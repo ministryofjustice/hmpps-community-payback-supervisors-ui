@@ -35,6 +35,26 @@ jobs:
     name: node build
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_build.yml@v2 # WORKFLOW_VERSION
     secrets: inherit
+
+  type_checking:
+    name: "Type check"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --no-audit
+
+      - name: Run type check
+        run: npm run typecheck
+
   # generic node unit tests - feel free to override with local tests if required
   node_unit_tests:
     name: node unit tests
