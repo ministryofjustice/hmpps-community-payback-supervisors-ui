@@ -13,4 +13,5 @@ generic-service:
     AUDIT_ENABLED: "false"
 
 generic-prometheus-alerts:
-  alertSeverity: 
+  alertSeverity: hmpps-community-payback-prod
+
