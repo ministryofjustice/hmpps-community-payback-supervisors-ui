@@ -5,7 +5,7 @@ import logger from '../../logger'
 
 export default class ExampleApiClient extends RestClient {
   constructor(authenticationClient: AuthenticationClient) {
-    super('Example API', config.apis.exampleApi, logger, authenticationClient)
+    super('Example API', config.apis.communityPaybackApi, logger, authenticationClient)
   }
 
   /**

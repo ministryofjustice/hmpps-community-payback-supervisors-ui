@@ -5,13 +5,13 @@ generic-service:
   replicaCount: 2
 
   ingress:
-    host: community-payback-supervisors-ui-preprod.hmpps.service.justice.gov.uk
+    host: community-payback-supervisors-preprod.hmpps.service.justice.gov.uk
 
   env:
-    INGRESS_URL: "https://community-payback-supervisors-ui-preprod.hmpps.service.justice.gov.uk"
+    INGRESS_URL: "https://community-payback-supervisors-preprod.hmpps.service.justice.gov.uk"
     HMPPS_AUTH_URL: "https://sign-in-preprod.hmpps.service.justice.gov.uk/auth"
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-preprod.prison.service.justice.gov.uk"
-    EXAMPLE_API_URL: 'https://template-kotlin-preprod.hmpps.service.justice.gov.uk'
+    COMMUNITY_PAYBACK_API_URL: 'https://community-payback-api-preprod.hmpps.service.justice.gov.uk'
     ENVIRONMENT_NAME: PRE-PRODUCTION
     AUDIT_ENABLED: "false"
 
