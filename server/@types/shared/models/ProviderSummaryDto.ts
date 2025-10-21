@@ -1,0 +1,19 @@
+/* generated using openapi-typescript-codegen -- do not edit */
+/* istanbul ignore file */
+/* tslint:disable */
+
+export type ProviderSummaryDto = {
+  /**
+   * Community Payback (UPW) provider code
+   */
+  code: string
+  /**
+   * Community Payback (UPW) provider name
+   */
+  name: string
+  /**
+   * Community Payback (UPW) provider id
+   * @deprecated
+   */
+  id: number
+}
