@@ -4,10 +4,10 @@ services:
     image: wiremock/wiremock
     networks:
     - hmpps_int
-    container_name: wiremock
+    container_name: wiremock-supervisors
     restart: always
     ports:
-      - "9091:8080"
+      - "9092:8080"
 
 networks:
   hmpps_int:

@@ -1,0 +1,106 @@
+#!/bin/sh
+
+# script/test: Run the test suite for the application.
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+if [ -n "$DEBUG" ]; then
+  set -x
+fi
+
+BUILD=true
+UPDATE=true
+SUCCESS=false
+GENERATE_TYPES=true
+SERVER=false
+SKIP_SERVER=false
+
+for arg in "$@"
+do
+  case $arg in
+    --skip-update)
+      UPDATE=false
+      ;;
+    --skip-build)
+      BUILD=false
+      ;;
+    # use this if you already have the application running locally
+    --skip-server)
+      SERVER=true
+      SKIP_SERVER=true
+      ;;
+    --skip-generate-types)
+      GENERATE_TYPES=false
+      ;;
+  esac
+  shift
+done
+
+if [ "$UPDATE" = true ]; then
+  echo "==> Updating..."
+
+  script/bootstrap
+fi
+
+if [ "$GENERATE_TYPES" = true ];then 
+  if [ "$SERVER" = false ];then
+    script/server --local-api
+    SERVER=true
+  fi
+
+  script/generate-types http://localhost:8080/v3/api-docs/ForCommunityPaybackUI
+fi
+
+cleanup() {
+  if [ "$SKIP_SERVER" = false ];then
+    cp-stack stop
+  fi
+  
+  GREEN='\033[1;32m'
+  RED='\033[1;31m'
+  RESET_COLOUR='\033[0m'
+
+  if [ "$SUCCESS" = true ]; then
+    echo "\n\n${GREEN}( ͡° ͜ʖ ͡°) The full test suite ran successfully!${RESET_COLOUR}"
+    echo "\n\n${GREEN}You can safely revert any changes to files in the \`server/@types/shared\` directory"
+  else
+    echo "\n\n${RED}( ͡° ʖ̯ ͡°) The test suite failed.${RESET_COLOUR}"
+  fi
+}
+
+trap cleanup EXIT
+
+echo "==> Linting the code..."
+
+npm run lint
+
+echo "==> Typechecking the code..."
+
+npm run typecheck
+
+echo "==> Running unit tests..."
+
+npm run test
+
+if [ "$BUILD" = true ]; then
+  echo "==> Building..."
+
+  npm run build
+fi
+
+echo "==> Running integration tests..."
+
+npm run test:integration:local
+
+if [ "$SERVER" = false ]; then
+  script/server --local-api
+fi
+
+echo "==> Running e2e tests..."
+
+npx playwright install
+npm run test:e2e:local
+
+SUCCESS=true

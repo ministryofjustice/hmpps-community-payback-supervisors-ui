@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# script/server: Launch the application and any extra required processes
+#                locally.
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+echo "==> Clearing up any existing running application..."
+
+cp-stack stop
+
+echo "==> Starting the server..."
+
+# Assumes we will always want to run the UI application locally
+# To run a local instance of the API use script/server --local-api
+cp-stack start --local-sui $@
