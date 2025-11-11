@@ -44,20 +44,20 @@ if [ "$UPDATE" = true ]; then
   script/bootstrap
 fi
 
-if [ "$GENERATE_TYPES" = true ];then 
+if [ "$GENERATE_TYPES" = true ];then
   if [ "$SERVER" = false ];then
     script/server --local-api
     SERVER=true
   fi
 
-  script/generate-types http://localhost:8080/v3/api-docs/ForCommunityPaybackUI
+  script/generate-types http://localhost:8080/v3/api-docs/ForCommunityPaybackSupervisorUI
 fi
 
 cleanup() {
   if [ "$SKIP_SERVER" = false ];then
     cp-stack stop
   fi
-  
+
   GREEN='\033[1;32m'
   RED='\033[1;31m'
   RESET_COLOUR='\033[0m'
