@@ -22,6 +22,6 @@ class HomePageAssertions {
   constructor(private readonly page: HomePage) {}
 
   async toBeOnThePage() {
-    await expect(this.page.headingLocator).toContainText('This site is under construction...')
+    await expect(this.page.headingLocator).toContainText('Next session')
   }
 }
