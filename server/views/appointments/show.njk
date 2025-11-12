@@ -1,0 +1,56 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% extends "../partials/layout.njk" %}
+
+{% set pageTitle = applicationName + " - View person details" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l">
+      CRN: {{ appointment.offender.crn }}
+    </span>
+    <h1 class="govuk-heading-l">
+      Alex Boyle
+    </h1>
+
+    {{
+      govukSummaryList({
+        card: {
+          title: {
+            text: "Person details"
+          }
+        },
+        rows: [
+          {
+            key: {
+              text: "Session status"
+            },
+            value: {
+              html: '<strong id="status-tag" class="govuk-tag govuk-tag--grey">Scheduled</strong>'
+            }
+          },
+          {
+            key: {
+              text: "Scheduled start time"
+            },
+            value: {
+              text: "9:00"
+            }
+          },
+          {
+            key: {
+              text: "Scheduled finish time"
+            },
+            value: {
+              text: "16:00"
+            }
+          }
+        ]
+      })
+    }}
+  </div>
+</div>
+
+{% endblock %}

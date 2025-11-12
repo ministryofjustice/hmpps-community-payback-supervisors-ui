@@ -2,8 +2,9 @@ import { Router } from 'express'
 
 import type { Services } from '../services'
 import { Page } from '../services/auditService'
-import { Controllers } from '../controllers'
 import sessionRoutes from './session'
+import appointmentRoutes from './appointment'
+import type { Controllers } from '../controllers'
 
 export default function routes(controllers: Controllers, { auditService }: Services): Router {
   const router = Router()
@@ -17,6 +18,7 @@ export default function routes(controllers: Controllers, { auditService }: Servi
   })
 
   sessionRoutes(sessionsController, router)
+  appointmentRoutes(controllers, router, auditService)
 
   return router
 }
