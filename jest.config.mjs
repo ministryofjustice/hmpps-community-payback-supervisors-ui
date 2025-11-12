@@ -1,7 +1,10 @@
 export default {
+  preset: 'ts-jest',
   transform: {
     '^.+\\.tsx?$': ['ts-jest'],
+    '^.+\\.jsx?$': ['babel-jest'],
   },
+  transformIgnorePatterns: ['/node_modules/(?!@faker-js/faker)'],
   collectCoverageFrom: ['server/**/*.{ts,js,jsx,mjs}'],
   testMatch: ['<rootDir>/(server|job)/**/?(*.)(cy|test).{ts,js,jsx,mjs}'],
   testEnvironment: 'node',
