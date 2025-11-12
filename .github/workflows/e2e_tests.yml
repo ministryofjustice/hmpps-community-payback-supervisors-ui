@@ -1,0 +1,80 @@
+name: e2e tests
+
+on:
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      node_version_file:
+        description: "Passed to setup-node action to specify where to source the version of node from"
+        required: false
+        type: string
+        default: ".nvmrc"
+
+permissions:
+  contents: read
+
+jobs:
+  e2e_test:
+    name: Run the e2e tests
+    runs-on: [self-hosted, Linux, X64, hmpps-github-actions-runner]
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # Repository is specified to run the workflow from the API repository
+          repository: 'ministryofjustice/hmpps-community-payback-supervisors-ui'
+      - name: Use Node.js ${{ inputs.node_version_file }}
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: ${{ inputs.node_version_file }}
+      - name: refresh cache
+        id: refresh-cache
+        uses: actions/cache@v4
+        env:
+          cache-name: node-modules
+        with:
+          path: |
+            ~/.cache
+            node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: install dependencies
+        if: steps.refresh-cache.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          npm ci --no-audit
+      - name: install playwright
+        shell: bash
+        run: |
+          npx playwright install
+      - name: run e2e tests
+        env:
+          DELIUS_USERNAME: ${{ secrets.DELIUS_USERNAME }}
+          DELIUS_PASSWORD: ${{ secrets.DELIUS_PASSWORD }}
+        shell: bash
+        run: |
+          npm run test:e2e
+      - name: upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm_e2e_test_artifacts
+          path: |
+            e2e-tests/test_results/
+            e2e-tests/playwright-report/
+
+  e2e_test_notify_slack:
+    name: "E2E test failure notification"
+    needs: e2e_test
+    if: ${{ always() && needs.e2e_test.result == 'failure' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Slack notification
+        uses: ministryofjustice/hmpps-community-payback-ui/.github/actions/slack_failure_notification@main
+        with:
+          title: "Community Payback Supervisor E2E Tests"
+          job: "e2e_test"
+          channel_id: ${{ vars.NONPROD_RELEASES_SLACK_CHANNEL }}
+          slack_bot_token: ${{ secrets.HMPPS_SRE_SLACK_BOT_TOKEN }}
