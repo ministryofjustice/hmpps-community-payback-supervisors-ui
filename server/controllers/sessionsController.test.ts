@@ -3,6 +3,8 @@ import type { NextFunction, Request, Response } from 'express'
 import SessionsController from './sessionsController'
 import SessionService from '../services/sessionService'
 import sessionFactory from '../testutils/factories/sessionFactory'
+import DateTimeFormats from '../utils/dateTimeUtils'
+import LocationUtils from '../utils/locationUtils'
 
 describe('SessionsController', () => {
   const request: DeepMocked<Request> = createMock<Request>({})
@@ -24,10 +26,16 @@ describe('SessionsController', () => {
       const requestHandler = sessionsController.show()
       const response = createMock<Response>()
 
+      const date = '12 February 2025'
+      jest.spyOn(DateTimeFormats, 'isoDateToUIDate').mockReturnValue(date)
+
+      const location = '12 Hampton Road'
+      jest.spyOn(LocationUtils, 'locationToParagraph').mockReturnValue(location)
+
       await requestHandler(request, response, next)
 
       expect(response.render).toHaveBeenCalledWith('sessions/show', {
-        session,
+        session: { ...session, formattedDate: date, formattedLocation: location },
       })
     })
   })
