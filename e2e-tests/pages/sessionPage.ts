@@ -26,6 +26,7 @@ class SessionPageAssertions {
   }
 
   async toShowSessionDetails() {
-    await expect(this.page.page.getByText('Cleaning streets')).toBeVisible()
+    await expect(this.page.page.getByRole('heading', { name: 'Cleaning streets' })).toBeVisible()
+    await expect(this.page.page.getByRole('heading', { name: 'Monday 15 September 2025' })).toBeVisible()
   }
 }

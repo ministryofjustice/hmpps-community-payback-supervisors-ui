@@ -1,5 +1,6 @@
 import { SessionDto } from '../../server/@types/shared'
 import Page from './page'
+import DateTimeFormats from '../../server/utils/dateTimeUtils'
 
 export default class SessionPage extends Page {
   constructor(private readonly session: SessionDto) {
@@ -7,6 +8,8 @@ export default class SessionPage extends Page {
   }
 
   shouldShowSessionDetails() {
-    cy.get('p').should('have.text', this.session.projectName)
+    cy.get('[data-cy=project-details')
+      .should('contain.text', this.session.projectName)
+      .and('contain.text', DateTimeFormats.isoDateToUIDate(this.session.date, { format: 'medium' }))
   }
 }
