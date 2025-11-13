@@ -13,7 +13,7 @@ export default class HomePage extends BasePage {
   constructor(private readonly page: Page) {
     super(page)
     this.expect = new HomePageAssertions(this)
-    this.viewDetailsLinkLocator = page.getByRole('link', { name: 'View details' })
+    this.viewDetailsLinkLocator = page.getByRole('button', { name: 'View details' })
   }
 
   async visit() {
