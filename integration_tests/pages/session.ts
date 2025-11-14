@@ -1,6 +1,7 @@
 import { OffenderFullDto, SessionDto } from '../../server/@types/shared'
 import Page from './page'
 import DateTimeFormats from '../../server/utils/dateTimeUtils'
+import paths from '../../server/paths'
 
 export default class SessionPage extends Page {
   offenders: OffenderFullDto[]
@@ -8,6 +9,16 @@ export default class SessionPage extends Page {
   constructor(private readonly session: SessionDto) {
     super('Session details')
     this.offenders = session.appointmentSummaries.map(appointment => appointment.offender as OffenderFullDto)
+  }
+
+  static visit(session: SessionDto): SessionPage {
+    cy.visit(paths.sessions.show({ projectCode: session.projectCode, date: session.date }))
+
+    return new SessionPage(session)
+  }
+
+  clickOnAnAppointment() {
+    cy.get('a').contains('View details').click()
   }
 
   shouldShowSessionDetails() {

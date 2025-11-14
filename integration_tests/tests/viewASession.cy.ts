@@ -8,12 +8,18 @@
 //      When I visit a session page
 //      Then I see the session details
 //
+//  Scenario: viewing an individual appointment
+//    Given I am on a session page
+//    When I click on an appointment
+//    Then I see the appointment and offender details
 
 import IndexPage from '../pages'
 import Page from '../pages/page'
 import SessionPage from '../pages/session'
 import sessionFactory from '../../server/testutils/factories/sessionFactory'
 import appointmentSummaryFactory from '../../server/testutils/factories/appointmentSummaryFactory'
+import AppointmentPage from '../pages/appointment'
+import appointmentFactory from '../../server/testutils/factories/appointmentFactory'
 
 context('Home', () => {
   beforeEach(() => {
@@ -36,5 +42,29 @@ context('Home', () => {
     //  Then I see the search form
     const sessionPage = Page.verifyOnPage(SessionPage, session)
     sessionPage.shouldShowSessionDetails()
+  })
+})
+
+context('Session', () => {
+  beforeEach(() => {
+    cy.task('reset')
+    cy.task('stubSignIn')
+    cy.signIn()
+  })
+
+  //  Scenario: viewing an individual appointment
+  it('Viewing a person on a session', () => {
+    // Given I am on a session page
+    const appointmentSummaries = appointmentSummaryFactory.buildList(3)
+    const session = sessionFactory.build({ appointmentSummaries })
+    cy.task('stubFindSession', { session })
+    const sessionPage = SessionPage.visit(session)
+
+    const appointment = appointmentFactory.build({ id: appointmentSummaries[0].id })
+    //  When I click on an appointment
+    cy.task('stubFindAppointment', { appointment, projectCode: session.projectCode })
+    sessionPage.clickOnAnAppointment()
+    //  Then I see the appointment and offender details
+    Page.verifyOnPage(AppointmentPage)
   })
 })
