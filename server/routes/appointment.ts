@@ -20,6 +20,21 @@ export default function appointmentRoutes(
     await handler(req, res, next)
   })
 
+  router.get(paths.appointments.startTime.pattern, async (req, res, next) => {
+    await auditService.logPageView(Page.APPOINTMENT_START_TIME_PAGE, {
+      who: res.locals.user.username,
+      correlationId: req.id,
+    })
+
+    const handler = appointments.startTimeController.show()
+    await handler(req, res, next)
+  })
+
+  router.post(paths.appointments.startTime.pattern, async (req, res, next) => {
+    const handler = appointments.startTimeController.submit()
+    await handler(req, res, next)
+  })
+
   router.get(paths.appointments.ableToWork.pattern, async (req, res, next) => {
     await auditService.logPageView(Page.APPOINTMENT_ABLE_TO_WORK_PAGE, {
       who: res.locals.user.username,
