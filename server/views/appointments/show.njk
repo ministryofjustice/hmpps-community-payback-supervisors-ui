@@ -1,4 +1,5 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 {% extends "../partials/layout.njk" %}
 
 {% set pageTitle = applicationName + " - View person details" %}
@@ -14,6 +15,12 @@
     <h1 class="govuk-heading-l">
       Alex Boyle
     </h1>
+
+    {{ govukButton({
+        text: 'Arrived',
+        href: arrivedPath,
+        classes: "govuk-button--secondary govuk-!-width-full"
+    }) }}
 
     {{
       govukSummaryList({

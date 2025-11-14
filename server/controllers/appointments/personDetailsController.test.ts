@@ -3,9 +3,12 @@ import type { NextFunction, Request, Response } from 'express'
 import PersonDetailsController from './personDetailsController'
 import AppointmentService from '../../services/appointmentService'
 import appointmentFactory from '../../testutils/factories/appointmentFactory'
+import paths from '../../paths'
 
 describe('PersonDetailsController', () => {
-  const request: DeepMocked<Request> = createMock<Request>({})
+  const projectCode = '123'
+  const appointmentId = '234'
+  const request: DeepMocked<Request> = createMock<Request>({ params: { projectCode, appointmentId } })
   const next: DeepMocked<NextFunction> = createMock<NextFunction>({})
 
   let personDetailsController: PersonDetailsController
@@ -28,6 +31,7 @@ describe('PersonDetailsController', () => {
 
       expect(response.render).toHaveBeenCalledWith('appointments/show', {
         appointment,
+        arrivedPath: paths.appointments.startTime({ projectCode, appointmentId }),
       })
     })
   })

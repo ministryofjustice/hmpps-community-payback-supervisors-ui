@@ -1,6 +1,7 @@
 import type { Request, RequestHandler, Response } from 'express'
 import AppointmentService from '../../services/appointmentService'
 import { GetAppointmentRequest } from '../../@types/user-defined'
+import paths from '../../paths'
 
 export default class PersonDetailsController {
   constructor(private readonly appointmentService: AppointmentService) {}
@@ -19,6 +20,7 @@ export default class PersonDetailsController {
 
       res.render('appointments/show', {
         appointment,
+        arrivedPath: paths.appointments.startTime({ projectCode, appointmentId }),
       })
     }
   }
