@@ -8,7 +8,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPathPattern: paths.projects.session({ projectCode: 'N56123456', date: '2025-09-22' }),
+        urlPathPattern: paths.projects.session({ projectCode: session.projectCode, date: session.date }),
       },
 
       response: {
