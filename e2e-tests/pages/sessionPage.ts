@@ -6,15 +6,16 @@ import BasePage from './basePage'
 export default class SessionPage extends BasePage {
   readonly expect: SessionPageAssertions
 
-  readonly trackCommunityPaybackProgressLink: Locator
+  readonly viewDetailsLinkLocator: Locator
 
   constructor(readonly page: Page) {
     super(page)
     this.expect = new SessionPageAssertions(this)
+    this.viewDetailsLinkLocator = page.getByRole('link', { name: 'View details' })
   }
 
-  async visit() {
-    await this.page.goto('/')
+  async clickOnAnAppointment() {
+    await this.viewDetailsLinkLocator.nth(0).click()
   }
 }
 
