@@ -11,5 +11,8 @@ export default class SessionPage extends Page {
     cy.get('[data-cy=project-details')
       .should('contain.text', this.session.projectName)
       .and('contain.text', DateTimeFormats.isoDateToUIDate(this.session.date, { format: 'medium' }))
+
+    const appointmentCount = this.session.appointmentSummaries.length
+    cy.get('h2').should('contain.text', `${appointmentCount} people scheduled on this session`)
   }
 }
