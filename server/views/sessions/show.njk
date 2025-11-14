@@ -45,12 +45,19 @@
     
     <ul class="govuk-list">
       {% for appointment in session.appointmentSummaries %}
+        {% set offenderName = appointment.formattedOffender.name | default(appointment.formattedOffender.crn) %}
         <li>
           <div class="govuk-summary-card">
             <div class="govuk-summary-card__title-wrapper">
               <h3 class="govuk-summary-card__title">
-                {{ appointment.formattedOffender.name | default(appointment.formattedOffender.crn) }}
+                {{ offenderName }}
               </h3>
+
+              <div class="govuk-summary-card__actions">
+                <div class="govuk-summary-card__action">
+                  <a class="govuk-link" href="{{ appointment.path }}">View details<span class="govuk-visually-hidden"> of {{ offenderName }}</span></a>
+                </div>
+              </div>
             </div>
             <div class="govuk-summary-card__content">
             </div>

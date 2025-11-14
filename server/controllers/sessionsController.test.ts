@@ -7,6 +7,7 @@ import DateTimeFormats from '../utils/dateTimeUtils'
 import LocationUtils from '../utils/locationUtils'
 import Offender from '../models/offender'
 import appointmentSummaryFactory from '../testutils/factories/appointmentSummaryFactory'
+import paths from '../paths'
 
 jest.mock('../models/offender')
 
@@ -52,7 +53,16 @@ describe('SessionsController', () => {
           ...session,
           formattedDate: date,
           formattedLocation: location,
-          appointmentSummaries: [{ ...appointmentSummary, formattedOffender: offender }],
+          appointmentSummaries: [
+            {
+              ...appointmentSummary,
+              formattedOffender: offender,
+              path: paths.appointments.personDetails({
+                projectCode: session.projectCode,
+                appointmentId: appointmentSummary.id.toString(),
+              }),
+            },
+          ],
         },
       })
     })

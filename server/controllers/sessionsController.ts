@@ -3,6 +3,7 @@ import SessionService from '../services/sessionService'
 import DateTimeFormats from '../utils/dateTimeUtils'
 import LocationUtils from '../utils/locationUtils'
 import Offender from '../models/offender'
+import paths from '../paths'
 
 export default class SessionsController {
   constructor(private readonly sessionService: SessionService) {}
@@ -21,6 +22,10 @@ export default class SessionsController {
       const appointmentSummaries = session.appointmentSummaries.map(appointment => ({
         ...appointment,
         formattedOffender: new Offender(appointment.offender),
+        path: paths.appointments.personDetails({
+          projectCode: session.projectCode,
+          appointmentId: appointment.id.toString(),
+        }),
       }))
 
       res.render('sessions/show', {
