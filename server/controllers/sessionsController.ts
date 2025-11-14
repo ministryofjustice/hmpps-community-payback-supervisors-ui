@@ -1,5 +1,7 @@
 import type { Request, RequestHandler, Response } from 'express'
 import SessionService from '../services/sessionService'
+import DateTimeFormats from '../utils/dateTimeUtils'
+import LocationUtils from '../utils/locationUtils'
 
 export default class SessionsController {
   constructor(private readonly sessionService: SessionService) {}
@@ -17,7 +19,11 @@ export default class SessionsController {
       const session = await this.sessionService.getSession(request)
 
       res.render('sessions/show', {
-        session,
+        session: {
+          ...session,
+          formattedDate: DateTimeFormats.isoDateToUIDate(session.date),
+          formattedLocation: LocationUtils.locationToParagraph(session.location),
+        },
       })
     }
   }
