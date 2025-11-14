@@ -6,15 +6,16 @@ import BasePage from './basePage'
 export default class SessionPage extends BasePage {
   readonly expect: SessionPageAssertions
 
-  readonly trackCommunityPaybackProgressLink: Locator
+  readonly viewDetailsLinkLocator: Locator
 
   constructor(readonly page: Page) {
     super(page)
     this.expect = new SessionPageAssertions(this)
+    this.viewDetailsLinkLocator = page.getByRole('link', { name: 'View details' })
   }
 
-  async visit() {
-    await this.page.goto('/')
+  async clickOnAnAppointment() {
+    await this.viewDetailsLinkLocator.nth(0).click()
   }
 }
 
@@ -28,5 +29,10 @@ class SessionPageAssertions {
   async toShowSessionDetails() {
     await expect(this.page.page.getByRole('heading', { name: 'Cleaning streets' })).toBeVisible()
     await expect(this.page.page.getByRole('heading', { name: 'Monday 15 September 2025' })).toBeVisible()
+    await expect(this.page.page.getByRole('listitem')).toContainText([
+      'Harry Wormwood',
+      'Agatha Trunchbull',
+      'Zinnia Wormwood',
+    ])
   }
 }

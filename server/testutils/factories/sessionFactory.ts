@@ -9,7 +9,7 @@ export default Factory.define<SessionDto>(() => ({
   projectName: faker.company.name(),
   projectLocation: fakerEngb.location.county(),
   location: locationFactory.build(),
-  date: faker.date.recent().toISOString(),
+  date: faker.date.recent().toISOString().split('T')[0],
   startTime: '09:00',
   endTime: '17:00',
   appointmentSummaries: appointmentSummaryFactory.buildList(3),
