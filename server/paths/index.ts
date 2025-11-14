@@ -9,6 +9,7 @@ const paths = {
   },
   appointments: {
     personDetails: appointmentPath.path('/person-details'),
+    ableToWork: appointmentPath.path('able-to-work'),
   },
 }
 
