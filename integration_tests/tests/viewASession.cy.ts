@@ -13,6 +13,7 @@ import IndexPage from '../pages'
 import Page from '../pages/page'
 import SessionPage from '../pages/session'
 import sessionFactory from '../../server/testutils/factories/sessionFactory'
+import appointmentSummaryFactory from '../../server/testutils/factories/appointmentSummaryFactory'
 
 context('Home', () => {
   beforeEach(() => {
@@ -27,7 +28,8 @@ context('Home', () => {
     const page = Page.verifyOnPage(IndexPage)
 
     //  When I visit a session page
-    const session = sessionFactory.build()
+    const appointmentSummaries = appointmentSummaryFactory.buildList(3)
+    const session = sessionFactory.build({ appointmentSummaries })
     cy.task('stubFindSession', { session })
     page.clickViewSession()
 
