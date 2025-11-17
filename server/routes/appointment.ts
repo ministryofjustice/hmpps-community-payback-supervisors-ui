@@ -10,8 +10,8 @@ export default function appointmentRoutes(
 ): Router {
   const { appointments } = controllers
 
-  router.get(paths.appointments.personDetails.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.APPOINTMENT_PERSON_DETAILS_PAGE, {
+  router.get(paths.appointments.show.pattern, async (req, res, next) => {
+    await auditService.logPageView(Page.APPOINTMENT_SHOW_PAGE, {
       who: res.locals.user.username,
       correlationId: req.id,
     })

@@ -32,7 +32,7 @@ describe('StartTimePage', () => {
       const result = page.viewData(appointment, projectCode)
       expect(result).toEqual({
         offender,
-        backPath: paths.appointments.personDetails({ appointmentId, projectCode }),
+        backPath: paths.appointments.show({ appointmentId, projectCode }),
         updatePath: paths.appointments.startTime({ appointmentId, projectCode }),
         startTime,
       })

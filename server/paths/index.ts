@@ -8,7 +8,7 @@ const paths = {
     show: projectPath.path('sessions/:date'),
   },
   appointments: {
-    personDetails: appointmentPath.path('/person-details'),
+    show: appointmentPath,
     startTime: appointmentPath.path('start-time'),
     ableToWork: appointmentPath.path('able-to-work'),
   },

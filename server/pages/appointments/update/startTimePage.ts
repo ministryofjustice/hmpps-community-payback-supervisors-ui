@@ -12,7 +12,7 @@ export default class StartTimePage extends BaseAppointmentUpdatePage {
   }
 
   protected backPath(appointment: AppointmentDto, projectCode: string): string {
-    return paths.appointments.personDetails({ projectCode, appointmentId: appointment.id.toString() })
+    return paths.appointments.show({ projectCode, appointmentId: appointment.id.toString() })
   }
 
   protected updatePath(appointment: AppointmentDto, projectCode: string): string {
