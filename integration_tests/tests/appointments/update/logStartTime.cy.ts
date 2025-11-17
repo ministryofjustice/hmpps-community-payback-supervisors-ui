@@ -36,5 +36,6 @@ context('Log start time ', () => {
     // Then I see the same page with errors
     Page.verifyOnPage(StartTimePage, appointment, true)
     page.shouldShowErrorSummary('startTime', 'Enter a start time')
+    page.shouldHaveInputValue('startTime', '')
   })
 })

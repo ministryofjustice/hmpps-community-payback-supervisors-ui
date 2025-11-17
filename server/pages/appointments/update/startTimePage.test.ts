@@ -39,6 +39,16 @@ describe('StartTimePage', () => {
         title: `You are logging Sam Smith as having arrived at:`,
       })
     })
+
+    it.each(['', '10:00'])('start time is form value if query has body', (updatedStartTime: string) => {
+      const startTime = '09:00'
+      const appointment = appointmentFactory.build({ id: 1, startTime })
+      const projectCode = 'XR3'
+
+      const page = new StartTimePage({ startTime: updatedStartTime })
+      const result = page.viewData(appointment, projectCode)
+      expect(result.startTime).toEqual(updatedStartTime)
+    })
   })
 
   describe('next', () => {

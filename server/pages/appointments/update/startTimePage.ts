@@ -36,9 +36,11 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
 
   viewData(appointment: AppointmentDto, projectCode: string): ViewData {
     const commonViewData = this.commonViewData(appointment, projectCode)
+    const hasFormBody = this.query.startTime !== undefined
+
     return {
       ...commonViewData,
-      startTime: appointment.startTime,
+      startTime: hasFormBody ? this.query.startTime : appointment.startTime,
       title: this.getPageTitle(commonViewData.offender),
     }
   }

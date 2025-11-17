@@ -29,6 +29,10 @@ export default abstract class Page {
     cy.get(`#${id}`).type(details)
   }
 
+  shouldHaveInputValue(id: string, value: string): void {
+    this.getTextInputById(id).should('have.value', value)
+  }
+
   shouldShowErrorSummary(field: string, errorMessage: string) {
     cy.get(`[data-cy-error-${field}]`).should('contain', errorMessage)
   }
