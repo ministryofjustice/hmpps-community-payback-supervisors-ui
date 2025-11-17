@@ -1,10 +1,12 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% extends "./layout.njk" %}
 
+{% set pageTitle = 'Log start time' %}
+
 {% block formContent %}
   {{ govukInput({
     label: {
-      text: "You are logging Alex Boyle as having arrived at:",
+      text: title,
       classes: "govuk-label--l",
       isPageHeading: true
     },
