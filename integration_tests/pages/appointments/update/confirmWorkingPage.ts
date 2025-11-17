@@ -3,24 +3,24 @@ import Page from '../../page'
 import Offender from '../../../../server/models/offender'
 import paths from '../../../../server/paths'
 
-export default class AbleToWorkPage extends Page {
+export default class ConfirmWorkingPage extends Page {
   constructor(appointment: AppointmentDto) {
     const offender = new Offender(appointment.offender)
-    const title = `Can ${offender.name} work today?`
+    const title = `${offender.name} has been recorded as starting work today`
     super(title)
   }
 
-  static visit(appointment: AppointmentDto): AbleToWorkPage {
-    const path = paths.appointments.ableToWork({
+  static visit(appointment: AppointmentDto): ConfirmWorkingPage {
+    const path = paths.appointments.confirm.working({
       appointmentId: appointment.id.toString(),
       projectCode: appointment.projectCode,
     })
     cy.visit(path)
 
-    return new AbleToWorkPage(appointment)
+    return new ConfirmWorkingPage(appointment)
   }
 
-  selectYes(): void {
-    this.checkRadioByNameAndValue('ableToWork', 'yes')
+  clickLinkToSessionPage(): void {
+    cy.get('a').contains('Return to session page').click()
   }
 }
