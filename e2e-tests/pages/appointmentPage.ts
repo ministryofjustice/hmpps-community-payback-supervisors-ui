@@ -2,20 +2,38 @@
 
 import { Page, expect } from '@playwright/test'
 import BasePage from './basePage'
+import SummaryListComponent from './components/summaryListComponent'
 
 export default class AppointmentPage extends BasePage {
   readonly expect: AppointmentPageAssertions
 
+  readonly details: SummaryListComponent
+
   constructor(readonly page: Page) {
     super(page)
     this.expect = new AppointmentPageAssertions(this)
+    this.details = new SummaryListComponent(page)
   }
 }
 
 class AppointmentPageAssertions {
-  constructor(private readonly page: AppointmentPage) {}
+  readonly appointmentPage: AppointmentPage
+
+  constructor(private readonly page: AppointmentPage) {
+    this.appointmentPage = page
+  }
 
   async toBeOnThePage() {
     await expect(this.page.headingLocator).toContainText('Harry Wormwood')
+  }
+
+  async toShowAppointmentDetails() {
+    await this.appointmentPage.details.expect.toHaveItemWith('Session status', 'Scheduled')
+    await this.appointmentPage.details.expect.toHaveItemWith('Start time', '09:00')
+    await this.appointmentPage.details.expect.toHaveItemWith('Finish time', '17:00')
+  }
+
+  async toShowOffenderDetails() {
+    await this.page.page.locator('span', { hasText: 'CRN: X948762' }).textContent()
   }
 }
