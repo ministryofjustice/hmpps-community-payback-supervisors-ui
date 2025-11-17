@@ -1,3 +1,4 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% extends "../partials/layout.njk" %}
@@ -5,15 +6,22 @@
 {% set pageTitle = applicationName + " - View person details" %}
 {% set mainClasses = "app-container govuk-body" %}
 
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: backPath
+  }) }}
+{% endblock %}
+
 {% block content %}
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <span class="govuk-caption-l">
-      CRN: {{ appointment.offender.crn }}
+      CRN: {{ offender.crn }}
     </span>
     <h1 class="govuk-heading-l">
-      Alex Boyle
+      {{ offender.name }}
     </h1>
 
     {{ govukButton({
@@ -43,7 +51,7 @@
               text: "Scheduled start time"
             },
             value: {
-              text: "9:00"
+              text: startTime
             }
           },
           {
@@ -51,7 +59,7 @@
               text: "Scheduled finish time"
             },
             value: {
-              text: "16:00"
+              text: endTime
             }
           }
         ]

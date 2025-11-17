@@ -16,6 +16,6 @@ class AppointmentPageAssertions {
   constructor(private readonly page: AppointmentPage) {}
 
   async toBeOnThePage() {
-    await expect(this.page.headingLocator).toContainText('Alex Boyle')
+    await expect(this.page.headingLocator).toContainText('Harry Wormwood')
   }
 }

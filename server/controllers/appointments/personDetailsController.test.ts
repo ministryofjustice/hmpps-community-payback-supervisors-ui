@@ -3,13 +3,18 @@ import type { NextFunction, Request, Response } from 'express'
 import PersonDetailsController from './personDetailsController'
 import AppointmentService from '../../services/appointmentService'
 import appointmentFactory from '../../testutils/factories/appointmentFactory'
+import AppointmentShowDetailsPage from '../../pages/appointments/appointmentShowDetailsPage'
 import paths from '../../paths'
+
+jest.mock('../../pages/appointments/appointmentShowDetailsPage')
 
 describe('PersonDetailsController', () => {
   const projectCode = '123'
   const appointmentId = '234'
   const request: DeepMocked<Request> = createMock<Request>({ params: { projectCode, appointmentId } })
   const next: DeepMocked<NextFunction> = createMock<NextFunction>({})
+  const appointmentDetailsPageMock: jest.Mock =
+    AppointmentShowDetailsPage as unknown as jest.Mock<AppointmentShowDetailsPage>
 
   let personDetailsController: PersonDetailsController
   const appointmentService = createMock<AppointmentService>()
@@ -19,7 +24,15 @@ describe('PersonDetailsController', () => {
   })
 
   describe('show', () => {
-    it('should render the view person details page', async () => {
+    it('should render the view appointment details page', async () => {
+      const viewData = { someKey: 'someValue' }
+
+      appointmentDetailsPageMock.mockImplementation(() => {
+        return {
+          viewData: () => viewData,
+        }
+      })
+
       const appointment = appointmentFactory.build()
 
       appointmentService.getAppointment.mockResolvedValue(appointment)
@@ -30,7 +43,7 @@ describe('PersonDetailsController', () => {
       await requestHandler(request, response, next)
 
       expect(response.render).toHaveBeenCalledWith('appointments/show', {
-        appointment,
+        ...viewData,
         arrivedPath: paths.appointments.startTime({ projectCode, appointmentId }),
       })
     })
