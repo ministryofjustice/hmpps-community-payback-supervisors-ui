@@ -1,6 +1,7 @@
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
 import appointmentFactory from '../../../testutils/factories/appointmentFactory'
+import DateTimeFormats from '../../../utils/dateTimeUtils'
 import StartTimePage from './startTimePage'
 
 jest.mock('../../../models/offender')
@@ -38,6 +39,16 @@ describe('StartTimePage', () => {
         title: `You are logging Sam Smith as having arrived at:`,
       })
     })
+
+    it.each(['', '10:00'])('start time is form value if query has body', (updatedStartTime: string) => {
+      const startTime = '09:00'
+      const appointment = appointmentFactory.build({ id: 1, startTime })
+      const projectCode = 'XR3'
+
+      const page = new StartTimePage({ startTime: updatedStartTime })
+      const result = page.viewData(appointment, projectCode)
+      expect(result.startTime).toEqual(updatedStartTime)
+    })
   })
 
   describe('next', () => {
@@ -48,6 +59,63 @@ describe('StartTimePage', () => {
       const result = page.nextPath(appointmentId, projectCode)
 
       expect(result).toEqual(paths.appointments.ableToWork({ projectCode, appointmentId }))
+    })
+  })
+
+  describe('validate', () => {
+    describe('when startTime is not present', () => {
+      it.each([null, undefined, ''])('should return true', (time?: string) => {
+        const page = new StartTimePage({ startTime: time })
+        page.validate()
+
+        expect(page.hasErrors).toEqual(true)
+      })
+
+      it.each([null, undefined, ''])('should return true', (time?: string) => {
+        const page = new StartTimePage({ startTime: time })
+        page.validate()
+
+        expect(page.validationErrors.startTime).toEqual({
+          text: 'Enter a start time',
+        })
+      })
+    })
+
+    describe('when startTime is not valid', () => {
+      it('should return true', () => {
+        jest.spyOn(DateTimeFormats, 'isValidTime').mockReturnValue(false)
+        const page = new StartTimePage({ startTime: '8475438' })
+        page.validate()
+
+        expect(page.hasErrors).toEqual(true)
+      })
+
+      it('should return the correct error', () => {
+        const page = new StartTimePage({ startTime: '8475438' })
+        page.validate()
+
+        expect(page.validationErrors.startTime).toEqual({
+          text: 'Enter a valid start time, for example 09:00',
+        })
+      })
+    })
+
+    describe('when startTime is valid', () => {
+      it('should return false', () => {
+        jest.spyOn(DateTimeFormats, 'isValidTime').mockReturnValue(true)
+        const page = new StartTimePage({ startTime: '09:00' })
+        page.validate()
+
+        expect(page.hasErrors).toEqual(false)
+      })
+
+      it('startTime error should be undefined', () => {
+        jest.spyOn(DateTimeFormats, 'isValidTime').mockReturnValue(true)
+        const page = new StartTimePage({ startTime: '09:00' })
+        page.validate()
+
+        expect(page.validationErrors.startTime).toEqual(undefined)
+      })
     })
   })
 })
