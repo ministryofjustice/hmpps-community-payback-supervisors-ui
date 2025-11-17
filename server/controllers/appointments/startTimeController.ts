@@ -25,22 +25,30 @@ export default class StartTimeController {
   submit(): RequestHandler {
     return async (_req: Request, res: Response) => {
       const { projectCode, appointmentId } = _req.params
+      const appointment = await this.appointmentService.getAppointment({
+        projectCode,
+        appointmentId,
+        username: res.locals.user.username,
+      })
+
       const page = new StartTimePage(_req.body)
       page.validate()
 
       if (page.hasErrors) {
-        const appointment = await this.appointmentService.getAppointment({
-          projectCode,
-          appointmentId,
-          username: res.locals.user.username,
-        })
-
         return res.render('appointments/update/startTime', {
           ...page.viewData(appointment, projectCode),
           errors: page.validationErrors,
           errorSummary: generateErrorSummary(page.validationErrors),
         })
       }
+
+      const payload = page.requestBody(appointment)
+
+      await this.appointmentService.saveAppointment({
+        username: res.locals.user.name,
+        projectCode,
+        data: payload,
+      })
 
       return res.redirect(page.nextPath(appointmentId, projectCode))
     }
