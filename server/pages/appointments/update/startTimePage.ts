@@ -8,7 +8,11 @@ interface ViewData extends AppointmentUpdatePageViewData {
   title: string
 }
 
-export default class StartTimePage extends BaseAppointmentUpdatePage {
+interface Body {
+  startTime: string
+}
+
+export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
   nextPath(appointmentId: string, projectCode: string): string {
     return paths.appointments.ableToWork({ projectCode, appointmentId })
   }
