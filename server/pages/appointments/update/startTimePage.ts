@@ -1,4 +1,4 @@
-import { AppointmentDto } from '../../../@types/shared'
+import { AppointmentDto, UpdateAppointmentOutcomeDto } from '../../../@types/shared'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
 import DateTimeFormats from '../../../utils/dateTimeUtils'
@@ -32,6 +32,13 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
 
   protected updatePath(appointment: AppointmentDto, projectCode: string): string {
     return paths.appointments.startTime({ projectCode, appointmentId: appointment.id.toString() })
+  }
+
+  requestBody(appointment: AppointmentDto): UpdateAppointmentOutcomeDto {
+    return {
+      ...this.appointmentRequestBody(appointment),
+      startTime: this.query.startTime,
+    }
   }
 
   viewData(appointment: AppointmentDto, projectCode: string): ViewData {

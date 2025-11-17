@@ -1,3 +1,4 @@
+import { UpdateAppointmentOutcomeDto } from '../../../@types/shared'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
 import appointmentFactory from '../../../testutils/factories/appointmentFactory'
@@ -116,6 +117,53 @@ describe('StartTimePage', () => {
 
         expect(page.validationErrors.startTime).toEqual(undefined)
       })
+    })
+  })
+
+  describe('requestBody', () => {
+    it('returns the original appointment object with updated startTime', () => {
+      const appointment = appointmentFactory.build({
+        startTime: '09:00',
+        id: 1,
+        version: '2',
+        contactOutcomeId: '3',
+        supervisorOfficerCode: '123',
+      })
+      const page = new StartTimePage({ startTime: '10:00' })
+
+      const result = page.requestBody(appointment)
+
+      expect(result.startTime).toEqual('10:00')
+    })
+
+    it('returns the original appointment object with deliusId and deliusVersionToUpdate', () => {
+      const appointment = appointmentFactory.build({
+        startTime: '09:00',
+        id: 1,
+        version: '2',
+        contactOutcomeId: '3',
+        supervisorOfficerCode: '123',
+      })
+      const page = new StartTimePage({ startTime: '09:00' })
+
+      const result = page.requestBody(appointment)
+
+      const expected: UpdateAppointmentOutcomeDto = {
+        contactOutcomeId: '3',
+        deliusVersionToUpdate: '2',
+        deliusId: 1,
+        supervisorOfficerCode: '123',
+        startTime: '09:00',
+
+        alertActive: appointment.alertActive,
+        sensitive: appointment.sensitive,
+        endTime: appointment.endTime,
+        attendanceData: appointment.attendanceData,
+        enforcementData: appointment.enforcementData,
+        notes: appointment.notes,
+      }
+
+      expect(result).toEqual(expected)
     })
   })
 })
