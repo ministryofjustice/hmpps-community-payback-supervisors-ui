@@ -35,6 +35,7 @@ describe('StartTimePage', () => {
         backPath: paths.appointments.show({ appointmentId, projectCode }),
         updatePath: paths.appointments.startTime({ appointmentId, projectCode }),
         startTime,
+        title: `You are logging Sam Smith as having arrived at:`,
       })
     })
   })

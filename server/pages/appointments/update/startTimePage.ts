@@ -1,9 +1,11 @@
 import { AppointmentDto } from '../../../@types/shared'
+import Offender from '../../../models/offender'
 import paths from '../../../paths'
 import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './baseAppointmentUpdatePage'
 
 interface ViewData extends AppointmentUpdatePageViewData {
   startTime: string
+  title: string
 }
 
 export default class StartTimePage extends BaseAppointmentUpdatePage {
@@ -20,9 +22,15 @@ export default class StartTimePage extends BaseAppointmentUpdatePage {
   }
 
   viewData(appointment: AppointmentDto, projectCode: string): ViewData {
+    const commonViewData = this.commonViewData(appointment, projectCode)
     return {
-      ...this.commonViewData(appointment, projectCode),
+      ...commonViewData,
       startTime: appointment.startTime,
+      title: this.getPageTitle(commonViewData.offender),
     }
+  }
+
+  private getPageTitle(offender: Offender): string {
+    return `You are logging ${offender.name} as having arrived at:`
   }
 }
