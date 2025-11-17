@@ -16,7 +16,7 @@ export default function appointmentRoutes(
       correlationId: req.id,
     })
 
-    const handler = appointments.personDetailsController.show()
+    const handler = appointments.showDetailsController.show()
     await handler(req, res, next)
   })
 

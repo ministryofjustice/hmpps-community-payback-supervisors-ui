@@ -1,6 +1,6 @@
 import { DeepMocked, createMock } from '@golevelup/ts-jest'
 import type { NextFunction, Request, Response } from 'express'
-import PersonDetailsController from './personDetailsController'
+import ShowDetailsController from './showDetailsController'
 import AppointmentService from '../../services/appointmentService'
 import appointmentFactory from '../../testutils/factories/appointmentFactory'
 import AppointmentShowDetailsPage from '../../pages/appointments/appointmentShowDetailsPage'
@@ -8,7 +8,7 @@ import paths from '../../paths'
 
 jest.mock('../../pages/appointments/appointmentShowDetailsPage')
 
-describe('PersonDetailsController', () => {
+describe('ShowDetailsController', () => {
   const projectCode = '123'
   const appointmentId = '234'
   const request: DeepMocked<Request> = createMock<Request>({ params: { projectCode, appointmentId } })
@@ -16,11 +16,11 @@ describe('PersonDetailsController', () => {
   const appointmentDetailsPageMock: jest.Mock =
     AppointmentShowDetailsPage as unknown as jest.Mock<AppointmentShowDetailsPage>
 
-  let personDetailsController: PersonDetailsController
+  let showDetailsController: ShowDetailsController
   const appointmentService = createMock<AppointmentService>()
 
   beforeEach(() => {
-    personDetailsController = new PersonDetailsController(appointmentService)
+    showDetailsController = new ShowDetailsController(appointmentService)
   })
 
   describe('show', () => {
@@ -37,7 +37,7 @@ describe('PersonDetailsController', () => {
 
       appointmentService.getAppointment.mockResolvedValue(appointment)
 
-      const requestHandler = personDetailsController.show()
+      const requestHandler = showDetailsController.show()
       const response = createMock<Response>()
 
       await requestHandler(request, response, next)

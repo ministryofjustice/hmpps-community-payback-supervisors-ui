@@ -4,7 +4,7 @@ import { GetAppointmentRequest } from '../../@types/user-defined'
 import paths from '../../paths'
 import AppointmentShowDetailsPage from '../../pages/appointments/appointmentShowDetailsPage'
 
-export default class PersonDetailsController {
+export default class ShowDetailsController {
   constructor(private readonly appointmentService: AppointmentService) {}
 
   show(): RequestHandler {
