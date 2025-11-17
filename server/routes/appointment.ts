@@ -8,7 +8,7 @@ export default function appointmentRoutes(
   router: Router,
   auditService: AuditService,
 ): Router {
-  const { appointments: { personDetailsController } = {} } = controllers
+  const { appointments } = controllers
 
   router.get(paths.appointments.personDetails.pattern, async (req, res, next) => {
     await auditService.logPageView(Page.APPOINTMENT_PERSON_DETAILS_PAGE, {
@@ -16,7 +16,32 @@ export default function appointmentRoutes(
       correlationId: req.id,
     })
 
-    const handler = personDetailsController.show()
+    const handler = appointments.personDetailsController.show()
+    await handler(req, res, next)
+  })
+
+  router.get(paths.appointments.startTime.pattern, async (req, res, next) => {
+    await auditService.logPageView(Page.APPOINTMENT_START_TIME_PAGE, {
+      who: res.locals.user.username,
+      correlationId: req.id,
+    })
+
+    const handler = appointments.startTimeController.show()
+    await handler(req, res, next)
+  })
+
+  router.post(paths.appointments.startTime.pattern, async (req, res, next) => {
+    const handler = appointments.startTimeController.submit()
+    await handler(req, res, next)
+  })
+
+  router.get(paths.appointments.ableToWork.pattern, async (req, res, next) => {
+    await auditService.logPageView(Page.APPOINTMENT_ABLE_TO_WORK_PAGE, {
+      who: res.locals.user.username,
+      correlationId: req.id,
+    })
+
+    const handler = appointments.ableToWorkController.show()
     await handler(req, res, next)
   })
 
