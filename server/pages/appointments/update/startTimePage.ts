@@ -1,6 +1,7 @@
 import { AppointmentDto } from '../../../@types/shared'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
+import DateTimeFormats from '../../../utils/dateTimeUtils'
 import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './baseAppointmentUpdatePage'
 
 interface ViewData extends AppointmentUpdatePageViewData {
@@ -8,11 +9,19 @@ interface ViewData extends AppointmentUpdatePageViewData {
   title: string
 }
 
+interface Query {
+  startTime?: string
+}
+
 interface Body {
   startTime: string
 }
 
 export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
+  constructor(private readonly query: Query = {}) {
+    super()
+  }
+
   nextPath(appointmentId: string, projectCode: string): string {
     return paths.appointments.ableToWork({ projectCode, appointmentId })
   }
@@ -32,6 +41,16 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
       startTime: appointment.startTime,
       title: this.getPageTitle(commonViewData.offender),
     }
+  }
+
+  validate(): void {
+    if (!this.query.startTime) {
+      this.validationErrors.startTime = { text: 'Enter a start time' }
+    } else if (!DateTimeFormats.isValidTime(this.query.startTime as string)) {
+      this.validationErrors.startTime = { text: 'Enter a valid start time, for example 09:00' }
+    }
+
+    this.checkHasErrors()
   }
 
   private getPageTitle(offender: Offender): string {
