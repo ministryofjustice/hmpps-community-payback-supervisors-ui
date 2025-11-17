@@ -11,5 +11,6 @@ export default {
   },
   appointments: {
     singleAppointment: singleAppointmentPath,
+    outcome: singleAppointmentPath.path('outcome'),
   },
 }
