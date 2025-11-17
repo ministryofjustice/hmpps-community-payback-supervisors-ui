@@ -18,4 +18,8 @@ export default class StartTimePage extends Page {
 
     return new StartTimePage(appointment, isArrivedForm)
   }
+
+  clearStartTime(): void {
+    this.getTextInputById('startTime').clear()
+  }
 }
