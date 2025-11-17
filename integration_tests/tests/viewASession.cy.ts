@@ -65,6 +65,6 @@ context('Session', () => {
     cy.task('stubFindAppointment', { appointment, projectCode: session.projectCode })
     sessionPage.clickOnAnAppointment()
     //  Then I see the appointment and offender details
-    Page.verifyOnPage(AppointmentPage)
+    Page.verifyOnPage(AppointmentPage, appointment)
   })
 })

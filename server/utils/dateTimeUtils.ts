@@ -43,4 +43,28 @@ export default class DateTimeFormats {
 
     return parsedDate
   }
+
+  /**
+   * Formats a time string into HH:MM format, removing any trailing :SS.
+   * @param string a time string
+   * @returns A string
+   */
+  static stripTime(time: string) {
+    if (!DateTimeFormats.isValidTime(time)) {
+      throw new InvalidDateStringError(`Invalid time: ${time}`)
+    }
+
+    const timeParts = time.split(':')
+
+    return `${timeParts[0]}:${timeParts[1]}`
+  }
+
+  /**
+   * Check that a string is in the HH:MM or HH:MM:SS format (12 or 24 hour clock).
+   * @param string a time string
+   * @returns A boolean
+   */
+  static isValidTime(time: string): boolean {
+    return /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]($|:[0-5][0-9]$)/.test(time)
+  }
 }

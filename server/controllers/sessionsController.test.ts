@@ -57,7 +57,7 @@ describe('SessionsController', () => {
             {
               ...appointmentSummary,
               formattedOffender: offender,
-              path: paths.appointments.personDetails({
+              path: paths.appointments.show({
                 projectCode: session.projectCode,
                 appointmentId: appointmentSummary.id.toString(),
               }),

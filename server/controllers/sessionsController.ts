@@ -22,7 +22,7 @@ export default class SessionsController {
       const appointmentSummaries = session.appointmentSummaries.map(appointment => ({
         ...appointment,
         formattedOffender: new Offender(appointment.offender),
-        path: paths.appointments.personDetails({
+        path: paths.appointments.show({
           projectCode: session.projectCode,
           appointmentId: appointment.id.toString(),
         }),

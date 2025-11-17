@@ -61,4 +61,43 @@ describe('DateTimeFormats', () => {
       expect(() => DateTimeFormats.isoToDateObj(date)).toThrow(new InvalidDateStringError(`Invalid Date: ${date}`))
     })
   })
+
+  describe('stripTime', () => {
+    it('strips ":SS" data from a time string', () => {
+      const time = '23:12:12'
+
+      expect(DateTimeFormats.stripTime(time)).toEqual('23:12')
+    })
+
+    it('returns the same if no seconds data', () => {
+      const time = '23:12'
+
+      expect(DateTimeFormats.stripTime(time)).toEqual('23:12')
+    })
+
+    const invalidTimes = ['23:12;00', '23:12trr', 'someText', 'some:text', 'tr:12:13', 'tr:12:']
+
+    it.each(invalidTimes)('raises an error if the time is not in the right format', time => {
+      expect(() => DateTimeFormats.stripTime(time)).toThrow(new InvalidDateStringError(`Invalid time: ${time}`))
+    })
+  })
+
+  describe('isValidTime', () => {
+    it.each([
+      ['234:00', false],
+      ['34456', false],
+      ['1:', false],
+      ['1', false],
+      [':4', false],
+      [23, false],
+      [null, false],
+      ['', false],
+      ['-', false],
+      ['01:0l', false],
+      ['17:00', true],
+      ['17:00:45', true],
+    ])('returns false if not valid 24 hour time', (time: string, expected: boolean) => {
+      expect(DateTimeFormats.isValidTime(time)).toEqual(expected)
+    })
+  })
 })

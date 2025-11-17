@@ -1,36 +1,49 @@
 import { DeepMocked, createMock } from '@golevelup/ts-jest'
 import type { NextFunction, Request, Response } from 'express'
-import PersonDetailsController from './personDetailsController'
+import ShowDetailsController from './showDetailsController'
 import AppointmentService from '../../services/appointmentService'
 import appointmentFactory from '../../testutils/factories/appointmentFactory'
+import AppointmentShowDetailsPage from '../../pages/appointments/appointmentShowDetailsPage'
 import paths from '../../paths'
 
-describe('PersonDetailsController', () => {
+jest.mock('../../pages/appointments/appointmentShowDetailsPage')
+
+describe('ShowDetailsController', () => {
   const projectCode = '123'
   const appointmentId = '234'
   const request: DeepMocked<Request> = createMock<Request>({ params: { projectCode, appointmentId } })
   const next: DeepMocked<NextFunction> = createMock<NextFunction>({})
+  const appointmentDetailsPageMock: jest.Mock =
+    AppointmentShowDetailsPage as unknown as jest.Mock<AppointmentShowDetailsPage>
 
-  let personDetailsController: PersonDetailsController
+  let showDetailsController: ShowDetailsController
   const appointmentService = createMock<AppointmentService>()
 
   beforeEach(() => {
-    personDetailsController = new PersonDetailsController(appointmentService)
+    showDetailsController = new ShowDetailsController(appointmentService)
   })
 
   describe('show', () => {
-    it('should render the view person details page', async () => {
+    it('should render the view appointment details page', async () => {
+      const viewData = { someKey: 'someValue' }
+
+      appointmentDetailsPageMock.mockImplementation(() => {
+        return {
+          viewData: () => viewData,
+        }
+      })
+
       const appointment = appointmentFactory.build()
 
       appointmentService.getAppointment.mockResolvedValue(appointment)
 
-      const requestHandler = personDetailsController.show()
+      const requestHandler = showDetailsController.show()
       const response = createMock<Response>()
 
       await requestHandler(request, response, next)
 
       expect(response.render).toHaveBeenCalledWith('appointments/show', {
-        appointment,
+        ...viewData,
         arrivedPath: paths.appointments.startTime({ projectCode, appointmentId }),
       })
     })
