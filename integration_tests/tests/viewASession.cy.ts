@@ -11,7 +11,7 @@
 //  Scenario: viewing an individual appointment
 //    Given I am on a session page
 //    When I click on an appointment
-//    Then I see the appointment and offender details
+//    Then I am taken to the appointment page
 
 import IndexPage from '../pages'
 import Page from '../pages/page'
@@ -64,7 +64,7 @@ context('Session', () => {
     //  When I click on an appointment
     cy.task('stubFindAppointment', { appointment, projectCode: session.projectCode })
     sessionPage.clickOnAnAppointment()
-    //  Then I see the appointment and offender details
+    //  Then I am taken to the appointment page
     Page.verifyOnPage(AppointmentPage, appointment)
   })
 })

@@ -15,4 +15,6 @@ test('View a person details', async ({ page, deliusUser }) => {
 
   const appointmentPage = new AppointmentPage(page)
   await appointmentPage.expect.toBeOnThePage()
+  await appointmentPage.expect.toShowAppointmentDetails()
+  await appointmentPage.expect.toShowOffenderDetails()
 })
