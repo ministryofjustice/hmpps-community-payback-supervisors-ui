@@ -11,6 +11,9 @@ const paths = {
     show: appointmentPath,
     startTime: appointmentPath.path('start-time'),
     ableToWork: appointmentPath.path('able-to-work'),
+    confirm: {
+      working: appointmentPath.path('confirm-working'),
+    },
   },
 }
 
