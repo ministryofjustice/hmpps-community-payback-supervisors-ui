@@ -31,6 +31,7 @@ export default class AppointmentShowDetailsPage {
       arrivedPath: paths.appointments.startTime({
         projectCode: appointment.projectCode,
         appointmentId: appointment.id.toString(),
+        action: 'arrived',
       }),
     }
   }

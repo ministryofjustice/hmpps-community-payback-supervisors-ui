@@ -14,11 +14,11 @@ export default abstract class BaseAppointmentUpdatePage<TBody> {
 
   hasErrors: boolean
 
-  abstract nextPath(appointmentId: string | AppointmentDto, projectCode: string): string
+  abstract nextPath(appointmentId: string | AppointmentDto, projectCode: string, action: string): string
 
-  protected abstract backPath(appointment: AppointmentDto, projectCode: string): string
+  protected abstract backPath(appointment: AppointmentDto, projectCode: string, action: string): string
 
-  protected abstract updatePath(appointment: AppointmentDto, projectCode: string): string
+  protected abstract updatePath(appointment: AppointmentDto, projectCode: string, action: string): string
 
   protected appointmentRequestBody(appointment: AppointmentDto): UpdateAppointmentOutcomeDto {
     return {
@@ -36,11 +36,15 @@ export default abstract class BaseAppointmentUpdatePage<TBody> {
     }
   }
 
-  protected commonViewData(appointment: AppointmentDto, projectCode: string): AppointmentUpdatePageViewData {
+  protected commonViewData(
+    appointment: AppointmentDto,
+    projectCode: string,
+    action: string,
+  ): AppointmentUpdatePageViewData {
     return {
       offender: new Offender(appointment.offender),
-      backPath: this.backPath(appointment, projectCode),
-      updatePath: this.updatePath(appointment, projectCode),
+      backPath: this.backPath(appointment, projectCode, action),
+      updatePath: this.updatePath(appointment, projectCode, action),
     }
   }
 

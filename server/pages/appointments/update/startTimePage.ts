@@ -22,16 +22,16 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
     super()
   }
 
-  nextPath(appointmentId: string, projectCode: string): string {
-    return paths.appointments.ableToWork({ projectCode, appointmentId })
+  nextPath(appointmentId: string, projectCode: string, action: string): string {
+    return paths.appointments.ableToWork({ projectCode, appointmentId, action })
   }
 
   protected backPath(appointment: AppointmentDto, projectCode: string): string {
     return paths.appointments.show({ projectCode, appointmentId: appointment.id.toString() })
   }
 
-  protected updatePath(appointment: AppointmentDto, projectCode: string): string {
-    return paths.appointments.startTime({ projectCode, appointmentId: appointment.id.toString() })
+  protected updatePath(appointment: AppointmentDto, projectCode: string, action: string): string {
+    return paths.appointments.startTime({ projectCode, appointmentId: appointment.id.toString(), action })
   }
 
   requestBody(appointment: AppointmentDto): UpdateAppointmentOutcomeDto {
@@ -41,8 +41,8 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
     }
   }
 
-  viewData(appointment: AppointmentDto, projectCode: string): ViewData {
-    const commonViewData = this.commonViewData(appointment, projectCode)
+  viewData(appointment: AppointmentDto, projectCode: string, action: string): ViewData {
+    const commonViewData = this.commonViewData(appointment, projectCode, action)
     const hasFormBody = this.query.startTime !== undefined
 
     return {

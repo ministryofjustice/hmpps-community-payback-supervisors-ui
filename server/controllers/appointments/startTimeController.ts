@@ -8,7 +8,7 @@ export default class StartTimeController {
 
   show(): RequestHandler {
     return async (_req: Request, res: Response) => {
-      const { projectCode, appointmentId } = _req.params
+      const { projectCode, appointmentId, action } = _req.params
 
       const appointment = await this.appointmentService.getAppointment({
         projectCode,
@@ -18,13 +18,13 @@ export default class StartTimeController {
 
       const page = new StartTimePage()
 
-      res.render('appointments/update/startTime', page.viewData(appointment, projectCode))
+      res.render('appointments/update/startTime', page.viewData(appointment, projectCode, action))
     }
   }
 
   submit(): RequestHandler {
     return async (_req: Request, res: Response) => {
-      const { projectCode, appointmentId } = _req.params
+      const { projectCode, appointmentId, action } = _req.params
       const appointment = await this.appointmentService.getAppointment({
         projectCode,
         appointmentId,
@@ -36,7 +36,7 @@ export default class StartTimeController {
 
       if (page.hasErrors) {
         return res.render('appointments/update/startTime', {
-          ...page.viewData(appointment, projectCode),
+          ...page.viewData(appointment, projectCode, action),
           errors: page.validationErrors,
           errorSummary: generateErrorSummary(page.validationErrors),
         })
@@ -50,7 +50,7 @@ export default class StartTimeController {
         data: payload,
       })
 
-      return res.redirect(page.nextPath(appointmentId, projectCode))
+      return res.redirect(page.nextPath(appointmentId, projectCode, action))
     }
   }
 }
