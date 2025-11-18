@@ -4,7 +4,6 @@ import ShowDetailsController from './showDetailsController'
 import AppointmentService from '../../services/appointmentService'
 import appointmentFactory from '../../testutils/factories/appointmentFactory'
 import AppointmentShowDetailsPage from '../../pages/appointments/appointmentShowDetailsPage'
-import paths from '../../paths'
 
 jest.mock('../../pages/appointments/appointmentShowDetailsPage')
 
@@ -42,10 +41,7 @@ describe('ShowDetailsController', () => {
 
       await requestHandler(request, response, next)
 
-      expect(response.render).toHaveBeenCalledWith('appointments/show', {
-        ...viewData,
-        arrivedPath: paths.appointments.startTime({ projectCode, appointmentId }),
-      })
+      expect(response.render).toHaveBeenCalledWith('appointments/show', viewData)
     })
   })
 })
