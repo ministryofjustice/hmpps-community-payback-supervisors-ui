@@ -1,4 +1,6 @@
 import { AppointmentDto, UpdateAppointmentOutcomeDto } from '../../../@types/shared'
+import { AppointmentArrivalActionType } from '../../../@types/user-defined'
+import InvalidUpdateActionError from '../../../errors/invalidUpdateActionError'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
 import DateTimeFormats from '../../../utils/dateTimeUtils'
@@ -41,14 +43,14 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
     }
   }
 
-  viewData(appointment: AppointmentDto, projectCode: string, action: string): ViewData {
+  viewData(appointment: AppointmentDto, projectCode: string, action: AppointmentArrivalActionType): ViewData {
     const commonViewData = this.commonViewData(appointment, projectCode, action)
     const hasFormBody = this.query.startTime !== undefined
 
     return {
       ...commonViewData,
       startTime: hasFormBody ? this.query.startTime : appointment.startTime,
-      title: this.getPageTitle(commonViewData.offender),
+      title: this.getPageTitle(commonViewData.offender, action),
     }
   }
 
@@ -62,7 +64,15 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
     this.checkHasErrors()
   }
 
-  private getPageTitle(offender: Offender): string {
-    return `You are logging ${offender.name} as having arrived at:`
+  private getPageTitle(offender: Offender, action: AppointmentArrivalActionType): string {
+    if (action === 'arrived') {
+      return `You are logging ${offender.name} as having arrived at:`
+    }
+
+    if (action === 'absent') {
+      return `You are logging ${offender.name} as absent:`
+    }
+
+    throw new InvalidUpdateActionError(`Invalid update appointment action: ${action}`)
   }
 }

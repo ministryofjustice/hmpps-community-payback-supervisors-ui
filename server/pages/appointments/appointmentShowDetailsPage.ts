@@ -5,6 +5,7 @@ import DateTimeFormats from '../../utils/dateTimeUtils'
 
 interface AppointmentActions {
   arrivedPath: string
+  absentPath: string
 }
 
 interface ViewData {
@@ -27,12 +28,11 @@ export default class AppointmentShowDetailsPage {
   }
 
   private appointmentActions(appointment: AppointmentDto): AppointmentActions {
+    const appointmentPathParams = { projectCode: appointment.projectCode, appointmentId: appointment.id.toString() }
+
     return {
-      arrivedPath: paths.appointments.startTime({
-        projectCode: appointment.projectCode,
-        appointmentId: appointment.id.toString(),
-        action: 'arrived',
-      }),
+      absentPath: paths.appointments.startTime({ ...appointmentPathParams, action: 'absent' }),
+      arrivedPath: paths.appointments.startTime({ ...appointmentPathParams, action: 'arrived' }),
     }
   }
 }

@@ -24,11 +24,21 @@
       {{ offender.name }}
     </h1>
 
+  {% if actions.arrivedPath %}
     {{ govukButton({
         text: 'Arrived',
         href: actions.arrivedPath,
         classes: "govuk-button--secondary govuk-!-width-full"
     }) }}
+  {% endif %}
+
+  {% if actions.absentPath %}
+    {{ govukButton({
+        text: 'Not arrived',
+        href: actions.absentPath,
+        classes: "govuk-button--secondary govuk-!-width-full"
+    }) }}
+  {% endif %}
 
     {{
       govukSummaryList({

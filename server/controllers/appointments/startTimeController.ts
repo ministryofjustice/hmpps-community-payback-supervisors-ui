@@ -2,6 +2,7 @@ import type { Request, RequestHandler, Response } from 'express'
 import AppointmentService from '../../services/appointmentService'
 import StartTimePage from '../../pages/appointments/update/startTimePage'
 import generateErrorSummary from '../../utils/errorUtils'
+import { AppointmentArrivalActionType } from '../../@types/user-defined'
 
 export default class StartTimeController {
   constructor(private readonly appointmentService: AppointmentService) {}
@@ -18,7 +19,10 @@ export default class StartTimeController {
 
       const page = new StartTimePage()
 
-      res.render('appointments/update/startTime', page.viewData(appointment, projectCode, action))
+      res.render(
+        'appointments/update/startTime',
+        page.viewData(appointment, projectCode, action as AppointmentArrivalActionType),
+      )
     }
   }
 
@@ -36,7 +40,7 @@ export default class StartTimeController {
 
       if (page.hasErrors) {
         return res.render('appointments/update/startTime', {
-          ...page.viewData(appointment, projectCode, action),
+          ...page.viewData(appointment, projectCode, action as AppointmentArrivalActionType),
           errors: page.validationErrors,
           errorSummary: generateErrorSummary(page.validationErrors),
         })

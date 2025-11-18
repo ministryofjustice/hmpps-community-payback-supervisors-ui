@@ -37,6 +37,7 @@ describe('AppointmentShowDetailsPage', () => {
         backPath: paths.sessions.show({ projectCode, date }),
         actions: {
           arrivedPath: paths.appointments.startTime({ projectCode, appointmentId: id.toString(), action: 'arrived' }),
+          absentPath: paths.appointments.startTime({ projectCode, appointmentId: id.toString(), action: 'absent' }),
         },
       })
     })

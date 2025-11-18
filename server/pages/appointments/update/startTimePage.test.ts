@@ -8,6 +8,7 @@ import StartTimePage from './startTimePage'
 jest.mock('../../../models/offender')
 
 describe('StartTimePage', () => {
+  const action = 'arrived'
   beforeEach(() => {
     jest.resetAllMocks()
   })
@@ -31,11 +32,11 @@ describe('StartTimePage', () => {
       })
 
       const page = new StartTimePage()
-      const result = page.viewData(appointment, projectCode)
+      const result = page.viewData(appointment, projectCode, action)
       expect(result).toEqual({
         offender,
         backPath: paths.appointments.show({ appointmentId, projectCode }),
-        updatePath: paths.appointments.startTime({ appointmentId, projectCode }),
+        updatePath: paths.appointments.startTime({ appointmentId, projectCode, action }),
         startTime,
         title: `You are logging Sam Smith as having arrived at:`,
       })
@@ -47,7 +48,7 @@ describe('StartTimePage', () => {
       const projectCode = 'XR3'
 
       const page = new StartTimePage({ startTime: updatedStartTime })
-      const result = page.viewData(appointment, projectCode)
+      const result = page.viewData(appointment, projectCode, action)
       expect(result.startTime).toEqual(updatedStartTime)
     })
   })
@@ -57,9 +58,9 @@ describe('StartTimePage', () => {
       const appointmentId = '1'
       const projectCode = '2'
       const page = new StartTimePage()
-      const result = page.nextPath(appointmentId, projectCode)
+      const result = page.nextPath(appointmentId, projectCode, action)
 
-      expect(result).toEqual(paths.appointments.ableToWork({ projectCode, appointmentId }))
+      expect(result).toEqual(paths.appointments.ableToWork({ projectCode, appointmentId, action }))
     })
   })
 
