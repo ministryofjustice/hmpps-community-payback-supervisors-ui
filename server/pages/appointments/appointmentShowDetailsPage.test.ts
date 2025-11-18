@@ -29,11 +29,15 @@ describe('AppointmentShowDetailsPage', () => {
 
       const page = new AppointmentShowDetailsPage()
       const result = page.viewData(appointment)
+      const { projectCode, date, id } = appointment
       expect(result).toEqual({
         offender,
         startTime: '09:00',
         endTime: '17:00',
-        backPath: paths.sessions.show({ projectCode: appointment.projectCode, date: appointment.date }),
+        backPath: paths.sessions.show({ projectCode, date }),
+        actions: {
+          arrivedPath: paths.appointments.startTime({ projectCode, appointmentId: id.toString() }),
+        },
       })
     })
   })

@@ -21,10 +21,7 @@ export default class ShowDetailsController {
 
       const page = new AppointmentShowDetailsPage()
 
-      res.render('appointments/show', {
-        ...page.viewData(appointment),
-        arrivedPath: paths.appointments.startTime({ projectCode, appointmentId }),
-      })
+      res.render('appointments/show', page.viewData(appointment))
     }
   }
 }

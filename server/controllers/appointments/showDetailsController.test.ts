@@ -42,10 +42,7 @@ describe('ShowDetailsController', () => {
 
       await requestHandler(request, response, next)
 
-      expect(response.render).toHaveBeenCalledWith('appointments/show', {
-        ...viewData,
-        arrivedPath: paths.appointments.startTime({ projectCode, appointmentId }),
-      })
+      expect(response.render).toHaveBeenCalledWith('appointments/show', viewData)
     })
   })
 })

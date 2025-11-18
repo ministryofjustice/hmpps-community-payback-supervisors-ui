@@ -3,11 +3,16 @@ import Offender from '../../models/offender'
 import paths from '../../paths'
 import DateTimeFormats from '../../utils/dateTimeUtils'
 
+interface AppointmentActions {
+  arrivedPath: string
+}
+
 interface ViewData {
   offender: Offender
   startTime: string
   endTime: string
   backPath: string
+  actions: AppointmentActions
 }
 
 export default class AppointmentShowDetailsPage {
@@ -17,6 +22,16 @@ export default class AppointmentShowDetailsPage {
       startTime: DateTimeFormats.stripTime(appointment.startTime),
       endTime: DateTimeFormats.stripTime(appointment.endTime),
       backPath: paths.sessions.show({ projectCode: appointment.projectCode, date: appointment.date }),
+      actions: this.appointmentActions(appointment),
+    }
+  }
+
+  private appointmentActions(appointment: AppointmentDto): AppointmentActions {
+    return {
+      arrivedPath: paths.appointments.startTime({
+        projectCode: appointment.projectCode,
+        appointmentId: appointment.id.toString(),
+      }),
     }
   }
 }
