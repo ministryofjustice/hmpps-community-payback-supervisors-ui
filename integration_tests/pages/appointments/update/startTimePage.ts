@@ -22,4 +22,9 @@ export default class StartTimePage extends Page {
   clearStartTime(): void {
     this.getTextInputById('startTime').clear()
   }
+
+  enterStartTime(value: string): void {
+    this.clearStartTime()
+    this.getTextInputById('startTime').type(value)
+  }
 }

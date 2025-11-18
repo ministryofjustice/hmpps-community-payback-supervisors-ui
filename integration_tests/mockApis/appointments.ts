@@ -26,4 +26,24 @@ export default {
       },
     })
   },
+
+  stubUpdateAppointmentOutcome: ({
+    appointment,
+    projectCode,
+  }: {
+    appointment: AppointmentDto
+    projectCode: string
+  }): SuperAgentRequest => {
+    const pattern = paths.appointments.outcome({ projectCode, appointmentId: appointment.id.toString() })
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPathPattern: pattern,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      },
+    })
+  },
 }

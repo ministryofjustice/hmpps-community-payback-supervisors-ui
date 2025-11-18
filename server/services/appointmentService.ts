@@ -1,5 +1,5 @@
 import { AppointmentDto } from '../@types/shared'
-import { GetAppointmentRequest } from '../@types/user-defined'
+import { GetAppointmentRequest, SaveAppointmentRequest } from '../@types/user-defined'
 import AppointmentClient from '../data/appointmentClient'
 
 export default class AppointmentService {
@@ -9,5 +9,9 @@ export default class AppointmentService {
     const appointment = await this.appointmentClient.find({ username, appointmentId, projectCode })
 
     return appointment
+  }
+
+  saveAppointment(request: SaveAppointmentRequest): Promise<void> {
+    return this.appointmentClient.save(request)
   }
 }

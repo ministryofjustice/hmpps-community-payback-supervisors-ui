@@ -1,4 +1,4 @@
-import { AppointmentDto } from '../../../@types/shared'
+import { AppointmentDto, UpdateAppointmentOutcomeDto } from '../../../@types/shared'
 import { ValidationErrors } from '../../../@types/user-defined'
 import Offender from '../../../models/offender'
 
@@ -19,6 +19,22 @@ export default abstract class BaseAppointmentUpdatePage<TBody> {
   protected abstract backPath(appointment: AppointmentDto, projectCode: string): string
 
   protected abstract updatePath(appointment: AppointmentDto, projectCode: string): string
+
+  protected appointmentRequestBody(appointment: AppointmentDto): UpdateAppointmentOutcomeDto {
+    return {
+      deliusId: appointment.id,
+      deliusVersionToUpdate: appointment.version,
+      alertActive: appointment.alertActive,
+      sensitive: appointment.sensitive,
+      startTime: appointment.startTime,
+      endTime: appointment.endTime,
+      contactOutcomeId: appointment.contactOutcomeId,
+      attendanceData: appointment.attendanceData,
+      enforcementData: appointment.enforcementData,
+      notes: appointment.notes,
+      supervisorOfficerCode: appointment.supervisorOfficerCode,
+    }
+  }
 
   protected commonViewData(appointment: AppointmentDto, projectCode: string): AppointmentUpdatePageViewData {
     return {

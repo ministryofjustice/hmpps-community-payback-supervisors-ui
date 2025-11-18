@@ -1,5 +1,6 @@
 import AppointmentClient from '../data/appointmentClient'
 import appointmentFactory from '../testutils/factories/appointmentFactory'
+import updateAppointmentOutcomeFactory from '../testutils/factories/updateAppointmentOutcomeFactory'
 import AppointmentService from './appointmentService'
 
 jest.mock('../data/appointmentClient')
@@ -28,5 +29,13 @@ describe('AppointmentService', () => {
 
     expect(appointmentClient.find).toHaveBeenCalledTimes(1)
     expect(result).toEqual(appointment)
+  })
+
+  it('should call saveAppointment on the api client', async () => {
+    const data = updateAppointmentOutcomeFactory.build()
+
+    await appointmentService.saveAppointment({ data, username: 'some-username', projectCode: 'some-code' })
+
+    expect(appointmentClient.save).toHaveBeenCalledTimes(1)
   })
 })

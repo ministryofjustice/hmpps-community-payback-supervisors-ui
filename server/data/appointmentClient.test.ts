@@ -4,6 +4,7 @@ import AppointmentClient from './appointmentClient'
 import config from '../config'
 import appointmentFactory from '../testutils/factories/appointmentFactory'
 import paths from '../paths/api'
+import updateAppointmentOutcomeFactory from '../testutils/factories/updateAppointmentOutcomeFactory'
 
 describe('AppointmentClient', () => {
   let appointmentClient: AppointmentClient
@@ -38,6 +39,22 @@ describe('AppointmentClient', () => {
 
       expect(response).toEqual(appointment)
       expect(mockAuthenticationClient.getToken).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('save', () => {
+    it('should make a POST request to the appointment outcomes path using user token', async () => {
+      const projectCode = 'some-code'
+      const data = updateAppointmentOutcomeFactory.build({ deliusId: 1001 })
+
+      nock(config.apis.communityPaybackApi.url)
+        .post(paths.appointments.outcome({ appointmentId: '1001', projectCode }))
+        .matchHeader('authorization', 'Bearer test-system-token')
+        .reply(200)
+
+      const response = await appointmentClient.save({ username: 'some-user-name', projectCode, data })
+
+      expect(response).toBeTruthy()
     })
   })
 })
