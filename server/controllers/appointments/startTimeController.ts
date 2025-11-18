@@ -54,7 +54,7 @@ export default class StartTimeController {
         data: payload,
       })
 
-      return res.redirect(page.nextPath(appointmentId, projectCode, action))
+      return res.redirect(page.nextPath(appointmentId, projectCode, action as AppointmentArrivalActionType))
     }
   }
 }

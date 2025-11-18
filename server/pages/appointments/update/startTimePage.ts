@@ -24,8 +24,16 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
     super()
   }
 
-  nextPath(appointmentId: string, projectCode: string, action: string): string {
-    return paths.appointments.ableToWork({ projectCode, appointmentId, action })
+  nextPath(appointmentId: string, projectCode: string, action: AppointmentArrivalActionType): string {
+    if (action === 'arrived') {
+      return paths.appointments.ableToWork({ projectCode, appointmentId, action })
+    }
+
+    if (action === 'absent') {
+      return paths.appointments.confirm.absent({ projectCode, appointmentId })
+    }
+
+    throw new InvalidUpdateActionError(`Invalid update appointment action: ${action}`)
   }
 
   protected backPath(appointment: AppointmentDto, projectCode: string): string {
