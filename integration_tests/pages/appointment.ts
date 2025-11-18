@@ -25,6 +25,10 @@ export default class AppointmentPage extends Page {
     return new AppointmentPage(appointment)
   }
 
+  clickArrived() {
+    cy.get('a').contains('Arrived').click()
+  }
+
   shouldShowOffenderDetails(): void {
     cy.get('span').contains(this.appointment.offender.crn)
   }
