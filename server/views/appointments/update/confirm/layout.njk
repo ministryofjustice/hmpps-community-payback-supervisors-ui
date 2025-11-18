@@ -1,0 +1,15 @@
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+
+{% extends "../../../partials/layout.njk" %}
+
+{% block content %}
+  {{ govukPanel({
+    titleText: title
+  }) }}
+
+  {% block confirmBody %}{% endblock %}
+
+  <div class="govuk-!-margin-top-7">
+    <p><a href="{{ sessionPath }}" class="govuk-link">Return to session page</a></p>
+  </div>
+{% endblock %}

@@ -55,5 +55,15 @@ export default function appointmentRoutes(
     await handler(req, res, next)
   })
 
+  router.get(paths.appointments.confirm.working.pattern, async (req, res, next) => {
+    await auditService.logPageView(Page.SHOW_CONFIRM_WORKING_PAGE, {
+      who: res.locals.user.username,
+      correlationId: req.id,
+    })
+
+    const handler = appointments.confirmController.working()
+    await handler(req, res, next)
+  })
+
   return router
 }
