@@ -26,7 +26,7 @@ export type AppointmentDto = {
     contactOutcomeId?: string;
     attendanceData?: AttendanceDataDto;
     enforcementData?: EnforcementDto;
-    supervisorOfficerCode?: string;
+    supervisorOfficerCode: string;
     notes?: string;
     sensitive?: boolean;
     alertActive?: boolean;
