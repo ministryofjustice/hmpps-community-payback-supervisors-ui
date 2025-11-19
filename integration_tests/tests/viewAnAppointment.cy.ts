@@ -17,6 +17,10 @@
 //      Given I am on the appointment page
 //      When I click on 'Arrived'
 //      Then I should be taken to the first page of the arrival form
+//    Scenario: starting an absent form
+//      Given I am on the appointment page
+//      When I click on 'Not arrived'
+//      Then I should be taken to the first page of the absent form
 
 import Page from '../pages/page'
 import SessionPage from '../pages/session'
@@ -82,6 +86,21 @@ context('viewAnAppointment', () => {
 
       // Then I should be taken to the first page of the arrival form
       Page.verifyOnPage(StartTimePage, appointment, 'arrived')
+    })
+
+    // Scenario: starting an absent form
+    it('I can navigate to the absent form', () => {
+      // Given I am on the appointment page
+      const appointment = appointmentFactory.build()
+      cy.signIn()
+      cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
+      const appointmentPage = AppointmentPage.visit(appointment)
+
+      // When I click on 'Not arrived'
+      appointmentPage.clickNotArrived()
+
+      // Then I should be taken to the first page of the absent form
+      Page.verifyOnPage(StartTimePage, appointment, 'absent')
     })
   })
 })
