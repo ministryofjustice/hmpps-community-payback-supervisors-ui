@@ -16,8 +16,8 @@ describe('AbleToWorkPage', () => {
     it('should return an object with correct data', () => {
       const appointmentId = '1'
       const startTime = '09:00'
-      const appointment = appointmentFactory.build({ id: 1, startTime })
       const projectCode = 'XR3'
+      const appointment = appointmentFactory.build({ id: 1, startTime, projectCode })
       const offender = {
         name: 'Sam Smith',
         crn: 'CRN123',
@@ -29,7 +29,7 @@ describe('AbleToWorkPage', () => {
       })
 
       const page = new AbleToWorkPage()
-      const result = page.viewData(appointment, projectCode)
+      const result = page.viewData(appointment)
       expect(result).toEqual({
         offender,
         backPath: paths.appointments.arrived.startTime({ appointmentId, projectCode }),

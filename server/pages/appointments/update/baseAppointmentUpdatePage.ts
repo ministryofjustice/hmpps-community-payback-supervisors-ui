@@ -16,9 +16,9 @@ export default abstract class BaseAppointmentUpdatePage<TBody> {
 
   abstract nextPath(appointmentId: string | AppointmentDto, projectCode: string): string
 
-  protected abstract backPath(appointment: AppointmentDto, projectCode: string): string
+  protected abstract backPath(appointment: AppointmentDto): string
 
-  protected abstract updatePath(appointment: AppointmentDto, projectCode: string): string
+  protected abstract updatePath(appointment: AppointmentDto): string
 
   protected appointmentRequestBody(appointment: AppointmentDto): UpdateAppointmentOutcomeDto {
     return {
@@ -36,11 +36,11 @@ export default abstract class BaseAppointmentUpdatePage<TBody> {
     }
   }
 
-  protected commonViewData(appointment: AppointmentDto, projectCode: string): AppointmentUpdatePageViewData {
+  protected commonViewData(appointment: AppointmentDto): AppointmentUpdatePageViewData {
     return {
       offender: new Offender(appointment.offender),
-      backPath: this.backPath(appointment, projectCode),
-      updatePath: this.updatePath(appointment, projectCode),
+      backPath: this.backPath(appointment),
+      updatePath: this.updatePath(appointment),
     }
   }
 

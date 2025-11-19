@@ -19,8 +19,8 @@ describe('StartTimePage', () => {
     it('should return an object back path, update path and startTime', () => {
       const appointmentId = '1'
       const startTime = '09:00'
-      const appointment = appointmentFactory.build({ id: 1, startTime })
       const projectCode = 'XR3'
+      const appointment = appointmentFactory.build({ id: 1, startTime, projectCode })
       const offender = {
         name: 'Sam Smith',
         crn: 'CRN123',
@@ -32,7 +32,7 @@ describe('StartTimePage', () => {
       })
 
       const page = new StartTimePage(action)
-      const result = page.viewData(appointment, projectCode)
+      const result = page.viewData(appointment)
       expect(result).toEqual({
         offender,
         backPath: paths.appointments.show({ appointmentId, projectCode }),
@@ -45,19 +45,21 @@ describe('StartTimePage', () => {
     it.each(['', '10:00'])('start time is form value if query has body', (updatedStartTime: string) => {
       const startTime = '09:00'
       const appointment = appointmentFactory.build({ id: 1, startTime })
-      const projectCode = 'XR3'
 
       const page = new StartTimePage(action, { startTime: updatedStartTime })
-      const result = page.viewData(appointment, projectCode)
+      const result = page.viewData(appointment)
       expect(result.startTime).toEqual(updatedStartTime)
     })
 
     it('returns absent update path if action is absent', () => {
       const appointment = appointmentFactory.build()
       const page = new StartTimePage('absent')
-      const result = page.viewData(appointment, 'code')
+      const result = page.viewData(appointment)
       expect(result.updatePath).toBe(
-        paths.appointments.absent.startTime({ projectCode: 'code', appointmentId: appointment.id.toString() }),
+        paths.appointments.absent.startTime({
+          projectCode: appointment.projectCode,
+          appointmentId: appointment.id.toString(),
+        }),
       )
     })
   })

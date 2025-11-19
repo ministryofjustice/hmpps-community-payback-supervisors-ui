@@ -19,7 +19,7 @@ export default class AbleToWorkController {
 
       const page = new AbleToWorkPage()
 
-      res.render('appointments/update/ableToWork', page.viewData(appointment, projectCode))
+      res.render('appointments/update/ableToWork', page.viewData(appointment))
     }
   }
 
@@ -38,7 +38,7 @@ export default class AbleToWorkController {
 
       if (page.hasErrors) {
         return res.render('appointments/update/ableToWork', {
-          ...page.viewData(appointment, projectCode),
+          ...page.viewData(appointment),
           errors: page.validationErrors,
           errorSummary: generateErrorSummary(page.validationErrors),
         })
