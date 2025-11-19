@@ -83,7 +83,7 @@ describe('StartTimePage', () => {
         const page = new StartTimePage('absent')
         const result = page.nextPath(appointmentId, projectCode)
 
-        expect(result).toEqual(paths.appointments.absent.startTime({ projectCode, appointmentId }))
+        expect(result).toEqual(paths.appointments.confirm.absent({ projectCode, appointmentId }))
       })
     })
   })

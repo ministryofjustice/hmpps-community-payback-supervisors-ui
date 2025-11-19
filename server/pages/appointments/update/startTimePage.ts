@@ -1,4 +1,4 @@
-import { AppointmentDto, ContactOutcomeDto, UpdateAppointmentOutcomeDto } from '../../../@types/shared'
+import { AppointmentDto, UpdateAppointmentOutcomeDto } from '../../../@types/shared'
 import { AppointmentArrivedAction } from '../../../@types/user-defined'
 import InvalidUpdateActionError from '../../../errors/invalidUpdateActionError'
 import Offender from '../../../models/offender'
@@ -35,8 +35,7 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
     }
 
     if (this.action === 'absent') {
-      // TODO: replace with confirm page once added
-      return paths.appointments.absent.startTime({ projectCode, appointmentId })
+      return paths.appointments.confirm.absent({ projectCode, appointmentId })
     }
 
     throw new InvalidUpdateActionError(`Invalid update appointment action: ${this.action}`)

@@ -3,6 +3,7 @@ import signIn from '../steps/signIn'
 import SessionPage from '../pages/sessionPage'
 import AppointmentPage from '../pages/appointmentPage'
 import StartTimePage from '../pages/appointments/update/startTimePage'
+import ConfirmAbsentPage from '../pages/appointments/update/confirm/confirmAbsentPage'
 
 test('Record an absence', async ({ page, deliusUser }) => {
   const homePage = await signIn(page, deliusUser)
@@ -26,5 +27,10 @@ test('Record an absence', async ({ page, deliusUser }) => {
   await startTimePage.enterAStartTime()
   await startTimePage.clickContinue()
 
-  await startTimePage.expect.toBeOnThePage()
+  const confirmAbsentPage = new ConfirmAbsentPage(page)
+  await confirmAbsentPage.expect.toBeOnThePage()
+
+  await confirmAbsentPage.clickLinkToSessionPage()
+
+  await sessionPage.expect.toBeOnThePage()
 })
