@@ -35,7 +35,7 @@ context('Home', () => {
 
     //  When I visit a session page
     const appointmentSummaries = appointmentSummaryFactory.buildList(3)
-    const session = sessionFactory.build({ appointmentSummaries, projectCode: 'N56123456', date: '2025-09-22' })
+    const session = sessionFactory.build({ appointmentSummaries, projectCode: 'N56123456', date: '2025-09-15' })
     cy.task('stubFindSession', { session })
     page.clickViewSession()
 
