@@ -28,7 +28,7 @@ export default abstract class BaseAppointmentUpdatePage<TBody> {
       sensitive: appointment.sensitive,
       startTime: appointment.startTime,
       endTime: appointment.endTime,
-      contactOutcomeId: appointment.contactOutcomeId,
+      contactOutcomeCode: appointment.contactOutcomeCode,
       attendanceData: appointment.attendanceData,
       enforcementData: appointment.enforcementData,
       notes: appointment.notes,

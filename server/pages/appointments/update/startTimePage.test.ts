@@ -126,7 +126,7 @@ describe('StartTimePage', () => {
         startTime: '09:00',
         id: 1,
         version: '2',
-        contactOutcomeId: '3',
+        contactOutcomeCode: '3',
         supervisorOfficerCode: '123',
       })
       const page = new StartTimePage({ startTime: '10:00' })
@@ -141,7 +141,7 @@ describe('StartTimePage', () => {
         startTime: '09:00',
         id: 1,
         version: '2',
-        contactOutcomeId: '3',
+        contactOutcomeCode: '3',
         supervisorOfficerCode: '123',
       })
       const page = new StartTimePage({ startTime: '09:00' })
@@ -149,7 +149,7 @@ describe('StartTimePage', () => {
       const result = page.requestBody(appointment)
 
       const expected: UpdateAppointmentOutcomeDto = {
-        contactOutcomeId: '3',
+        contactOutcomeCode: '3',
         deliusVersionToUpdate: '2',
         deliusId: 1,
         supervisorOfficerCode: '123',
