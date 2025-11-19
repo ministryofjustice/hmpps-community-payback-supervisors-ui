@@ -1,4 +1,4 @@
-import { AppointmentDto, UpdateAppointmentOutcomeDto } from '../../../@types/shared'
+import { AppointmentDto, ContactOutcomeDto, UpdateAppointmentOutcomeDto } from '../../../@types/shared'
 import { AppointmentArrivedAction } from '../../../@types/user-defined'
 import InvalidUpdateActionError from '../../../errors/invalidUpdateActionError'
 import Offender from '../../../models/offender'
@@ -20,6 +20,8 @@ interface Body {
 }
 
 export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
+  static UnacceptableAbsenceOutcomeCode = 'UAAB'
+
   constructor(
     private readonly action: AppointmentArrivedAction,
     private readonly query: Query = {},
@@ -52,10 +54,16 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
   }
 
   requestBody(appointment: AppointmentDto): UpdateAppointmentOutcomeDto {
-    return {
+    const body = {
       ...this.appointmentRequestBody(appointment),
       startTime: this.query.startTime,
     }
+
+    if (this.action === 'absent') {
+      body.contactOutcomeCode = StartTimePage.UnacceptableAbsenceOutcomeCode
+    }
+
+    return body
   }
 
   viewData(appointment: AppointmentDto): ViewData {
