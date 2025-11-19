@@ -11,8 +11,11 @@ export default class StartTimePage extends Page {
     super(title)
   }
 
-  static visit(appointment: AppointmentDto, projectCode: string, action: AppointmentArrivedAction): StartTimePage {
-    const path = paths.appointments[action].startTime({ appointmentId: appointment.id.toString(), projectCode })
+  static visit(appointment: AppointmentDto, action: AppointmentArrivedAction): StartTimePage {
+    const path = paths.appointments[action].startTime({
+      appointmentId: appointment.id.toString(),
+      projectCode: appointment.projectCode,
+    })
     cy.visit(path)
 
     return new StartTimePage(appointment, action)

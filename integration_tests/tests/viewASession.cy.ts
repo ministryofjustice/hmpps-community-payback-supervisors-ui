@@ -60,9 +60,9 @@ context('Session', () => {
     cy.task('stubFindSession', { session })
     const sessionPage = SessionPage.visit(session)
 
-    const appointment = appointmentFactory.build({ id: appointmentSummaries[0].id })
+    const appointment = appointmentFactory.build({ id: appointmentSummaries[0].id, projectCode: session.projectCode })
     //  When I click on an appointment
-    cy.task('stubFindAppointment', { appointment, projectCode: session.projectCode })
+    cy.task('stubFindAppointment', { appointment })
     sessionPage.clickOnAnAppointment()
     //  Then I am taken to the appointment page
     Page.verifyOnPage(AppointmentPage, appointment)

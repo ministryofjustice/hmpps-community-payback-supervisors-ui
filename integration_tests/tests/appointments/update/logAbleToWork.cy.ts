@@ -40,7 +40,7 @@ context('Log able to work ', () => {
   it('validates the form', () => {
     const appointment = appointmentFactory.build()
     // Given I am on the able to work page
-    cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
+    cy.task('stubFindAppointment', { appointment })
 
     const page = AbleToWorkPage.visit(appointment)
 
@@ -57,7 +57,7 @@ context('Log able to work ', () => {
     it('submits form and navigates to confirmation page', () => {
       const appointment = appointmentFactory.build()
       // Given I am on the able to work page
-      cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
+      cy.task('stubFindAppointment', { appointment })
 
       const page = AbleToWorkPage.visit(appointment)
 
@@ -78,7 +78,7 @@ context('Log able to work ', () => {
       const appointment = appointmentFactory.build({ projectCode: session.projectCode, date: session.date })
 
       // Given I am on the confirm working page
-      cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
+      cy.task('stubFindAppointment', { appointment })
 
       const page = ConfirmWorkingPage.visit(appointment)
 
