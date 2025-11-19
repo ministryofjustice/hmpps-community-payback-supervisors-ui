@@ -19,4 +19,6 @@ export interface SaveAppointmentRequest extends BaseRequest {
   data: UpdateAppointmentOutcomeDto
 }
 
+export type AppointmentArrivedAction = 'arrived' | 'absent'
+
 export type ValidationErrors<T> = Partial<Record<keyof T, Record<'text', string>>>

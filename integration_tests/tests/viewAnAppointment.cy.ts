@@ -81,7 +81,7 @@ context('viewAnAppointment', () => {
       appointmentPage.clickArrived()
 
       // Then I should be taken to the first page of the arrival form
-      Page.verifyOnPage(StartTimePage, appointment, true)
+      Page.verifyOnPage(StartTimePage, appointment, 'arrived')
     })
   })
 })

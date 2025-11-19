@@ -2,21 +2,20 @@ import { AppointmentDto } from '../../../../server/@types/shared'
 import Page from '../../page'
 import Offender from '../../../../server/models/offender'
 import paths from '../../../../server/paths'
+import { AppointmentArrivedAction } from '../../../../server/@types/user-defined'
 
 export default class StartTimePage extends Page {
-  constructor(appointment: AppointmentDto, isArrivedForm: boolean) {
+  constructor(appointment: AppointmentDto, action: AppointmentArrivedAction) {
     const offender = new Offender(appointment.offender)
-    const title = isArrivedForm
-      ? `You are logging ${offender.name} as having arrived at:`
-      : `You are logging ${offender.name} as absent:`
+    const title: string = StartTimePage.getExpectedTitle(action, offender)
     super(title)
   }
 
-  static visit(appointment: AppointmentDto, projectCode: string, isArrivedForm: boolean): StartTimePage {
-    const path = paths.appointments.arrived.startTime({ appointmentId: appointment.id.toString(), projectCode })
+  static visit(appointment: AppointmentDto, projectCode: string, action: AppointmentArrivedAction): StartTimePage {
+    const path = paths.appointments[action].startTime({ appointmentId: appointment.id.toString(), projectCode })
     cy.visit(path)
 
-    return new StartTimePage(appointment, isArrivedForm)
+    return new StartTimePage(appointment, action)
   }
 
   clearStartTime(): void {
@@ -26,5 +25,18 @@ export default class StartTimePage extends Page {
   enterStartTime(value: string): void {
     this.clearStartTime()
     this.getTextInputById('startTime').type(value)
+  }
+
+  private static getExpectedTitle(action: string, offender: Offender) {
+    let title: string
+
+    if (action === 'arrived') {
+      title = `You are logging ${offender.name} as having arrived at:`
+    }
+
+    if (action === 'absent') {
+      title = `You are logging ${offender.name} as absent:`
+    }
+    return title
   }
 }

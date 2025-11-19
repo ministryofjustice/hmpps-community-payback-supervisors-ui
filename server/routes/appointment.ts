@@ -26,12 +26,27 @@ export default function appointmentRoutes(
       correlationId: req.id,
     })
 
-    const handler = appointments.startTimeController.show()
+    const handler = appointments.startTimeController.show('arrived')
     await handler(req, res, next)
   })
 
   router.post(paths.appointments.arrived.startTime.pattern, async (req, res, next) => {
-    const handler = appointments.startTimeController.submit()
+    const handler = appointments.startTimeController.submit('arrived')
+    await handler(req, res, next)
+  })
+
+  router.get(paths.appointments.absent.startTime.pattern, async (req, res, next) => {
+    await auditService.logPageView(Page.APPOINTMENT_ABSENT_START_TIME_PAGE, {
+      who: res.locals.user.username,
+      correlationId: req.id,
+    })
+
+    const handler = appointments.startTimeController.show('absent')
+    await handler(req, res, next)
+  })
+
+  router.post(paths.appointments.absent.startTime.pattern, async (req, res, next) => {
+    const handler = appointments.startTimeController.submit('absent')
     await handler(req, res, next)
   })
 

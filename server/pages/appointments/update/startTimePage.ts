@@ -1,4 +1,6 @@
 import { AppointmentDto, UpdateAppointmentOutcomeDto } from '../../../@types/shared'
+import { AppointmentArrivedAction } from '../../../@types/user-defined'
+import InvalidUpdateActionError from '../../../errors/invalidUpdateActionError'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
 import DateTimeFormats from '../../../utils/dateTimeUtils'
@@ -18,12 +20,24 @@ interface Body {
 }
 
 export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
-  constructor(private readonly query: Query = {}) {
+  constructor(
+    private readonly action: AppointmentArrivedAction,
+    private readonly query: Query = {},
+  ) {
     super()
   }
 
   nextPath(appointmentId: string, projectCode: string): string {
-    return paths.appointments.arrived.ableToWork({ projectCode, appointmentId })
+    if (this.action === 'arrived') {
+      return paths.appointments.arrived.ableToWork({ projectCode, appointmentId })
+    }
+
+    if (this.action === 'absent') {
+      // TODO: replace with confirm page once added
+      return paths.appointments.absent.startTime({ projectCode, appointmentId })
+    }
+
+    throw new InvalidUpdateActionError(`Invalid update appointment action: ${this.action}`)
   }
 
   protected backPath(appointment: AppointmentDto, projectCode: string): string {
@@ -31,7 +45,7 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
   }
 
   protected updatePath(appointment: AppointmentDto, projectCode: string): string {
-    return paths.appointments.arrived.startTime({ projectCode, appointmentId: appointment.id.toString() })
+    return paths.appointments[this.action].startTime({ projectCode, appointmentId: appointment.id.toString() })
   }
 
   requestBody(appointment: AppointmentDto): UpdateAppointmentOutcomeDto {
@@ -63,6 +77,14 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
   }
 
   private getPageTitle(offender: Offender): string {
-    return `You are logging ${offender.name} as having arrived at:`
+    if (this.action === 'arrived') {
+      return `You are logging ${offender.name} as having arrived at:`
+    }
+
+    if (this.action === 'absent') {
+      return `You are logging ${offender.name} as absent:`
+    }
+
+    throw new InvalidUpdateActionError(`Invalid update appointment action: ${this.action}`)
   }
 }
