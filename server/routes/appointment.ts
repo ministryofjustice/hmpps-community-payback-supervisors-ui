@@ -89,5 +89,15 @@ export default function appointmentRoutes(
     await handler(req, res, next)
   })
 
+  router.get(paths.appointments.confirm.absent.pattern, async (req, res, next) => {
+    await auditService.logPageView(Page.SHOW_CONFIRM_ABSENT_PAGE, {
+      who: res.locals.user.username,
+      correlationId: req.id,
+    })
+
+    const handler = appointments.confirmController.absent()
+    await handler(req, res, next)
+  })
+
   return router
 }

@@ -26,4 +26,25 @@ export default class ConfirmController {
       })
     }
   }
+
+  absent(): RequestHandler {
+    return async (_req: Request, res: Response) => {
+      const { projectCode, appointmentId } = _req.params
+
+      const request: GetAppointmentRequest = {
+        username: res.locals.user.username,
+        projectCode,
+        appointmentId,
+      }
+
+      const appointment = await this.appointmentService.getAppointment(request)
+      const offender = new Offender(appointment.offender)
+
+      res.render('appointments/update/confirm/absent', {
+        offender,
+        title: `${offender.name} has been recorded as absent`,
+        sessionPath: paths.sessions.show({ projectCode: appointment.projectCode, date: appointment.date }),
+      })
+    }
+  }
 }
