@@ -4,8 +4,9 @@ import SessionPage from '../pages/sessionPage'
 import AppointmentPage from '../pages/appointmentPage'
 import StartTimePage from '../pages/appointments/update/startTimePage'
 import AbleToWorkPage from '../pages/appointments/update/ableToWorkPage'
+import ConfirmWorkingPage from '../pages/appointments/update/confirmWorkingPage'
 
-test('Record an arrival', async ({ page, deliusUser }) => {
+test('Record an arrival and log as working', async ({ page, deliusUser }) => {
   const homePage = await signIn(page, deliusUser)
 
   await homePage.viewDetailsLinkLocator.click()
@@ -29,4 +30,11 @@ test('Record an arrival', async ({ page, deliusUser }) => {
 
   const ableToWorkPage = new AbleToWorkPage(page)
   await ableToWorkPage.expect.toBeOnThePage()
+  await ableToWorkPage.checkYes()
+  await ableToWorkPage.clickContinue()
+
+  const confirmWorkingPage = new ConfirmWorkingPage(page)
+  await confirmWorkingPage.clickLinkToSessionPage()
+
+  await sessionPage.expect.toBeOnThePage()
 })

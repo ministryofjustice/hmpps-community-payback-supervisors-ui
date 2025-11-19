@@ -1,5 +1,28 @@
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% extends "./layout.njk" %}
 
-{% block beforeForm %}
-  <h1>Can Alex Boyle work today?</h1>
+{% set pageTitle = 'Can the person work today?' %}
+
+{% block formContent %}
+  {{ govukRadios({
+    name: "ableToWork",
+    fieldset: {
+      legend: {
+        text: title,
+        isPageHeading: true,
+        classes: "govuk-fieldset__legend--l"
+      }
+    },
+    items: [
+      {
+        value: "yes",
+        text: "Yes"
+      },
+      {
+        value: "no",
+        text: "No"
+      }
+    ],
+    errorMessage: errors.ableToWork
+  }) }}
 {% endblock %}

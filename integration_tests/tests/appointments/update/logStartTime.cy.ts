@@ -60,7 +60,7 @@ context('Log start time ', () => {
       page.clickSubmit()
 
       // Then I see the next form page
-      Page.verifyOnPage(AbleToWorkPage)
+      Page.verifyOnPage(AbleToWorkPage, appointment)
     })
   })
 })

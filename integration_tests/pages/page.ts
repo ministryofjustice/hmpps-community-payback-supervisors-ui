@@ -33,6 +33,10 @@ export default abstract class Page {
     cy.get(`#${id}`).type(details)
   }
 
+  checkRadioByNameAndValue(name: string, option: string): void {
+    cy.get(`input[name="${name}"][value="${option}"]`).check()
+  }
+
   shouldHaveInputValue(id: string, value: string): void {
     this.getTextInputById(id).should('have.value', value)
   }
