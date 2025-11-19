@@ -4,20 +4,27 @@ import { Locator, Page, expect } from '@playwright/test'
 import BasePage from '../../basePage'
 
 export default class AbleToWorkPage extends BasePage {
-  readonly titleText = 'Can Alex Boyle work today?'
+  readonly titleText = 'Can Harry Wormwood work today?'
 
   readonly expect: AbleToWorkPageAssertions
 
   private readonly continueButtonLocator: Locator
 
+  private readonly ableToWorkLocator: Locator
+
   constructor(readonly page: Page) {
     super(page)
     this.expect = new AbleToWorkPageAssertions(this)
     this.continueButtonLocator = page.getByRole('button', { name: 'continue' })
+    this.ableToWorkLocator = page.getByRole('group', { name: this.titleText })
   }
 
   async clickContinue() {
     await this.continueButtonLocator.click()
+  }
+
+  async checkYes() {
+    await this.ableToWorkLocator.getByRole('radio', { name: 'Yes' }).check()
   }
 }
 
