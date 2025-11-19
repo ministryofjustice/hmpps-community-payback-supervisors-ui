@@ -11,15 +11,22 @@ export default class AppointmentPage extends BasePage {
 
   readonly arrivedButtonLocator: Locator
 
+  readonly notArrivedButtonLocator: Locator
+
   constructor(readonly page: Page) {
     super(page)
     this.expect = new AppointmentPageAssertions(this)
     this.details = new SummaryListComponent(page)
-    this.arrivedButtonLocator = page.getByRole('button', { name: 'Arrived' })
+    this.arrivedButtonLocator = page.getByRole('button', { name: 'Arrived', exact: true })
+    this.notArrivedButtonLocator = page.getByRole('button', { name: 'Not arrived' })
   }
 
   async clickArrived() {
     await this.arrivedButtonLocator.click()
+  }
+
+  async clickNotArrived() {
+    await this.notArrivedButtonLocator.click()
   }
 }
 

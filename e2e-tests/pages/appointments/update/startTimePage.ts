@@ -2,9 +2,10 @@
 
 import { Locator, Page, expect } from '@playwright/test'
 import BasePage from '../../basePage'
+import { AppointmentArrivedAction } from '../../../../server/@types/user-defined'
 
 export default class StartTimePage extends BasePage {
-  readonly titleText = 'You are logging Harry Wormwood as having arrived at:'
+  readonly titleText = this.getExpectedTitle()
 
   readonly expect: StartTimePageAssertions
 
@@ -12,11 +13,20 @@ export default class StartTimePage extends BasePage {
 
   private readonly continueButtonLocator: Locator
 
-  constructor(readonly page: Page) {
+  constructor(
+    readonly page: Page,
+    private readonly action: AppointmentArrivedAction,
+  ) {
     super(page)
     this.expect = new StartTimePageAssertions(this)
     this.startTimeFieldLocator = page.getByLabel(this.titleText)
     this.continueButtonLocator = page.getByRole('button', { name: 'continue' })
+  }
+
+  getExpectedTitle() {
+    return this.action === 'arrived'
+      ? 'You are logging Harry Wormwood as having arrived at:'
+      : 'You are logging Harry Wormwood as absent:'
   }
 
   async clickContinue() {
@@ -32,6 +42,6 @@ class StartTimePageAssertions {
   constructor(private readonly page: StartTimePage) {}
 
   async toBeOnThePage() {
-    await expect(this.page.headingLocator).toContainText(this.page.titleText)
+    await expect(this.page.headingLocator).toContainText(this.page.getExpectedTitle())
   }
 }

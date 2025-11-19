@@ -20,22 +20,37 @@ export default function appointmentRoutes(
     await handler(req, res, next)
   })
 
-  router.get(paths.appointments.startTime.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.APPOINTMENT_START_TIME_PAGE, {
+  router.get(paths.appointments.arrived.startTime.pattern, async (req, res, next) => {
+    await auditService.logPageView(Page.APPOINTMENT_ARRIVED_START_TIME_PAGE, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
 
-    const handler = appointments.startTimeController.show()
+    const handler = appointments.startTimeController.show('arrived')
     await handler(req, res, next)
   })
 
-  router.post(paths.appointments.startTime.pattern, async (req, res, next) => {
-    const handler = appointments.startTimeController.submit()
+  router.post(paths.appointments.arrived.startTime.pattern, async (req, res, next) => {
+    const handler = appointments.startTimeController.submit('arrived')
     await handler(req, res, next)
   })
 
-  router.get(paths.appointments.ableToWork.pattern, async (req, res, next) => {
+  router.get(paths.appointments.absent.startTime.pattern, async (req, res, next) => {
+    await auditService.logPageView(Page.APPOINTMENT_ABSENT_START_TIME_PAGE, {
+      who: res.locals.user.username,
+      correlationId: req.id,
+    })
+
+    const handler = appointments.startTimeController.show('absent')
+    await handler(req, res, next)
+  })
+
+  router.post(paths.appointments.absent.startTime.pattern, async (req, res, next) => {
+    const handler = appointments.startTimeController.submit('absent')
+    await handler(req, res, next)
+  })
+
+  router.get(paths.appointments.arrived.ableToWork.pattern, async (req, res, next) => {
     await auditService.logPageView(Page.SHOW_APPOINTMENT_ABLE_TO_WORK_PAGE, {
       who: res.locals.user.username,
       correlationId: req.id,
@@ -45,7 +60,7 @@ export default function appointmentRoutes(
     await handler(req, res, next)
   })
 
-  router.post(paths.appointments.ableToWork.pattern, async (req, res, next) => {
+  router.post(paths.appointments.arrived.ableToWork.pattern, async (req, res, next) => {
     await auditService.logPageView(Page.SUBMIT_APPOINTMENT_ABLE_TO_WORK_PAGE, {
       who: res.locals.user.username,
       correlationId: req.id,

@@ -26,7 +26,13 @@
 
     {{ govukButton({
         text: 'Arrived',
-        href: arrivedPath,
+        href: actions.arrivedPath,
+        classes: "govuk-button--secondary govuk-!-width-full"
+    }) }}
+
+    {{ govukButton({
+        text: 'Not arrived',
+        href: actions.absentPath,
         classes: "govuk-button--secondary govuk-!-width-full"
     }) }}
 
