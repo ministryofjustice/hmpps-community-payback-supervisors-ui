@@ -28,7 +28,7 @@ export default class AppointmentShowDetailsPage {
 
   private appointmentActions(appointment: AppointmentDto): AppointmentActions {
     return {
-      arrivedPath: paths.appointments.startTime({
+      arrivedPath: paths.appointments.arrived.startTime({
         projectCode: appointment.projectCode,
         appointmentId: appointment.id.toString(),
       }),

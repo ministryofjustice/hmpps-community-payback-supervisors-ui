@@ -23,7 +23,7 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
   }
 
   nextPath(appointmentId: string, projectCode: string): string {
-    return paths.appointments.ableToWork({ projectCode, appointmentId })
+    return paths.appointments.arrived.ableToWork({ projectCode, appointmentId })
   }
 
   protected backPath(appointment: AppointmentDto, projectCode: string): string {
@@ -31,7 +31,7 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
   }
 
   protected updatePath(appointment: AppointmentDto, projectCode: string): string {
-    return paths.appointments.startTime({ projectCode, appointmentId: appointment.id.toString() })
+    return paths.appointments.arrived.startTime({ projectCode, appointmentId: appointment.id.toString() })
   }
 
   requestBody(appointment: AppointmentDto): UpdateAppointmentOutcomeDto {

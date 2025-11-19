@@ -35,7 +35,7 @@ describe('StartTimePage', () => {
       expect(result).toEqual({
         offender,
         backPath: paths.appointments.show({ appointmentId, projectCode }),
-        updatePath: paths.appointments.startTime({ appointmentId, projectCode }),
+        updatePath: paths.appointments.arrived.startTime({ appointmentId, projectCode }),
         startTime,
         title: `You are logging Sam Smith as having arrived at:`,
       })
@@ -59,7 +59,7 @@ describe('StartTimePage', () => {
       const page = new StartTimePage()
       const result = page.nextPath(appointmentId, projectCode)
 
-      expect(result).toEqual(paths.appointments.ableToWork({ projectCode, appointmentId }))
+      expect(result).toEqual(paths.appointments.arrived.ableToWork({ projectCode, appointmentId }))
     })
   })
 

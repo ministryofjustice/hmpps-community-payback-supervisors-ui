@@ -2,6 +2,7 @@ import { path } from 'static-path'
 
 const projectPath = path('/projects/:projectCode')
 const appointmentPath = projectPath.path('/appointments/:appointmentId')
+const appointmentArrivedPath = appointmentPath.path('arrived')
 
 const paths = {
   sessions: {
@@ -9,8 +10,10 @@ const paths = {
   },
   appointments: {
     show: appointmentPath,
-    startTime: appointmentPath.path('start-time'),
-    ableToWork: appointmentPath.path('able-to-work'),
+    arrived: {
+      startTime: appointmentArrivedPath.path('start-time'),
+      ableToWork: appointmentArrivedPath.path('able-to-work'),
+    },
     confirm: {
       working: appointmentPath.path('confirm-working'),
     },

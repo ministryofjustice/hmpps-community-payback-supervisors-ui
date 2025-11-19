@@ -13,7 +13,7 @@ export default class StartTimePage extends Page {
   }
 
   static visit(appointment: AppointmentDto, projectCode: string, isArrivedForm: boolean): StartTimePage {
-    const path = paths.appointments.startTime({ appointmentId: appointment.id.toString(), projectCode })
+    const path = paths.appointments.arrived.startTime({ appointmentId: appointment.id.toString(), projectCode })
     cy.visit(path)
 
     return new StartTimePage(appointment, isArrivedForm)
