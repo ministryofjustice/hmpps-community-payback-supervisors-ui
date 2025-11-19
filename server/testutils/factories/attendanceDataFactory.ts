@@ -9,5 +9,5 @@ export default Factory.define<AttendanceDataDto>(() => ({
   workQuality: 'GOOD',
   behaviour: 'NOT_APPLICABLE',
   supervisorOfficerCode: faker.string.alpha(8),
-  contactOutcomeId: faker.string.uuid(),
+  contactOutcomeCode: faker.string.uuid(),
 }))

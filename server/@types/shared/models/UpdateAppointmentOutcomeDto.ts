@@ -22,7 +22,7 @@ export type UpdateAppointmentOutcomeDto = {
      * The end local time of the appointment
      */
     endTime: string;
-    contactOutcomeId: string;
+    contactOutcomeCode?: string;
     attendanceData?: AttendanceDataDto;
     enforcementData?: EnforcementDto;
     supervisorOfficerCode: string;

@@ -9,7 +9,7 @@ export default Factory.define<UpdateAppointmentOutcomeDto>(() => ({
   deliusVersionToUpdate: faker.string.uuid(),
   startTime: '09:00',
   endTime: '17:00',
-  contactOutcomeId: faker.string.uuid(),
+  contactOutcomeCode: faker.string.uuid(),
   attendanceData: attendanceDataFactory.build(),
   enforcementData: enforcementDataFactory.build(),
   supervisorOfficerCode: faker.string.alpha(10),
