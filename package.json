@@ -42,7 +42,7 @@
     "@golevelup/ts-jest": "^0.7.0",
     "@ministryofjustice/frontend": "^6.0.0",
     "@ministryofjustice/hmpps-auth-clients": "^1.0.0",
-    "@ministryofjustice/hmpps-monitoring": "^0.0.2",
+    "@ministryofjustice/hmpps-monitoring": "^1.0.0",
     "@ministryofjustice/hmpps-rest-client": "^0.0.3",
     "@playwright/test": "^1.56.1",
     "applicationinsights": "^2.9.8",
