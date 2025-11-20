@@ -60,7 +60,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: npm_e2e_test_artifacts
+          name: npm_e2e_test_artifacts_supervisors_ui
           path: |
             e2e-tests/test_results/
             e2e-tests/playwright-report/
