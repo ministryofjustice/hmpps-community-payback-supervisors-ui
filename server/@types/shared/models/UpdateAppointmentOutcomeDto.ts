@@ -24,6 +24,10 @@ export type UpdateAppointmentOutcomeDto = {
     endTime: string;
     contactOutcomeCode?: string;
     attendanceData?: AttendanceDataDto;
+    /**
+     * Setting specific enforcement data is not supported
+     * @deprecated
+     */
     enforcementData?: EnforcementDto;
     supervisorOfficerCode: string;
     notes?: string;
