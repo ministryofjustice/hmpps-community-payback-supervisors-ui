@@ -29,6 +29,14 @@ export default abstract class Page {
     return cy.get(`#${id}`)
   }
 
+  getInputByLabel(label: string): Cypress.Chainable<JQuery<HTMLElement>> {
+    return cy
+      .get('label')
+      .contains(label)
+      .invoke('attr', 'for')
+      .then(id => this.getTextInputById(id))
+  }
+
   getTextInputByIdAndEnterDetails(id: string, details: string): void {
     cy.get(`#${id}`).type(details)
   }
