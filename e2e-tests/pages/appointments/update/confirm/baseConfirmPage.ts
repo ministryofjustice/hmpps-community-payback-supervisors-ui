@@ -1,19 +1,20 @@
 /* eslint max-classes-per-file: "off" -- splitting out these classes would cause an import dependency loop */
 
 import { Locator, Page, expect } from '@playwright/test'
-import BasePage from '../../basePage'
+import BasePage from '../../../basePage'
 
-export default class ConfirmWorkingPage extends BasePage {
-  readonly titleText = 'Alexy Boyle has been recorded as starting work today?'
-
-  readonly expect: ConfirmWorkingPageAssertions
-
+export default abstract class BaseConfirmPage extends BasePage {
   private readonly linkToSessionPageLocator: Locator
 
-  constructor(readonly page: Page) {
+  readonly expect: ConfirmPageAssertions
+
+  constructor(
+    readonly page: Page,
+    readonly titleText: string,
+  ) {
     super(page)
-    this.expect = new ConfirmWorkingPageAssertions(this)
     this.linkToSessionPageLocator = page.getByRole('link', { name: 'Return to session page' })
+    this.expect = new ConfirmPageAssertions(this)
   }
 
   async clickLinkToSessionPage() {
@@ -21,8 +22,8 @@ export default class ConfirmWorkingPage extends BasePage {
   }
 }
 
-class ConfirmWorkingPageAssertions {
-  constructor(private readonly page: ConfirmWorkingPage) {}
+class ConfirmPageAssertions {
+  constructor(private readonly page: BaseConfirmPage) {}
 
   async toBeOnThePage() {
     await expect(this.page.headingLocator).toContainText(this.page.titleText)

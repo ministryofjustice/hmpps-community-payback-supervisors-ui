@@ -1,9 +1,9 @@
-import { AppointmentDto } from '../../../../server/@types/shared'
-import Page from '../../page'
-import Offender from '../../../../server/models/offender'
-import paths from '../../../../server/paths'
+import { AppointmentDto } from '../../../../../server/@types/shared'
+import Offender from '../../../../../server/models/offender'
+import paths from '../../../../../server/paths'
+import BaseConfirmPage from './baseConfirmPage'
 
-export default class ConfirmWorkingPage extends Page {
+export default class ConfirmWorkingPage extends BaseConfirmPage {
   constructor(appointment: AppointmentDto) {
     const offender = new Offender(appointment.offender)
     const title = `${offender.name} has been recorded as starting work today`
@@ -18,9 +18,5 @@ export default class ConfirmWorkingPage extends Page {
     cy.visit(path)
 
     return new ConfirmWorkingPage(appointment)
-  }
-
-  clickLinkToSessionPage(): void {
-    cy.get('a').contains('Return to session page').click()
   }
 }
