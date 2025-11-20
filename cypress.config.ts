@@ -5,6 +5,7 @@ import tokenVerification from './integration_tests/mockApis/tokenVerification'
 import health from './integration_tests/mockApis/health'
 import sessions from './integration_tests/mockApis/sessions'
 import appointments from './integration_tests/mockApis/appointments'
+import referenceData from './integration_tests/mockApis/referenceData'
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -25,6 +26,7 @@ export default defineConfig({
         ...health,
         ...sessions,
         ...appointments,
+        ...referenceData,
       })
     },
     baseUrl: 'http://localhost:3007',

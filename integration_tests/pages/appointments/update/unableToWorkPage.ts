@@ -3,28 +3,24 @@ import Page from '../../page'
 import Offender from '../../../../server/models/offender'
 import paths from '../../../../server/paths'
 
-export default class AbleToWorkPage extends Page {
+export default class UnableToWorkPage extends Page {
   constructor(appointment: AppointmentDto) {
     const offender = new Offender(appointment.offender)
-    const title = `Can ${offender.name} work today?`
+    const title = `Why is ${offender.name} unable to work today?`
     super(title)
   }
 
-  static visit(appointment: AppointmentDto): AbleToWorkPage {
-    const path = paths.appointments.arrived.ableToWork({
+  static visit(appointment: AppointmentDto): UnableToWorkPage {
+    const path = paths.appointments.arrived.unableToWork({
       appointmentId: appointment.id.toString(),
       projectCode: appointment.projectCode,
     })
     cy.visit(path)
 
-    return new AbleToWorkPage(appointment)
+    return new UnableToWorkPage(appointment)
   }
 
-  selectYes(): void {
-    this.checkRadioByNameAndValue('ableToWork', 'yes')
-  }
-
-  selectNo(): void {
-    this.checkRadioByNameAndValue('ableToWork', 'no')
+  selectSentHomeServiceIssues(): void {
+    this.getInputByLabel('Attended - Sent Home (service issues)').check()
   }
 }
