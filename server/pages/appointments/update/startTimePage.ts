@@ -40,12 +40,15 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
     throw new InvalidUpdateActionError(`Invalid update appointment action: ${this.action}`)
   }
 
-  protected backPath(appointment: AppointmentDto, projectCode: string): string {
-    return paths.appointments.show({ projectCode, appointmentId: appointment.id.toString() })
+  protected backPath(appointment: AppointmentDto): string {
+    return paths.appointments.show({ projectCode: appointment.projectCode, appointmentId: appointment.id.toString() })
   }
 
-  protected updatePath(appointment: AppointmentDto, projectCode: string): string {
-    return paths.appointments[this.action].startTime({ projectCode, appointmentId: appointment.id.toString() })
+  protected updatePath(appointment: AppointmentDto): string {
+    return paths.appointments[this.action].startTime({
+      projectCode: appointment.projectCode,
+      appointmentId: appointment.id.toString(),
+    })
   }
 
   requestBody(appointment: AppointmentDto): UpdateAppointmentOutcomeDto {
@@ -55,8 +58,8 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
     }
   }
 
-  viewData(appointment: AppointmentDto, projectCode: string): ViewData {
-    const commonViewData = this.commonViewData(appointment, projectCode)
+  viewData(appointment: AppointmentDto): ViewData {
+    const commonViewData = this.commonViewData(appointment)
     const hasFormBody = this.query.startTime !== undefined
 
     return {

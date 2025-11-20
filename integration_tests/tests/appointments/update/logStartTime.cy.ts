@@ -38,12 +38,11 @@ context('Log start time ', () => {
   describe('arrived', () => {
     //  Scenario: Validates time entered
     it('validates the time entered on submit', () => {
-      const projectCode = 'some-code'
       const appointment = appointmentFactory.build()
       // Given I am on the start time page for an arrival form
-      cy.task('stubFindAppointment', { appointment, projectCode })
+      cy.task('stubFindAppointment', { appointment })
 
-      const page = StartTimePage.visit(appointment, projectCode, 'arrived')
+      const page = StartTimePage.visit(appointment, 'arrived')
 
       // When I submit an invalid time
       page.clearStartTime()
@@ -57,15 +56,14 @@ context('Log start time ', () => {
 
     //  Scenario: Submitting a valid time
     it('submits start time and navigates to next page', () => {
-      const projectCode = 'some-code'
       const appointment = appointmentFactory.build({ startTime: '09:00' })
       // Given I am on the start time page for an arrival form
-      cy.task('stubFindAppointment', { appointment, projectCode })
+      cy.task('stubFindAppointment', { appointment })
 
-      const page = StartTimePage.visit(appointment, projectCode, 'arrived')
+      const page = StartTimePage.visit(appointment, 'arrived')
 
       // When I submit a valid time
-      cy.task('stubUpdateAppointmentOutcome', { appointment, projectCode })
+      cy.task('stubUpdateAppointmentOutcome', { appointment })
       page.enterStartTime('09:30')
       page.clickSubmit()
 
@@ -78,12 +76,11 @@ context('Log start time ', () => {
   describe('absent', () => {
     //  Scenario: Validates time entered
     it('validates the time entered on submit', () => {
-      const projectCode = 'some-code'
       const appointment = appointmentFactory.build()
       // Given I am on the start time page for an absent form
-      cy.task('stubFindAppointment', { appointment, projectCode })
+      cy.task('stubFindAppointment', { appointment })
 
-      const page = StartTimePage.visit(appointment, projectCode, 'absent')
+      const page = StartTimePage.visit(appointment, 'absent')
 
       // When I submit an invalid time
       page.clearStartTime()
@@ -97,15 +94,14 @@ context('Log start time ', () => {
 
     //  Scenario: Submitting a valid time
     it('submits start time and navigates to next page', () => {
-      const projectCode = 'some-code'
       const appointment = appointmentFactory.build({ startTime: '09:00' })
       // Given I am on the start time page for an absent form
-      cy.task('stubFindAppointment', { appointment, projectCode })
+      cy.task('stubFindAppointment', { appointment })
 
-      const page = StartTimePage.visit(appointment, projectCode, 'absent')
+      const page = StartTimePage.visit(appointment, 'absent')
 
       // When I submit a valid time
-      cy.task('stubUpdateAppointmentOutcome', { appointment, projectCode })
+      cy.task('stubUpdateAppointmentOutcome', { appointment })
       page.enterStartTime('09:30')
       page.clickSubmit()
 

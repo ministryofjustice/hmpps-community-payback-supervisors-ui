@@ -24,16 +24,22 @@ export default class AbleToWorkPage extends BaseAppointmentUpdatePage<Body> {
     return paths.appointments.confirm.working({ projectCode, appointmentId })
   }
 
-  protected backPath(appointment: AppointmentDto, projectCode: string): string {
-    return paths.appointments.arrived.startTime({ projectCode, appointmentId: appointment.id.toString() })
+  protected backPath(appointment: AppointmentDto): string {
+    return paths.appointments.arrived.startTime({
+      projectCode: appointment.projectCode,
+      appointmentId: appointment.id.toString(),
+    })
   }
 
-  protected updatePath(appointment: AppointmentDto, projectCode: string): string {
-    return paths.appointments.arrived.ableToWork({ projectCode, appointmentId: appointment.id.toString() })
+  protected updatePath(appointment: AppointmentDto): string {
+    return paths.appointments.arrived.ableToWork({
+      projectCode: appointment.projectCode,
+      appointmentId: appointment.id.toString(),
+    })
   }
 
-  viewData(appointment: AppointmentDto, projectCode: string): ViewData {
-    const commonViewData = this.commonViewData(appointment, projectCode)
+  viewData(appointment: AppointmentDto): ViewData {
+    const commonViewData = this.commonViewData(appointment)
 
     return {
       ...commonViewData,

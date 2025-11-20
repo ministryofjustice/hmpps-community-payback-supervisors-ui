@@ -4,14 +4,11 @@ import paths from '../../server/paths/api'
 import { AppointmentDto } from '../../server/@types/shared'
 
 export default {
-  stubFindAppointment: ({
-    appointment,
-    projectCode,
-  }: {
-    appointment: AppointmentDto
-    projectCode: string
-  }): SuperAgentRequest => {
-    const pattern = paths.appointments.singleAppointment({ projectCode, appointmentId: appointment.id.toString() })
+  stubFindAppointment: ({ appointment }: { appointment: AppointmentDto }): SuperAgentRequest => {
+    const pattern = paths.appointments.singleAppointment({
+      projectCode: appointment.projectCode,
+      appointmentId: appointment.id.toString(),
+    })
     return stubFor({
       request: {
         method: 'GET',
@@ -27,14 +24,11 @@ export default {
     })
   },
 
-  stubUpdateAppointmentOutcome: ({
-    appointment,
-    projectCode,
-  }: {
-    appointment: AppointmentDto
-    projectCode: string
-  }): SuperAgentRequest => {
-    const pattern = paths.appointments.outcome({ projectCode, appointmentId: appointment.id.toString() })
+  stubUpdateAppointmentOutcome: ({ appointment }: { appointment: AppointmentDto }): SuperAgentRequest => {
+    const pattern = paths.appointments.outcome({
+      projectCode: appointment.projectCode,
+      appointmentId: appointment.id.toString(),
+    })
     return stubFor({
       request: {
         method: 'POST',

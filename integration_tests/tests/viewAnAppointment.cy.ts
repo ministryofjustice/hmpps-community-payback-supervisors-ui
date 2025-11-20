@@ -43,7 +43,7 @@ context('viewAnAppointment', () => {
 
     //  When I visit an appointment page
     const appointment = appointmentFactory.build()
-    cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
+    cy.task('stubFindAppointment', { appointment })
 
     const appointmentPage = AppointmentPage.visit(appointment)
 
@@ -60,7 +60,7 @@ context('viewAnAppointment', () => {
 
     // Given I am on an appointment page
     cy.signIn()
-    cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
+    cy.task('stubFindAppointment', { appointment })
     const appointmentPage = AppointmentPage.visit(appointment)
 
     // When I click the back link
