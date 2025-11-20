@@ -18,6 +18,7 @@ import logger from '../../logger'
 import SessionClient from './sessionClient'
 import AppointmentClient from './appointmentClient'
 import ReferenceDataClient from './referenceDataClient'
+import FormClient from './formClient'
 
 export const dataAccess = () => {
   const hmppsAuthClient = new AuthenticationClient(
@@ -33,6 +34,7 @@ export const dataAccess = () => {
     sessionClient: new SessionClient(hmppsAuthClient),
     appointmentClient: new AppointmentClient(hmppsAuthClient),
     referenceDataClient: new ReferenceDataClient(hmppsAuthClient),
+    formClient: new FormClient(hmppsAuthClient),
   }
 }
 

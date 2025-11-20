@@ -5,6 +5,7 @@ const supervisorUiPath = path('/supervisor')
 const projectPath = supervisorUiPath.path('/projects/:projectCode')
 const singleAppointmentPath = projectPath.path('/appointments/:appointmentId')
 const referenceDataPath = path('/common/references')
+const formsPath = path('/common/forms')
 
 export default {
   projects: {
@@ -20,4 +21,5 @@ export default {
   referenceData: {
     contactOutcomes: referenceDataPath.path('contact-outcomes'),
   },
+  forms: formsPath.path(':type/:id'),
 }
