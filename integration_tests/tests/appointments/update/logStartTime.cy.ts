@@ -21,11 +21,19 @@
 //      Given I am on the start time page for an absent form
 //      When I a submit a valid time
 //      Then I see the form next page
+//    Scenario: Navigates from confirm absent page to session page
+//      Given I am on the confirm page
+//      And I click the return to session link
+//      Then I am taken to the session page
 
 import appointmentFactory from '../../../../server/testutils/factories/appointmentFactory'
+import appointmentSummaryFactory from '../../../../server/testutils/factories/appointmentSummaryFactory'
+import sessionFactory from '../../../../server/testutils/factories/sessionFactory'
 import AbleToWorkPage from '../../../pages/appointments/update/ableToWorkPage'
+import ConfirmAbsentPage from '../../../pages/appointments/update/confirm/confirmAbsentPage'
 import StartTimePage from '../../../pages/appointments/update/startTimePage'
 import Page from '../../../pages/page'
+import SessionPage from '../../../pages/session'
 
 context('Log start time ', () => {
   beforeEach(() => {
@@ -106,7 +114,26 @@ context('Log start time ', () => {
       page.clickSubmit()
 
       // Then I see the next form page
-      Page.verifyOnPage(StartTimePage, appointment, 'absent')
+      Page.verifyOnPage(ConfirmAbsentPage, appointment)
+    })
+
+    //  Scenario: Navigates from confirm absent page to session page
+    it('navigates from confirm working page to session page', () => {
+      const appointmentSummaries = appointmentSummaryFactory.buildList(3)
+      const session = sessionFactory.build({ appointmentSummaries })
+      const appointment = appointmentFactory.build({ projectCode: session.projectCode, date: session.date })
+
+      // Given I am on the confirm page
+      cy.task('stubFindAppointment', { appointment })
+
+      const page = ConfirmAbsentPage.visit(appointment)
+
+      // And I click the return to session link
+      cy.task('stubFindSession', { session })
+      page.clickLinkToSessionPage()
+
+      // Then I am taken to the session page
+      Page.verifyOnPage(SessionPage, session)
     })
   })
 })

@@ -21,7 +21,7 @@ export default function appointmentRoutes(
   })
 
   router.get(paths.appointments.arrived.startTime.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.APPOINTMENT_ARRIVED_START_TIME_PAGE, {
+    await auditService.logPageView(Page.SHOW_APPOINTMENT_ARRIVED_START_TIME_PAGE, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -31,12 +31,17 @@ export default function appointmentRoutes(
   })
 
   router.post(paths.appointments.arrived.startTime.pattern, async (req, res, next) => {
+    await auditService.logPageView(Page.SUBMIT_APPOINTMENT_ARRIVED_START_TIME_PAGE, {
+      who: res.locals.user.username,
+      correlationId: req.id,
+    })
+
     const handler = appointments.startTimeController.submit('arrived')
     await handler(req, res, next)
   })
 
   router.get(paths.appointments.absent.startTime.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.APPOINTMENT_ABSENT_START_TIME_PAGE, {
+    await auditService.logPageView(Page.SHOW_APPOINTMENT_ABSENT_START_TIME_PAGE, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -46,6 +51,10 @@ export default function appointmentRoutes(
   })
 
   router.post(paths.appointments.absent.startTime.pattern, async (req, res, next) => {
+    await auditService.logPageView(Page.SUBMIT_APPOINTMENT_ABSENT_START_TIME_PAGE, {
+      who: res.locals.user.username,
+      correlationId: req.id,
+    })
     const handler = appointments.startTimeController.submit('absent')
     await handler(req, res, next)
   })
@@ -77,6 +86,16 @@ export default function appointmentRoutes(
     })
 
     const handler = appointments.confirmController.working()
+    await handler(req, res, next)
+  })
+
+  router.get(paths.appointments.confirm.absent.pattern, async (req, res, next) => {
+    await auditService.logPageView(Page.SHOW_CONFIRM_ABSENT_PAGE, {
+      who: res.locals.user.username,
+      correlationId: req.id,
+    })
+
+    const handler = appointments.confirmController.absent()
     await handler(req, res, next)
   })
 

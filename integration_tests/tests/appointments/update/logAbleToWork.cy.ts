@@ -25,7 +25,7 @@ import appointmentFactory from '../../../../server/testutils/factories/appointme
 import appointmentSummaryFactory from '../../../../server/testutils/factories/appointmentSummaryFactory'
 import sessionFactory from '../../../../server/testutils/factories/sessionFactory'
 import AbleToWorkPage from '../../../pages/appointments/update/ableToWorkPage'
-import ConfirmWorkingPage from '../../../pages/appointments/update/confirmWorkingPage'
+import ConfirmWorkingPage from '../../../pages/appointments/update/confirm/confirmWorkingPage'
 import Page from '../../../pages/page'
 import SessionPage from '../../../pages/session'
 

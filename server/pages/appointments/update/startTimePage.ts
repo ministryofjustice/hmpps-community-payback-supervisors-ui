@@ -20,6 +20,8 @@ interface Body {
 }
 
 export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
+  static UnacceptableAbsenceOutcomeCode = 'UAAB'
+
   constructor(
     private readonly action: AppointmentArrivedAction,
     private readonly query: Query = {},
@@ -33,8 +35,7 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
     }
 
     if (this.action === 'absent') {
-      // TODO: replace with confirm page once added
-      return paths.appointments.absent.startTime({ projectCode, appointmentId })
+      return paths.appointments.confirm.absent({ projectCode, appointmentId })
     }
 
     throw new InvalidUpdateActionError(`Invalid update appointment action: ${this.action}`)
@@ -52,10 +53,16 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
   }
 
   requestBody(appointment: AppointmentDto): UpdateAppointmentOutcomeDto {
-    return {
+    const body = {
       ...this.appointmentRequestBody(appointment),
       startTime: this.query.startTime,
     }
+
+    if (this.action === 'absent') {
+      body.contactOutcomeCode = StartTimePage.UnacceptableAbsenceOutcomeCode
+    }
+
+    return body
   }
 
   viewData(appointment: AppointmentDto): ViewData {

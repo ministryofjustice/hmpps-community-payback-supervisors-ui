@@ -4,7 +4,7 @@ import SessionPage from '../pages/sessionPage'
 import AppointmentPage from '../pages/appointmentPage'
 import StartTimePage from '../pages/appointments/update/startTimePage'
 import AbleToWorkPage from '../pages/appointments/update/ableToWorkPage'
-import ConfirmWorkingPage from '../pages/appointments/update/confirmWorkingPage'
+import ConfirmWorkingPage from '../pages/appointments/update/confirm/confirmWorkingPage'
 
 test('Record an arrival and log as working', async ({ page, deliusUser }) => {
   const homePage = await signIn(page, deliusUser)

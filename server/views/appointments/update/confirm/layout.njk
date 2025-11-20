@@ -3,13 +3,17 @@
 {% extends "../../../partials/layout.njk" %}
 
 {% block content %}
-  {{ govukPanel({
-    titleText: title
-  }) }}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {{ govukPanel({
+        titleText: title
+      }) }}
 
-  {% block confirmBody %}{% endblock %}
+      {% block confirmBody %}{% endblock %}
 
-  <div class="govuk-!-margin-top-7">
-    <p><a href="{{ sessionPath }}" class="govuk-link">Return to session page</a></p>
+      <div class="govuk-!-margin-top-7">
+        <p><a href="{{ sessionPath }}" class="govuk-link">Return to session page</a></p>
+      </div>
+    </div>
   </div>
 {% endblock %}

@@ -20,6 +20,7 @@ const paths = {
     },
     confirm: {
       working: appointmentPath.path('confirm-working'),
+      absent: appointmentPath.path('confirm-absent'),
     },
   },
 }

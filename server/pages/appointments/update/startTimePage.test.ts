@@ -83,7 +83,7 @@ describe('StartTimePage', () => {
         const page = new StartTimePage('absent')
         const result = page.nextPath(appointmentId, projectCode)
 
-        expect(result).toEqual(paths.appointments.absent.startTime({ projectCode, appointmentId }))
+        expect(result).toEqual(paths.appointments.confirm.absent({ projectCode, appointmentId }))
       })
     })
   })
@@ -147,50 +147,100 @@ describe('StartTimePage', () => {
   })
 
   describe('requestBody', () => {
-    const action = 'arrived'
-    it('returns the original appointment object with updated startTime', () => {
-      const appointment = appointmentFactory.build({
-        startTime: '09:00',
-        id: 1,
-        version: '2',
-        contactOutcomeCode: '3',
-        supervisorOfficerCode: '123',
+    describe('arrived', () => {
+      const action = 'arrived'
+      it('returns the original appointment object with updated startTime', () => {
+        const appointment = appointmentFactory.build({
+          startTime: '09:00',
+          id: 1,
+          version: '2',
+          contactOutcomeCode: '3',
+          supervisorOfficerCode: '123',
+        })
+        const page = new StartTimePage(action, { startTime: '10:00' })
+
+        const result = page.requestBody(appointment)
+
+        expect(result.startTime).toEqual('10:00')
       })
-      const page = new StartTimePage(action, { startTime: '10:00' })
 
-      const result = page.requestBody(appointment)
+      it('returns the original appointment object with deliusId and deliusVersionToUpdate', () => {
+        const appointment = appointmentFactory.build({
+          startTime: '09:00',
+          id: 1,
+          version: '2',
+          contactOutcomeCode: '3',
+          supervisorOfficerCode: '123',
+        })
+        const page = new StartTimePage(action, { startTime: '09:00' })
 
-      expect(result.startTime).toEqual('10:00')
+        const result = page.requestBody(appointment)
+
+        const expected: UpdateAppointmentOutcomeDto = {
+          contactOutcomeCode: '3',
+          deliusVersionToUpdate: '2',
+          deliusId: 1,
+          supervisorOfficerCode: '123',
+          startTime: '09:00',
+
+          alertActive: appointment.alertActive,
+          sensitive: appointment.sensitive,
+          endTime: appointment.endTime,
+          attendanceData: appointment.attendanceData,
+          enforcementData: appointment.enforcementData,
+          notes: appointment.notes,
+        }
+
+        expect(result).toEqual(expected)
+      })
     })
 
-    it('returns the original appointment object with deliusId and deliusVersionToUpdate', () => {
-      const appointment = appointmentFactory.build({
-        startTime: '09:00',
-        id: 1,
-        version: '2',
-        contactOutcomeCode: '3',
-        supervisorOfficerCode: '123',
+    describe('absent', () => {
+      const action = 'absent'
+      it('returns the original appointment object with updated startTime', () => {
+        const appointment = appointmentFactory.build({
+          startTime: '09:00',
+          id: 1,
+          version: '2',
+          contactOutcomeCode: '3',
+          supervisorOfficerCode: '123',
+        })
+        const page = new StartTimePage(action, { startTime: '10:00' })
+
+        const result = page.requestBody(appointment)
+
+        expect(result.startTime).toEqual('10:00')
       })
-      const page = new StartTimePage(action, { startTime: '09:00' })
 
-      const result = page.requestBody(appointment)
+      it('returns the original appointment object with deliusId, deliusVersionToUpdate and updated contact outcome', () => {
+        const appointment = appointmentFactory.build({
+          startTime: '09:00',
+          id: 1,
+          version: '2',
+          contactOutcomeCode: '3',
+          supervisorOfficerCode: '123',
+        })
+        const page = new StartTimePage(action, { startTime: '09:00' })
 
-      const expected: UpdateAppointmentOutcomeDto = {
-        contactOutcomeCode: '3',
-        deliusVersionToUpdate: '2',
-        deliusId: 1,
-        supervisorOfficerCode: '123',
-        startTime: '09:00',
+        const result = page.requestBody(appointment)
 
-        alertActive: appointment.alertActive,
-        sensitive: appointment.sensitive,
-        endTime: appointment.endTime,
-        attendanceData: appointment.attendanceData,
-        enforcementData: appointment.enforcementData,
-        notes: appointment.notes,
-      }
+        const expected: UpdateAppointmentOutcomeDto = {
+          contactOutcomeCode: StartTimePage.UnacceptableAbsenceOutcomeCode,
+          deliusVersionToUpdate: '2',
+          deliusId: 1,
+          supervisorOfficerCode: '123',
+          startTime: '09:00',
 
-      expect(result).toEqual(expected)
+          alertActive: appointment.alertActive,
+          sensitive: appointment.sensitive,
+          endTime: appointment.endTime,
+          attendanceData: appointment.attendanceData,
+          enforcementData: appointment.enforcementData,
+          notes: appointment.notes,
+        }
+
+        expect(result).toEqual(expected)
+      })
     })
   })
 })
