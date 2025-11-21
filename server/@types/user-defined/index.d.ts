@@ -9,6 +9,10 @@ export interface GetSessionRequest extends BaseRequest {
   date: string
 }
 
+export interface GetNextSessionRequest extends BaseRequest {
+  supervisorCode: string
+}
+
 export interface GetAppointmentRequest extends BaseRequest {
   projectCode: string
   appointmentId: string
