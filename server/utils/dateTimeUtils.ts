@@ -2,7 +2,7 @@ import { format, parseISO } from 'date-fns'
 import InvalidDateStringError from '../errors/invalidDateStringError'
 
 interface DateFormatOptions {
-  format: 'short' | 'medium' | 'long'
+  format: 'short' | 'medium' | 'long' | 'dashed'
 }
 
 export default class DateTimeFormats {
@@ -24,6 +24,9 @@ export default class DateTimeFormats {
     }
     if (options.format === 'medium') {
       return format(date, 'd MMMM y')
+    }
+    if (options.format === 'dashed') {
+      return format(date, 'y-MM-dd')
     }
     return format(date, 'dd/LL/y')
   }

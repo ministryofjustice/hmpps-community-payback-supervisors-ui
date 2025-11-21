@@ -20,6 +20,7 @@ import sessionFactory from '../../server/testutils/factories/sessionFactory'
 import appointmentSummaryFactory from '../../server/testutils/factories/appointmentSummaryFactory'
 import AppointmentPage from '../pages/appointment'
 import appointmentFactory from '../../server/testutils/factories/appointmentFactory'
+import sessionSummaryFactory from '../../server/testutils/factories/sessionSummaryFactory'
 
 context('Home', () => {
   beforeEach(() => {
@@ -29,9 +30,14 @@ context('Home', () => {
 
   //  Scenario: viewing the home page
   it('shows the find a session search form', () => {
+    const sessionSummary = sessionSummaryFactory.build({ date: '2025-09-15' })
+    cy.task('stubNextSession', { sessionSummary })
+
     // Given I am logged in
     cy.signIn()
-    const page = Page.verifyOnPage(IndexPage)
+
+    const page = Page.verifyOnPage(IndexPage, sessionSummary)
+    page.shouldShowSessionSummaryDetails()
 
     //  When I visit a session page
     const appointmentSummaries = appointmentSummaryFactory.buildList(3)

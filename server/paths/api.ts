@@ -13,4 +13,7 @@ export default {
     singleAppointment: singleAppointmentPath,
     outcome: singleAppointmentPath.path('outcome'),
   },
+  sessions: {
+    next: supervisorUiPath.path('supervisors').path(':supervisorCode').path('sessions/next'),
+  },
 }
