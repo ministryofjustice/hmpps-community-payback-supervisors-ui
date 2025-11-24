@@ -35,6 +35,12 @@ describe('DateTimeFormats', () => {
       expect(DateTimeFormats.dateObjtoUIDate(date, { format: 'medium' })).toEqual('11 November 2022')
     })
 
+    it('converts a date to a dashed format date', () => {
+      const date = new Date('2022-11-11T00:00:00.000Z')
+
+      expect(DateTimeFormats.dateObjtoUIDate(date, { format: 'dashed' })).toEqual('2022-11-11')
+    })
+
     it('converts a date to a long format date', () => {
       const date = new Date('2022-11-11T00:00:00.000Z')
 

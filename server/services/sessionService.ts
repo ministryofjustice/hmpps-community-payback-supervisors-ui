@@ -1,5 +1,5 @@
-import { SessionDto } from '../@types/shared'
-import { GetSessionRequest } from '../@types/user-defined'
+import { SessionDto, SessionSummaryDto } from '../@types/shared'
+import { GetSessionRequest, GetNextSessionRequest } from '../@types/user-defined'
 import SessionClient from '../data/sessionClient'
 
 export default class SessionService {
@@ -7,5 +7,9 @@ export default class SessionService {
 
   getSession(request: GetSessionRequest): Promise<SessionDto> {
     return this.sessionClient.find(request)
+  }
+
+  getNextSession(request: GetNextSessionRequest): Promise<SessionSummaryDto> {
+    return this.sessionClient.nextSession(request)
   }
 }
