@@ -92,7 +92,7 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
     }
 
     if (this.action === 'absent') {
-      return `You are logging ${offender.name} as absent:`
+      return `You're logging ${offender.name} as absent today at:`
     }
 
     throw new InvalidUpdateActionError(`Invalid update appointment action: ${this.action}`)
