@@ -17,6 +17,7 @@ import HmppsAuditClient from './hmppsAuditClient'
 import logger from '../../logger'
 import SessionClient from './sessionClient'
 import AppointmentClient from './appointmentClient'
+import ReferenceDataClient from './referenceDataClient'
 
 export const dataAccess = () => {
   const hmppsAuthClient = new AuthenticationClient(
@@ -31,9 +32,10 @@ export const dataAccess = () => {
     hmppsAuditClient: new HmppsAuditClient(config.sqs.audit),
     sessionClient: new SessionClient(hmppsAuthClient),
     appointmentClient: new AppointmentClient(hmppsAuthClient),
+    referenceDataClient: new ReferenceDataClient(hmppsAuthClient),
   }
 }
 
 export type DataAccess = ReturnType<typeof dataAccess>
 
-export { AuthenticationClient, HmppsAuditClient, SessionClient, AppointmentClient }
+export { AuthenticationClient, HmppsAuditClient, SessionClient, AppointmentClient, ReferenceDataClient }
