@@ -9,9 +9,16 @@ export default class FormClient extends RestClient {
     super('formClient', config.apis.communityPaybackApi, logger, authenticationClient)
   }
 
-  async find<T>({ type, id }: FormKeyDto, username: string): Promise<T> {
+  async find<T>({ type, id }: FormKeyDto, username: string): Promise<T | null> {
     const path = paths.forms({ type, id })
-    return (await this.get({ path }, asSystem(username))) as T
+    try {
+      return (await this.get({ path }, asSystem(username))) as T
+    } catch (err) {
+      if (err.responseStatus === 404) {
+        return null
+      }
+      throw err
+    }
   }
 
   async save({ type, id }: FormKeyDto, username: string, data: Record<string, unknown>): Promise<void> {

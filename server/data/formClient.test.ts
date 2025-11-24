@@ -36,6 +36,32 @@ describe('formClient', () => {
 
       expect(response).toEqual(form)
     })
+
+    it('should return a null result if result is Not Found (error)', async () => {
+      const type = 'some-type'
+      const id = '1'
+
+      nock(config.apis.communityPaybackApi.url)
+        .get(paths.forms({ type, id }))
+        .matchHeader('authorization', 'Bearer test-system-token')
+        .reply(404)
+
+      const response = await formClient.find({ type, id }, 'some-user')
+
+      expect(response).toEqual(null)
+    })
+
+    it('should throw error if response is not OK and not 404', async () => {
+      const type = 'some-type-2'
+      const id = '11'
+
+      nock(config.apis.communityPaybackApi.url)
+        .get(paths.forms({ type, id }))
+        .matchHeader('authorization', 'Bearer test-system-token')
+        .replyWithError('Something went wrong')
+
+      expect(() => formClient.find({ type, id }, 'some-user')).rejects.toThrow('Something went wrong')
+    })
   })
 
   describe('save', () => {
