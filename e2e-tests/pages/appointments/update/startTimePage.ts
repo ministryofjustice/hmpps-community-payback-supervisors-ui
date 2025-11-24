@@ -25,7 +25,7 @@ export default class StartTimePage extends BasePage {
 
   getExpectedTitle() {
     return this.action === 'arrived'
-      ? 'You are logging Harry Wormwood as having arrived at:'
+      ? "You're logging Harry Wormwood as having arrived at:"
       : "You're logging Harry Wormwood as absent today at:"
   }
 

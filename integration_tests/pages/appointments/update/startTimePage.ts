@@ -34,7 +34,7 @@ export default class StartTimePage extends Page {
     let title: string
 
     if (action === 'arrived') {
-      title = `You are logging ${offender.name} as having arrived at:`
+      title = `You're logging ${offender.name} as having arrived at:`
     }
 
     if (action === 'absent') {

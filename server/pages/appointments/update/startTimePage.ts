@@ -88,7 +88,7 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
 
   private getPageTitle(offender: Offender): string {
     if (this.action === 'arrived') {
-      return `You are logging ${offender.name} as having arrived at:`
+      return `You're logging ${offender.name} as having arrived at:`
     }
 
     if (this.action === 'absent') {
