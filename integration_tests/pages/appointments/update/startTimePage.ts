@@ -38,7 +38,7 @@ export default class StartTimePage extends Page {
     }
 
     if (action === 'absent') {
-      title = `You are logging ${offender.name} as absent:`
+      title = `You're logging ${offender.name} as absent today at:`
     }
     return title
   }

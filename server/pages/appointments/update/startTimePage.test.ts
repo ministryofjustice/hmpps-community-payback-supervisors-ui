@@ -62,6 +62,23 @@ describe('StartTimePage', () => {
         }),
       )
     })
+
+    it('returns the absent title if action is absent', () => {
+      const offender = {
+        name: 'Sam Smith',
+        crn: 'CRN123',
+        isLimited: false,
+      }
+
+      offenderMock.mockImplementation(() => {
+        return offender
+      })
+
+      const appointment = appointmentFactory.build()
+      const page = new StartTimePage('absent')
+      const result = page.viewData(appointment)
+      expect(result.title).toBe("You're logging Sam Smith as absent today at:")
+    })
   })
 
   describe('next', () => {
