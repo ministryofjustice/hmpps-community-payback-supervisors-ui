@@ -1,0 +1,22 @@
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% extends "./layout.njk" %}
+
+{% set pageTitle = 'Why is the person unable to work today?' %}
+
+{% block formContent %}
+  {{ govukRadios({
+    name: "unableToWork",
+    fieldset: {
+      legend: {
+        text: title,
+        isPageHeading: true,
+        classes: "govuk-fieldset__legend--l"
+      }
+    },
+    hint: {
+      text: "Select one option"
+    },
+    items: items,
+    errorMessage: errors.unableToWork
+  }) }}
+{% endblock %}
