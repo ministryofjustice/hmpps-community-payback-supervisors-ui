@@ -56,6 +56,14 @@ export default class UnableToWorkController {
         })
       }
 
+      const payload = page.requestBody(appointment)
+
+      await this.appointmentService.saveAppointment({
+        username: res.locals.user.name,
+        projectCode,
+        data: payload,
+      })
+
       return res.redirect(paths.appointments.confirm.unableToWork({ projectCode, appointmentId }))
     }
   }

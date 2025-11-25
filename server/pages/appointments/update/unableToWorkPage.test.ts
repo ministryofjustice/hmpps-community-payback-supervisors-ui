@@ -1,3 +1,4 @@
+import { UpdateAppointmentOutcomeDto } from '../../../@types/shared'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
 import appointmentFactory from '../../../testutils/factories/appointmentFactory'
@@ -84,6 +85,53 @@ describe('UnableToWorkPage', () => {
           text: 'Select the reason why the person is unable to work today',
         })
       })
+    })
+  })
+
+  describe('requestBody', () => {
+    it('returns the original appointment object with updated contactOutcomeCode', () => {
+      const appointment = appointmentFactory.build({
+        startTime: '09:00',
+        id: 1,
+        version: '2',
+        contactOutcomeCode: 'AAAA',
+        supervisorOfficerCode: '123',
+      })
+      const page = new UnableToWorkPage({ unableToWork: 'BBBB' })
+
+      const result = page.requestBody(appointment)
+
+      expect(result.contactOutcomeCode).toEqual('BBBB')
+    })
+
+    it('returns the original appointment object with deliusId and deliusVersionToUpdate', () => {
+      const appointment = appointmentFactory.build({
+        startTime: '09:00',
+        id: 1,
+        version: '2',
+        contactOutcomeCode: 'AAAA',
+        supervisorOfficerCode: '123',
+      })
+      const page = new UnableToWorkPage({ unableToWork: 'BBBB' })
+
+      const result = page.requestBody(appointment)
+
+      const expected: UpdateAppointmentOutcomeDto = {
+        contactOutcomeCode: 'BBBB',
+        deliusVersionToUpdate: '2',
+        deliusId: 1,
+        supervisorOfficerCode: '123',
+        startTime: '09:00',
+
+        alertActive: appointment.alertActive,
+        sensitive: appointment.sensitive,
+        endTime: appointment.endTime,
+        attendanceData: appointment.attendanceData,
+        enforcementData: appointment.enforcementData,
+        notes: appointment.notes,
+      }
+
+      expect(result).toEqual(expected)
     })
   })
 })

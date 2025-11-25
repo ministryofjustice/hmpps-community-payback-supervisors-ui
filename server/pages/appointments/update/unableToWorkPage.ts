@@ -1,4 +1,4 @@
-import { AppointmentDto, ContactOutcomeDto } from '../../../@types/shared'
+import { AppointmentDto, ContactOutcomeDto, UpdateAppointmentOutcomeDto } from '../../../@types/shared'
 import { GovUkRadioOption } from '../../../@types/user-defined'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
@@ -56,6 +56,15 @@ export default class UnableToWorkPage extends BaseAppointmentUpdatePage<Body> {
     }
 
     this.checkHasErrors()
+  }
+
+  requestBody(appointment: AppointmentDto): UpdateAppointmentOutcomeDto {
+    const body: UpdateAppointmentOutcomeDto = {
+      ...this.appointmentRequestBody(appointment),
+      contactOutcomeCode: this.query.unableToWork,
+    }
+
+    return body
   }
 
   private getPageTitle(offender: Offender): string {
