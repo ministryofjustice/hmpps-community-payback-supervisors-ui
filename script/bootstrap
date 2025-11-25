@@ -9,4 +9,4 @@ cd "$(dirname "$0")/.."
 
 echo "==> Installing application dependencies..."
 
-npm install
+npm ci
