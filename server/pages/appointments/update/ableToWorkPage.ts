@@ -1,4 +1,5 @@
 import { AppointmentDto } from '../../../@types/shared'
+import { YesOrNo } from '../../../@types/user-defined'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
 import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './baseAppointmentUpdatePage'
@@ -8,11 +9,11 @@ interface ViewData extends AppointmentUpdatePageViewData {
 }
 
 interface Query {
-  ableToWork?: string
+  ableToWork?: YesOrNo
 }
 
 interface Body {
-  ableToWork: string
+  ableToWork: YesOrNo
 }
 
 export default class AbleToWorkPage extends BaseAppointmentUpdatePage<Body> {
@@ -21,7 +22,10 @@ export default class AbleToWorkPage extends BaseAppointmentUpdatePage<Body> {
   }
 
   nextPath(appointmentId: string, projectCode: string): string {
-    return paths.appointments.confirm.working({ projectCode, appointmentId })
+    if (this.query.ableToWork === 'yes') {
+      return paths.appointments.confirm.working({ projectCode, appointmentId })
+    }
+    return paths.appointments.arrived.unableToWork({ projectCode, appointmentId })
   }
 
   protected backPath(appointment: AppointmentDto): string {

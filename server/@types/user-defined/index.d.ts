@@ -32,3 +32,5 @@ export interface GovUkRadioOption {
   value: string
   checked?: boolean
 }
+
+export type YesOrNo = 'yes' | 'no'
