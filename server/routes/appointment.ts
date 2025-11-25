@@ -109,6 +109,16 @@ export default function appointmentRoutes(
     await handler(req, res, next)
   })
 
+  router.get(paths.appointments.confirm.unableToWork.pattern, async (req, res, next) => {
+    await auditService.logPageView(Page.SHOW_CONFIRM_UNABLE_TO_WORK_PAGE, {
+      who: res.locals.user.username,
+      correlationId: req.id,
+    })
+
+    const handler = appointments.confirmController.unableToWork()
+    await handler(req, res, next)
+  })
+
   router.get(paths.appointments.confirm.absent.pattern, async (req, res, next) => {
     await auditService.logPageView(Page.SHOW_CONFIRM_ABSENT_PAGE, {
       who: res.locals.user.username,
