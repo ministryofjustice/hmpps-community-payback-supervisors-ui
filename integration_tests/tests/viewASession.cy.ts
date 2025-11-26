@@ -20,6 +20,9 @@
 //    Scenario: viewing a session's existing appointment statuses
 //      Given I am on a session page for an in progress session
 //      Then I see saved statuses for each offender
+//    Scenario: viewing an in progress session with new appointments
+//      Given I am on a session page for an in progress session
+//      Then I see saved statuses for each offender and statuses for new appointments
 
 import IndexPage from '../pages'
 import Page from '../pages/page'
@@ -119,6 +122,30 @@ context('Session', () => {
 
       // Then I see saved statuses for each offender
       sessionPage.shouldShowAppointmentsWithStatuses(appointmentStatuses)
+    })
+
+    //  Scenario: viewing an in progress session with new appointments
+    it('Shows a status for any new appointments', () => {
+      // Given I am on a session page for an in progress session
+      const appointmentSummaries = appointmentSummaryFactory.buildList(3)
+      const appointmentStatuses = appointmentSummaries.map(appointment =>
+        appointmentStatusFactory.build({ appointmentId: appointment.id }),
+      )
+
+      const newAppointment = appointmentSummaryFactory.build()
+      appointmentSummaries.push(newAppointment)
+      const session = sessionFactory.build({ appointmentSummaries })
+      cy.task('stubFindSession', { session })
+      cy.task('stubGetForm', { session, appointmentStatuses })
+      cy.task('stubSaveForm', { session })
+
+      const sessionPage = SessionPage.visit(session)
+
+      // Then I see saved statuses for each offender and statuses for new appointments
+      sessionPage.shouldShowAppointmentsWithStatuses([
+        ...appointmentStatuses,
+        { appointmentId: newAppointment.id, status: 'Scheduled' },
+      ])
     })
   })
 })

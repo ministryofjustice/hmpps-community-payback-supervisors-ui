@@ -1,4 +1,4 @@
-import { FormKeyDto, SessionDto } from '../@types/shared'
+import { AppointmentDto, AppointmentSummaryDto, FormKeyDto, SessionDto } from '../@types/shared'
 import { AppointmentStatusType } from '../@types/user-defined'
 import FormClient from '../data/formClient'
 
@@ -21,26 +21,54 @@ export default class AppointmentStatusService {
     const data = await this.formClient.find<AppointmentStatuses>(formKey, username)
 
     if (data) {
-      return data.appointmentStatuses
+      return this.getOrCreateAllAppointmentStatuses(data.appointmentStatuses, session, formKey, username)
     }
 
     return this.createStatusesForSession(session, username)
   }
 
+  private async getOrCreateAllAppointmentStatuses(
+    appointmentStatuses: AppointmentStatus[],
+    session: SessionDto,
+    formKey: FormKeyDto,
+    username: string,
+  ) {
+    const newAppointmentStatuses = session.appointmentSummaries
+      .filter(appointment => !appointmentStatuses.find(status => status.appointmentId === appointment.id))
+      .map(this.getNewAppointmentStatus)
+
+    if (newAppointmentStatuses.length) {
+      appointmentStatuses.push(...newAppointmentStatuses)
+      await this.saveStatusesForSession(formKey, username, appointmentStatuses)
+    }
+
+    return appointmentStatuses
+  }
+
   private async createStatusesForSession(session: SessionDto, username: string): Promise<AppointmentStatus[]> {
     const formKey = this.getFormKey(session)
 
-    const appointmentStatuses = session.appointmentSummaries.map(appt => {
-      const status: AppointmentStatusType = 'Scheduled'
-      return {
-        appointmentId: appt.id,
-        status,
-      } as AppointmentStatus
-    })
+    const appointmentStatuses = session.appointmentSummaries.map(this.getNewAppointmentStatus)
 
-    await this.formClient.save(formKey, username, { appointmentStatuses })
+    await this.saveStatusesForSession(formKey, username, appointmentStatuses)
 
     return appointmentStatuses
+  }
+
+  private async saveStatusesForSession(
+    formKey: FormKeyDto,
+    username: string,
+    appointmentStatuses: AppointmentStatus[],
+  ) {
+    await this.formClient.save(formKey, username, { appointmentStatuses })
+  }
+
+  private getNewAppointmentStatus(appointment: AppointmentDto | AppointmentSummaryDto): AppointmentStatus {
+    const status: AppointmentStatusType = 'Scheduled'
+    return {
+      appointmentId: appointment.id,
+      status,
+    }
   }
 
   private getFormKey(session: SessionDto): FormKeyDto {
