@@ -29,7 +29,7 @@
 import appointmentFactory from '../../../../server/testutils/factories/appointmentFactory'
 import appointmentSummaryFactory from '../../../../server/testutils/factories/appointmentSummaryFactory'
 import sessionFactory from '../../../../server/testutils/factories/sessionFactory'
-import AbleToWorkPage from '../../../pages/appointments/update/ableToWorkPage'
+import IsAbleToWorkPage from '../../../pages/appointments/update/isAbleToWorkPage'
 import ConfirmAbsentPage from '../../../pages/appointments/update/confirm/confirmAbsentPage'
 import StartTimePage from '../../../pages/appointments/update/startTimePage'
 import Page from '../../../pages/page'
@@ -76,7 +76,7 @@ context('Log start time ', () => {
       page.clickSubmit()
 
       // Then I see the next form page
-      Page.verifyOnPage(AbleToWorkPage, appointment)
+      Page.verifyOnPage(IsAbleToWorkPage, appointment)
     })
   })
 

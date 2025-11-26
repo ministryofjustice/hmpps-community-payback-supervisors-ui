@@ -1,11 +1,11 @@
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
 import appointmentFactory from '../../../testutils/factories/appointmentFactory'
-import AbleToWorkPage from './ableToWorkPage'
+import IsAbleToWorkPage from './isAbleToWorkPage'
 
 jest.mock('../../../models/offender')
 
-describe('AbleToWorkPage', () => {
+describe('IsAbleToWorkPage', () => {
   beforeEach(() => {
     jest.resetAllMocks()
   })
@@ -28,7 +28,7 @@ describe('AbleToWorkPage', () => {
         return offender
       })
 
-      const page = new AbleToWorkPage()
+      const page = new IsAbleToWorkPage()
       const result = page.viewData(appointment)
       expect(result).toEqual({
         offender,
@@ -44,7 +44,7 @@ describe('AbleToWorkPage', () => {
       it('should return path to the confirm working page with project code and appointment Id', () => {
         const appointmentId = '1'
         const projectCode = '2'
-        const page = new AbleToWorkPage({ ableToWork: 'yes' })
+        const page = new IsAbleToWorkPage({ ableToWork: 'yes' })
         const result = page.nextPath(appointmentId, projectCode)
 
         expect(result).toEqual(paths.appointments.confirm.working({ projectCode, appointmentId }))
@@ -55,7 +55,7 @@ describe('AbleToWorkPage', () => {
       it('should return path to the unable to work page with project code and appointment Id', () => {
         const appointmentId = '1'
         const projectCode = '2'
-        const page = new AbleToWorkPage({ ableToWork: 'no' })
+        const page = new IsAbleToWorkPage({ ableToWork: 'no' })
         const result = page.nextPath(appointmentId, projectCode)
 
         expect(result).toEqual(paths.appointments.arrived.unableToWork({ projectCode, appointmentId }))
@@ -66,14 +66,14 @@ describe('AbleToWorkPage', () => {
   describe('validate', () => {
     describe('when ableToWork is not present', () => {
       it('should return true for page.hasError', () => {
-        const page = new AbleToWorkPage({})
+        const page = new IsAbleToWorkPage({})
         page.validate()
 
         expect(page.hasErrors).toEqual(true)
       })
 
       it('should return the correct error', () => {
-        const page = new AbleToWorkPage({})
+        const page = new IsAbleToWorkPage({})
         page.validate()
 
         expect(page.validationErrors.ableToWork).toEqual({

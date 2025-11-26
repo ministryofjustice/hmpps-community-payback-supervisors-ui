@@ -65,7 +65,7 @@ export default function appointmentRoutes(
       correlationId: req.id,
     })
 
-    const handler = appointments.ableToWorkController.show()
+    const handler = appointments.isAbleToWorkController.show()
     await handler(req, res, next)
   })
 
@@ -75,7 +75,7 @@ export default function appointmentRoutes(
       correlationId: req.id,
     })
 
-    const handler = appointments.ableToWorkController.submit()
+    const handler = appointments.isAbleToWorkController.submit()
     await handler(req, res, next)
   })
 

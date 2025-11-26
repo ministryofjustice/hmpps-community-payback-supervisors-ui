@@ -16,7 +16,7 @@ interface Body {
   ableToWork: YesOrNo
 }
 
-export default class AbleToWorkPage extends BaseAppointmentUpdatePage<Body> {
+export default class IsAbleToWorkPage extends BaseAppointmentUpdatePage<Body> {
   constructor(private readonly query: Query = {}) {
     super()
   }
