@@ -27,7 +27,7 @@ export default class UnableToWorkPage extends BaseAppointmentUpdatePage<Body> {
   }
 
   protected backPath(appointment: AppointmentDto): string {
-    return paths.appointments.arrived.ableToWork({
+    return paths.appointments.arrived.isAbleToWork({
       projectCode: appointment.projectCode,
       appointmentId: appointment.id.toString(),
     })

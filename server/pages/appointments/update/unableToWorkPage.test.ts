@@ -36,7 +36,7 @@ describe('UnableToWorkPage', () => {
       const result = page.viewData(appointment, contactOutcomes)
       expect(result).toEqual({
         offender,
-        backPath: paths.appointments.arrived.ableToWork({ appointmentId, projectCode }),
+        backPath: paths.appointments.arrived.isAbleToWork({ appointmentId, projectCode }),
         updatePath: paths.appointments.arrived.unableToWork({ appointmentId, projectCode }),
         title: `Why is Sam Smith unable to work today?`,
         items: [

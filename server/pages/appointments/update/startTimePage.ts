@@ -31,7 +31,7 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
 
   nextPath(appointmentId: string, projectCode: string): string {
     if (this.action === 'arrived') {
-      return paths.appointments.arrived.ableToWork({ projectCode, appointmentId })
+      return paths.appointments.arrived.isAbleToWork({ projectCode, appointmentId })
     }
 
     if (this.action === 'absent') {

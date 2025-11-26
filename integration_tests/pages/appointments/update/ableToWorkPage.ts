@@ -11,7 +11,7 @@ export default class AbleToWorkPage extends Page {
   }
 
   static visit(appointment: AppointmentDto): AbleToWorkPage {
-    const path = paths.appointments.arrived.ableToWork({
+    const path = paths.appointments.arrived.isAbleToWork({
       appointmentId: appointment.id.toString(),
       projectCode: appointment.projectCode,
     })

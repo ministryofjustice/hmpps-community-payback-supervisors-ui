@@ -13,7 +13,7 @@ const paths = {
     show: appointmentPath,
     arrived: {
       startTime: appointmentArrivedPath.path('start-time'),
-      ableToWork: appointmentArrivedPath.path('able-to-work'),
+      isAbleToWork: appointmentArrivedPath.path('is-able-to-work'),
       unableToWork: appointmentArrivedPath.path('unable-to-work'),
     },
     absent: {

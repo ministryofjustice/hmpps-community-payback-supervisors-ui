@@ -33,7 +33,7 @@ describe('AbleToWorkPage', () => {
       expect(result).toEqual({
         offender,
         backPath: paths.appointments.arrived.startTime({ appointmentId, projectCode }),
-        updatePath: paths.appointments.arrived.ableToWork({ appointmentId, projectCode }),
+        updatePath: paths.appointments.arrived.isAbleToWork({ appointmentId, projectCode }),
         title: `Can Sam Smith work today?`,
       })
     })
