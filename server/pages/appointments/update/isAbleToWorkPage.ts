@@ -16,7 +16,7 @@ interface Body {
   ableToWork: YesOrNo
 }
 
-export default class AbleToWorkPage extends BaseAppointmentUpdatePage<Body> {
+export default class IsAbleToWorkPage extends BaseAppointmentUpdatePage<Body> {
   constructor(private readonly query: Query = {}) {
     super()
   }
@@ -36,7 +36,7 @@ export default class AbleToWorkPage extends BaseAppointmentUpdatePage<Body> {
   }
 
   protected updatePath(appointment: AppointmentDto): string {
-    return paths.appointments.arrived.ableToWork({
+    return paths.appointments.arrived.isAbleToWork({
       projectCode: appointment.projectCode,
       appointmentId: appointment.id.toString(),
     })

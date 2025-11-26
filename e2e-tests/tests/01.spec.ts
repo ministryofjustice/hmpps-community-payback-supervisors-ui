@@ -3,7 +3,7 @@ import signIn from '../steps/signIn'
 import SessionPage from '../pages/sessionPage'
 import AppointmentPage from '../pages/appointmentPage'
 import StartTimePage from '../pages/appointments/update/startTimePage'
-import AbleToWorkPage from '../pages/appointments/update/ableToWorkPage'
+import IsAbleToWorkPage from '../pages/appointments/update/isAbleToWorkPage'
 import ConfirmWorkingPage from '../pages/appointments/update/confirm/confirmWorkingPage'
 
 test('Record an arrival and log as working', async ({ page, deliusUser }) => {
@@ -28,10 +28,10 @@ test('Record an arrival and log as working', async ({ page, deliusUser }) => {
   await startTimePage.enterAStartTime()
   await startTimePage.clickContinue()
 
-  const ableToWorkPage = new AbleToWorkPage(page)
-  await ableToWorkPage.expect.toBeOnThePage()
-  await ableToWorkPage.checkYes()
-  await ableToWorkPage.clickContinue()
+  const isAbleToWorkPage = new IsAbleToWorkPage(page)
+  await isAbleToWorkPage.expect.toBeOnThePage()
+  await isAbleToWorkPage.checkYes()
+  await isAbleToWorkPage.clickContinue()
 
   const confirmWorkingPage = new ConfirmWorkingPage(page)
   await confirmWorkingPage.clickLinkToSessionPage()

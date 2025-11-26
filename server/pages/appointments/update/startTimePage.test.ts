@@ -89,7 +89,7 @@ describe('StartTimePage', () => {
         const page = new StartTimePage('arrived')
         const result = page.nextPath(appointmentId, projectCode)
 
-        expect(result).toEqual(paths.appointments.arrived.ableToWork({ projectCode, appointmentId }))
+        expect(result).toEqual(paths.appointments.arrived.isAbleToWork({ projectCode, appointmentId }))
       })
     })
 

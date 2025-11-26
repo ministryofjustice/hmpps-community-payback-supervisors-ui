@@ -49,7 +49,7 @@ import appointmentFactory from '../../../../server/testutils/factories/appointme
 import appointmentSummaryFactory from '../../../../server/testutils/factories/appointmentSummaryFactory'
 import { contactOutcomeFactory } from '../../../../server/testutils/factories/contactOutcomeFactory'
 import sessionFactory from '../../../../server/testutils/factories/sessionFactory'
-import AbleToWorkPage from '../../../pages/appointments/update/ableToWorkPage'
+import IsAbleToWorkPage from '../../../pages/appointments/update/isAbleToWorkPage'
 import ConfirmUnableToWorkPage from '../../../pages/appointments/update/confirm/confirmUnableToWorkPage'
 import ConfirmWorkingPage from '../../../pages/appointments/update/confirm/confirmWorkingPage'
 import UnableToWorkPage from '../../../pages/appointments/update/unableToWorkPage'
@@ -69,13 +69,13 @@ context('Log able to work ', () => {
     // Given I am on the able to work page
     cy.task('stubFindAppointment', { appointment })
 
-    const page = AbleToWorkPage.visit(appointment)
+    const page = IsAbleToWorkPage.visit(appointment)
 
     // When I submit without selecting an answer
     page.clickSubmit()
 
     // Then I see the same page with errors
-    Page.verifyOnPage(AbleToWorkPage, appointment)
+    Page.verifyOnPage(IsAbleToWorkPage, appointment)
     page.shouldShowErrorSummary('ableToWork', 'Select whether the person is able to work today')
   })
 
@@ -87,7 +87,7 @@ context('Log able to work ', () => {
       // Given I am on the able to work page
       cy.task('stubFindAppointment', { appointment })
 
-      const page = AbleToWorkPage.visit(appointment)
+      const page = IsAbleToWorkPage.visit(appointment)
 
       // And I select yes
       page.selectYes()
@@ -143,7 +143,7 @@ context('Log able to work ', () => {
       cy.task('stubFindAppointment', { appointment })
       cy.task('stubGetContactOutcomes', { contactOutcomes: this.contactOutcomes })
 
-      const page = AbleToWorkPage.visit(appointment)
+      const page = IsAbleToWorkPage.visit(appointment)
 
       // And I select no
       page.selectNo()

@@ -1,9 +1,9 @@
 import type { Request, RequestHandler, Response } from 'express'
 import AppointmentService from '../../services/appointmentService'
-import AbleToWorkPage from '../../pages/appointments/update/ableToWorkPage'
+import IsAbleToWorkPage from '../../pages/appointments/update/isAbleToWorkPage'
 import generateErrorSummary from '../../utils/errorUtils'
 
-export default class AbleToWorkController {
+export default class IsAbleToWorkController {
   constructor(private readonly appointmentService: AppointmentService) {}
 
   show(): RequestHandler {
@@ -16,9 +16,9 @@ export default class AbleToWorkController {
         username: res.locals.user.username,
       })
 
-      const page = new AbleToWorkPage()
+      const page = new IsAbleToWorkPage()
 
-      res.render('appointments/update/ableToWork', page.viewData(appointment))
+      res.render('appointments/update/isAbleToWork', page.viewData(appointment))
     }
   }
 
@@ -32,11 +32,11 @@ export default class AbleToWorkController {
         username: res.locals.user.username,
       })
 
-      const page = new AbleToWorkPage(_req.body)
+      const page = new IsAbleToWorkPage(_req.body)
       page.validate()
 
       if (page.hasErrors) {
-        return res.render('appointments/update/ableToWork', {
+        return res.render('appointments/update/isAbleToWork', {
           ...page.viewData(appointment),
           errors: page.validationErrors,
           errorSummary: generateErrorSummary(page.validationErrors),
