@@ -44,6 +44,8 @@ context('viewAnAppointment', () => {
 
     //  When I visit an appointment page
     const appointment = appointmentFactory.build()
+    const appointmentStatus = appointmentStatusFactory.build({ appointmentId: appointment.id })
+    cy.task('stubGetForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
     cy.task('stubFindAppointment', { appointment })
 
     const appointmentPage = AppointmentPage.visit(appointment)
@@ -51,6 +53,7 @@ context('viewAnAppointment', () => {
     // Then I should see the appointment and offender details
     appointmentPage.shouldShowAppointmentDetails()
     appointmentPage.shouldShowOffenderDetails()
+    appointmentPage.shouldShowStatus(appointmentStatus.status)
   })
 
   //  Scenario: navigating back to the session page
@@ -58,18 +61,20 @@ context('viewAnAppointment', () => {
     const appointmentSummaries = appointmentSummaryFactory.buildList(3)
     const session = sessionFactory.build({ appointmentSummaries })
     const appointment = appointmentFactory.build({ projectCode: session.projectCode, date: session.date })
+    const appointmentStatus = appointmentStatusFactory.build({ appointmentId: appointment.id })
+    const appointmentStatuses = appointmentSummaries.map(appointmentSummary =>
+      appointmentStatusFactory.build({ appointmentId: appointmentSummary.id }),
+    )
 
     // Given I am on an appointment page
     cy.signIn()
     cy.task('stubFindAppointment', { appointment })
+    cy.task('stubGetForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
     const appointmentPage = AppointmentPage.visit(appointment)
 
     // When I click the back link
     cy.task('stubFindSession', { session })
-    const appointmentStatuses = appointmentSummaries.map(appointmentSummary =>
-      appointmentStatusFactory.build({ appointmentId: appointmentSummary.id }),
-    )
-    cy.task('stubGetForm', { session, appointmentStatuses })
+    cy.task('stubGetForm', { sessionOrAppointment: session, appointmentStatuses })
     appointmentPage.clickBack()
 
     // Then I should be taken to the session page
@@ -82,8 +87,12 @@ context('viewAnAppointment', () => {
     it('I can navigate to the arrived form', () => {
       // Given I am on the appointment page
       const appointment = appointmentFactory.build()
+      const appointmentStatus = appointmentStatusFactory.build({ appointmentId: appointment.id })
+
       cy.signIn()
       cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
+      cy.task('stubGetForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
+
       const appointmentPage = AppointmentPage.visit(appointment)
 
       // When I click on 'Arrived'
@@ -97,8 +106,12 @@ context('viewAnAppointment', () => {
     it('I can navigate to the absent form', () => {
       // Given I am on the appointment page
       const appointment = appointmentFactory.build()
+      const appointmentStatus = appointmentStatusFactory.build({ appointmentId: appointment.id })
+
       cy.signIn()
       cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
+      cy.task('stubGetForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
+
       const appointmentPage = AppointmentPage.visit(appointment)
 
       // When I click on 'Not arrived'

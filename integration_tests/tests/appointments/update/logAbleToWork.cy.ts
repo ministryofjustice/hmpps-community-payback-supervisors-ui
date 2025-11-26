@@ -56,20 +56,27 @@ import ConfirmWorkingPage from '../../../pages/appointments/update/confirm/confi
 import UnableToWorkPage from '../../../pages/appointments/update/unableToWorkPage'
 import Page from '../../../pages/page'
 import SessionPage from '../../../pages/session'
+import { AppointmentDto } from '../../../../server/@types/shared'
+import { AppointmentStatus } from '../../../../server/services/appointmentStatusService'
 
 context('Log able to work ', () => {
+  let appointment: AppointmentDto
+  let appointmentStatus: AppointmentStatus
+
   beforeEach(() => {
+    appointment = appointmentFactory.build()
+    appointmentStatus = appointmentStatusFactory.build({ appointmentId: appointment.id })
     cy.task('reset')
     cy.task('stubSignIn')
+    cy.task('stubGetForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
+    cy.task('stubFindAppointment', { appointment })
+
     cy.signIn()
   })
 
   //  Scenario: validates form
   it('validates the form', () => {
-    const appointment = appointmentFactory.build()
     // Given I am on the able to work page
-    cy.task('stubFindAppointment', { appointment })
-
     const page = IsAbleToWorkPage.visit(appointment)
 
     // When I submit without selecting an answer
@@ -84,10 +91,7 @@ context('Log able to work ', () => {
   describe('when the person is able to work', () => {
     //  Scenario: Confirms the person can work
     it('submits form and navigates to confirmation page', () => {
-      const appointment = appointmentFactory.build()
       // Given I am on the able to work page
-      cy.task('stubFindAppointment', { appointment })
-
       const page = IsAbleToWorkPage.visit(appointment)
 
       // And I select yes
@@ -104,19 +108,20 @@ context('Log able to work ', () => {
     it('navigates from confirm working page to session page', () => {
       const appointmentSummaries = appointmentSummaryFactory.buildList(3)
       const session = sessionFactory.build({ appointmentSummaries })
-      const appointment = appointmentFactory.build({ projectCode: session.projectCode, date: session.date })
+      appointment = appointmentFactory.build({ projectCode: session.projectCode, date: session.date })
       const appointmentStatuses = appointmentSummaries.map(appointmentSummary =>
         appointmentStatusFactory.build({ appointmentId: appointmentSummary.id }),
       )
 
       // Given I am on the confirm working page
       cy.task('stubFindAppointment', { appointment })
+      cy.task('stubGetForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatuses[0]] })
 
       const page = ConfirmWorkingPage.visit(appointment)
 
       // And I click the return to session link
       cy.task('stubFindSession', { session })
-      cy.task('stubGetForm', { session, appointmentStatuses })
+      cy.task('stubGetForm', { sessionOrAppointment: session, appointmentStatuses })
       page.clickLinkToSessionPage()
 
       // Then I am taken to the session page
@@ -143,9 +148,7 @@ context('Log able to work ', () => {
 
     //  Scenario: Confirms the person cannot work
     it('submits form and navigates to unable to work page', function test() {
-      const appointment = appointmentFactory.build()
       // Given I am on the able to work page
-      cy.task('stubFindAppointment', { appointment })
       cy.task('stubGetContactOutcomes', { contactOutcomes: this.contactOutcomes })
 
       const page = IsAbleToWorkPage.visit(appointment)
@@ -162,9 +165,7 @@ context('Log able to work ', () => {
 
     //  Scenario: validates form
     it('validates the form', function test() {
-      const appointment = appointmentFactory.build()
       // Given I am on the unable to work page
-      cy.task('stubFindAppointment', { appointment })
       cy.task('stubGetContactOutcomes', { contactOutcomes: this.contactOutcomes })
 
       const page = UnableToWorkPage.visit(appointment)
@@ -181,9 +182,7 @@ context('Log able to work ', () => {
 
     // Scenario: Confirms the reason the person cannot work
     it('submits form and navigates to confirm unable to work page', function test() {
-      const appointment = appointmentFactory.build()
       // Given I am on the unable to work page
-      cy.task('stubFindAppointment', { appointment })
       cy.task('stubGetContactOutcomes', { contactOutcomes: this.contactOutcomes })
       cy.task('stubUpdateAppointmentOutcome', { appointment })
 
@@ -203,20 +202,22 @@ context('Log able to work ', () => {
     it('navigates from confirm working page to session page', function test() {
       const appointmentSummaries = appointmentSummaryFactory.buildList(3)
       const session = sessionFactory.build({ appointmentSummaries })
-      const appointment = appointmentFactory.build({ projectCode: session.projectCode, date: session.date })
+      appointment = appointmentFactory.build({ projectCode: session.projectCode, date: session.date })
       const appointmentStatuses = appointmentSummaries.map(appointmentSummary =>
         appointmentStatusFactory.build({ appointmentId: appointmentSummary.id }),
       )
 
       // Given I am on the confirm unable to work page
       cy.task('stubFindAppointment', { appointment })
+      cy.task('stubGetForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatuses[0]] })
+
       cy.task('stubGetContactOutcomes', { contactOutcomes: this.contactOutcomes })
 
       const page = ConfirmUnableToWorkPage.visit(appointment)
 
       // And I click the return to session link
       cy.task('stubFindSession', { session })
-      cy.task('stubGetForm', { session, appointmentStatuses })
+      cy.task('stubGetForm', { sessionOrAppointment: session, appointmentStatuses })
       page.clickLinkToSessionPage()
 
       // Then I am taken to the session page
