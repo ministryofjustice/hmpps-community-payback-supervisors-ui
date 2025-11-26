@@ -1,0 +1,86 @@
+[
+  {
+    "name": "Acceptable Absence - Court/Legal",
+    "code": "AACL"
+  },
+  {
+    "name": "Acceptable Absence - Employment",
+    "code": "AAEM"
+  },
+  {
+    "name": "Acceptable Absence - Family/ Childcare",
+    "code": "AAFC"
+  },
+  {
+    "name": "Acceptable Absence - Medical",
+    "code": "AAME"
+  },
+  {
+    "name": "Acceptable Absence - RIC",
+    "code": "AARC"
+  },
+  {
+    "name": "Acceptable Absence - Stood Down",
+    "code": "AASD"
+  },
+  {
+    "name": "Acceptable Absence-Professional Judgement Decision",
+    "code": "CO05"
+  },
+  {
+    "name": "Acceptable Failure - None in following 12 months",
+    "code": "CO10"
+  },
+  {
+    "name": "Attended - Complied",
+    "code": "ATTC"
+  },
+  {
+    "name": "Attended - Concurrent Hours",
+    "code": "ATCH"
+  },
+  {
+    "name": "Attended - FTC Deemed Acceptable",
+    "code": "AFDA"
+  },
+  {
+    "name": "Attended - Failed to Comply",
+    "code": "AFTC"
+  },
+  {
+    "name": "Attended - Sent Home (behaviour)",
+    "code": "ATSH"
+  },
+  {
+    "name": "Attended - Sent Home (service issues)",
+    "code": "ATSS"
+  },
+  {
+    "name": "Failed to Comply with other Instruction",
+    "code": "ATFI"
+  },
+  {
+    "name": "Rescheduled - PoP Request",
+    "code": "RSOF"
+  },
+  {
+    "name": "Rescheduled - Service Request",
+    "code": "RSSR"
+  },
+  {
+    "name": "Suspended",
+    "code": "CO40"
+  },
+  {
+    "name": "Unacceptable Absence",
+    "code": "UAAB"
+  },
+  {
+    "name": "Warrant Outstanding",
+    "code": "CO38"
+  },
+  {
+    "name": "YOT Breach - Not Enforceable",
+    "code": "CO39"
+  }
+]

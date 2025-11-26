@@ -14,6 +14,7 @@ const paths = {
     arrived: {
       startTime: appointmentArrivedPath.path('start-time'),
       ableToWork: appointmentArrivedPath.path('able-to-work'),
+      unableToWork: appointmentArrivedPath.path('unable-to-work'),
     },
     absent: {
       startTime: appointmentAbsentPath.path('start-time'),
@@ -21,6 +22,7 @@ const paths = {
     confirm: {
       working: appointmentPath.path('confirm-working'),
       absent: appointmentPath.path('confirm-absent'),
+      unableToWork: appointmentPath.path('confirm-unable-to-work'),
     },
   },
 }

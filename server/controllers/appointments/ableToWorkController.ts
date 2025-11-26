@@ -2,7 +2,6 @@ import type { Request, RequestHandler, Response } from 'express'
 import AppointmentService from '../../services/appointmentService'
 import AbleToWorkPage from '../../pages/appointments/update/ableToWorkPage'
 import generateErrorSummary from '../../utils/errorUtils'
-import paths from '../../paths'
 
 export default class AbleToWorkController {
   constructor(private readonly appointmentService: AppointmentService) {}
@@ -44,7 +43,7 @@ export default class AbleToWorkController {
         })
       }
 
-      return res.redirect(paths.appointments.confirm.working({ projectCode, appointmentId }))
+      return res.redirect(page.nextPath(appointmentId, projectCode))
     }
   }
 }

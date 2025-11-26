@@ -2,7 +2,7 @@ import { Factory } from 'fishery'
 import { faker } from '@faker-js/faker'
 import { AppointmentSummaryDto } from '../../@types/shared'
 import offenderFullFactory from './offenderFullFactory'
-import contactOutcomeFactory from './contactOutcomeFactory'
+import { contactOutcomeFactory } from './contactOutcomeFactory'
 
 export default Factory.define<AppointmentSummaryDto>(() => ({
   id: faker.number.int(),

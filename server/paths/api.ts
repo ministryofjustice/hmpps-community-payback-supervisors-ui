@@ -4,6 +4,7 @@ const supervisorUiPath = path('/supervisor')
 
 const projectPath = supervisorUiPath.path('/projects/:projectCode')
 const singleAppointmentPath = projectPath.path('/appointments/:appointmentId')
+const referenceDataPath = path('/common/references')
 
 export default {
   projects: {
@@ -15,5 +16,8 @@ export default {
   },
   sessions: {
     next: supervisorUiPath.path('supervisors').path(':supervisorCode').path('sessions/next'),
+  },
+  referenceData: {
+    contactOutcomes: referenceDataPath.path('contact-outcomes'),
   },
 }

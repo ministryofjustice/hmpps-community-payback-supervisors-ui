@@ -26,3 +26,11 @@ export interface SaveAppointmentRequest extends BaseRequest {
 export type AppointmentArrivedAction = 'arrived' | 'absent'
 
 export type ValidationErrors<T> = Partial<Record<keyof T, Record<'text', string>>>
+
+export interface GovUkRadioOption {
+  text: string
+  value: string
+  checked?: boolean
+}
+
+export type YesOrNo = 'yes' | 'no'

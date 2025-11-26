@@ -40,13 +40,26 @@ describe('AbleToWorkPage', () => {
   })
 
   describe('next', () => {
-    it('should return path to the confirm working page with project code and appointment Id', () => {
-      const appointmentId = '1'
-      const projectCode = '2'
-      const page = new AbleToWorkPage()
-      const result = page.nextPath(appointmentId, projectCode)
+    describe('when ableToWork is "yes"', () => {
+      it('should return path to the confirm working page with project code and appointment Id', () => {
+        const appointmentId = '1'
+        const projectCode = '2'
+        const page = new AbleToWorkPage({ ableToWork: 'yes' })
+        const result = page.nextPath(appointmentId, projectCode)
 
-      expect(result).toEqual(paths.appointments.confirm.working({ projectCode, appointmentId }))
+        expect(result).toEqual(paths.appointments.confirm.working({ projectCode, appointmentId }))
+      })
+    })
+
+    describe('when ableToWork is "no"', () => {
+      it('should return path to the unable to work page with project code and appointment Id', () => {
+        const appointmentId = '1'
+        const projectCode = '2'
+        const page = new AbleToWorkPage({ ableToWork: 'no' })
+        const result = page.nextPath(appointmentId, projectCode)
+
+        expect(result).toEqual(paths.appointments.arrived.unableToWork({ projectCode, appointmentId }))
+      })
     })
   })
 
