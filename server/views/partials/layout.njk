@@ -13,6 +13,20 @@
 {% block bodyStart %}
 {% endblock %}
 
+{% block footer %}
+  {{ govukFooter({
+    classes: 'govuk-footer',
+    meta: {
+      items: [
+        {
+          href: "/cookies",
+          text: "Cookies policy"
+        }
+      ]
+    }
+  }) }}
+{% endblock %}
+
 {% block bodyEnd %}
   <script type="module" src="{{ '/assets/js/index.js' | assetMap }}"></script>
 {% endblock %}

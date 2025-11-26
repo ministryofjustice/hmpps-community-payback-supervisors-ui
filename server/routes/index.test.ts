@@ -4,6 +4,7 @@ import { appWithAllRoutes, user } from './testutils/appSetup'
 import AuditService, { Page } from '../services/auditService'
 import SessionService from '../services/sessionService'
 import IndexController from '../controllers/indexController'
+import StaticController from '../controllers/staticController'
 
 jest.mock('../services/auditService')
 jest.mock('../services/exampleService')
@@ -21,6 +22,7 @@ beforeEach(() => {
     },
     controllers: {
       indexController: new IndexController(sessionService),
+      staticController: new StaticController() as jest.Mocked<StaticController>,
     },
     userSupplier: () => user,
   })
