@@ -1,4 +1,6 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+
 {% extends "../partials/layout.njk" %}
 
 {% set pageTitle = project.projectName %}
@@ -59,7 +61,11 @@
                 </div>
               </div>
             </div>
-            <div class="govuk-summary-card__content">
+            <div class="govuk-summary-card__content govuk-!-padding-bottom-3">
+              {{govukTag({
+                text: appointment.statusTag.text,
+                classes: appointment.statusTag.classes
+              })}}
             </div>
           </div>
         </li>

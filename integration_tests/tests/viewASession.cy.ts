@@ -12,6 +12,14 @@
 //    Given I am on a session page
 //    When I click on an appointment
 //    Then I am taken to the appointment page
+//
+//  Scenario: Viewing statuses
+//    Scenario: viewing a new session with no appointment statuses saved
+//      Given I am on a session page for a new session
+//      Then I see scheduled statuses for each offender
+//    Scenario: viewing a session's existing appointment statuses
+//      Given I am on a session page for an in progress session
+//      Then I see saved statuses for each offender
 
 import IndexPage from '../pages'
 import Page from '../pages/page'
@@ -21,6 +29,7 @@ import appointmentSummaryFactory from '../../server/testutils/factories/appointm
 import AppointmentPage from '../pages/appointment'
 import appointmentFactory from '../../server/testutils/factories/appointmentFactory'
 import sessionSummaryFactory from '../../server/testutils/factories/sessionSummaryFactory'
+import appointmentStatusFactory from '../../server/testutils/factories/appointmentStatusFactory'
 
 context('Home', () => {
   beforeEach(() => {
@@ -43,11 +52,14 @@ context('Home', () => {
     const appointmentSummaries = appointmentSummaryFactory.buildList(3)
     const session = sessionFactory.build({ appointmentSummaries, projectCode: 'N56123456', date: '2025-09-15' })
     cy.task('stubFindSession', { session })
+    cy.task('stubGetFormNotFound', { session })
+    cy.task('stubSaveForm', { session })
     page.clickViewSession()
 
-    //  Then I see the search form
+    //  Then I see the session details
     const sessionPage = Page.verifyOnPage(SessionPage, session)
     sessionPage.shouldShowSessionDetails()
+    sessionPage.shouldShowAppointmentsForEachOffender()
   })
 })
 
@@ -64,6 +76,8 @@ context('Session', () => {
     const appointmentSummaries = appointmentSummaryFactory.buildList(3)
     const session = sessionFactory.build({ appointmentSummaries })
     cy.task('stubFindSession', { session })
+    cy.task('stubGetFormNotFound', { session })
+    cy.task('stubSaveForm', { session })
     const sessionPage = SessionPage.visit(session)
 
     const appointment = appointmentFactory.build({ id: appointmentSummaries[0].id, projectCode: session.projectCode })
@@ -72,5 +86,39 @@ context('Session', () => {
     sessionPage.clickOnAnAppointment()
     //  Then I am taken to the appointment page
     Page.verifyOnPage(AppointmentPage, appointment)
+  })
+
+  // Scenario: Viewing statuses
+  describe('statuses', () => {
+    //  Scenario: viewing a new session with no appointment statuses saved
+    it('Viewing a person on a session', () => {
+      // Given I am on a session page for a new session
+      const appointmentSummaries = appointmentSummaryFactory.buildList(3)
+      const session = sessionFactory.build({ appointmentSummaries })
+      cy.task('stubFindSession', { session })
+      cy.task('stubGetFormNotFound', { session })
+      cy.task('stubSaveForm', { session })
+      const sessionPage = SessionPage.visit(session)
+
+      // Then I see scheduled statuses for each offender
+      sessionPage.shouldShowAppointmentsWithScheduledStatus()
+    })
+
+    //  Scenario: viewing a session's existing appointment statuses
+    it('shows existing statuses if they exist', () => {
+      // Given I am on a session page for an in progress session
+      const appointmentSummaries = appointmentSummaryFactory.buildList(3)
+      const appointmentStatuses = appointmentSummaries.map(appointment =>
+        appointmentStatusFactory.build({ appointmentId: appointment.id }),
+      )
+      const session = sessionFactory.build({ appointmentSummaries })
+      cy.task('stubFindSession', { session })
+      cy.task('stubGetForm', { session, appointmentStatuses })
+
+      const sessionPage = SessionPage.visit(session)
+
+      // Then I see saved statuses for each offender
+      sessionPage.shouldShowAppointmentsWithStatuses(appointmentStatuses)
+    })
   })
 })

@@ -27,6 +27,7 @@
 //      Then I am taken to the session page
 
 import appointmentFactory from '../../../../server/testutils/factories/appointmentFactory'
+import appointmentStatusFactory from '../../../../server/testutils/factories/appointmentStatusFactory'
 import appointmentSummaryFactory from '../../../../server/testutils/factories/appointmentSummaryFactory'
 import sessionFactory from '../../../../server/testutils/factories/sessionFactory'
 import IsAbleToWorkPage from '../../../pages/appointments/update/isAbleToWorkPage'
@@ -122,6 +123,9 @@ context('Log start time ', () => {
       const appointmentSummaries = appointmentSummaryFactory.buildList(3)
       const session = sessionFactory.build({ appointmentSummaries })
       const appointment = appointmentFactory.build({ projectCode: session.projectCode, date: session.date })
+      const appointmentStatuses = appointmentSummaries.map(appointmentSummary =>
+        appointmentStatusFactory.build({ appointmentId: appointmentSummary.id }),
+      )
 
       // Given I am on the confirm page
       cy.task('stubFindAppointment', { appointment })
@@ -130,6 +134,7 @@ context('Log start time ', () => {
 
       // And I click the return to session link
       cy.task('stubFindSession', { session })
+      cy.task('stubGetForm', { session, appointmentStatuses })
       page.clickLinkToSessionPage()
 
       // Then I am taken to the session page
