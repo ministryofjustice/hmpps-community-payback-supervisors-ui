@@ -205,7 +205,7 @@ describe('StartTimePage', () => {
           endTime: appointment.endTime,
           attendanceData: appointment.attendanceData,
           enforcementData: appointment.enforcementData,
-          notes: appointment.notes,
+          notes: null,
         }
 
         expect(result).toEqual(expected)
@@ -253,7 +253,7 @@ describe('StartTimePage', () => {
           endTime: appointment.endTime,
           attendanceData: appointment.attendanceData,
           enforcementData: appointment.enforcementData,
-          notes: appointment.notes,
+          notes: null,
         }
 
         expect(result).toEqual(expected)
