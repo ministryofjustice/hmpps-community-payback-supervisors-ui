@@ -22,12 +22,12 @@ export default class StartTimePage extends Page {
   }
 
   clearStartTime(): void {
-    this.getTextInputById('startTime').clear()
+    this.getInputByLabel(this.title).clear()
   }
 
   enterStartTime(value: string): void {
     this.clearStartTime()
-    this.getTextInputById('startTime').type(value)
+    this.getInputByLabel(this.title).type(value)
   }
 
   private static getExpectedTitle(action: string, offender: Offender) {
@@ -41,5 +41,13 @@ export default class StartTimePage extends Page {
       title = `You're logging ${offender.name} as absent today at:`
     }
     return title
+  }
+
+  shouldShowValidationErrors() {
+    this.shouldShowErrorSummary('startTime', 'Enter a start time')
+  }
+
+  shouldHaveStartTimeValue(value: string) {
+    this.shouldHaveInputValue(this.title, value)
   }
 }

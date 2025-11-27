@@ -66,8 +66,8 @@ context('Log start time ', () => {
 
       // Then I see the same page with errors
       Page.verifyOnPage(StartTimePage, appointment, 'arrived')
-      page.shouldShowErrorSummary('startTime', 'Enter a start time')
-      page.shouldHaveInputValue('startTime', '')
+      page.shouldShowValidationErrors()
+      page.shouldHaveStartTimeValue('')
     })
 
     //  Scenario: Submitting a valid time
@@ -98,8 +98,8 @@ context('Log start time ', () => {
 
       // Then I see the same page with errors
       Page.verifyOnPage(StartTimePage, appointment, 'absent')
-      page.shouldShowErrorSummary('startTime', 'Enter a start time')
-      page.shouldHaveInputValue('startTime', '')
+      page.shouldShowValidationErrors()
+      page.shouldHaveStartTimeValue('')
     })
 
     //  Scenario: Submitting a valid time

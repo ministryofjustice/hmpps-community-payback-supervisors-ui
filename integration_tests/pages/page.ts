@@ -5,7 +5,7 @@ export default abstract class Page {
     return new constructor(...args)
   }
 
-  protected constructor(private readonly title: string) {
+  protected constructor(protected readonly title: string) {
     this.checkOnPage()
   }
 
@@ -45,8 +45,8 @@ export default abstract class Page {
     cy.get(`input[name="${name}"][value="${option}"]`).check()
   }
 
-  shouldHaveInputValue(id: string, value: string): void {
-    this.getTextInputById(id).should('have.value', value)
+  shouldHaveInputValue(label: string, value: string): void {
+    this.getInputByLabel(label).should('have.value', value)
   }
 
   shouldShowErrorSummary(field: string, errorMessage: string) {
