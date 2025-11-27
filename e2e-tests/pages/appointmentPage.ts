@@ -3,6 +3,7 @@
 import { Locator, Page, expect } from '@playwright/test'
 import BasePage from './basePage'
 import SummaryListComponent from './components/summaryListComponent'
+import { AppointmentStatusType } from '../../server/@types/user-defined'
 
 export default class AppointmentPage extends BasePage {
   readonly expect: AppointmentPageAssertions
@@ -42,9 +43,12 @@ class AppointmentPageAssertions {
   }
 
   async toShowAppointmentDetails() {
-    await this.appointmentPage.details.expect.toHaveItemWith('Session status', 'Scheduled')
     await this.appointmentPage.details.expect.toHaveItemWith('Start time', '09:00')
     await this.appointmentPage.details.expect.toHaveItemWith('Finish time', '17:00')
+  }
+
+  async toShowStatus(status: AppointmentStatusType) {
+    await this.appointmentPage.details.expect.toHaveItemWith('Session status', status)
   }
 
   async toShowOffenderDetails() {

@@ -35,11 +35,21 @@ import ConfirmAbsentPage from '../../../pages/appointments/update/confirm/confir
 import StartTimePage from '../../../pages/appointments/update/startTimePage'
 import Page from '../../../pages/page'
 import SessionPage from '../../../pages/session'
+import { AppointmentDto } from '../../../../server/@types/shared'
+import { AppointmentStatus } from '../../../../server/services/appointmentStatusService'
 
 context('Log start time ', () => {
+  let appointment: AppointmentDto
+  let appointmentStatus: AppointmentStatus
+
   beforeEach(() => {
+    appointment = appointmentFactory.build()
+    appointmentStatus = appointmentStatusFactory.build({ appointmentId: appointment.id })
     cy.task('reset')
     cy.task('stubSignIn')
+    cy.task('stubGetForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
+    cy.task('stubFindAppointment', { appointment })
+
     cy.signIn()
   })
 
@@ -47,10 +57,7 @@ context('Log start time ', () => {
   describe('arrived', () => {
     //  Scenario: Validates time entered
     it('validates the time entered on submit', () => {
-      const appointment = appointmentFactory.build()
       // Given I am on the start time page for an arrival form
-      cy.task('stubFindAppointment', { appointment })
-
       const page = StartTimePage.visit(appointment, 'arrived')
 
       // When I submit an invalid time
@@ -65,10 +72,7 @@ context('Log start time ', () => {
 
     //  Scenario: Submitting a valid time
     it('submits start time and navigates to next page', () => {
-      const appointment = appointmentFactory.build({ startTime: '09:00' })
       // Given I am on the start time page for an arrival form
-      cy.task('stubFindAppointment', { appointment })
-
       const page = StartTimePage.visit(appointment, 'arrived')
 
       // When I submit a valid time
@@ -85,10 +89,7 @@ context('Log start time ', () => {
   describe('absent', () => {
     //  Scenario: Validates time entered
     it('validates the time entered on submit', () => {
-      const appointment = appointmentFactory.build()
       // Given I am on the start time page for an absent form
-      cy.task('stubFindAppointment', { appointment })
-
       const page = StartTimePage.visit(appointment, 'absent')
 
       // When I submit an invalid time
@@ -103,10 +104,7 @@ context('Log start time ', () => {
 
     //  Scenario: Submitting a valid time
     it('submits start time and navigates to next page', () => {
-      const appointment = appointmentFactory.build({ startTime: '09:00' })
       // Given I am on the start time page for an absent form
-      cy.task('stubFindAppointment', { appointment })
-
       const page = StartTimePage.visit(appointment, 'absent')
 
       // When I submit a valid time
@@ -122,19 +120,20 @@ context('Log start time ', () => {
     it('navigates from confirm working page to session page', () => {
       const appointmentSummaries = appointmentSummaryFactory.buildList(3)
       const session = sessionFactory.build({ appointmentSummaries })
-      const appointment = appointmentFactory.build({ projectCode: session.projectCode, date: session.date })
+      appointment = appointmentFactory.build({ projectCode: session.projectCode, date: session.date })
       const appointmentStatuses = appointmentSummaries.map(appointmentSummary =>
         appointmentStatusFactory.build({ appointmentId: appointmentSummary.id }),
       )
 
       // Given I am on the confirm page
+      cy.task('stubGetForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatuses[0]] })
       cy.task('stubFindAppointment', { appointment })
 
       const page = ConfirmAbsentPage.visit(appointment)
 
       // And I click the return to session link
       cy.task('stubFindSession', { session })
-      cy.task('stubGetForm', { session, appointmentStatuses })
+      cy.task('stubGetForm', { sessionOrAppointment: session, appointmentStatuses })
       page.clickLinkToSessionPage()
 
       // Then I am taken to the session page

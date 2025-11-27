@@ -8,7 +8,10 @@ import StartTimeController from './startTimeController'
 import UnableToWorkController from './unableToWorkController'
 
 const appointmentControllers = (services: Services) => {
-  const showDetailsController = new ShowDetailsController(services.appointmentService)
+  const showDetailsController = new ShowDetailsController(
+    services.appointmentService,
+    services.appointmentStatusService,
+  )
   const startTimeController = new StartTimeController(services.appointmentService)
   const isAbleToWorkController = new IsAbleToWorkController(services.appointmentService)
   const unableToWorkController = new UnableToWorkController(services.appointmentService, services.referenceDataService)

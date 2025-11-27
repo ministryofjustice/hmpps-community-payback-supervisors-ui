@@ -1,6 +1,7 @@
 import Offender from '../../models/offender'
 import paths from '../../paths'
 import appointmentFactory from '../../testutils/factories/appointmentFactory'
+import StatusTagUtils from '../../utils/GovUKFrontend/statusTagUtils'
 import AppointmentShowDetailsPage from './appointmentShowDetailsPage'
 
 jest.mock('../../models/offender')
@@ -27,8 +28,11 @@ describe('AppointmentShowDetailsPage', () => {
         return offender
       })
 
+      const statusTagHtml = '<strong>Scheduled</strong>'
+      jest.spyOn(StatusTagUtils, 'getHtml').mockReturnValue(statusTagHtml)
+
       const page = new AppointmentShowDetailsPage()
-      const result = page.viewData(appointment)
+      const result = page.viewData(appointment, 'Scheduled')
       const { projectCode, date, id } = appointment
       expect(result).toEqual({
         offender,
@@ -39,6 +43,7 @@ describe('AppointmentShowDetailsPage', () => {
           arrivedPath: paths.appointments.arrived.startTime({ projectCode, appointmentId: id.toString() }),
           absentPath: paths.appointments.absent.startTime({ projectCode, appointmentId: id.toString() }),
         },
+        statusTagHtml,
       })
     })
   })

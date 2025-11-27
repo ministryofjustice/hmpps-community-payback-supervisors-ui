@@ -56,7 +56,7 @@ context('Home', () => {
     const session = sessionFactory.build({ appointmentSummaries, projectCode: 'N56123456', date: '2025-09-15' })
     cy.task('stubFindSession', { session })
     cy.task('stubGetFormNotFound', { session })
-    cy.task('stubSaveForm', { session })
+    cy.task('stubSaveForm', { sessionOrAppointment: session })
     page.clickViewSession()
 
     //  Then I see the session details
@@ -80,12 +80,15 @@ context('Session', () => {
     const session = sessionFactory.build({ appointmentSummaries })
     cy.task('stubFindSession', { session })
     cy.task('stubGetFormNotFound', { session })
-    cy.task('stubSaveForm', { session })
+    cy.task('stubSaveForm', { sessionOrAppointment: session })
     const sessionPage = SessionPage.visit(session)
 
     const appointment = appointmentFactory.build({ id: appointmentSummaries[0].id, projectCode: session.projectCode })
+    const appointmentStatus = appointmentStatusFactory.build({ appointmentId: appointment.id })
     //  When I click on an appointment
     cy.task('stubFindAppointment', { appointment })
+    cy.task('stubGetForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
+
     sessionPage.clickOnAnAppointment()
     //  Then I am taken to the appointment page
     Page.verifyOnPage(AppointmentPage, appointment)
@@ -100,7 +103,7 @@ context('Session', () => {
       const session = sessionFactory.build({ appointmentSummaries })
       cy.task('stubFindSession', { session })
       cy.task('stubGetFormNotFound', { session })
-      cy.task('stubSaveForm', { session })
+      cy.task('stubSaveForm', { sessionOrAppointment: session })
       const sessionPage = SessionPage.visit(session)
 
       // Then I see scheduled statuses for each offender
@@ -116,7 +119,7 @@ context('Session', () => {
       )
       const session = sessionFactory.build({ appointmentSummaries })
       cy.task('stubFindSession', { session })
-      cy.task('stubGetForm', { session, appointmentStatuses })
+      cy.task('stubGetForm', { sessionOrAppointment: session, appointmentStatuses })
 
       const sessionPage = SessionPage.visit(session)
 
@@ -136,8 +139,8 @@ context('Session', () => {
       appointmentSummaries.push(newAppointment)
       const session = sessionFactory.build({ appointmentSummaries })
       cy.task('stubFindSession', { session })
-      cy.task('stubGetForm', { session, appointmentStatuses })
-      cy.task('stubSaveForm', { session })
+      cy.task('stubGetForm', { sessionOrAppointment: session, appointmentStatuses })
+      cy.task('stubSaveForm', { sessionOrAppointment: session })
 
       const sessionPage = SessionPage.visit(session)
 

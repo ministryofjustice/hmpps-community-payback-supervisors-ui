@@ -16,6 +16,24 @@ export const APPOINTMENT_STATUS_FORM_TYPE = 'APPOINTMENT_STATUSES_SUPERVISOR'
 export default class AppointmentStatusService {
   constructor(private readonly formClient: FormClient) {}
 
+  /**
+   * Gets a status for a single appointment.
+   * Assumes that `getStatusesForSession` (and implicitly `createStatusesForSession`) has been called previously for a session,
+   * as the appointment page is only accessible from the session page—where statuses are set up for the session appointments.
+   */
+  async getStatus(appointment: AppointmentDto, username: string): Promise<AppointmentStatus> {
+    const formKey = this.getFormKey(appointment)
+    const data = await this.formClient.find<AppointmentStatuses>(formKey, username)
+
+    const appointmentStatus = data?.appointmentStatuses.find(status => status.appointmentId === appointment.id)
+
+    if (appointmentStatus) {
+      return appointmentStatus
+    }
+
+    throw new Error(`No appointment status found for project ${appointment.projectCode} on ${appointment.date}`)
+  }
+
   async getStatusesForSession(session: SessionDto, username: string): Promise<AppointmentStatus[]> {
     const formKey = this.getFormKey(session)
     const data = await this.formClient.find<AppointmentStatuses>(formKey, username)
@@ -71,9 +89,9 @@ export default class AppointmentStatusService {
     }
   }
 
-  private getFormKey(session: SessionDto): FormKeyDto {
+  private getFormKey(sessionOrAppointment: Pick<SessionDto | AppointmentDto, 'projectCode' | 'date'>): FormKeyDto {
     return {
-      id: session.projectCode + session.date,
+      id: sessionOrAppointment.projectCode + sessionOrAppointment.date,
       type: APPOINTMENT_STATUS_FORM_TYPE,
     }
   }
