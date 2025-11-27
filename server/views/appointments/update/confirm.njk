@@ -1,6 +1,6 @@
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
 
-{% extends "../../../partials/layout.njk" %}
+{% extends "../../partials/layout.njk" %}
 
 {% block content %}
   <div class="govuk-grid-row">
@@ -9,7 +9,15 @@
         titleText: title
       }) }}
 
-      {% block confirmBody %}{% endblock %}
+      {% if nextStepsText %}
+        <div class="govuk-!-margin-top-7">
+          <h2 class="govuk-heading-m">What happens next</h2>
+
+          <p class="govuk-body">
+            {{ nextStepsText }}
+          </p>
+        </div>
+      {% endif %}
 
       <div class="govuk-!-margin-top-7">
         <p><a href="{{ sessionPath }}" class="govuk-link">Return to session page</a></p>

@@ -20,7 +20,7 @@ export default class ConfirmController {
       const appointment = await this.appointmentService.getAppointment(request)
       const { name } = new Offender(appointment.offender)
 
-      res.render('appointments/update/confirm/working', {
+      res.render('appointments/update/confirm', {
         title: `${name} has been recorded as starting work today`,
         sessionPath: paths.sessions.show({ projectCode: appointment.projectCode, date: appointment.date }),
       })
@@ -40,9 +40,10 @@ export default class ConfirmController {
       const appointment = await this.appointmentService.getAppointment(request)
       const offender = new Offender(appointment.offender)
 
-      res.render('appointments/update/confirm/unableToWork', {
+      res.render('appointments/update/confirm', {
         offender,
         title: `${offender.name} has been recorded as being unable to work`,
+        nextStepsText: `${offender.name}'s probation practioner will be informed about them being unable to work today.`,
         sessionPath: paths.sessions.show({ projectCode: appointment.projectCode, date: appointment.date }),
       })
     }
@@ -61,9 +62,10 @@ export default class ConfirmController {
       const appointment = await this.appointmentService.getAppointment(request)
       const offender = new Offender(appointment.offender)
 
-      res.render('appointments/update/confirm/absent', {
+      res.render('appointments/update/confirm', {
         offender,
         title: `${offender.name} has been recorded as absent`,
+        nextStepsText: `${offender.name}'s probation practioner will be informed about this absence.`,
         sessionPath: paths.sessions.show({ projectCode: appointment.projectCode, date: appointment.date }),
       })
     }
