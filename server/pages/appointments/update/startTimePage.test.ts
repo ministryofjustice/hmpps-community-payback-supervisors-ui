@@ -37,7 +37,7 @@ describe('StartTimePage', () => {
         offender,
         backPath: paths.appointments.show({ appointmentId, projectCode }),
         updatePath: paths.appointments.arrived.startTime({ appointmentId, projectCode }),
-        startTime,
+        time: startTime,
         title: `You're logging Sam Smith as having arrived at:`,
       })
     })
@@ -46,9 +46,9 @@ describe('StartTimePage', () => {
       const startTime = '09:00'
       const appointment = appointmentFactory.build({ id: 1, startTime })
 
-      const page = new StartTimePage(action, { startTime: updatedStartTime })
+      const page = new StartTimePage(action, { time: updatedStartTime })
       const result = page.viewData(appointment)
-      expect(result.startTime).toEqual(updatedStartTime)
+      expect(result.time).toEqual(updatedStartTime)
     })
 
     it('returns absent update path if action is absent', () => {
@@ -109,17 +109,17 @@ describe('StartTimePage', () => {
     const action = 'arrived'
     describe('when startTime is not present', () => {
       it.each([null, undefined, ''])('should return true', (time?: string) => {
-        const page = new StartTimePage(action, { startTime: time })
+        const page = new StartTimePage(action, { time })
         page.validate()
 
         expect(page.hasErrors).toEqual(true)
       })
 
       it.each([null, undefined, ''])('should return true', (time?: string) => {
-        const page = new StartTimePage(action, { startTime: time })
+        const page = new StartTimePage(action, { time })
         page.validate()
 
-        expect(page.validationErrors.startTime).toEqual({
+        expect(page.validationErrors.time).toEqual({
           text: 'Enter a start time',
         })
       })
@@ -128,17 +128,17 @@ describe('StartTimePage', () => {
     describe('when startTime is not valid', () => {
       it('should return true', () => {
         jest.spyOn(DateTimeFormats, 'isValidTime').mockReturnValue(false)
-        const page = new StartTimePage(action, { startTime: '8475438' })
+        const page = new StartTimePage(action, { time: '8475438' })
         page.validate()
 
         expect(page.hasErrors).toEqual(true)
       })
 
       it('should return the correct error', () => {
-        const page = new StartTimePage(action, { startTime: '8475438' })
+        const page = new StartTimePage(action, { time: '8475438' })
         page.validate()
 
-        expect(page.validationErrors.startTime).toEqual({
+        expect(page.validationErrors.time).toEqual({
           text: 'Enter a valid start time, for example 09:00',
         })
       })
@@ -147,7 +147,7 @@ describe('StartTimePage', () => {
     describe('when startTime is valid', () => {
       it('should return false', () => {
         jest.spyOn(DateTimeFormats, 'isValidTime').mockReturnValue(true)
-        const page = new StartTimePage(action, { startTime: '09:00' })
+        const page = new StartTimePage(action, { time: '09:00' })
         page.validate()
 
         expect(page.hasErrors).toEqual(false)
@@ -155,10 +155,10 @@ describe('StartTimePage', () => {
 
       it('startTime error should be undefined', () => {
         jest.spyOn(DateTimeFormats, 'isValidTime').mockReturnValue(true)
-        const page = new StartTimePage(action, { startTime: '09:00' })
+        const page = new StartTimePage(action, { time: '09:00' })
         page.validate()
 
-        expect(page.validationErrors.startTime).toEqual(undefined)
+        expect(page.validationErrors.time).toEqual(undefined)
       })
     })
   })
@@ -174,7 +174,7 @@ describe('StartTimePage', () => {
           contactOutcomeCode: '3',
           supervisorOfficerCode: '123',
         })
-        const page = new StartTimePage(action, { startTime: '10:00' })
+        const page = new StartTimePage(action, { time: '10:00' })
 
         const result = page.requestBody(appointment)
 
@@ -189,7 +189,7 @@ describe('StartTimePage', () => {
           contactOutcomeCode: '3',
           supervisorOfficerCode: '123',
         })
-        const page = new StartTimePage(action, { startTime: '09:00' })
+        const page = new StartTimePage(action, { time: '09:00' })
 
         const result = page.requestBody(appointment)
 
@@ -222,7 +222,7 @@ describe('StartTimePage', () => {
           contactOutcomeCode: '3',
           supervisorOfficerCode: '123',
         })
-        const page = new StartTimePage(action, { startTime: '10:00' })
+        const page = new StartTimePage(action, { time: '10:00' })
 
         const result = page.requestBody(appointment)
 
@@ -237,7 +237,7 @@ describe('StartTimePage', () => {
           contactOutcomeCode: '3',
           supervisorOfficerCode: '123',
         })
-        const page = new StartTimePage(action, { startTime: '09:00' })
+        const page = new StartTimePage(action, { time: '09:00' })
 
         const result = page.requestBody(appointment)
 

@@ -44,7 +44,7 @@ export default class StartTimePage extends Page {
   }
 
   shouldShowValidationErrors() {
-    this.shouldShowErrorSummary('startTime', 'Enter a start time')
+    this.shouldShowErrorSummary('time', 'Enter a start time')
   }
 
   shouldHaveStartTimeValue(value: string) {

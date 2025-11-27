@@ -19,7 +19,7 @@ export default class StartTimeController {
 
       const page = new StartTimePage(action)
 
-      res.render('appointments/update/startTime', page.viewData(appointment))
+      res.render('appointments/update/time', page.viewData(appointment))
     }
   }
 
@@ -36,7 +36,7 @@ export default class StartTimeController {
       page.validate()
 
       if (page.hasErrors) {
-        return res.render('appointments/update/startTime', {
+        return res.render('appointments/update/time', {
           ...page.viewData(appointment),
           errors: page.validationErrors,
           errorSummary: generateErrorSummary(page.validationErrors),
