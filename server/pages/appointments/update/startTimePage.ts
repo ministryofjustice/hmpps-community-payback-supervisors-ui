@@ -8,7 +8,8 @@ import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './base
 
 interface ViewData extends AppointmentUpdatePageViewData {
   time: string
-  title: string
+  question: string
+  documentTitle: string
 }
 
 interface Query {
@@ -72,7 +73,8 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
     return {
       ...commonViewData,
       time: hasFormBody ? this.query.time : appointment.startTime,
-      title: this.getPageTitle(commonViewData.offender),
+      question: this.getPageTitle(commonViewData.offender),
+      documentTitle: 'Log start time',
     }
   }
 

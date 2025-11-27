@@ -38,7 +38,8 @@ describe('StartTimePage', () => {
         backPath: paths.appointments.show({ appointmentId, projectCode }),
         updatePath: paths.appointments.arrived.startTime({ appointmentId, projectCode }),
         time: startTime,
-        title: `You're logging Sam Smith as having arrived at:`,
+        question: `You're logging Sam Smith as having arrived at:`,
+        documentTitle: 'Log start time',
       })
     })
 
@@ -77,7 +78,7 @@ describe('StartTimePage', () => {
       const appointment = appointmentFactory.build()
       const page = new StartTimePage('absent')
       const result = page.viewData(appointment)
-      expect(result.title).toBe("You're logging Sam Smith as absent today at:")
+      expect(result.question).toBe("You're logging Sam Smith as absent today at:")
     })
   })
 
