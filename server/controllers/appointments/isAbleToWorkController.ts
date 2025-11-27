@@ -2,9 +2,13 @@ import type { Request, RequestHandler, Response } from 'express'
 import AppointmentService from '../../services/appointmentService'
 import IsAbleToWorkPage from '../../pages/appointments/update/isAbleToWorkPage'
 import generateErrorSummary from '../../utils/errorUtils'
+import AppointmentStatusService from '../../services/appointmentStatusService'
 
 export default class IsAbleToWorkController {
-  constructor(private readonly appointmentService: AppointmentService) {}
+  constructor(
+    private readonly appointmentService: AppointmentService,
+    private readonly appointmentStatusService: AppointmentStatusService,
+  ) {}
 
   show(): RequestHandler {
     return async (_req: Request, res: Response) => {
@@ -41,6 +45,10 @@ export default class IsAbleToWorkController {
           errors: page.validationErrors,
           errorSummary: generateErrorSummary(page.validationErrors),
         })
+      }
+
+      if (page.isAbleToWork()) {
+        this.appointmentStatusService.updateStatus(appointment, 'Working', res.locals.user.name)
       }
 
       return res.redirect(page.nextPath(appointmentId, projectCode))

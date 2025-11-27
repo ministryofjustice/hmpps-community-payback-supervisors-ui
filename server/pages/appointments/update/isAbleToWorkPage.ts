@@ -22,10 +22,14 @@ export default class IsAbleToWorkPage extends BaseAppointmentUpdatePage<Body> {
   }
 
   nextPath(appointmentId: string, projectCode: string): string {
-    if (this.query.ableToWork === 'yes') {
+    if (this.isAbleToWork()) {
       return paths.appointments.confirm.working({ projectCode, appointmentId })
     }
     return paths.appointments.arrived.unableToWork({ projectCode, appointmentId })
+  }
+
+  isAbleToWork() {
+    return this.query.ableToWork === 'yes'
   }
 
   protected backPath(appointment: AppointmentDto): string {

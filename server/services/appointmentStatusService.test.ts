@@ -116,4 +116,46 @@ describe('AppointmentStatusService', () => {
       expect(result).toEqual(appointmentStatuses)
     })
   })
+
+  describe('updateStatus', () => {
+    it('updates an existing appointment status for a session', async () => {
+      const appointment = appointmentFactory.build()
+      const appointmentStatus = { appointmentId: appointment.id, status: 'Scheduled' }
+      const otherStatuses = appointmentStatusFactory.buildList(2)
+      const appointmentStatuses = [...otherStatuses, appointmentStatus]
+
+      formClient.find.mockResolvedValue({ appointmentStatuses })
+
+      await appointmentStatusService.updateStatus(appointment, 'Working', userName)
+
+      const expectedFormKey: FormKeyDto = {
+        type: APPOINTMENT_STATUS_FORM_TYPE,
+        id: appointment.projectCode + appointment.date,
+      }
+
+      expect(formClient.save).toHaveBeenCalledWith(expectedFormKey, userName, {
+        appointmentStatuses: [...otherStatuses, { appointmentId: appointment.id, status: 'Working' }],
+      })
+    })
+
+    it('throws an error if given appointment status does not exist on the session statuses list', async () => {
+      const appointment = appointmentFactory.build()
+      const appointmentStatuses = appointmentStatusFactory.buildList(2)
+
+      formClient.find.mockResolvedValue({ appointmentStatuses })
+
+      expect(() => appointmentStatusService.updateStatus(appointment, 'Working', userName)).rejects.toThrow(
+        `No appointment status found for project ${appointment.projectCode} on ${appointment.date}`,
+      )
+    })
+
+    it('throws an error if no status list exists for the session', async () => {
+      const appointment = appointmentFactory.build()
+
+      formClient.find.mockResolvedValue(null)
+      expect(() => appointmentStatusService.updateStatus(appointment, 'Working', userName)).rejects.toThrow(
+        `No appointment status found for project ${appointment.projectCode} on ${appointment.date}`,
+      )
+    })
+  })
 })

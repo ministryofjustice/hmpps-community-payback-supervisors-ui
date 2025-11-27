@@ -45,6 +45,27 @@ export default class AppointmentStatusService {
     return this.createStatusesForSession(session, username)
   }
 
+  /**
+   * Updates an existing status for a single appointment.
+   * Assumes that `getStatusesForSession` (and implicitly `createStatusesForSession`) has been called previously for a session,
+   * as the appointment page is only accessible from the session page—where statuses are set up for the session appointments.
+   */
+  async updateStatus(appointment: AppointmentDto, statusType: AppointmentStatusType, username: string): Promise<void> {
+    const formKey = this.getFormKey(appointment)
+    const data = await this.formClient.find<AppointmentStatuses>(formKey, username)
+
+    const appointmentStatusIndex = data?.appointmentStatuses.findIndex(
+      status => status.appointmentId === appointment.id,
+    )
+
+    if (appointmentStatusIndex > -1) {
+      data.appointmentStatuses[appointmentStatusIndex].status = statusType
+      return this.saveStatusesForSession(formKey, username, data.appointmentStatuses)
+    }
+
+    throw new Error(`No appointment status found for project ${appointment.projectCode} on ${appointment.date}`)
+  }
+
   private async getOrCreateAllAppointmentStatuses(
     appointmentStatuses: AppointmentStatus[],
     session: SessionDto,
