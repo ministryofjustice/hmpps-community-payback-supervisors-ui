@@ -2,6 +2,7 @@ import { OffenderFullDto, SessionDto } from '../../server/@types/shared'
 import Page from './page'
 import DateTimeFormats from '../../server/utils/dateTimeUtils'
 import paths from '../../server/paths'
+import { AppointmentStatus } from '../../server/services/appointmentStatusService'
 
 export default class SessionPage extends Page {
   offenders: OffenderFullDto[]
@@ -28,9 +29,26 @@ export default class SessionPage extends Page {
 
     const appointmentCount = this.session.appointmentSummaries.length
     cy.get('h2').should('contain.text', `${appointmentCount} people scheduled on this session`)
+  }
 
+  shouldShowAppointmentsForEachOffender() {
     this.offenders.forEach(offender => {
       cy.get('li').should('contain.text', `${offender.forename} ${offender.surname}`)
+    })
+  }
+
+  shouldShowAppointmentsWithScheduledStatus() {
+    this.offenders.forEach(offender => {
+      cy.contains('li', `${offender.forename} ${offender.surname}`).should('contain.text', 'Scheduled')
+    })
+  }
+
+  shouldShowAppointmentsWithStatuses(appointmentStatuses: AppointmentStatus[]) {
+    this.offenders.forEach((offender, i) => {
+      cy.contains('li', `${offender.forename} ${offender.surname}`).should(
+        'contain.text',
+        appointmentStatuses[i].status,
+      )
     })
   }
 }

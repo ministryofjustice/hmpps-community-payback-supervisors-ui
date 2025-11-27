@@ -6,6 +6,7 @@ import health from './integration_tests/mockApis/health'
 import sessions from './integration_tests/mockApis/sessions'
 import appointments from './integration_tests/mockApis/appointments'
 import referenceData from './integration_tests/mockApis/referenceData'
+import forms from './integration_tests/mockApis/forms'
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -27,6 +28,7 @@ export default defineConfig({
         ...sessions,
         ...appointments,
         ...referenceData,
+        ...forms,
       })
     },
     baseUrl: 'http://localhost:3007',

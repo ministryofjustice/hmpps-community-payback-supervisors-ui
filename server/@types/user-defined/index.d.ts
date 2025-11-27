@@ -25,6 +25,11 @@ export interface SaveAppointmentRequest extends BaseRequest {
 
 export type AppointmentArrivedAction = 'arrived' | 'absent'
 
+export type AppointmentStatusType = 'Scheduled' | 'Working' | 'Completed'
+
+// Should be a known colour variation of the GOV.UK Design System Tag component: https://design-system.service.gov.uk/components/tag/
+export type GovUkStatusTagColour = 'grey' | 'green' | 'blue' | 'pink' | 'red' | 'orange' | 'yellow'
+
 export type ValidationErrors<T> = Partial<Record<keyof T, Record<'text', string>>>
 
 export interface GovUkRadioOption {

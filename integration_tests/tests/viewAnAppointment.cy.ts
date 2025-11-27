@@ -29,6 +29,7 @@ import appointmentSummaryFactory from '../../server/testutils/factories/appointm
 import AppointmentPage from '../pages/appointment'
 import appointmentFactory from '../../server/testutils/factories/appointmentFactory'
 import StartTimePage from '../pages/appointments/update/startTimePage'
+import appointmentStatusFactory from '../../server/testutils/factories/appointmentStatusFactory'
 
 context('viewAnAppointment', () => {
   beforeEach(() => {
@@ -65,6 +66,10 @@ context('viewAnAppointment', () => {
 
     // When I click the back link
     cy.task('stubFindSession', { session })
+    const appointmentStatuses = appointmentSummaries.map(appointmentSummary =>
+      appointmentStatusFactory.build({ appointmentId: appointmentSummary.id }),
+    )
+    cy.task('stubGetForm', { session, appointmentStatuses })
     appointmentPage.clickBack()
 
     // Then I should be taken to the session page
