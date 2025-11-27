@@ -38,7 +38,8 @@ describe('UnableToWorkPage', () => {
         offender,
         backPath: paths.appointments.arrived.isAbleToWork({ appointmentId, projectCode }),
         updatePath: paths.appointments.arrived.unableToWork({ appointmentId, projectCode }),
-        title: `Why is Sam Smith unable to work today?`,
+        title: 'Unable to work',
+        unableToWorkQuestion: `Why is Sam Smith unable to work today?`,
         items: [
           {
             text: contactOutcomes[0].name,
@@ -104,6 +105,82 @@ describe('UnableToWorkPage', () => {
       expect(result.contactOutcomeCode).toEqual('BBBB')
     })
 
+    describe('notes', () => {
+      it('returns the original appointment object with updated notes', () => {
+        const appointment = appointmentFactory.build({
+          notes: 'xxxxx',
+          id: 1,
+          version: '2',
+          contactOutcomeCode: 'AAAA',
+        })
+        const page = new UnableToWorkPage({ unableToWork: 'BBBB', notes: 'yyyyy' })
+
+        const result = page.requestBody(appointment)
+
+        expect(result.notes).toEqual('yyyyy')
+      })
+
+      it('returns null for notes if not included in the query', () => {
+        const appointment = appointmentFactory.build({
+          notes: 'xxxxx',
+          id: 1,
+          version: '2',
+          contactOutcomeCode: 'AAAA',
+        })
+        const page = new UnableToWorkPage({ unableToWork: 'BBBB' })
+
+        const result = page.requestBody(appointment)
+
+        expect(result.notes).toBeNull()
+      })
+    })
+
+    describe('sensitive', () => {
+      it('returns true if isSensitive is checked', () => {
+        const appointment = appointmentFactory.build({
+          sensitive: false,
+        })
+        const page = new UnableToWorkPage({ unableToWork: 'BBBB', isSensitive: 'isSensitive' })
+
+        const result = page.requestBody(appointment)
+
+        expect(result.sensitive).toEqual(true)
+      })
+
+      it('returns unchanged (true) if isSensitive is not checked', () => {
+        const appointment = appointmentFactory.build({
+          sensitive: true,
+        })
+        const page = new UnableToWorkPage({ unableToWork: 'BBBB' })
+
+        const result = page.requestBody(appointment)
+
+        expect(result.sensitive).toBe(true)
+      })
+
+      it('returns unchanged (false) if isSensitive is not checked', () => {
+        const appointment = appointmentFactory.build({
+          sensitive: false,
+        })
+        const page = new UnableToWorkPage({ unableToWork: 'BBBB' })
+
+        const result = page.requestBody(appointment)
+
+        expect(result.sensitive).toBe(false)
+      })
+
+      it('returns unchanged (undefined) if isSensitive is not checked', () => {
+        const appointment = appointmentFactory.build({
+          sensitive: undefined,
+        })
+        const page = new UnableToWorkPage({ unableToWork: 'BBBB' })
+
+        const result = page.requestBody(appointment)
+
+        expect(result.sensitive).toBeUndefined()
+      })
+    })
+
     it('returns the original appointment object with deliusId and deliusVersionToUpdate', () => {
       const appointment = appointmentFactory.build({
         startTime: '09:00',
@@ -111,6 +188,7 @@ describe('UnableToWorkPage', () => {
         version: '2',
         contactOutcomeCode: 'AAAA',
         supervisorOfficerCode: '123',
+        sensitive: true,
       })
       const page = new UnableToWorkPage({ unableToWork: 'BBBB' })
 
@@ -128,7 +206,7 @@ describe('UnableToWorkPage', () => {
         endTime: appointment.endTime,
         attendanceData: appointment.attendanceData,
         enforcementData: appointment.enforcementData,
-        notes: appointment.notes,
+        notes: null,
       }
 
       expect(result).toEqual(expected)

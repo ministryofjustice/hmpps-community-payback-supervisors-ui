@@ -26,6 +26,10 @@ export default class IsAbleToWorkPage extends BasePage {
   async checkYes() {
     await this.ableToWorkLocator.getByRole('radio', { name: 'Yes' }).check()
   }
+
+  async checkNo() {
+    await this.ableToWorkLocator.getByRole('radio', { name: 'No' }).check()
+  }
 }
 
 class IsAbleToWorkPageAssertions {

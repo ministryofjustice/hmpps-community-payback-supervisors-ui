@@ -51,6 +51,7 @@ export default class UnableToWorkController {
 
         return res.render('appointments/update/unableToWork', {
           ...page.viewData(appointment, contactOutcomes.contactOutcomes),
+          ..._req.body,
           errors: page.validationErrors,
           errorSummary: generateErrorSummary(page.validationErrors),
         })
