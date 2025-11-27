@@ -7,16 +7,17 @@ import DateTimeFormats from '../../../utils/dateTimeUtils'
 import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './baseAppointmentUpdatePage'
 
 interface ViewData extends AppointmentUpdatePageViewData {
-  startTime: string
-  title: string
+  time: string
+  question: string
+  documentTitle: string
 }
 
 interface Query {
-  startTime?: string
+  time?: string
 }
 
 interface Body {
-  startTime: string
+  time: string
 }
 
 export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
@@ -55,7 +56,7 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
   requestBody(appointment: AppointmentDto): UpdateAppointmentOutcomeDto {
     const body = {
       ...this.appointmentRequestBody(appointment),
-      startTime: this.query.startTime,
+      startTime: this.query.time,
     }
 
     if (this.action === 'absent') {
@@ -67,20 +68,21 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
 
   viewData(appointment: AppointmentDto): ViewData {
     const commonViewData = this.commonViewData(appointment)
-    const hasFormBody = this.query.startTime !== undefined
+    const hasFormBody = this.query.time !== undefined
 
     return {
       ...commonViewData,
-      startTime: hasFormBody ? this.query.startTime : appointment.startTime,
-      title: this.getPageTitle(commonViewData.offender),
+      time: hasFormBody ? this.query.time : appointment.startTime,
+      question: this.getPageTitle(commonViewData.offender),
+      documentTitle: 'Log start time',
     }
   }
 
   validate(): void {
-    if (!this.query.startTime) {
-      this.validationErrors.startTime = { text: 'Enter a start time' }
-    } else if (!DateTimeFormats.isValidTime(this.query.startTime as string)) {
-      this.validationErrors.startTime = { text: 'Enter a valid start time, for example 09:00' }
+    if (!this.query.time) {
+      this.validationErrors.time = { text: 'Enter a start time' }
+    } else if (!DateTimeFormats.isValidTime(this.query.time as string)) {
+      this.validationErrors.time = { text: 'Enter a valid start time, for example 09:00' }
     }
 
     this.checkHasErrors()

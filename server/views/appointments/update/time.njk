@@ -1,19 +1,19 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% extends "./layout.njk" %}
 
-{% set pageTitle = 'Log start time' %}
+{% set pageTitle = documentTitle %}
 
 {% block formContent %}
   {{ govukInput({
     label: {
-      text: title,
+      text: question,
       classes: "govuk-label--l",
       isPageHeading: true
     },
-    id: "startTime",
-    name: "startTime",
+    id: "time",
+    name: "time",
     type: "time",
-    value: startTime,
-    errorMessage: errors.startTime
+    value: time,
+    errorMessage: errors.time
   }) }}
 {% endblock %}
