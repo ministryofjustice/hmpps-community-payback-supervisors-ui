@@ -6,15 +6,18 @@ import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './base
 
 interface ViewData extends AppointmentUpdatePageViewData {
   title: string
+  unableToWorkQuestion: string
   items: GovUkRadioOption[]
 }
 
 interface Query {
   unableToWork?: string
+  notes?: string
 }
 
 interface Body {
   unableToWork: string
+  notes?: string
 }
 
 export default class UnableToWorkPage extends BaseAppointmentUpdatePage<Body> {
@@ -45,7 +48,8 @@ export default class UnableToWorkPage extends BaseAppointmentUpdatePage<Body> {
 
     return {
       ...commonViewData,
-      title: this.getPageTitle(commonViewData.offender),
+      title: this.getPageTitle(),
+      unableToWorkQuestion: this.getUnableToWorkQuestion(commonViewData.offender),
       items: this.items(contactOutcomes),
     }
   }
@@ -55,6 +59,10 @@ export default class UnableToWorkPage extends BaseAppointmentUpdatePage<Body> {
       this.validationErrors.unableToWork = { text: 'Select the reason why the person is unable to work today' }
     }
 
+    if (this.query.notes && this.query.notes.length > 4000) {
+      this.validationErrors.notes = { text: 'Notes must be 4000 characters or less' }
+    }
+
     this.checkHasErrors()
   }
 
@@ -62,12 +70,17 @@ export default class UnableToWorkPage extends BaseAppointmentUpdatePage<Body> {
     const body: UpdateAppointmentOutcomeDto = {
       ...this.appointmentRequestBody(appointment),
       contactOutcomeCode: this.query.unableToWork,
+      notes: this.query.notes || null,
     }
 
     return body
   }
 
-  private getPageTitle(offender: Offender): string {
+  private getPageTitle(): string {
+    return 'Unable to work'
+  }
+
+  private getUnableToWorkQuestion(offender: Offender): string {
     return `Why is ${offender.name} unable to work today?`
   }
 

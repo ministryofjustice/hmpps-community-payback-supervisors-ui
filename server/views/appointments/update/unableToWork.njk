@@ -1,16 +1,19 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+
 {% extends "./layout.njk" %}
 
 {% set pageTitle = 'Why is the person unable to work today?' %}
 
 {% block formContent %}
+  <h1 class="govuk-heading-l">{{ title }} </h1>
+
   {{ govukRadios({
     name: "unableToWork",
     fieldset: {
       legend: {
-        text: title,
-        isPageHeading: true,
-        classes: "govuk-fieldset__legend--l"
+        text: unableToWorkQuestion,
+        classes: "govuk-fieldset__legend--m"
       }
     },
     hint: {
@@ -18,5 +21,17 @@
     },
     items: items,
     errorMessage: errors.unableToWork
+  }) }}
+
+  {{ govukCharacterCount({
+    name: "notes",
+    value: notes,
+    maxlength: 4000,
+    threshold: 85,
+    label: {
+      text: "Add notes",
+      classes: "govuk-label--m"
+    },
+    errorMessage: errors.notes
   }) }}
 {% endblock %}
