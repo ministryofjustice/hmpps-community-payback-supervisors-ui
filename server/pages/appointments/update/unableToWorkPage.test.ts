@@ -135,6 +135,52 @@ describe('UnableToWorkPage', () => {
       })
     })
 
+    describe('sensitive', () => {
+      it('returns true if isSensitive is checked', () => {
+        const appointment = appointmentFactory.build({
+          sensitive: false,
+        })
+        const page = new UnableToWorkPage({ unableToWork: 'BBBB', isSensitive: 'isSensitive' })
+
+        const result = page.requestBody(appointment)
+
+        expect(result.sensitive).toEqual(true)
+      })
+
+      it('returns unchanged (true) if isSensitive is not checked', () => {
+        const appointment = appointmentFactory.build({
+          sensitive: true,
+        })
+        const page = new UnableToWorkPage({ unableToWork: 'BBBB' })
+
+        const result = page.requestBody(appointment)
+
+        expect(result.sensitive).toBe(true)
+      })
+
+      it('returns unchanged (false) if isSensitive is not checked', () => {
+        const appointment = appointmentFactory.build({
+          sensitive: false,
+        })
+        const page = new UnableToWorkPage({ unableToWork: 'BBBB' })
+
+        const result = page.requestBody(appointment)
+
+        expect(result.sensitive).toBe(false)
+      })
+
+      it('returns unchanged (undefined) if isSensitive is not checked', () => {
+        const appointment = appointmentFactory.build({
+          sensitive: undefined,
+        })
+        const page = new UnableToWorkPage({ unableToWork: 'BBBB' })
+
+        const result = page.requestBody(appointment)
+
+        expect(result.sensitive).toBeUndefined()
+      })
+    })
+
     it('returns the original appointment object with deliusId and deliusVersionToUpdate', () => {
       const appointment = appointmentFactory.build({
         startTime: '09:00',
@@ -142,6 +188,7 @@ describe('UnableToWorkPage', () => {
         version: '2',
         contactOutcomeCode: 'AAAA',
         supervisorOfficerCode: '123',
+        sensitive: true,
       })
       const page = new UnableToWorkPage({ unableToWork: 'BBBB' })
 

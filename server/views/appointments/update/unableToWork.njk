@@ -1,12 +1,13 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
 {% extends "./layout.njk" %}
 
 {% set pageTitle = 'Why is the person unable to work today?' %}
 
 {% block formContent %}
-  <h1 class="govuk-heading-l">{{ title }} </h1>
+  <h1 class="govuk-heading-l">{{ title }}</h1>
 
   {{ govukRadios({
     name: "unableToWork",
@@ -33,5 +34,15 @@
       classes: "govuk-label--m"
     },
     errorMessage: errors.notes
+  }) }}
+
+  {{ govukCheckboxes({
+    name: "isSensitive",
+    items: [
+      {
+        value: "isSensitive",
+        text: "This information is not to be shared with the person on probation"
+      }
+    ]
   }) }}
 {% endblock %}

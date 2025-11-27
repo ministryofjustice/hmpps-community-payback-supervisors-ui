@@ -33,4 +33,8 @@ export default class UnableToWorkPage extends Page {
   shouldShowSubmittedNotes(): void {
     this.getInputByLabel('Add notes').should('have.value', this.userInput)
   }
+
+  checkSensitiveInformation(): void {
+    this.getInputByLabel('This information is not to be shared with the person on probation').check()
+  }
 }

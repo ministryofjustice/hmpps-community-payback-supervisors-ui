@@ -13,11 +13,13 @@ interface ViewData extends AppointmentUpdatePageViewData {
 interface Query {
   unableToWork?: string
   notes?: string
+  isSensitive?: string
 }
 
 interface Body {
   unableToWork: string
   notes?: string
+  isSensitive?: string
 }
 
 export default class UnableToWorkPage extends BaseAppointmentUpdatePage<Body> {
@@ -71,6 +73,10 @@ export default class UnableToWorkPage extends BaseAppointmentUpdatePage<Body> {
       ...this.appointmentRequestBody(appointment),
       contactOutcomeCode: this.query.unableToWork,
       notes: this.query.notes || null,
+    }
+
+    if (this.query.isSensitive) {
+      body.sensitive = true
     }
 
     return body

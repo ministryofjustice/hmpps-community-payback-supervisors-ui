@@ -39,6 +39,7 @@
 //      Given I am on the unable to work reason page
 //      And I select a reason
 //      And I enter a note 4000 characters long
+//      And I check "This information is not to be shared with the person on probation"
 //      When I submit the form
 //      Then I am taken to the confirm unable to work page
 //
@@ -199,6 +200,9 @@ context('Log able to work ', () => {
 
       // And I enter a note 4000 characters long
       page.enterNotesWithCharacterLength(4000)
+
+      // And I check "This information is not to be shared with the person on probation"
+      page.checkSensitiveInformation()
 
       // When I submit the form
       page.clickSubmit()
