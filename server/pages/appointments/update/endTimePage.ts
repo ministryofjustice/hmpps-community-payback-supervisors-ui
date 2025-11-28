@@ -1,5 +1,5 @@
 import { AppointmentDto, UpdateAppointmentOutcomeDto } from '../../../@types/shared'
-import { AppointmentCompletedAction } from '../../../@types/user-defined'
+import { AppointmentCompletedAction, ValidationErrors } from '../../../@types/user-defined'
 import InvalidUpdateActionError from '../../../errors/invalidUpdateActionError'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
@@ -63,14 +63,16 @@ export default class EndTimePage extends BaseAppointmentUpdatePage<Body> {
     }
   }
 
-  validate(): void {
+  protected getValidationErrors(): ValidationErrors<Body> {
     if (!this.query.time) {
-      this.validationErrors.time = { text: 'Enter a finish time' }
-    } else if (!DateTimeFormats.isValidTime(this.query.time as string)) {
-      this.validationErrors.time = { text: 'Enter a valid finish time, for example 17:00' }
+      return { time: { text: 'Enter a finish time' } }
     }
 
-    this.checkHasErrors()
+    if (!DateTimeFormats.isValidTime(this.query.time as string)) {
+      return { time: { text: 'Enter a valid finish time, for example 17:00' } }
+    }
+
+    return {}
   }
 
   private getPageTitle(offender: Offender): string {

@@ -1,5 +1,5 @@
 import { AppointmentDto, UpdateAppointmentOutcomeDto } from '../../../@types/shared'
-import { AppointmentArrivedAction } from '../../../@types/user-defined'
+import { AppointmentArrivedAction, ValidationErrors } from '../../../@types/user-defined'
 import InvalidUpdateActionError from '../../../errors/invalidUpdateActionError'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
@@ -78,14 +78,16 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
     }
   }
 
-  validate(): void {
+  protected getValidationErrors(): ValidationErrors<Body> | undefined {
     if (!this.query.time) {
-      this.validationErrors.time = { text: 'Enter a start time' }
-    } else if (!DateTimeFormats.isValidTime(this.query.time as string)) {
-      this.validationErrors.time = { text: 'Enter a valid start time, for example 09:00' }
+      return { time: { text: 'Enter a start time' } }
     }
 
-    this.checkHasErrors()
+    if (!DateTimeFormats.isValidTime(this.query.time as string)) {
+      return { time: { text: 'Enter a valid start time, for example 09:00' } }
+    }
+
+    return {}
   }
 
   private getPageTitle(offender: Offender): string {
