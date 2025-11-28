@@ -85,4 +85,20 @@ describe('formClient', () => {
       expect(response).toBeTruthy()
     })
   })
+
+  describe('clear', () => {
+    it('should make a DELETE request to the forms path using user token', async () => {
+      const type = 'some-type'
+      const id = '1'
+
+      nock(config.apis.communityPaybackApi.url)
+        .delete(paths.forms({ type, id }))
+        .matchHeader('authorization', 'Bearer test-system-token')
+        .reply(200)
+
+      const response = await formClient.clear({ type, id }, 'some-user')
+
+      expect(response).toBeTruthy()
+    })
+  })
 })
