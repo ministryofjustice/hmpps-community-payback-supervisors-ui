@@ -5,6 +5,8 @@ const sessionsPath = projectPath.path('sessions/:date')
 const appointmentPath = projectPath.path('/appointments/:appointmentId')
 const appointmentArrivedPath = appointmentPath.path('arrived')
 const appointmentAbsentPath = appointmentPath.path('absent')
+const appointmentCompletedPath = appointmentPath.path('completed')
+const appointmentLeftEarlyPath = appointmentPath.path('left-early')
 
 const paths = {
   sessions: {
@@ -17,6 +19,12 @@ const paths = {
       startTime: appointmentArrivedPath.path('start-time'),
       isAbleToWork: appointmentArrivedPath.path('is-able-to-work'),
       unableToWork: appointmentArrivedPath.path('unable-to-work'),
+    },
+    completed: {
+      endTime: appointmentCompletedPath.path('finish-time'),
+    },
+    leftEarly: {
+      endTime: appointmentLeftEarlyPath.path('finish-time'),
     },
     absent: {
       startTime: appointmentAbsentPath.path('start-time'),
