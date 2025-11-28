@@ -6,6 +6,8 @@ import Offender from '../models/offender'
 import paths from '../paths'
 import AppointmentStatusService from '../services/appointmentStatusService'
 import AppointmentUtils from '../utils/appointmentUtils'
+import { notFound } from '../utils/utils'
+import EnvironmentUtils from '../utils/environmentUtils'
 
 export default class SessionsController {
   constructor(
@@ -40,6 +42,14 @@ export default class SessionsController {
         }
       })
 
+      const footerLinks = []
+      if (EnvironmentUtils.isFeatureFlagEnabled('COMMUNITYPAYBACK_SUPERVISOR_ENABLE_CLEAR_SESSION_STATUSES')) {
+        footerLinks.push({
+          text: 'Clear session data',
+          href: paths.sessions.clearSessionStatuses({ projectCode: session.projectCode, date: session.date }),
+        })
+      }
+
       res.render('sessions/show', {
         session: {
           ...session,
@@ -47,6 +57,7 @@ export default class SessionsController {
           formattedDate: DateTimeFormats.isoDateToUIDate(session.date),
           formattedLocation: LocationUtils.locationToParagraph(session.location),
         },
+        footerLinks,
       })
     }
   }
