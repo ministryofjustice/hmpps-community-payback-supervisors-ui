@@ -6,9 +6,9 @@ import AppointmentUtils from '../../utils/appointmentUtils'
 import DateTimeFormats from '../../utils/dateTimeUtils'
 import StatusTagUtils from '../../utils/GovUKFrontend/statusTagUtils'
 
-interface AppointmentActions {
-  arrivedPath: string
-  absentPath: string
+interface AppointmentAction {
+  path: string
+  text: string
 }
 
 interface ViewData {
@@ -16,7 +16,7 @@ interface ViewData {
   startTime: string
   endTime: string
   backPath: string
-  actions: AppointmentActions
+  actions: AppointmentAction[]
   statusTagHtml: string
 }
 
@@ -32,12 +32,12 @@ export default class AppointmentShowDetailsPage {
     }
   }
 
-  private appointmentActions(appointment: AppointmentDto): AppointmentActions {
+  private appointmentActions(appointment: AppointmentDto): AppointmentAction[] {
     const appointmentPathParams = { projectCode: appointment.projectCode, appointmentId: appointment.id.toString() }
 
-    return {
-      absentPath: paths.appointments.absent.startTime(appointmentPathParams),
-      arrivedPath: paths.appointments.arrived.startTime(appointmentPathParams),
-    }
+    return [
+      { text: 'Arrived', path: paths.appointments.arrived.startTime(appointmentPathParams) },
+      { text: 'Not arrived', path: paths.appointments.absent.startTime(appointmentPathParams) },
+    ]
   }
 }
