@@ -42,6 +42,14 @@ export default class SessionsController {
         }
       })
 
+      const footerLinks = []
+      if (config.flags.enableClearSessionStatuses) {
+        footerLinks.push({
+          text: 'Clear session data',
+          href: paths.sessions.clearSessionStatuses({ projectCode: session.projectCode, date: session.date }),
+        })
+      }
+
       res.render('sessions/show', {
         session: {
           ...session,
@@ -49,6 +57,7 @@ export default class SessionsController {
           formattedDate: DateTimeFormats.isoDateToUIDate(session.date),
           formattedLocation: LocationUtils.locationToParagraph(session.location),
         },
+        footerLinks,
       })
     }
   }

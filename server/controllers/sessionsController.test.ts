@@ -76,6 +76,7 @@ describe('SessionsController', () => {
             },
           ],
         },
+        footerLinks: [],
       })
     })
 
