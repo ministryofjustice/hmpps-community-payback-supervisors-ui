@@ -23,6 +23,11 @@ export interface SaveAppointmentRequest extends BaseRequest {
   data: UpdateAppointmentOutcomeDto
 }
 
+export interface LinkItem {
+  text: string
+  href: string
+}
+
 export type AppointmentArrivedAction = 'arrived' | 'absent'
 
 export type AppointmentStatusType = 'Scheduled' | 'Working' | 'Completed'
