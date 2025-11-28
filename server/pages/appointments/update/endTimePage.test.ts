@@ -1,4 +1,4 @@
-import { UpdateAppointmentOutcomeDto } from '../../../@types/shared'
+import { AppointmentDto, UpdateAppointmentOutcomeDto } from '../../../@types/shared'
 import { AppointmentCompletedAction } from '../../../@types/user-defined'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
@@ -98,17 +98,22 @@ describe('EndTimePage', () => {
 
   describe('validate', () => {
     const action = 'completed'
+    let appointment: AppointmentDto
+
+    beforeEach(() => {
+      appointment = appointmentFactory.build({ startTime: '09:00' })
+    })
     describe('when endTime is not present', () => {
       it.each([null, undefined, ''])('has errors should be true', (time?: string) => {
         const page = new EndTimePage(action, { time })
-        page.validate()
+        page.validate(appointment)
 
         expect(page.hasErrors).toEqual(true)
       })
 
       it.each([null, undefined, ''])('validation errors should include error', (time?: string) => {
         const page = new EndTimePage(action, { time })
-        page.validate()
+        page.validate(appointment)
 
         expect(page.validationErrors.time).toEqual({
           text: 'Enter a finish time',
@@ -120,14 +125,14 @@ describe('EndTimePage', () => {
       it('has errors should be true', () => {
         jest.spyOn(DateTimeFormats, 'isValidTime').mockReturnValue(false)
         const page = new EndTimePage(action, { time: '8475438' })
-        page.validate()
+        page.validate(appointment)
 
         expect(page.hasErrors).toEqual(true)
       })
 
       it('validation errors should include error', () => {
         const page = new EndTimePage(action, { time: '8475438' })
-        page.validate()
+        page.validate(appointment)
 
         expect(page.validationErrors.time).toEqual({
           text: 'Enter a valid finish time, for example 17:00',
@@ -135,19 +140,44 @@ describe('EndTimePage', () => {
       })
     })
 
-    describe('when endTime is valid', () => {
-      it('has errors should be false', () => {
+    describe('when time is before start time', () => {
+      let page: EndTimePage
+      beforeEach(() => {
         jest.spyOn(DateTimeFormats, 'isValidTime').mockReturnValue(true)
-        const page = new EndTimePage(action, { time: '09:00' })
-        page.validate()
+        jest.spyOn(DateTimeFormats, 'isBeforeTime').mockReturnValue(true)
+
+        page = new EndTimePage(action, { time: '8475438' })
+      })
+      it('hasErrors should be true', () => {
+        page.validate(appointment)
+
+        expect(page.hasErrors).toEqual(true)
+      })
+
+      it('validationErrors should contain error message', () => {
+        page.validate(appointment)
+
+        expect(page.validationErrors.time).toEqual({
+          text: 'Finish time must be after 09:00 when they started the session',
+        })
+      })
+    })
+
+    describe('when no errors', () => {
+      beforeEach(() => {
+        jest.spyOn(DateTimeFormats, 'isValidTime').mockReturnValue(true)
+        jest.spyOn(DateTimeFormats, 'isBeforeTime').mockReturnValue(false)
+      })
+      it('should return false', () => {
+        const page = new EndTimePage(action, { time: '10:00' })
+        page.validate(appointment)
 
         expect(page.hasErrors).toEqual(false)
       })
 
       it('endTime error should be undefined', () => {
-        jest.spyOn(DateTimeFormats, 'isValidTime').mockReturnValue(true)
-        const page = new EndTimePage(action, { time: '09:00' })
-        page.validate()
+        const page = new EndTimePage(action, { time: '10:00' })
+        page.validate(appointment)
 
         expect(page.validationErrors.time).toEqual(undefined)
       })
