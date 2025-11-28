@@ -63,13 +63,21 @@ export default class EndTimePage extends BaseAppointmentUpdatePage<Body> {
     }
   }
 
-  protected getValidationErrors(): ValidationErrors<Body> {
+  protected getValidationErrors(appointment: AppointmentDto): ValidationErrors<Body> {
     if (!this.query.time) {
       return { time: { text: 'Enter a finish time' } }
     }
 
     if (!DateTimeFormats.isValidTime(this.query.time as string)) {
       return { time: { text: 'Enter a valid finish time, for example 17:00' } }
+    }
+
+    if (DateTimeFormats.isBeforeTime(this.query.time, appointment.startTime)) {
+      return {
+        time: {
+          text: `Finish time must be after ${appointment.startTime} when they started the session`,
+        },
+      }
     }
 
     return {}
