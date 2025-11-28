@@ -39,10 +39,16 @@ describe('AppointmentShowDetailsPage', () => {
         startTime: '09:00',
         endTime: '17:00',
         backPath: paths.sessions.show({ projectCode, date }),
-        actions: {
-          arrivedPath: paths.appointments.arrived.startTime({ projectCode, appointmentId: id.toString() }),
-          absentPath: paths.appointments.absent.startTime({ projectCode, appointmentId: id.toString() }),
-        },
+        actions: [
+          {
+            text: 'Arrived',
+            href: paths.appointments.arrived.startTime({ projectCode, appointmentId: id.toString() }),
+          },
+          {
+            text: 'Not arrived',
+            href: paths.appointments.absent.startTime({ projectCode, appointmentId: id.toString() }),
+          },
+        ],
         statusTagHtml,
       })
     })
