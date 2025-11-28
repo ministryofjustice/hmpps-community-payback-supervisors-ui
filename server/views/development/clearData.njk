@@ -1,0 +1,42 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+
+{% extends "../partials/layout.njk" %}
+
+{% set pageTitle = "Clear session data" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: backPath
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <form method="post" action="{{ confirmPath }}">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">
+        {{ title }}
+        </h1>
+        <div class="govuk-warning-text">
+          <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+          <strong class="govuk-warning-text__text">
+            <span class="govuk-visually-hidden">Warning</span>
+              {{ detail }}
+            </strong>
+        </div>
+
+        {{ govukButton({
+          text: "Clear the data"
+        }) }}
+      </div>
+    </div>
+  </form>
+
+{% endblock %}
