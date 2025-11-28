@@ -4,6 +4,7 @@ import appointmentFactory from '../testutils/factories/appointmentFactory'
 import appointmentStatusFactory from '../testutils/factories/appointmentStatusFactory'
 import appointmentSummaryFactory from '../testutils/factories/appointmentSummaryFactory'
 import sessionFactory from '../testutils/factories/sessionFactory'
+import EnvironmentUtils from '../utils/environmentUtils'
 import AppointmentStatusService, { APPOINTMENT_STATUS_FORM_TYPE } from './appointmentStatusService'
 
 jest.mock('../data/formClient')
@@ -156,6 +157,31 @@ describe('AppointmentStatusService', () => {
       expect(() => appointmentStatusService.updateStatus(appointment, 'Working', userName)).rejects.toThrow(
         `No appointment status found for project ${appointment.projectCode} on ${appointment.date}`,
       )
+    })
+  })
+
+  describe('clearStatusesForSession', () => {
+    it('calls form client with project code and date', async () => {
+      jest.spyOn(EnvironmentUtils, 'isFeatureFlagEnabled').mockReturnValue(true)
+      const session = sessionFactory.build()
+
+      const expectedFormKey: FormKeyDto = {
+        type: APPOINTMENT_STATUS_FORM_TYPE,
+        id: session.projectCode + session.date,
+      }
+
+      await appointmentStatusService.clearStatusesForSession(session.projectCode, session.date, userName)
+
+      expect(formClient.clear).toHaveBeenCalledWith(expectedFormKey, userName)
+    })
+
+    it('throws error if feature flag not enabled', async () => {
+      jest.spyOn(EnvironmentUtils, 'isFeatureFlagEnabled').mockReturnValue(false)
+      const session = sessionFactory.build()
+
+      expect(() =>
+        appointmentStatusService.clearStatusesForSession(session.projectCode, session.date, 'some-user'),
+      ).rejects.toThrow('Clearing session statuses not enabled')
     })
   })
 })
