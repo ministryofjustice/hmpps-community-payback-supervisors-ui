@@ -17,16 +17,7 @@
   {{ govukFooter({
     classes: 'govuk-footer',
     meta: {
-      items: [
-        {
-          href: "/cookies",
-          text: "Cookies policy"
-        },
-        {
-          href: "/privacy-notice",
-          text: "Privacy notice"
-        }
-      ]
+      items: layoutUtils.getFooterItems(footerLinks)
     }
   }) }}
 {% endblock %}
