@@ -61,13 +61,13 @@ context('Log start time ', () => {
       const page = StartTimePage.visit(appointment, 'arrived')
 
       // When I submit an invalid time
-      page.clearStartTime()
+      page.clearTime()
       page.clickSubmit()
 
       // Then I see the same page with errors
       Page.verifyOnPage(StartTimePage, appointment, 'arrived')
       page.shouldShowValidationErrors()
-      page.shouldHaveStartTimeValue('')
+      page.shouldHaveTimeValue('')
     })
 
     //  Scenario: Submitting a valid time
@@ -77,7 +77,7 @@ context('Log start time ', () => {
 
       // When I submit a valid time
       cy.task('stubUpdateAppointmentOutcome', { appointment })
-      page.enterStartTime('09:30')
+      page.enterTime('09:30')
       page.clickSubmit()
 
       // Then I see the next form page
@@ -93,13 +93,13 @@ context('Log start time ', () => {
       const page = StartTimePage.visit(appointment, 'absent')
 
       // When I submit an invalid time
-      page.clearStartTime()
+      page.clearTime()
       page.clickSubmit()
 
       // Then I see the same page with errors
       Page.verifyOnPage(StartTimePage, appointment, 'absent')
       page.shouldShowValidationErrors()
-      page.shouldHaveStartTimeValue('')
+      page.shouldHaveTimeValue('')
     })
 
     //  Scenario: Submitting a valid time
@@ -109,7 +109,7 @@ context('Log start time ', () => {
 
       // When I submit a valid time
       cy.task('stubUpdateAppointmentOutcome', { appointment })
-      page.enterStartTime('09:30')
+      page.enterTime('09:30')
       page.clickSubmit()
 
       // Then I see the next form page

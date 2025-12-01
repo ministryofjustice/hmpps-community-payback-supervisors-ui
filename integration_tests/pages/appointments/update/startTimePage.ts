@@ -1,10 +1,10 @@
 import { AppointmentDto } from '../../../../server/@types/shared'
-import Page from '../../page'
 import Offender from '../../../../server/models/offender'
 import paths from '../../../../server/paths'
 import { AppointmentArrivedAction } from '../../../../server/@types/user-defined'
+import LogTimePage from './base/logTimePage'
 
-export default class StartTimePage extends Page {
+export default class StartTimePage extends LogTimePage {
   constructor(appointment: AppointmentDto, action: AppointmentArrivedAction) {
     const offender = new Offender(appointment.offender)
     const title: string = StartTimePage.getExpectedTitle(action, offender)
@@ -19,15 +19,6 @@ export default class StartTimePage extends Page {
     cy.visit(path)
 
     return new StartTimePage(appointment, action)
-  }
-
-  clearStartTime(): void {
-    this.getInputByLabel(this.title).clear()
-  }
-
-  enterStartTime(value: string): void {
-    this.clearStartTime()
-    this.getInputByLabel(this.title).type(value)
   }
 
   private static getExpectedTitle(action: string, offender: Offender) {
@@ -45,9 +36,5 @@ export default class StartTimePage extends Page {
 
   shouldShowValidationErrors() {
     this.shouldShowErrorSummary('time', 'Enter a start time')
-  }
-
-  shouldHaveStartTimeValue(value: string) {
-    this.shouldHaveInputValue(this.title, value)
   }
 }
