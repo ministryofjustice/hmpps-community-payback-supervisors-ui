@@ -5,10 +5,12 @@ import AppointmentPage from '../pages/appointmentPage'
 import StartTimePage from '../pages/appointments/update/startTimePage'
 import IsAbleToWorkPage from '../pages/appointments/update/isAbleToWorkPage'
 import ConfirmWorkingPage from '../pages/appointments/update/confirm/confirmWorkingPage'
+import clearSessionData from '../steps/clearSessionData'
 
 test('Record an arrival and log as working', async ({ page, deliusUser }) => {
   const homePage = await signIn(page, deliusUser)
 
+  await clearSessionData(page)
   await homePage.viewDetailsLinkLocator.click()
 
   const sessionPage = new SessionPage(page)

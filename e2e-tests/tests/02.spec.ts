@@ -6,10 +6,11 @@ import StartTimePage from '../pages/appointments/update/startTimePage'
 import IsAbleToWorkPage from '../pages/appointments/update/isAbleToWorkPage'
 import UnableToWorkPage from '../pages/appointments/update/unableToWorkPage'
 import ConfirmUnableToWorkPage from '../pages/appointments/update/confirm/confirmUnableToWorkPage'
+import clearSessionData from '../steps/clearSessionData'
 
 test('Record an arrival and log as unable to work', async ({ page, deliusUser }) => {
   const homePage = await signIn(page, deliusUser)
-
+  await clearSessionData(page)
   await homePage.viewDetailsLinkLocator.click()
 
   const sessionPage = new SessionPage(page)
