@@ -23,6 +23,7 @@ export type { ProjectTypeDto } from './models/ProjectTypeDto';
 export type { ProjectTypesDto } from './models/ProjectTypesDto';
 export type { SessionDto } from './models/SessionDto';
 export type { SessionSummaryDto } from './models/SessionSummaryDto';
+export type { SupervisorDto } from './models/SupervisorDto';
 export type { SupervisorSessionsDto } from './models/SupervisorSessionsDto';
 export type { UpdateAppointmentOutcomeDto } from './models/UpdateAppointmentOutcomeDto';
 export type { UpdateAppointmentOutcomeResultDto } from './models/UpdateAppointmentOutcomeResultDto';
