@@ -22,16 +22,25 @@ export default class AppointmentShowDetailsPage {
       startTime: DateTimeFormats.stripTime(appointment.startTime),
       endTime: DateTimeFormats.stripTime(appointment.endTime),
       backPath: paths.sessions.show({ projectCode: appointment.projectCode, date: appointment.date }),
-      actions: this.appointmentActions(appointment),
+      actions: this.appointmentActions(appointment, appointmentStatus),
       statusTagHtml: StatusTagUtils.getHtml(appointmentStatus, AppointmentUtils.statusTagColour[appointmentStatus]),
     }
   }
 
-  private appointmentActions(appointment: AppointmentDto): LinkItem[] {
+  private appointmentActions(appointment: AppointmentDto, appointmentStatus: AppointmentStatusType): LinkItem[] {
     const appointmentPathParams = { projectCode: appointment.projectCode, appointmentId: appointment.id.toString() }
-    return [
-      { text: 'Arrived', href: paths.appointments.arrived.startTime(appointmentPathParams) },
-      { text: 'Not arrived', href: paths.appointments.absent.startTime(appointmentPathParams) },
-    ]
+
+    if (appointmentStatus === 'Scheduled') {
+      return [
+        { text: 'Arrived', href: paths.appointments.arrived.startTime(appointmentPathParams) },
+        { text: 'Not arrived', href: paths.appointments.absent.startTime(appointmentPathParams) },
+      ]
+    }
+
+    if (appointmentStatus === 'Working') {
+      return [{ text: 'Finish session', href: paths.appointments.completed.endTime(appointmentPathParams) }]
+    }
+
+    return []
   }
 }
