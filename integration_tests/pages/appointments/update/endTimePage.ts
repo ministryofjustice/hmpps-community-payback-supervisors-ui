@@ -29,7 +29,7 @@ export default class EndTimePage extends LogTimePage {
     }
 
     if (action === 'leftEarly') {
-      title = `You're logging ${offender.name} as absent today at:`
+      title = `You're logging out ${offender.name} early today at:`
     }
     return title
   }
