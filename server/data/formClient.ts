@@ -25,4 +25,9 @@ export default class FormClient extends RestClient {
     const path = paths.forms({ type, id })
     return this.put({ path, data }, asSystem(username))
   }
+
+  async clear({ type, id }: FormKeyDto, username: string): Promise<void> {
+    const path = paths.forms({ type, id })
+    return this.delete({ path }, asSystem(username))
+  }
 }

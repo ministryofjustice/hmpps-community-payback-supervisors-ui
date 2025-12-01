@@ -1,13 +1,15 @@
 import { path } from 'static-path'
 
 const projectPath = path('/projects/:projectCode')
+const sessionsPath = projectPath.path('sessions/:date')
 const appointmentPath = projectPath.path('/appointments/:appointmentId')
 const appointmentArrivedPath = appointmentPath.path('arrived')
 const appointmentAbsentPath = appointmentPath.path('absent')
 
 const paths = {
   sessions: {
-    show: projectPath.path('sessions/:date'),
+    show: sessionsPath,
+    clearSessionStatuses: sessionsPath.path('clear-data'),
   },
   appointments: {
     show: appointmentPath,

@@ -1,5 +1,6 @@
 import { AppointmentDto, AppointmentSummaryDto, FormKeyDto, SessionDto } from '../@types/shared'
 import { AppointmentStatusType } from '../@types/user-defined'
+import config from '../config'
 import FormClient from '../data/formClient'
 
 export interface AppointmentStatus {
@@ -64,6 +65,19 @@ export default class AppointmentStatusService {
     }
 
     throw new Error(`No appointment status found for project ${appointment.projectCode} on ${appointment.date}`)
+  }
+
+  /**
+   * Only intended for use in developer environments
+   */
+  async clearStatusesForSession(projectCode: string, date: string, username: string): Promise<void> {
+    if (config.flags.enableClearSessionStatuses) {
+      const formKey = this.getFormKey({ date, projectCode })
+
+      return this.formClient.clear(formKey, username)
+    }
+
+    throw new Error('Clearing session statuses not enabled')
   }
 
   private async getOrCreateAllAppointmentStatuses(
