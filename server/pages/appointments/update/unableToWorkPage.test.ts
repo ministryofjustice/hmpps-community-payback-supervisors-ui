@@ -38,8 +38,7 @@ describe('UnableToWorkPage', () => {
         offender,
         backPath: paths.appointments.arrived.isAbleToWork({ appointmentId, projectCode }),
         updatePath: paths.appointments.arrived.unableToWork({ appointmentId, projectCode }),
-        title: 'Unable to work',
-        unableToWorkQuestion: `Why is Sam Smith unable to work today?`,
+        title: `Why is Sam Smith unable to work today?`,
         items: [
           {
             text: contactOutcomes[0].name,

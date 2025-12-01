@@ -6,7 +6,6 @@ import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './base
 
 interface ViewData extends AppointmentUpdatePageViewData {
   title: string
-  unableToWorkQuestion: string
   items: GovUkRadioOption[]
 }
 
@@ -50,8 +49,7 @@ export default class UnableToWorkPage extends BaseAppointmentUpdatePage<Body> {
 
     return {
       ...commonViewData,
-      title: this.getPageTitle(),
-      unableToWorkQuestion: this.getUnableToWorkQuestion(commonViewData.offender),
+      title: this.getPageTitle(commonViewData.offender),
       items: this.items(contactOutcomes),
     }
   }
@@ -82,11 +80,7 @@ export default class UnableToWorkPage extends BaseAppointmentUpdatePage<Body> {
     return body
   }
 
-  private getPageTitle(): string {
-    return 'Unable to work'
-  }
-
-  private getUnableToWorkQuestion(offender: Offender): string {
+  private getPageTitle(offender: Offender): string {
     return `Why is ${offender.name} unable to work today?`
   }
 

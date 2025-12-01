@@ -165,7 +165,7 @@ context('Log able to work ', () => {
       page.clickSubmit()
 
       // Then I am taken to the unable to work reason page
-      Page.verifyOnPage(UnableToWorkPage)
+      Page.verifyOnPage(UnableToWorkPage, appointment)
     })
 
     //  Scenario: validates form
@@ -184,7 +184,7 @@ context('Log able to work ', () => {
       page.clickSubmit()
 
       // Then I see the same page with errors
-      Page.verifyOnPage(UnableToWorkPage)
+      Page.verifyOnPage(UnableToWorkPage, appointment)
       page.shouldShowErrorSummary('unableToWork', 'Select the reason why the person is unable to work today')
       page.shouldShowErrorSummary('notes', 'Notes must be 4000 characters or less')
 

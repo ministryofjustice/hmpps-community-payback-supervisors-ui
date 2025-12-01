@@ -1,12 +1,15 @@
 import { AppointmentDto } from '../../../../server/@types/shared'
 import Page from '../../page'
 import paths from '../../../../server/paths'
+import Offender from '../../../../server/models/offender'
 
 export default class UnableToWorkPage extends Page {
   private userInput: string
 
-  constructor() {
-    super('Unable to work')
+  constructor(appointment: AppointmentDto) {
+    const offender = new Offender(appointment.offender)
+    const title = `Why is ${offender.name} unable to work today?`
+    super(title)
   }
 
   static visit(appointment: AppointmentDto): UnableToWorkPage {
@@ -16,7 +19,7 @@ export default class UnableToWorkPage extends Page {
     })
     cy.visit(path)
 
-    return new UnableToWorkPage()
+    return new UnableToWorkPage(appointment)
   }
 
   selectSentHomeServiceIssues(): void {
