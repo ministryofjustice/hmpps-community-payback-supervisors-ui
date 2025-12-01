@@ -4,7 +4,7 @@ import { Locator, Page, expect } from '@playwright/test'
 import BasePage from '../../basePage'
 
 export default class UnableToWorkPage extends BasePage {
-  readonly titleText = 'Unable to work'
+  readonly titleText = 'Why is Harry Wormwood unable to work today?'
 
   readonly expect: UnableToWorkPageAssertions
 
@@ -20,7 +20,7 @@ export default class UnableToWorkPage extends BasePage {
     super(page)
     this.expect = new UnableToWorkPageAssertions(this)
     this.continueButtonLocator = page.getByRole('button', { name: 'continue' })
-    this.unableToWorkReasonLocator = page.getByRole('group', { name: 'Why is Harry Wormwood unable to work today?' })
+    this.unableToWorkReasonLocator = page.getByRole('group', { name: this.titleText })
     this.notesLocator = page.getByLabel('Add notes')
     this.isSensitiveLocator = page.getByLabel('This information is not to be shared with the person on probation')
   }
