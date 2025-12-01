@@ -22,9 +22,11 @@ const paths = {
     },
     completed: {
       endTime: appointmentCompletedPath.path('finish-time'),
+      compliance: appointmentCompletedPath.path('compliance'),
     },
     leftEarly: {
       endTime: appointmentLeftEarlyPath.path('finish-time'),
+      compliance: appointmentLeftEarlyPath.path('compliance'),
     },
     absent: {
       startTime: appointmentAbsentPath.path('start-time'),
