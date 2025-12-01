@@ -9,12 +9,13 @@ generic-service:
     tlsSecretName: hmpps-community-payback-supervisors-test-cert
 
   env:
-    INGRESS_URL: "https://community-payback-supervisors-test.hmpps.service.justice.gov.uk"
-    HMPPS_AUTH_URL: "https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
-    TOKEN_VERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
+    INGRESS_URL: 'https://community-payback-supervisors-test.hmpps.service.justice.gov.uk'
+    HMPPS_AUTH_URL: 'https://sign-in-dev.hmpps.service.justice.gov.uk/auth'
+    TOKEN_VERIFICATION_API_URL: 'https://token-verification-api-dev.prison.service.justice.gov.uk'
     COMMUNITY_PAYBACK_API_URL: 'https://community-payback-api-test.hmpps.service.justice.gov.uk'
     ENVIRONMENT_NAME: TEST
-    AUDIT_ENABLED: "false"
+    AUDIT_ENABLED: 'false'
+    CLEAR_SESSION_STATUSES_ENABLED: 'true'
 
 generic-prometheus-alerts:
   alertSeverity: hmpps-community-payback-nonprod
