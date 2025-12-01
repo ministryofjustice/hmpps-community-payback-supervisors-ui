@@ -18,6 +18,11 @@ export interface GetAppointmentRequest extends BaseRequest {
   appointmentId: string
 }
 
+export interface AppointmentParams {
+  appointmentId: string
+  projectCode: string
+}
+
 export interface SaveAppointmentRequest extends BaseRequest {
   projectCode: string
   data: UpdateAppointmentOutcomeDto
