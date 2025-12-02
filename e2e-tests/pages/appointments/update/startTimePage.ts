@@ -11,8 +11,6 @@ export default class StartTimePage extends BasePage {
 
   private readonly startTimeFieldLocator: Locator
 
-  private readonly continueButtonLocator: Locator
-
   constructor(
     readonly page: Page,
     private readonly action: AppointmentArrivedAction,
@@ -20,17 +18,12 @@ export default class StartTimePage extends BasePage {
     super(page)
     this.expect = new StartTimePageAssertions(this)
     this.startTimeFieldLocator = page.getByLabel(this.titleText)
-    this.continueButtonLocator = page.getByRole('button', { name: 'continue' })
   }
 
   getExpectedTitle() {
     return this.action === 'arrived'
       ? "You're logging Harry Wormwood as having arrived at:"
       : "You're logging Harry Wormwood as absent today at:"
-  }
-
-  async clickContinue() {
-    await this.continueButtonLocator.click()
   }
 
   async enterAStartTime() {
