@@ -91,7 +91,7 @@ describe('EndTimePage', () => {
         const page = new EndTimePage('completed')
         const result = page.nextPath(appointmentId, projectCode)
 
-        expect(result).toEqual(paths.appointments.confirm.completed({ projectCode, appointmentId }))
+        expect(result).toEqual(paths.appointments.completed.compliance({ projectCode, appointmentId }))
       })
     })
   })

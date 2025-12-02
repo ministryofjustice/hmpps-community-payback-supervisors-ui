@@ -20,7 +20,7 @@ import Page from '../../../pages/page'
 import { AppointmentDto } from '../../../../server/@types/shared'
 import { AppointmentStatus } from '../../../../server/services/appointmentStatusService'
 import EndTimePage from '../../../pages/appointments/update/endTimePage'
-import ConfirmCompletedPage from '../../../pages/appointments/update/confirm/confirmCompletedPage'
+import CompliancePage from '../../../pages/appointments/update/compliancePage'
 
 context('Log finish time ', () => {
   let appointment: AppointmentDto
@@ -79,7 +79,7 @@ context('Log finish time ', () => {
       page.clickSubmit()
 
       // Then I see the next form page
-      Page.verifyOnPage(ConfirmCompletedPage, appointment)
+      Page.verifyOnPage(CompliancePage, appointment)
     })
   })
 })
