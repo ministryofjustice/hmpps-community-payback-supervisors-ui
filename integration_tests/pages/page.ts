@@ -41,8 +41,12 @@ export default abstract class Page {
     cy.get(`#${id}`).type(details)
   }
 
+  getRadioByNameAndValue(name: string, option: string): Cypress.Chainable<JQuery<HTMLElement>> {
+    return cy.get(`input[name="${name}"][value="${option}"]`)
+  }
+
   checkRadioByNameAndValue(name: string, option: string): void {
-    cy.get(`input[name="${name}"][value="${option}"]`).check()
+    this.getRadioByNameAndValue(name, option).check()
   }
 
   shouldHaveInputValue(label: string, value: string): void {
