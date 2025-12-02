@@ -8,6 +8,7 @@ import StaticController from '../controllers/staticController'
 export default function staticRoutes(staticController: StaticController, router: Router): Router {
   router.get(paths.static.cookiesPolicy.pattern, staticController.cookiesPolicyPage())
   router.get(paths.static.privacyNotice.pattern, staticController.privacyNoticePage())
+  router.get(paths.static.accessibilityStatement.pattern, staticController.accessibilityStatementPage())
 
   return router
 }

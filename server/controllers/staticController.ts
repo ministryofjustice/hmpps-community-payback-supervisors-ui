@@ -12,4 +12,10 @@ export default class StaticController {
       res.render('static/privacy-notice')
     }
   }
+
+  accessibilityStatementPage(): RequestHandler {
+    return (_req: Request, res: Response) => {
+      res.render('static/accessibility-statement')
+    }
+  }
 }
