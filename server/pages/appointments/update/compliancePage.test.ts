@@ -3,6 +3,7 @@ import { AppointmentCompletedAction, AppointmentStatusType, GovUkRadioOption } f
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
 import appointmentFactory from '../../../testutils/factories/appointmentFactory'
+import attendanceDataFactory from '../../../testutils/factories/attendanceDataFactory'
 import GovUkRadioGroup from '../../../utils/GovUKFrontend/GovUkRadioGroup'
 import CompliancePage, { ComplianceQuery } from './compliancePage'
 
@@ -72,25 +73,98 @@ describe('CompliancePage', () => {
     )
 
     describe('items', () => {
-      it('should return items for hiVis', async () => {
-        const items = ['items'] as unknown as GovUkRadioOption[]
-        jest.spyOn(GovUkRadioGroup, 'yesNoItems').mockReturnValue(items)
+      describe('hiVis', () => {
+        it('should return items for hiVis', async () => {
+          const items = ['items'] as unknown as GovUkRadioOption[]
+          jest.spyOn(GovUkRadioGroup, 'yesNoItems').mockReturnValue(items)
 
-        const result = page.viewData(appointment)
-        expect(result.hiVisItems).toEqual(items)
+          const result = page.viewData(appointment)
+          expect(result.hiVisItems).toEqual(items)
+        })
+
+        it('checked answer should be appointment value if no query', () => {
+          appointment = appointmentFactory.build({
+            attendanceData: attendanceDataFactory.build({ hiVisWorn: true, workedIntensively: null }),
+          })
+          jest.spyOn(GovUkRadioGroup, 'yesNoItems')
+          jest.spyOn(GovUkRadioGroup, 'valueFromYesOrNoItem')
+
+          page.viewData(appointment)
+          expect(GovUkRadioGroup.valueFromYesOrNoItem).not.toHaveBeenCalled()
+          expect(GovUkRadioGroup.yesNoItems).toHaveBeenCalledWith({ checkedValue: true })
+          // Expect one call with null value for workedIntensively
+          expect(GovUkRadioGroup.yesNoItems).toHaveBeenCalledWith({ checkedValue: null })
+        })
+
+        it('checked answer should be query value if query', () => {
+          appointment = appointmentFactory.build({
+            attendanceData: attendanceDataFactory.build({ hiVisWorn: true, workedIntensively: null }),
+          })
+          jest.spyOn(GovUkRadioGroup, 'yesNoItems')
+          jest.spyOn(GovUkRadioGroup, 'valueFromYesOrNoItem').mockReturnValue(false)
+          page = new CompliancePage('completed', { hiVis: 'no' })
+
+          page.viewData(appointment)
+          expect(GovUkRadioGroup.valueFromYesOrNoItem).toHaveBeenCalledWith('no')
+          expect(GovUkRadioGroup.yesNoItems).toHaveBeenCalledWith({ checkedValue: false })
+          // Expect one call with null value for workedIntensively
+          expect(GovUkRadioGroup.yesNoItems).toHaveBeenCalledWith({ checkedValue: null })
+        })
       })
 
-      it('should return items for workedIntensively', async () => {
-        const items = ['items'] as unknown as GovUkRadioOption[]
-        jest.spyOn(GovUkRadioGroup, 'yesNoItems').mockReturnValue(items)
+      describe('workedIntensively', () => {
+        it('should return items for workedIntensively', async () => {
+          const items = ['items'] as unknown as GovUkRadioOption[]
+          jest.spyOn(GovUkRadioGroup, 'yesNoItems').mockReturnValue(items)
 
-        const result = page.viewData(appointment)
-        expect(result.workedIntensivelyItems).toEqual(items)
+          const result = page.viewData(appointment)
+          expect(result.workedIntensivelyItems).toEqual(items)
+        })
+
+        it('checked answer should be appointment value if no query', () => {
+          appointment = appointmentFactory.build({
+            attendanceData: attendanceDataFactory.build({ workedIntensively: true, hiVisWorn: null }),
+          })
+          jest.spyOn(GovUkRadioGroup, 'yesNoItems')
+          jest.spyOn(GovUkRadioGroup, 'valueFromYesOrNoItem')
+
+          page.viewData(appointment)
+          expect(GovUkRadioGroup.valueFromYesOrNoItem).not.toHaveBeenCalled()
+          expect(GovUkRadioGroup.yesNoItems).toHaveBeenCalledWith({ checkedValue: true })
+          // Expect one call with null value for hiVisWorn
+          expect(GovUkRadioGroup.yesNoItems).toHaveBeenCalledWith({ checkedValue: null })
+        })
+
+        it('checked answer should be query value if query', () => {
+          appointment = appointmentFactory.build({
+            attendanceData: attendanceDataFactory.build({ workedIntensively: true, hiVisWorn: null }),
+          })
+          jest.spyOn(GovUkRadioGroup, 'yesNoItems')
+          jest.spyOn(GovUkRadioGroup, 'valueFromYesOrNoItem').mockReturnValue(false)
+          page = new CompliancePage('completed', { workedIntensively: 'no' })
+
+          page.viewData(appointment)
+
+          expect(GovUkRadioGroup.valueFromYesOrNoItem).toHaveBeenCalledWith('no')
+          expect(GovUkRadioGroup.yesNoItems).toHaveBeenCalledWith({ checkedValue: false })
+          // Expect one call with null value for hiVisWorn
+          expect(GovUkRadioGroup.yesNoItems).toHaveBeenCalledWith({ checkedValue: null })
+        })
       })
 
-      it('should return empty notes', async () => {
-        const result = page.viewData(appointment)
-        expect(result.notes).toEqual(null)
+      describe('notes', () => {
+        it('should return empty notes if no query', async () => {
+          appointment = appointmentFactory.build({ notes: 'some note' })
+          const result = page.viewData(appointment)
+          expect(result.notes).toEqual(null)
+        })
+
+        it('should return notes with user submitted note value', async () => {
+          appointment = appointmentFactory.build({ notes: 'some note' })
+          page = new CompliancePage('completed', { notes: 'another note' })
+          const result = page.viewData(appointment)
+          expect(result.notes).toEqual('another note')
+        })
       })
 
       describe('workQuality', () => {
@@ -108,7 +182,7 @@ describe('CompliancePage', () => {
           ])
         })
 
-        it('should return items for workQuality with checked answer', async () => {
+        it('should return items for workQuality with checked answer from appointment if query is not present', async () => {
           appointment = appointmentFactory.build({ attendanceData: { workQuality: 'GOOD' } })
 
           const result = page.viewData(appointment)
@@ -117,6 +191,20 @@ describe('CompliancePage', () => {
             { text: 'Good', value: 'GOOD', checked: true },
             { text: 'Satisfactory', value: 'SATISFACTORY', checked: false },
             { text: 'Unsatisfactory', value: 'UNSATISFACTORY', checked: false },
+            { text: 'Poor', value: 'POOR', checked: false },
+            { text: 'Not applicable', value: 'NOT_APPLICABLE', checked: false },
+          ])
+        })
+
+        it('should return items for workQuality with checked answer from query', async () => {
+          appointment = appointmentFactory.build({ attendanceData: { workQuality: 'GOOD' } })
+          page = new CompliancePage('completed', { workQuality: 'UNSATISFACTORY' })
+          const result = page.viewData(appointment)
+          expect(result.workQualityItems).toEqual([
+            { text: 'Excellent', value: 'EXCELLENT', checked: false },
+            { text: 'Good', value: 'GOOD', checked: false },
+            { text: 'Satisfactory', value: 'SATISFACTORY', checked: false },
+            { text: 'Unsatisfactory', value: 'UNSATISFACTORY', checked: true },
             { text: 'Poor', value: 'POOR', checked: false },
             { text: 'Not applicable', value: 'NOT_APPLICABLE', checked: false },
           ])
@@ -138,7 +226,7 @@ describe('CompliancePage', () => {
           ])
         })
 
-        it('should return items for behaviour with checked answer', async () => {
+        it('should return items for behaviour with checked answer from appointment if query not present', async () => {
           appointment = appointmentFactory.build({ attendanceData: { behaviour: 'UNSATISFACTORY' } })
 
           const result = page.viewData(appointment)
@@ -147,6 +235,21 @@ describe('CompliancePage', () => {
             { text: 'Good', value: 'GOOD', checked: false },
             { text: 'Satisfactory', value: 'SATISFACTORY', checked: false },
             { text: 'Unsatisfactory', value: 'UNSATISFACTORY', checked: true },
+            { text: 'Poor', value: 'POOR', checked: false },
+            { text: 'Not applicable', value: 'NOT_APPLICABLE', checked: false },
+          ])
+        })
+
+        it('should return items for behaviour with checked answer from query', async () => {
+          appointment = appointmentFactory.build({ attendanceData: { behaviour: 'UNSATISFACTORY' } })
+          page = new CompliancePage('completed', { behaviour: 'EXCELLENT' })
+
+          const result = page.viewData(appointment)
+          expect(result.behaviourItems).toEqual([
+            { text: 'Excellent', value: 'EXCELLENT', checked: true },
+            { text: 'Good', value: 'GOOD', checked: false },
+            { text: 'Satisfactory', value: 'SATISFACTORY', checked: false },
+            { text: 'Unsatisfactory', value: 'UNSATISFACTORY', checked: false },
             { text: 'Poor', value: 'POOR', checked: false },
             { text: 'Not applicable', value: 'NOT_APPLICABLE', checked: false },
           ])

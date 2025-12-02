@@ -60,17 +60,29 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
   }
 
   viewData(appointment: AppointmentDto): ViewData {
+    const hiVisItems = GovUkRadioGroup.yesNoItems({
+      checkedValue: this.hasFormBody('hiVis')
+        ? GovUkRadioGroup.valueFromYesOrNoItem(this.query.hiVis)
+        : appointment.attendanceData?.hiVisWorn,
+    })
+
+    const workedIntensivelyItems = GovUkRadioGroup.yesNoItems({
+      checkedValue: this.hasFormBody('workedIntensively')
+        ? GovUkRadioGroup.valueFromYesOrNoItem(this.query.workedIntensively)
+        : appointment.attendanceData?.workedIntensively,
+    })
+
     return {
       ...this.commonViewData(appointment),
-      hiVisItems: GovUkRadioGroup.yesNoItems({
-        checkedValue: appointment.attendanceData?.hiVisWorn,
-      }),
-      workedIntensivelyItems: GovUkRadioGroup.yesNoItems({
-        checkedValue: appointment.attendanceData?.workedIntensively,
-      }),
-      workQualityItems: this.getItems(appointment.attendanceData?.workQuality),
-      behaviourItems: this.getItems(appointment.attendanceData?.behaviour),
-      notes: null,
+      hiVisItems,
+      workedIntensivelyItems,
+      workQualityItems: this.getItems(
+        this.hasFormBody('workQuality') ? this.query.workQuality : appointment.attendanceData?.workQuality,
+      ),
+      behaviourItems: this.getItems(
+        this.hasFormBody('behaviour') ? this.query.behaviour : appointment.attendanceData?.behaviour,
+      ),
+      notes: this.hasFormBody('notes') ? this.query.notes : null,
     }
   }
 
@@ -138,5 +150,9 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
   private completedStatusType: Record<AppointmentCompletedAction, AppointmentStatusType> = {
     completed: 'Session complete',
     leftEarly: 'Left site',
+  }
+
+  private hasFormBody(property: keyof ComplianceQuery): boolean {
+    return this.query[property] !== undefined
   }
 }
