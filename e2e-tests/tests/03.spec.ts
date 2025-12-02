@@ -4,10 +4,11 @@ import SessionPage from '../pages/sessionPage'
 import AppointmentPage from '../pages/appointmentPage'
 import StartTimePage from '../pages/appointments/update/startTimePage'
 import ConfirmAbsentPage from '../pages/appointments/update/confirm/confirmAbsentPage'
+import clearSessionData from '../steps/clearSessionData'
 
 test('Record an absence', async ({ page, deliusUser }) => {
   const homePage = await signIn(page, deliusUser)
-
+  await clearSessionData(page)
   await homePage.viewDetailsLinkLocator.click()
 
   const sessionPage = new SessionPage(page)

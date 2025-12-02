@@ -8,10 +8,13 @@ export default class SessionPage extends BasePage {
 
   readonly viewDetailsLinkLocator: Locator
 
+  clearSessionDataLinkLocator: Locator
+
   constructor(readonly page: Page) {
     super(page)
     this.expect = new SessionPageAssertions(this)
     this.viewDetailsLinkLocator = page.getByRole('link', { name: 'View details' })
+    this.clearSessionDataLinkLocator = page.getByRole('link', { name: 'Clear session data' })
   }
 
   async clickOnAnAppointment() {
