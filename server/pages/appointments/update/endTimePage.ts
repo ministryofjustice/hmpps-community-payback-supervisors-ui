@@ -29,8 +29,8 @@ export default class EndTimePage extends BaseAppointmentUpdatePage<Body> {
   }
 
   nextPath(appointmentId: string, projectCode: string): string {
-    // TODO: this will be compliance page (with action type)
-    return paths.appointments.confirm.completed({ projectCode, appointmentId })
+    // TODO: Add logic for left early journey
+    return paths.appointments.completed.compliance({ projectCode, appointmentId })
   }
 
   protected backPath(appointment: AppointmentDto): string {
