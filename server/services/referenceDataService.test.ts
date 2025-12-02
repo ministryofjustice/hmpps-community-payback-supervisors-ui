@@ -57,4 +57,10 @@ describe('ReferenceDataService', () => {
       ])
     })
   })
+
+  describe('attendedCompliedOutcomeCode', () => {
+    it('is ATTC', () => {
+      expect(ReferenceDataService.attendedCompliedOutcomeCode).toEqual('ATTC')
+    })
+  })
 })

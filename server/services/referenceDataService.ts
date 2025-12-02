@@ -2,6 +2,8 @@ import { ContactOutcomesDto } from '../@types/shared'
 import ReferenceDataClient from '../data/referenceDataClient'
 
 export default class ReferenceDataService {
+  static readonly attendedCompliedOutcomeCode = 'ATTC'
+
   constructor(private readonly referenceDataClient: ReferenceDataClient) {}
 
   async getContactOutcomes(userName: string): Promise<ContactOutcomesDto> {
