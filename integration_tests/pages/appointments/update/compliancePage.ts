@@ -25,10 +25,52 @@ export default class CompliancePage extends Page {
   }
 
   completeForm(): void {
-    this.checkRadioByNameAndValue('hiVis', 'yes')
-    this.checkRadioByNameAndValue('workedIntensively', 'no')
-    this.checkRadioByNameAndValue('workQuality', 'GOOD')
-    this.checkRadioByNameAndValue('behaviour', 'UNSATISFACTORY')
-    this.getTextInputByIdAndEnterDetails('notes', 'Attendance notes')
+    this.selectHiVisValue()
+    this.selectWorkedIntensivelyValue()
+    this.selectWorkQualityValue()
+    this.checkedBehaviourOption().check()
+    this.enterNotes()
   }
+
+  selectHiVisValue() {
+    this.checkedHiVisVisOption().check()
+  }
+
+  shouldHaveSelectedHiVisValue() {
+    this.checkedHiVisVisOption().should('be.checked')
+  }
+
+  selectWorkedIntensivelyValue() {
+    this.checkedWorkedIntensivelyOption().check()
+  }
+
+  shouldHaveSelectedWorkedIntensivelyValue() {
+    this.checkedWorkedIntensivelyOption().check()
+  }
+
+  selectWorkQualityValue() {
+    this.checkedHiVisOption().check()
+  }
+
+  shouldHaveSelectedWorkQualityValue() {
+    this.checkedHiVisOption().should('be.checked')
+  }
+
+  enterNotes() {
+    this.notesField().type('Attendance notes')
+  }
+
+  shouldHaveEnteredNotes() {
+    this.notesField().should('have.value', 'Attendance notes')
+  }
+
+  private checkedHiVisVisOption = () => this.getRadioByNameAndValue('hiVis', 'yes')
+
+  private checkedWorkedIntensivelyOption = () => this.getRadioByNameAndValue('workedIntensively', 'no')
+
+  private checkedHiVisOption = () => this.getRadioByNameAndValue('workQuality', 'GOOD')
+
+  private checkedBehaviourOption = () => this.getRadioByNameAndValue('behaviour', 'UNSATISFACTORY')
+
+  private notesField = () => this.getInputByLabel('Notes')
 }

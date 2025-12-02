@@ -17,6 +17,12 @@ import ConfirmLeftEarlyPage from '../../../pages/appointments/update/confirm/con
 //    When I submit the form
 //    Then I see the log compliance page with errors
 
+// Scenario: Viewing error messages for submitted answers
+//    Given I am on the log compliance page for an appointment
+//    And I complete some of the form
+//    When I submit the form
+//    Then I see the log compliance page with errors and my entered answers
+
 // Scenario: Completed
 //    Scenario: Completing the log compliance page
 //      Given I am on the log compliance page for an appointment
@@ -52,30 +58,63 @@ context('Log compliance', () => {
     cy.wrap(appointment).as('appointment')
   })
 
-  // Scenario: Validating the log compliance page
-  it('validates form data', () => {
-    const appointment = appointmentFactory.build({
-      attendanceData: {
-        hiVisWorn: null,
-        workedIntensively: null,
-        workQuality: null,
-        behaviour: null,
-      },
+  describe('Validation', () => {
+    // Scenario: Validating the log compliance page
+    it('validates form data', () => {
+      const appointment = appointmentFactory.build({
+        attendanceData: {
+          hiVisWorn: null,
+          workedIntensively: null,
+          workQuality: null,
+          behaviour: null,
+        },
+      })
+      // Given I am on the log compliance page for an appointment
+      cy.task('stubFindAppointment', { appointment })
+      const page = CompliancePage.visit(appointment, 'completed', 'ATSS')
+
+      // And I do not complete the form
+
+      // When I submit the form
+      page.clickSubmit()
+
+      // Then I see the log compliance page with errors
+      page.shouldShowErrorSummary('hiVis', 'Select whether a Hi-Vis was worn')
+      page.shouldShowErrorSummary('workedIntensively', 'Select whether they worked intensively')
+      page.shouldShowErrorSummary('workQuality', 'Select their work quality')
+      page.shouldShowErrorSummary('behaviour', 'Select their behaviour')
     })
-    // Given I am on the log compliance page for an appointment
-    cy.task('stubFindAppointment', { appointment })
-    const page = CompliancePage.visit(appointment, 'completed', 'ATSS')
 
-    // And I do not complete the form
+    // Scenario: Viewing error messages for submitted answers
+    it('should show user submitted values when showing validation errors', () => {
+      const appointment = appointmentFactory.build({
+        attendanceData: {
+          hiVisWorn: null,
+          workedIntensively: null,
+          workQuality: null,
+          behaviour: null,
+        },
+      })
+      // Given I am on the log compliance page for an appointment
+      cy.task('stubFindAppointment', { appointment })
+      const page = CompliancePage.visit(appointment, 'completed', 'ATSS')
 
-    // When I submit the form
-    page.clickSubmit()
+      // And I complete some of the form
+      page.selectHiVisValue()
+      page.selectWorkedIntensivelyValue()
+      page.selectWorkQualityValue()
+      page.enterNotes()
 
-    // Then I see the log compliance page with errors
-    page.shouldShowErrorSummary('hiVis', 'Select whether a Hi-Vis was worn')
-    page.shouldShowErrorSummary('workedIntensively', 'Select whether they worked intensively')
-    page.shouldShowErrorSummary('workQuality', 'Select their work quality')
-    page.shouldShowErrorSummary('behaviour', 'Select their behaviour')
+      // When I submit the form
+      page.clickSubmit()
+
+      // Then I see the log compliance page with errors and my entered answers
+      page.shouldShowErrorSummary('behaviour', 'Select their behaviour')
+      page.shouldHaveSelectedHiVisValue()
+      page.shouldHaveSelectedWorkedIntensivelyValue()
+      page.shouldHaveSelectedWorkQualityValue()
+      page.shouldHaveEnteredNotes()
+    })
   })
 
   describe('completed', function scenario() {
