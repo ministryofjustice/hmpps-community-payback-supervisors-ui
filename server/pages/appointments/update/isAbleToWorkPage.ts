@@ -1,5 +1,5 @@
 import { AppointmentDto } from '../../../@types/shared'
-import { YesOrNo } from '../../../@types/user-defined'
+import { ValidationErrors, YesOrNo } from '../../../@types/user-defined'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
 import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './baseAppointmentUpdatePage'
@@ -55,12 +55,12 @@ export default class IsAbleToWorkPage extends BaseAppointmentUpdatePage<Body> {
     }
   }
 
-  validate(): void {
+  protected getValidationErrors(): ValidationErrors<Body> {
     if (!this.query.ableToWork) {
-      this.validationErrors.ableToWork = { text: 'Select whether the person is able to work today' }
+      return { ableToWork: { text: 'Select whether the person is able to work today' } }
     }
 
-    this.checkHasErrors()
+    return {}
   }
 
   private getPageTitle(offender: Offender): string {

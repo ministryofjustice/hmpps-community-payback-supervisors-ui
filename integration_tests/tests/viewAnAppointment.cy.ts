@@ -21,6 +21,11 @@
 //      Given I am on the appointment page
 //      When I click on 'Not arrived'
 //      Then I should be taken to the first page of the absent form
+//  Scenario: working appointment
+//    Scenario: starting a finish session form
+//    Given I am on the appointment page
+//    When I click on 'Finished'
+//    Then I should be taken to the first page of the finish session form
 
 import Page from '../pages/page'
 import SessionPage from '../pages/session'
@@ -30,6 +35,7 @@ import AppointmentPage from '../pages/appointment'
 import appointmentFactory from '../../server/testutils/factories/appointmentFactory'
 import StartTimePage from '../pages/appointments/update/startTimePage'
 import appointmentStatusFactory from '../../server/testutils/factories/appointmentStatusFactory'
+import EndTimePage from '../pages/appointments/update/endTimePage'
 
 context('viewAnAppointment', () => {
   beforeEach(() => {
@@ -87,7 +93,7 @@ context('viewAnAppointment', () => {
     it('I can navigate to the arrived form', () => {
       // Given I am on the appointment page
       const appointment = appointmentFactory.build()
-      const appointmentStatus = appointmentStatusFactory.build({ appointmentId: appointment.id })
+      const appointmentStatus = appointmentStatusFactory.build({ appointmentId: appointment.id, status: 'Scheduled' })
 
       cy.signIn()
       cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
@@ -106,7 +112,7 @@ context('viewAnAppointment', () => {
     it('I can navigate to the absent form', () => {
       // Given I am on the appointment page
       const appointment = appointmentFactory.build()
-      const appointmentStatus = appointmentStatusFactory.build({ appointmentId: appointment.id })
+      const appointmentStatus = appointmentStatusFactory.build({ appointmentId: appointment.id, status: 'Scheduled' })
 
       cy.signIn()
       cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
@@ -119,6 +125,28 @@ context('viewAnAppointment', () => {
 
       // Then I should be taken to the first page of the absent form
       Page.verifyOnPage(StartTimePage, appointment, 'absent')
+    })
+  })
+
+  // Scenario: working appointment
+  describe('working appointment', () => {
+    // Scenario: starting a finish session form
+    it('I can navigate to the finish session form', () => {
+      // Given I am on the appointment page
+      const appointment = appointmentFactory.build()
+      const appointmentStatus = appointmentStatusFactory.build({ appointmentId: appointment.id, status: 'Working' })
+
+      cy.signIn()
+      cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
+      cy.task('stubGetForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
+
+      const appointmentPage = AppointmentPage.visit(appointment)
+
+      // When I click on 'Finished'
+      appointmentPage.clickFinished()
+
+      // Then I should be taken to the first page of the finish session form
+      Page.verifyOnPage(EndTimePage, appointment, 'completed')
     })
   })
 })

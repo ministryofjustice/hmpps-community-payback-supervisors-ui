@@ -24,18 +24,14 @@
       {{ offender.name }}
     </h1>
 
-    {{ govukButton({
-        text: 'Arrived',
-        href: actions.arrivedPath,
+    {% for action in actions %}
+      {{ govukButton({
+        text: action.text,
+        href: action.href,
         classes: "govuk-button--secondary govuk-!-width-full"
-    }) }}
-
-    {{ govukButton({
-        text: 'Not arrived',
-        href: actions.absentPath,
-        classes: "govuk-button--secondary govuk-!-width-full"
-    }) }}
-
+      }) }}
+    {% endfor %}
+    
     {{
       govukSummaryList({
         card: {

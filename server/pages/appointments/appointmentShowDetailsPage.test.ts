@@ -39,11 +39,61 @@ describe('AppointmentShowDetailsPage', () => {
         startTime: '09:00',
         endTime: '17:00',
         backPath: paths.sessions.show({ projectCode, date }),
-        actions: {
-          arrivedPath: paths.appointments.arrived.startTime({ projectCode, appointmentId: id.toString() }),
-          absentPath: paths.appointments.absent.startTime({ projectCode, appointmentId: id.toString() }),
-        },
+        actions: [
+          {
+            text: 'Arrived',
+            href: paths.appointments.arrived.startTime({ projectCode, appointmentId: id.toString() }),
+          },
+          {
+            text: 'Not arrived',
+            href: paths.appointments.absent.startTime({ projectCode, appointmentId: id.toString() }),
+          },
+        ],
         statusTagHtml,
+      })
+    })
+
+    describe('actions', () => {
+      it('should include arrived links if status is "Scheduled"', () => {
+        const appointment = appointmentFactory.build()
+        const page = new AppointmentShowDetailsPage()
+        const result = page.viewData(appointment, 'Scheduled')
+        const { projectCode, id } = appointment
+
+        expect(result.actions).toEqual([
+          {
+            text: 'Arrived',
+            href: paths.appointments.arrived.startTime({ projectCode, appointmentId: id.toString() }),
+          },
+          {
+            text: 'Not arrived',
+            href: paths.appointments.absent.startTime({ projectCode, appointmentId: id.toString() }),
+          },
+        ])
+      })
+
+      it('should include finish session links if status is "Working"', () => {
+        const appointment = appointmentFactory.build()
+        const page = new AppointmentShowDetailsPage()
+        const result = page.viewData(appointment, 'Working')
+
+        expect(result.actions).toEqual([
+          {
+            text: 'Finish session',
+            href: paths.appointments.completed.endTime({
+              appointmentId: appointment.id.toString(),
+              projectCode: appointment.projectCode,
+            }),
+          },
+        ])
+      })
+
+      it('should be empty if status is not "Working" or "Scheduled"', () => {
+        const appointment = appointmentFactory.build()
+        const page = new AppointmentShowDetailsPage()
+        const result = page.viewData(appointment, 'Completed')
+
+        expect(result.actions).toEqual([])
       })
     })
   })

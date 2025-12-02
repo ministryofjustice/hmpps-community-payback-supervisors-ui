@@ -70,4 +70,20 @@ export default class DateTimeFormats {
   static isValidTime(time: string): boolean {
     return /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]($|:[0-5][0-9]$)/.test(time)
   }
+
+  /**
+   * Check that a time in the HH:MM or HH:MM:SS format is after another given time in the same format.
+   * @param string a time string
+   * @returns A boolean
+   */
+  static isBeforeTime(time: string, timeToCompare: string) {
+    const timeAsDate = DateTimeFormats.timeToDate(time)
+    const timeToCompareAsDate = DateTimeFormats.timeToDate(timeToCompare)
+
+    return timeAsDate < timeToCompareAsDate
+  }
+
+  private static timeToDate(time: string) {
+    return new Date(`1970-01-01T${this.stripTime(time)}:00Z`)
+  }
 }

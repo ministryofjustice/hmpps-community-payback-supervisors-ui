@@ -70,4 +70,24 @@ export default class ConfirmController {
       })
     }
   }
+
+  completed(): RequestHandler {
+    return async (_req: Request, res: Response) => {
+      const { projectCode, appointmentId } = _req.params
+
+      const request: GetAppointmentRequest = {
+        username: res.locals.user.username,
+        projectCode,
+        appointmentId,
+      }
+
+      const appointment = await this.appointmentService.getAppointment(request)
+      const { name } = new Offender(appointment.offender)
+
+      res.render('appointments/update/confirm', {
+        title: `${name} session has been completed`,
+        sessionPath: paths.sessions.show({ projectCode: appointment.projectCode, date: appointment.date }),
+      })
+    }
+  }
 }

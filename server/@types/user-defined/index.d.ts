@@ -30,6 +30,8 @@ export interface LinkItem {
 
 export type AppointmentArrivedAction = 'arrived' | 'absent'
 
+export type AppointmentCompletedAction = 'completed' | 'leftEarly'
+
 export type AppointmentStatusType = 'Scheduled' | 'Working' | 'Completed'
 
 // Should be a known colour variation of the GOV.UK Design System Tag component: https://design-system.service.gov.uk/components/tag/

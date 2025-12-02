@@ -14,11 +14,19 @@ export default abstract class BaseAppointmentUpdatePage<TBody> {
 
   hasErrors: boolean
 
+  validate(...args: Array<unknown>) {
+    this.validationErrors = this.getValidationErrors(...args) ?? {}
+
+    this.checkHasErrors()
+  }
+
   abstract nextPath(appointmentId: string | AppointmentDto, projectCode: string): string
 
   protected abstract backPath(appointment: AppointmentDto): string
 
   protected abstract updatePath(appointment: AppointmentDto): string
+
+  protected abstract getValidationErrors(...args: Array<unknown>): ValidationErrors<TBody> | undefined
 
   protected appointmentRequestBody(appointment: AppointmentDto): UpdateAppointmentOutcomeDto {
     return {

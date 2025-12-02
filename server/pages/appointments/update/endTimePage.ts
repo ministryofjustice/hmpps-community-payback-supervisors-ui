@@ -1,5 +1,5 @@
 import { AppointmentDto, UpdateAppointmentOutcomeDto } from '../../../@types/shared'
-import { AppointmentArrivedAction, ValidationErrors } from '../../../@types/user-defined'
+import { AppointmentCompletedAction, ValidationErrors } from '../../../@types/user-defined'
 import InvalidUpdateActionError from '../../../errors/invalidUpdateActionError'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
@@ -20,26 +20,17 @@ interface Body {
   time: string
 }
 
-export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
-  static UnacceptableAbsenceOutcomeCode = 'UAAB'
-
+export default class EndTimePage extends BaseAppointmentUpdatePage<Body> {
   constructor(
-    private readonly action: AppointmentArrivedAction,
+    private readonly action: AppointmentCompletedAction,
     private readonly query: Query = {},
   ) {
     super()
   }
 
   nextPath(appointmentId: string, projectCode: string): string {
-    if (this.action === 'arrived') {
-      return paths.appointments.arrived.isAbleToWork({ projectCode, appointmentId })
-    }
-
-    if (this.action === 'absent') {
-      return paths.appointments.confirm.absent({ projectCode, appointmentId })
-    }
-
-    throw new InvalidUpdateActionError(`Invalid update appointment action: ${this.action}`)
+    // TODO: this will be compliance page (with action type)
+    return paths.appointments.confirm.completed({ projectCode, appointmentId })
   }
 
   protected backPath(appointment: AppointmentDto): string {
@@ -47,23 +38,17 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
   }
 
   protected updatePath(appointment: AppointmentDto): string {
-    return paths.appointments[this.action].startTime({
+    return paths.appointments[this.action].endTime({
       projectCode: appointment.projectCode,
       appointmentId: appointment.id.toString(),
     })
   }
 
   requestBody(appointment: AppointmentDto): UpdateAppointmentOutcomeDto {
-    const body = {
+    return {
       ...this.appointmentRequestBody(appointment),
-      startTime: this.query.time,
+      endTime: this.query.time,
     }
-
-    if (this.action === 'absent') {
-      body.contactOutcomeCode = StartTimePage.UnacceptableAbsenceOutcomeCode
-    }
-
-    return body
   }
 
   viewData(appointment: AppointmentDto): ViewData {
@@ -72,31 +57,39 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
 
     return {
       ...commonViewData,
-      time: hasFormBody ? this.query.time : appointment.startTime,
+      time: hasFormBody ? this.query.time : appointment.endTime,
       question: this.getPageTitle(commonViewData.offender),
-      documentTitle: 'Log start time',
+      documentTitle: 'Log finish time',
     }
   }
 
-  protected getValidationErrors(): ValidationErrors<Body> | undefined {
+  protected getValidationErrors(appointment: AppointmentDto): ValidationErrors<Body> {
     if (!this.query.time) {
-      return { time: { text: 'Enter a start time' } }
+      return { time: { text: 'Enter a finish time' } }
     }
 
     if (!DateTimeFormats.isValidTime(this.query.time as string)) {
-      return { time: { text: 'Enter a valid start time, for example 09:00' } }
+      return { time: { text: 'Enter a valid finish time, for example 17:00' } }
+    }
+
+    if (DateTimeFormats.isBeforeTime(this.query.time, appointment.startTime)) {
+      return {
+        time: {
+          text: `Finish time must be after ${appointment.startTime} when they started the session`,
+        },
+      }
     }
 
     return {}
   }
 
   private getPageTitle(offender: Offender): string {
-    if (this.action === 'arrived') {
-      return `You're logging ${offender.name} as having arrived at:`
+    if (this.action === 'completed') {
+      return `You're logging ${offender.name} as finishing today at:`
     }
 
-    if (this.action === 'absent') {
-      return `You're logging ${offender.name} as absent today at:`
+    if (this.action === 'leftEarly') {
+      return `You're logging out ${offender.name} early today at:`
     }
 
     throw new InvalidUpdateActionError(`Invalid update appointment action: ${this.action}`)

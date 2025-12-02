@@ -1,5 +1,5 @@
 import { AppointmentDto, ContactOutcomeDto, UpdateAppointmentOutcomeDto } from '../../../@types/shared'
-import { GovUkRadioOption } from '../../../@types/user-defined'
+import { GovUkRadioOption, ValidationErrors } from '../../../@types/user-defined'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
 import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './baseAppointmentUpdatePage'
@@ -54,16 +54,17 @@ export default class UnableToWorkPage extends BaseAppointmentUpdatePage<Body> {
     }
   }
 
-  validate(): void {
+  protected getValidationErrors(): ValidationErrors<Body> {
+    const errors: ValidationErrors<Body> = {}
     if (!this.query.unableToWork) {
-      this.validationErrors.unableToWork = { text: 'Select the reason why the person is unable to work today' }
+      errors.unableToWork = { text: 'Select the reason why the person is unable to work today' }
     }
 
     if (this.query.notes && this.query.notes.length > 4000) {
-      this.validationErrors.notes = { text: 'Notes must be 4000 characters or less' }
+      errors.notes = { text: 'Notes must be 4000 characters or less' }
     }
 
-    this.checkHasErrors()
+    return errors
   }
 
   requestBody(appointment: AppointmentDto): UpdateAppointmentOutcomeDto {

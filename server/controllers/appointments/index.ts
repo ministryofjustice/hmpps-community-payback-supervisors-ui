@@ -6,6 +6,7 @@ import ConfirmController from './confirmController'
 import ShowDetailsController from './showDetailsController'
 import StartTimeController from './startTimeController'
 import UnableToWorkController from './unableToWorkController'
+import EndTimeController from './endTimeController'
 
 const appointmentControllers = (services: Services) => {
   const showDetailsController = new ShowDetailsController(
@@ -18,6 +19,7 @@ const appointmentControllers = (services: Services) => {
     services.appointmentStatusService,
   )
   const unableToWorkController = new UnableToWorkController(services.appointmentService, services.referenceDataService)
+  const endTimeController = new EndTimeController(services.appointmentService)
   const confirmController = new ConfirmController(services.appointmentService)
 
   return {
@@ -26,6 +28,7 @@ const appointmentControllers = (services: Services) => {
     isAbleToWorkController,
     confirmController,
     unableToWorkController,
+    endTimeController,
   }
 }
 
