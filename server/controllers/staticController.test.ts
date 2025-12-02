@@ -31,4 +31,13 @@ describe('StaticController', () => {
       expect(response.render).toHaveBeenCalledWith('static/privacy-notice')
     })
   })
+
+  describe('accessibility statement page', () => {
+    it('should render the page', () => {
+      const requestHandler = staticController.accessibilityStatementPage()
+      requestHandler(request, response, next)
+
+      expect(response.render).toHaveBeenCalledWith('static/accessibility-statement')
+    })
+  })
 })
