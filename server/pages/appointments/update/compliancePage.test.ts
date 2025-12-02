@@ -233,7 +233,7 @@ describe('CompliancePage', () => {
 
       page = new CompliancePage(action, query)
 
-      const result = page.requestBody(appointment)
+      const result = page.requestBody(appointment, '')
 
       expect(result).toEqual(
         expect.objectContaining({
@@ -260,7 +260,7 @@ describe('CompliancePage', () => {
 
       page = new CompliancePage(action, query)
 
-      const result = page.requestBody(appointment)
+      const result = page.requestBody(appointment, '')
 
       expect(result).toEqual(
         expect.objectContaining({
@@ -275,6 +275,14 @@ describe('CompliancePage', () => {
           notes: 'good',
         }),
       )
+    })
+
+    it('saves the given contactOutcomeCode', () => {
+      page = new CompliancePage(action, {})
+
+      const result = page.requestBody(appointment, 'code')
+
+      expect(result.contactOutcomeCode).toEqual('code')
     })
   })
 })

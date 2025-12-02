@@ -36,7 +36,7 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
     super()
   }
 
-  requestBody(appointment: AppointmentDto): UpdateAppointmentOutcomeDto {
+  requestBody(appointment: AppointmentDto, contactOutcomeCode: string): UpdateAppointmentOutcomeDto {
     const data = this.appointmentRequestBody(appointment)
     return {
       ...data,
@@ -48,6 +48,7 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
         workQuality: this.query.workQuality,
         behaviour: this.query.behaviour,
       },
+      contactOutcomeCode,
     }
   }
 

@@ -3,6 +3,7 @@ import AppointmentService from '../../services/appointmentService'
 import generateErrorSummary from '../../utils/errorUtils'
 import { AppointmentCompletedAction, AppointmentParams } from '../../@types/user-defined'
 import CompliancePage from '../../pages/appointments/update/compliancePage'
+import ReferenceDataService from '../../services/referenceDataService'
 
 export default class ComplianceController {
   constructor(private readonly appointmentService: AppointmentService) {}
@@ -39,7 +40,9 @@ export default class ComplianceController {
         })
       }
 
-      const payload = page.requestBody(appointment)
+      const contactOutcomeCode = action === 'completed' ? ReferenceDataService.attendedCompliedOutcomeCode : ''
+
+      const payload = page.requestBody(appointment, contactOutcomeCode)
 
       await this.appointmentService.saveAppointment({
         username: res.locals.user.name,
