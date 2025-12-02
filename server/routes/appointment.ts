@@ -119,6 +119,26 @@ export default function appointmentRoutes(
     await handler(req, res, next)
   })
 
+  router.get(paths.appointments.completed.compliance.pattern, async (req, res, next) => {
+    await auditService.logPageView(Page.SHOW_APPOINTMENT_COMPLETED_COMPLIANCE_PAGE, {
+      who: res.locals.user.username,
+      correlationId: req.id,
+    })
+
+    const handler = appointments.complianceController.show('completed')
+    await handler(req, res, next)
+  })
+
+  router.post(paths.appointments.completed.compliance.pattern, async (req, res, next) => {
+    await auditService.logPageView(Page.SUBMIT_APPOINTMENT_COMPLETED_COMPLIANCE_PAGE, {
+      who: res.locals.user.username,
+      correlationId: req.id,
+    })
+
+    const handler = appointments.complianceController.submit('completed')
+    await handler(req, res, next)
+  })
+
   router.get(paths.appointments.leftEarly.endTime.pattern, async (req, res, next) => {
     await auditService.logPageView(Page.SHOW_APPOINTMENT_LEFT_EARLY_END_TIME_PAGE, {
       who: res.locals.user.username,
@@ -136,6 +156,26 @@ export default function appointmentRoutes(
     })
 
     const handler = appointments.endTimeController.submit('leftEarly')
+    await handler(req, res, next)
+  })
+
+  router.get(paths.appointments.leftEarly.compliance.pattern, async (req, res, next) => {
+    await auditService.logPageView(Page.SHOW_APPOINTMENT_LEFT_EARLY_COMPLIANCE_PAGE, {
+      who: res.locals.user.username,
+      correlationId: req.id,
+    })
+
+    const handler = appointments.complianceController.show('leftEarly')
+    await handler(req, res, next)
+  })
+
+  router.post(paths.appointments.leftEarly.compliance.pattern, async (req, res, next) => {
+    await auditService.logPageView(Page.SUBMIT_APPOINTMENT_LEFT_EARLY_COMPLIANCE_PAGE, {
+      who: res.locals.user.username,
+      correlationId: req.id,
+    })
+
+    const handler = appointments.complianceController.submit('leftEarly')
     await handler(req, res, next)
   })
 

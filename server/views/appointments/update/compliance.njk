@@ -1,0 +1,88 @@
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+
+{% extends "./layout.njk" %}
+
+{% set pageTitle = 'Log compliance' %}
+
+{% block beforeForm %}
+  <h1>Log compliance</h1>
+{% endblock %}
+
+{% block formContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      {{ govukRadios({
+        name: "hiVis",
+        fieldset: {
+          legend: {
+            text: "Did they wear hi-vis?",
+            classes: "govuk-fieldset__legend--m"
+          }
+        },
+        items: hiVisItems,
+        errorMessage: errors.hiVis
+      }) }}
+    </div>
+  </div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      {{ govukRadios({
+        name: "workedIntensively",
+        fieldset: {
+          legend: {
+            text: "Are they working intensively (28 hours of unpaid work over a 4-day week)?",
+            classes: "govuk-fieldset__legend--m"
+          }
+        },
+        items: workedIntensivelyItems,
+        errorMessage: errors.workedIntensively
+      }) }}
+    </div>
+  </div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      {{ govukRadios({
+        name: "workQuality",
+        fieldset: {
+          legend: {
+            text: "How was their work quality?",
+            classes: "govuk-fieldset__legend--m"
+          }
+        },
+        items: workQualityItems,
+        errorMessage: errors.workQuality
+      }) }}
+    </div>
+  </div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      {{ govukRadios({
+        name: "behaviour",
+        fieldset: {
+          legend: {
+            text: "How was their behaviour?",
+            classes: "govuk-fieldset__legend--m"
+          }
+        },
+        items: behaviourItems,
+        errorMessage: errors.behaviour
+      }) }}
+    </div>
+  </div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      {{ govukTextarea({
+        name: "notes",
+        id: "notes",
+        value: notes,
+        label: {
+          text: "Notes",
+          classes: "govuk-label--m",
+          isPageHeading: false
+        }
+      }) }}
+    </div>
+  </div>
+{% endblock %}
