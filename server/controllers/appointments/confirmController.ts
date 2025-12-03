@@ -90,4 +90,26 @@ export default class ConfirmController {
       })
     }
   }
+
+  leftEarly(): RequestHandler {
+    return async (_req: Request, res: Response) => {
+      const { projectCode, appointmentId } = _req.params
+
+      const request: GetAppointmentRequest = {
+        username: res.locals.user.username,
+        projectCode,
+        appointmentId,
+      }
+
+      const appointment = await this.appointmentService.getAppointment(request)
+      const offender = new Offender(appointment.offender)
+
+      res.render('appointments/update/confirm', {
+        offender,
+        title: `${offender.name} has been recorded as leaving the site early`,
+        nextStepsText: `${offender.name}'s probation practioner will be informed about them leaving the site early.`,
+        sessionPath: paths.sessions.show({ projectCode: appointment.projectCode, date: appointment.date }),
+      })
+    }
+  }
 }

@@ -219,5 +219,15 @@ export default function appointmentRoutes(
     await handler(req, res, next)
   })
 
+  router.get(paths.appointments.confirm.leftEarly.pattern, async (req, res, next) => {
+    await auditService.logPageView(Page.SHOW_CONFIRM_LEFT_EARLY_PAGE, {
+      who: res.locals.user.username,
+      correlationId: req.id,
+    })
+
+    const handler = appointments.confirmController.leftEarly()
+    await handler(req, res, next)
+  })
+
   return router
 }
