@@ -33,7 +33,7 @@ export default class StartTimeController {
       })
 
       const page = new StartTimePage(action, _req.body)
-      page.validate()
+      page.validate(appointment)
 
       if (page.hasErrors) {
         return res.render('appointments/update/time', {
