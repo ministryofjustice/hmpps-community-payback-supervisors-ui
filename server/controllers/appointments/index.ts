@@ -8,6 +8,7 @@ import StartTimeController from './startTimeController'
 import UnableToWorkController from './unableToWorkController'
 import EndTimeController from './endTimeController'
 import ComplianceController from './complianceController'
+import LeftEarlyReasonController from './leftEarlyReasonController'
 
 const appointmentControllers = (services: Services) => {
   const showDetailsController = new ShowDetailsController(
@@ -23,6 +24,10 @@ const appointmentControllers = (services: Services) => {
   const endTimeController = new EndTimeController(services.appointmentService)
   const complianceController = new ComplianceController(services.appointmentService)
   const confirmController = new ConfirmController(services.appointmentService)
+  const leftEarlyReasonController = new LeftEarlyReasonController(
+    services.appointmentService,
+    services.referenceDataService,
+  )
 
   return {
     showDetailsController,
@@ -32,6 +37,7 @@ const appointmentControllers = (services: Services) => {
     unableToWorkController,
     endTimeController,
     complianceController,
+    leftEarlyReasonController,
   }
 }
 
