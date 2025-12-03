@@ -135,5 +135,35 @@ describe('DateTimeFormats', () => {
         expect(DateTimeFormats.isBeforeTime('11:00', '11:00')).toBe(false)
       })
     })
+
+    describe('isAfterTime', () => {
+      it.each([
+        ['11:00', '11:01'],
+        ['12:30', '13:00'],
+        ['00:01', '23:59'],
+        ['09:00', '09:30'],
+        ['10:10', '11:00'],
+        ['10:10:00', '11:00:00'],
+        ['10:10:01', '11:00:01'],
+      ])('returns false if time is before time to compare', (time: string, timeToCompare: string) => {
+        expect(DateTimeFormats.isAfterTime(time, timeToCompare)).toBe(false)
+      })
+
+      it.each([
+        ['11:01', '11:00'],
+        ['13:00', '12:30'],
+        ['23:59', '00:01'],
+        ['09:30', '09:00'],
+        ['11:00', '10:10'],
+        ['11:00:00', '10:10:00'],
+        ['11:00:01', '10:10:01'],
+      ])('returns true if time is before time to compare', (time: string, timeToCompare: string) => {
+        expect(DateTimeFormats.isAfterTime(time, timeToCompare)).toBe(true)
+      })
+
+      it('returns false if time is same as time to compare', () => {
+        expect(DateTimeFormats.isAfterTime('11:00', '11:00')).toBe(false)
+      })
+    })
   })
 })

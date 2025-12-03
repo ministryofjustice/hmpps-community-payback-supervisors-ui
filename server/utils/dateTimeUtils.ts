@@ -72,7 +72,7 @@ export default class DateTimeFormats {
   }
 
   /**
-   * Check that a time in the HH:MM or HH:MM:SS format is after another given time in the same format.
+   * Check that a time in the HH:MM or HH:MM:SS format is before another given time in the same format.
    * @param string a time string
    * @returns A boolean
    */
@@ -81,6 +81,18 @@ export default class DateTimeFormats {
     const timeToCompareAsDate = DateTimeFormats.timeToDate(timeToCompare)
 
     return timeAsDate < timeToCompareAsDate
+  }
+
+  /**
+   * Check that a time in the HH:MM or HH:MM:SS format is after another given time in the same format.
+   * @param string a time string
+   * @returns A boolean
+   */
+  static isAfterTime(time: string, timeToCompare: string) {
+    const timeAsDate = DateTimeFormats.timeToDate(time)
+    const timeToCompareAsDate = DateTimeFormats.timeToDate(timeToCompare)
+
+    return timeAsDate > timeToCompareAsDate
   }
 
   private static timeToDate(time: string) {
