@@ -179,6 +179,26 @@ export default function appointmentRoutes(
     await handler(req, res, next)
   })
 
+  router.get(paths.appointments.leftEarly.reason.pattern, async (req, res, next) => {
+    await auditService.logPageView(Page.SHOW_APPOINTMENT_LEFT_EARLY_REASON_PAGE, {
+      who: res.locals.user.username,
+      correlationId: req.id,
+    })
+
+    const handler = appointments.leftEarlyReasonController.show()
+    await handler(req, res, next)
+  })
+
+  router.post(paths.appointments.leftEarly.reason.pattern, async (req, res, next) => {
+    await auditService.logPageView(Page.SUBMIT_APPOINTMENT_LEFT_EARLY_REASON_PAGE, {
+      who: res.locals.user.username,
+      correlationId: req.id,
+    })
+
+    const handler = appointments.leftEarlyReasonController.submit()
+    await handler(req, res, next)
+  })
+
   router.get(paths.appointments.confirm.working.pattern, async (req, res, next) => {
     await auditService.logPageView(Page.SHOW_CONFIRM_WORKING_PAGE, {
       who: res.locals.user.username,
@@ -216,6 +236,16 @@ export default function appointmentRoutes(
     })
 
     const handler = appointments.confirmController.completed()
+    await handler(req, res, next)
+  })
+
+  router.get(paths.appointments.confirm.leftEarly.pattern, async (req, res, next) => {
+    await auditService.logPageView(Page.SHOW_CONFIRM_LEFT_EARLY_PAGE, {
+      who: res.locals.user.username,
+      correlationId: req.id,
+    })
+
+    const handler = appointments.confirmController.leftEarly()
     await handler(req, res, next)
   })
 
