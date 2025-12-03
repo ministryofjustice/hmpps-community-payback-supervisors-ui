@@ -8,8 +8,6 @@ export default class UnableToWorkPage extends BasePage {
 
   readonly expect: UnableToWorkPageAssertions
 
-  private readonly continueButtonLocator: Locator
-
   private readonly unableToWorkReasonLocator: Locator
 
   private readonly notesLocator: Locator
@@ -19,14 +17,9 @@ export default class UnableToWorkPage extends BasePage {
   constructor(readonly page: Page) {
     super(page)
     this.expect = new UnableToWorkPageAssertions(this)
-    this.continueButtonLocator = page.getByRole('button', { name: 'continue' })
     this.unableToWorkReasonLocator = page.getByRole('group', { name: this.titleText })
     this.notesLocator = page.getByLabel('Add notes')
     this.isSensitiveLocator = page.getByLabel('This information is not to be shared with the person on probation')
-  }
-
-  async clickContinue() {
-    await this.continueButtonLocator.click()
   }
 
   async checkAttendedFailedToComply() {

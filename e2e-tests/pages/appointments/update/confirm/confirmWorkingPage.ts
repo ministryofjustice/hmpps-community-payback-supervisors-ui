@@ -3,6 +3,6 @@ import BaseConfirmPage from './baseConfirmPage'
 
 export default class ConfirmWorkingPage extends BaseConfirmPage {
   constructor(readonly page: Page) {
-    super(page, 'Alexy Boyle has been recorded as starting work today')
+    super(page, 'Harry Wormwood has been recorded as starting work today')
   }
 }
