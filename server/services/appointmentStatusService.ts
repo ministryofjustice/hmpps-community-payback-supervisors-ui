@@ -1,4 +1,4 @@
-import { AppointmentDto, AppointmentSummaryDto, FormKeyDto, SessionDto } from '../@types/shared'
+import { AppointmentDto, FormKeyDto, SessionDto } from '../@types/shared'
 import { AppointmentStatusType } from '../@types/user-defined'
 import config from '../config'
 import FormClient from '../data/formClient'
@@ -17,17 +17,17 @@ export const APPOINTMENT_STATUS_FORM_TYPE = 'APPOINTMENT_STATUSES_SUPERVISOR'
 export default class AppointmentStatusService {
   constructor(private readonly formClient: FormClient) {}
 
-  async getStatus(appointment: AppointmentDto, username: string): Promise<AppointmentStatus> {
+  async getStatus(appointment: AppointmentDto, username: string): Promise<AppointmentStatusType> {
     const formKey = this.getFormKey(appointment)
     const data = await this.formClient.find<AppointmentStatuses>(formKey, username)
 
     const appointmentStatus = data?.appointmentStatuses.find(status => status.appointmentId === appointment.id)
 
     if (appointmentStatus) {
-      return appointmentStatus
+      return appointmentStatus.status
     }
 
-    return this.getNewAppointmentStatus(appointment)
+    return this.defaultAppointmentStatusType()
   }
 
   async getStatusesForSession(session: SessionDto, username: string): Promise<AppointmentStatus[]> {
@@ -38,7 +38,10 @@ export default class AppointmentStatusService {
 
     return session.appointmentSummaries.map(appointment => {
       return (
-        statusEntries.find(entry => entry.appointmentId === appointment.id) ?? this.getNewAppointmentStatus(appointment)
+        statusEntries.find(entry => entry.appointmentId === appointment.id) ?? {
+          appointmentId: appointment.id,
+          status: this.defaultAppointmentStatusType(),
+        }
       )
     })
   }
@@ -81,12 +84,8 @@ export default class AppointmentStatusService {
     await this.formClient.save(formKey, username, { appointmentStatuses })
   }
 
-  private getNewAppointmentStatus(appointment: AppointmentDto | AppointmentSummaryDto): AppointmentStatus {
-    const status: AppointmentStatusType = 'Scheduled'
-    return {
-      appointmentId: appointment.id,
-      status,
-    }
+  private defaultAppointmentStatusType(): AppointmentStatusType {
+    return 'Scheduled'
   }
 
   private getFormKey(sessionOrAppointment: Pick<SessionDto | AppointmentDto, 'projectCode' | 'date'>): FormKeyDto {

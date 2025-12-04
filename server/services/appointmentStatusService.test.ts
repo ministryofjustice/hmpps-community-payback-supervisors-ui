@@ -35,7 +35,7 @@ describe('AppointmentStatusService', () => {
       }
 
       expect(formClient.find).toHaveBeenCalledWith(expectedFormKey, userName)
-      expect(result).toEqual(expectedStatus)
+      expect(result).toEqual(expectedStatus.status)
     })
 
     it('returns default appointment status does not exist on the session statuses list', async () => {
@@ -46,10 +46,7 @@ describe('AppointmentStatusService', () => {
 
       const result = await appointmentStatusService.getStatus(appointment, userName)
 
-      expect(result).toEqual({
-        appointmentId: appointment.id,
-        status: 'Scheduled',
-      })
+      expect(result).toEqual('Scheduled')
     })
 
     it('returns default appointment status if no status list exists for the session', async () => {
@@ -58,10 +55,7 @@ describe('AppointmentStatusService', () => {
       formClient.find.mockResolvedValue(null)
       const result = await appointmentStatusService.getStatus(appointment, userName)
 
-      expect(result).toEqual({
-        appointmentId: appointment.id,
-        status: 'Scheduled',
-      })
+      expect(result).toEqual('Scheduled')
     })
   })
 
