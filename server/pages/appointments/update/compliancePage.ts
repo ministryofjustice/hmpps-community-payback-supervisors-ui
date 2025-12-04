@@ -32,6 +32,7 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
   constructor(
     private readonly action: AppointmentCompletedAction,
     private readonly query: ComplianceQuery,
+    private readonly contactOutcomeCode: string,
   ) {
     super()
   }
@@ -54,7 +55,7 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
 
   viewData(appointment: AppointmentDto): ViewData {
     return {
-      ...this.commonViewData(appointment),
+      ...this.commonViewData(appointment, this.contactOutcomeCode),
       hiVisItems: GovUkRadioGroup.yesNoItems({
         checkedValue: appointment.attendanceData?.hiVisWorn,
       }),
@@ -101,10 +102,18 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
     return paths.appointments.confirm.completed({ projectCode, appointmentId })
   }
 
-  protected updatePath(appointment: AppointmentDto): string {
-    return paths.appointments[this.action].compliance({
+  protected updatePath(appointment: AppointmentDto, contactOutcomeCode?: string): string {
+    if (this.action === 'completed') {
+      return paths.appointments.completed.compliance({
+        projectCode: appointment.projectCode,
+        appointmentId: appointment.id.toString(),
+      })
+    }
+
+    return paths.appointments.leftEarly.compliance({
       projectCode: appointment.projectCode,
       appointmentId: appointment.id.toString(),
+      contactOutcomeCode,
     })
   }
 

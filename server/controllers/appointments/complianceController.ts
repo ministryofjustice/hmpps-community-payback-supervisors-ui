@@ -1,21 +1,30 @@
 import type { Request, RequestHandler, Response } from 'express'
 import AppointmentService from '../../services/appointmentService'
 import generateErrorSummary from '../../utils/errorUtils'
-import { AppointmentCompletedAction, AppointmentParams } from '../../@types/user-defined'
+import {
+  AppointmentCompletedAction,
+  AppointmentParams,
+} from '../../@types/user-defined'
 import CompliancePage from '../../pages/appointments/update/compliancePage'
 import ReferenceDataService from '../../services/referenceDataService'
+
+type AppointmentParamsWithContactOutcomeCode = AppointmentParams & { contactOutcomeCode: string }
 
 export default class ComplianceController {
   constructor(private readonly appointmentService: AppointmentService) {}
 
   show(action: AppointmentCompletedAction): RequestHandler {
     return async (_req: Request, res: Response) => {
+      const { projectCode, appointmentId, contactOutcomeCode } =
+        _req.params as unknown as AppointmentParamsWithContactOutcomeCode
+
       const appointment = await this.appointmentService.getAppointment({
-        ...(_req.params as unknown as AppointmentParams),
+        projectCode,
+        appointmentId,
         username: res.locals.user.username,
       })
 
-      const page = new CompliancePage(action, {})
+      const page = new CompliancePage(action, {}, contactOutcomeCode)
 
       res.render('appointments/update/compliance', page.viewData(appointment))
     }
@@ -23,13 +32,16 @@ export default class ComplianceController {
 
   submit(action: AppointmentCompletedAction): RequestHandler {
     return async (_req: Request, res: Response) => {
-      const appointmentParams = _req.params as unknown as AppointmentParams
+      const { projectCode, appointmentId, contactOutcomeCode } =
+        _req.params as unknown as AppointmentParamsWithContactOutcomeCode
+
       const appointment = await this.appointmentService.getAppointment({
-        ...appointmentParams,
+        projectCode,
+        appointmentId,
         username: res.locals.user.username,
       })
 
-      const page = new CompliancePage(action, _req.body)
+      const page = new CompliancePage(action, _req.body, contactOutcomeCode)
       page.validate()
 
       if (page.hasErrors) {
@@ -40,17 +52,18 @@ export default class ComplianceController {
         })
       }
 
-      const contactOutcomeCode = action === 'completed' ? ReferenceDataService.attendedCompliedOutcomeCode : ''
+      const contactOutcome =
+        action === 'completed' ? ReferenceDataService.attendedCompliedOutcomeCode : contactOutcomeCode
 
-      const payload = page.requestBody(appointment, contactOutcomeCode)
+      const payload = page.requestBody(appointment, contactOutcome)
 
       await this.appointmentService.saveAppointment({
         username: res.locals.user.name,
-        projectCode: appointmentParams.projectCode,
+        projectCode,
         data: payload,
       })
 
-      return res.redirect(page.nextPath(appointmentParams.projectCode, appointmentParams.appointmentId))
+      return res.redirect(page.nextPath(projectCode, appointmentId))
     }
   }
 }

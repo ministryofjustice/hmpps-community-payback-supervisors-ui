@@ -8,11 +8,22 @@ export default class CompliancePage extends Page {
     super('Log compliance')
   }
 
-  static visit(appointment: AppointmentDto, action: AppointmentCompletedAction): CompliancePage {
-    const path = paths.appointments[action].compliance({
-      projectCode: appointment.projectCode,
-      appointmentId: appointment.id.toString(),
-    })
+  static visit(
+    appointment: AppointmentDto,
+    action: AppointmentCompletedAction,
+    contactOutcomeCode?: string,
+  ): CompliancePage {
+    const path =
+      action === 'completed'
+        ? paths.appointments.completed.compliance({
+            projectCode: appointment.projectCode,
+            appointmentId: appointment.id.toString(),
+          })
+        : paths.appointments.leftEarly.compliance({
+            projectCode: appointment.projectCode,
+            appointmentId: appointment.id.toString(),
+            contactOutcomeCode,
+          })
 
     cy.visit(path)
 

@@ -23,6 +23,10 @@ export interface AppointmentParams {
   projectCode: string
 }
 
+export interface AppointmentParamsWithContactOutcomeCode extends AppointmentParams {
+  contactOutcomeCode: string
+}
+
 export interface SaveAppointmentRequest extends BaseRequest {
   projectCode: string
   data: UpdateAppointmentOutcomeDto

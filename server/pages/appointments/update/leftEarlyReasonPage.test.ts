@@ -112,10 +112,13 @@ describe('LeftEarlyReasonPage', () => {
     it('should return path to the left early compliance page with project code and appointment Id', () => {
       const appointmentId = '1'
       const projectCode = '2'
-      const page = new LeftEarlyReasonPage()
+      const contactOutcomeCode = 'code'
+      const page = new LeftEarlyReasonPage({ leftEarlyReason: contactOutcomeCode })
       const result = page.nextPath(appointmentId, projectCode)
 
-      expect(result).toEqual(paths.appointments.leftEarly.compliance({ projectCode, appointmentId }))
+      expect(result).toEqual(
+        paths.appointments.leftEarly.compliance({ projectCode, appointmentId, contactOutcomeCode }),
+      )
     })
   })
 

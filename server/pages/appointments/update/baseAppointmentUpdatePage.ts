@@ -24,7 +24,7 @@ export default abstract class BaseAppointmentUpdatePage<TBody> {
 
   protected abstract backPath(appointment: AppointmentDto): string
 
-  protected abstract updatePath(appointment: AppointmentDto): string
+  protected abstract updatePath(appointment: AppointmentDto, contactOutcomeCode?: string): string
 
   protected abstract getValidationErrors(...args: Array<unknown>): ValidationErrors<TBody> | undefined
 
@@ -44,11 +44,11 @@ export default abstract class BaseAppointmentUpdatePage<TBody> {
     }
   }
 
-  protected commonViewData(appointment: AppointmentDto): AppointmentUpdatePageViewData {
+  protected commonViewData(appointment: AppointmentDto, contactOutcomeCode?: string): AppointmentUpdatePageViewData {
     return {
       offender: new Offender(appointment.offender),
       backPath: this.backPath(appointment),
-      updatePath: this.updatePath(appointment),
+      updatePath: this.updatePath(appointment, contactOutcomeCode),
     }
   }
 

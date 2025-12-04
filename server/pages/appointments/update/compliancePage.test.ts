@@ -40,33 +40,62 @@ describe('CompliancePage', () => {
       expect(result.offender).toBe(offender)
     })
 
-    it.each(['completed', 'leftEarly'])(
-      'should return an object containing a back link to the end time page',
-      async (action: AppointmentCompletedAction) => {
-        page = new CompliancePage(action, {})
+    describe('completed', () => {
+      it('should return an object containing a back link to the end time page', () => {
+        page = new CompliancePage('completed', {})
         const result = page.viewData(appointment)
-        expect(result.backPath).toBe(
-          paths.appointments[action].endTime({
-            projectCode: appointment.projectCode,
-            appointmentId: appointment.id.toString(),
-          }),
-        )
-      },
-    )
 
-    it.each(['completed', 'leftEarly'])(
-      'should return an object containing an update link for the form',
-      async (action: AppointmentCompletedAction) => {
-        page = new CompliancePage(action, {})
-        const result = page.viewData(appointment)
-        expect(result.updatePath).toBe(
-          paths.appointments[action].compliance({
+        expect(result.backPath).toBe(
+          paths.appointments.completed.endTime({
             projectCode: appointment.projectCode,
             appointmentId: appointment.id.toString(),
           }),
         )
-      },
-    )
+      })
+    })
+
+    describe('leftEarly', () => {
+      it('should return an object containing a back link to the end time page', () => {
+        page = new CompliancePage('leftEarly', {})
+        const result = page.viewData(appointment, 'code')
+
+        expect(result.backPath).toBe(
+          paths.appointments.leftEarly.endTime({
+            projectCode: appointment.projectCode,
+            appointmentId: appointment.id.toString(),
+          }),
+        )
+      })
+    })
+
+    describe('completed', () => {
+      it('should return an object containing an update link for the form', () => {
+        page = new CompliancePage('completed', {})
+        const result = page.viewData(appointment)
+
+        expect(result.updatePath).toBe(
+          paths.appointments.completed.compliance({
+            projectCode: appointment.projectCode,
+            appointmentId: appointment.id.toString(),
+          }),
+        )
+      })
+    })
+
+    describe('leftEarly', () => {
+      it('should return an object containing an update link for the form', () => {
+        page = new CompliancePage('leftEarly', {})
+        const result = page.viewData(appointment, 'code')
+
+        expect(result.updatePath).toBe(
+          paths.appointments.leftEarly.compliance({
+            projectCode: appointment.projectCode,
+            appointmentId: appointment.id.toString(),
+            contactOutcomeCode: 'code',
+          }),
+        )
+      })
+    })
 
     describe('items', () => {
       it('should return items for hiVis', async () => {

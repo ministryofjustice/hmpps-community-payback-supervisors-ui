@@ -27,7 +27,7 @@ const paths = {
     leftEarly: {
       endTime: appointmentLeftEarlyPath.path('finish-time'),
       reason: appointmentLeftEarlyPath.path('reason'),
-      compliance: appointmentLeftEarlyPath.path('compliance'),
+      compliance: appointmentLeftEarlyPath.path('compliance/:contactOutcomeCode'),
     },
     absent: {
       startTime: appointmentAbsentPath.path('start-time'),
