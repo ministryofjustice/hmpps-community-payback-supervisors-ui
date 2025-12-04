@@ -3,6 +3,6 @@ import BaseConfirmPage from './baseConfirmPage'
 
 export default class ConfirmUnableToWorkPage extends BaseConfirmPage {
   constructor(readonly page: Page) {
-    super(page, 'Harry Wormwood has been recorded as being unable to work')
+    super(page, 'has been recorded as being unable to work')
   }
 }

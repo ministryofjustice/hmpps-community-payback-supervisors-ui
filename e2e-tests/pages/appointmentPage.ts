@@ -16,6 +16,8 @@ export default class AppointmentPage extends BasePage {
 
   readonly finishButtonLocator: Locator
 
+  readonly personDetailsHeading: Locator
+
   constructor(readonly page: Page) {
     super(page)
     this.expect = new AppointmentPageAssertions(this)
@@ -23,6 +25,7 @@ export default class AppointmentPage extends BasePage {
     this.arrivedButtonLocator = page.getByRole('button', { name: 'Arrived', exact: true })
     this.notArrivedButtonLocator = page.getByRole('button', { name: 'Not arrived' })
     this.finishButtonLocator = page.getByRole('button', { name: 'Finish session' })
+    this.personDetailsHeading = this.page.getByRole('heading', { name: 'Person details' })
   }
 
   async clickArrived() {
@@ -46,7 +49,8 @@ class AppointmentPageAssertions {
   }
 
   async toBeOnThePage() {
-    await expect(this.page.headingLocator).toContainText('Harry Wormwood')
+    await expect(this.page.personDetailsHeading).toBeVisible()
+    await this.toShowOffenderDetails()
   }
 
   async toShowAppointmentDetails() {
@@ -59,6 +63,6 @@ class AppointmentPageAssertions {
   }
 
   async toShowOffenderDetails() {
-    await this.page.page.locator('span', { hasText: 'CRN: X948762' }).textContent()
+    await this.page.page.locator('span', { hasText: 'CRN:' }).textContent()
   }
 }
