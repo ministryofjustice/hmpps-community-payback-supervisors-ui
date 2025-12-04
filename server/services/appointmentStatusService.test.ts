@@ -1,4 +1,5 @@
 import { FormKeyDto } from '../@types/shared'
+import { AppointmentStatusType } from '../@types/user-defined'
 import config from '../config'
 import FormClient from '../data/formClient'
 import appointmentFactory from '../testutils/factories/appointmentFactory'
@@ -38,25 +39,39 @@ describe('AppointmentStatusService', () => {
       expect(result).toEqual(expectedStatus.status)
     })
 
-    it('returns default appointment status does not exist on the session statuses list', async () => {
-      const appointment = appointmentFactory.build()
-      const appointmentStatuses = appointmentStatusFactory.buildList(2)
+    it.each([
+      ['code', 'Not expected'],
+      [null, 'Scheduled'],
+      [undefined, 'Scheduled'],
+    ])(
+      'returns default appointment status does not exist on the session statuses list',
+      async (contactOutcomeCode: string, status: AppointmentStatusType) => {
+        const appointment = appointmentFactory.build({ contactOutcomeCode })
+        const appointmentStatuses = appointmentStatusFactory.buildList(2)
 
-      formClient.find.mockResolvedValue({ appointmentStatuses })
+        formClient.find.mockResolvedValue({ appointmentStatuses })
 
-      const result = await appointmentStatusService.getStatus(appointment, userName)
+        const result = await appointmentStatusService.getStatus(appointment, userName)
 
-      expect(result).toEqual('Scheduled')
-    })
+        expect(result).toEqual(status)
+      },
+    )
 
-    it('returns default appointment status if no status list exists for the session', async () => {
-      const appointment = appointmentFactory.build()
+    it.each([
+      ['code', 'Not expected'],
+      [null, 'Scheduled'],
+      [undefined, 'Scheduled'],
+    ])(
+      'returns default appointment status if no status list exists for the session',
+      async (contactOutcomeCode: string, status: AppointmentStatusType) => {
+        const appointment = appointmentFactory.build({ contactOutcomeCode })
 
-      formClient.find.mockResolvedValue(null)
-      const result = await appointmentStatusService.getStatus(appointment, userName)
+        formClient.find.mockResolvedValue(null)
+        const result = await appointmentStatusService.getStatus(appointment, userName)
 
-      expect(result).toEqual('Scheduled')
-    })
+        expect(result).toEqual(status)
+      },
+    )
   })
 
   describe('getStatusesForSession', () => {
@@ -85,7 +100,7 @@ describe('AppointmentStatusService', () => {
       )
       formClient.find.mockResolvedValue({ appointmentStatuses })
 
-      const newAppointment = appointmentSummaryFactory.build()
+      const newAppointment = appointmentSummaryFactory.build({ contactOutcome: null })
       session.appointmentSummaries.push(newAppointment)
       const updatedStatuses = [...appointmentStatuses, { appointmentId: newAppointment.id, status: 'Scheduled' }]
 
@@ -101,7 +116,7 @@ describe('AppointmentStatusService', () => {
     })
 
     it('calls form client with project code and date and returns default statuses if result is null', async () => {
-      const appointmentSummary = appointmentSummaryFactory.build()
+      const appointmentSummary = appointmentSummaryFactory.build({ contactOutcome: null })
       const session = sessionFactory.build({ appointmentSummaries: [appointmentSummary] })
 
       formClient.find.mockResolvedValue(null)

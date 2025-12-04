@@ -27,7 +27,7 @@ export default class AppointmentStatusService {
       return appointmentStatus.status
     }
 
-    return this.defaultAppointmentStatusType()
+    return this.defaultAppointmentStatusType(appointment.contactOutcomeCode)
   }
 
   async getStatusesForSession(session: SessionDto, username: string): Promise<AppointmentStatus[]> {
@@ -40,7 +40,7 @@ export default class AppointmentStatusService {
       return (
         statusEntries.find(entry => entry.appointmentId === appointment.id) ?? {
           appointmentId: appointment.id,
-          status: this.defaultAppointmentStatusType(),
+          status: this.defaultAppointmentStatusType(appointment.contactOutcome?.code),
         }
       )
     })
@@ -84,8 +84,8 @@ export default class AppointmentStatusService {
     await this.formClient.save(formKey, username, { appointmentStatuses })
   }
 
-  private defaultAppointmentStatusType(): AppointmentStatusType {
-    return 'Scheduled'
+  private defaultAppointmentStatusType(contactOutcomeCode: string | null): AppointmentStatusType {
+    return contactOutcomeCode ? 'Not expected' : 'Scheduled'
   }
 
   private getFormKey(sessionOrAppointment: Pick<SessionDto | AppointmentDto, 'projectCode' | 'date'>): FormKeyDto {

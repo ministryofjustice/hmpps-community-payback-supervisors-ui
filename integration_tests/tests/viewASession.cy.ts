@@ -33,6 +33,7 @@ import AppointmentPage from '../pages/appointment'
 import appointmentFactory from '../../server/testutils/factories/appointmentFactory'
 import sessionSummaryFactory from '../../server/testutils/factories/sessionSummaryFactory'
 import appointmentStatusFactory from '../../server/testutils/factories/appointmentStatusFactory'
+import { contactOutcomeFactory } from '../../server/testutils/factories/contactOutcomeFactory'
 
 context('Home', () => {
   beforeEach(() => {
@@ -99,16 +100,19 @@ context('Session', () => {
   // Scenario: Viewing statuses
   describe('statuses', () => {
     //  Scenario: viewing a new session with no appointment statuses saved
-    it('Viewing a person on a session', () => {
+    it('Viewing a new session with no statuses', () => {
       // Given I am on a session page for a new session
-      const appointmentSummaries = appointmentSummaryFactory.buildList(3)
+      const appointmentSummaries = [
+        appointmentSummaryFactory.build({ contactOutcome: null }),
+        appointmentSummaryFactory.build({ contactOutcome: contactOutcomeFactory.build() }),
+      ]
       const session = sessionFactory.build({ appointmentSummaries })
       cy.task('stubFindSession', { session })
       cy.task('stubGetFormNotFound', { session })
       const sessionPage = SessionPage.visit(session)
 
       // Then I see scheduled statuses for each offender
-      sessionPage.shouldShowAppointmentsWithScheduledStatus()
+      sessionPage.shouldShowAppointmentsWithStatuses(['Scheduled', 'Not expected'])
     })
 
     //  Scenario: viewing a session's existing appointment statuses
@@ -125,7 +129,7 @@ context('Session', () => {
       const sessionPage = SessionPage.visit(session)
 
       // Then I see saved statuses for each offender
-      sessionPage.shouldShowAppointmentsWithStatuses(appointmentStatuses)
+      sessionPage.shouldShowAppointmentsWithStatuses(appointmentStatuses.map(entry => entry.status))
     })
 
     //  Scenario: viewing an in progress session with new appointments
@@ -136,8 +140,11 @@ context('Session', () => {
         appointmentStatusFactory.build({ appointmentId: appointment.id }),
       )
 
-      const newAppointment = appointmentSummaryFactory.build()
-      appointmentSummaries.push(newAppointment)
+      const newAppointments = [
+        appointmentSummaryFactory.build({ contactOutcome: null }),
+        appointmentSummaryFactory.build({ contactOutcome: contactOutcomeFactory.build() }),
+      ]
+      appointmentSummaries.push(...newAppointments)
       const session = sessionFactory.build({ appointmentSummaries })
       cy.task('stubFindSession', { session })
       cy.task('stubGetForm', { sessionOrAppointment: session, appointmentStatuses })
@@ -146,8 +153,9 @@ context('Session', () => {
 
       // Then I see saved statuses for each offender and statuses for new appointments
       sessionPage.shouldShowAppointmentsWithStatuses([
-        ...appointmentStatuses,
-        { appointmentId: newAppointment.id, status: 'Scheduled' },
+        ...appointmentStatuses.map(entry => entry.status),
+        'Scheduled',
+        'Not expected',
       ])
     })
   })

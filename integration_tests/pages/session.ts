@@ -2,7 +2,7 @@ import { OffenderFullDto, SessionDto } from '../../server/@types/shared'
 import Page from './page'
 import DateTimeFormats from '../../server/utils/dateTimeUtils'
 import paths from '../../server/paths'
-import { AppointmentStatus } from '../../server/services/appointmentStatusService'
+import { AppointmentStatusType } from '../../server/@types/user-defined'
 
 export default class SessionPage extends Page {
   offenders: OffenderFullDto[]
@@ -44,12 +44,9 @@ export default class SessionPage extends Page {
     })
   }
 
-  shouldShowAppointmentsWithStatuses(appointmentStatuses: AppointmentStatus[]) {
+  shouldShowAppointmentsWithStatuses(appointmentStatuses: AppointmentStatusType[]) {
     this.offenders.forEach((offender, i) => {
-      cy.contains('li', `${offender.forename} ${offender.surname}`).should(
-        'contain.text',
-        appointmentStatuses[i].status,
-      )
+      cy.contains('li', `${offender.forename} ${offender.surname}`).should('contain.text', appointmentStatuses[i])
     })
   }
 }
