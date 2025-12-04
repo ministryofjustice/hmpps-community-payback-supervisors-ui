@@ -3,7 +3,7 @@ import path from 'path'
 import nunjucks from 'nunjucks'
 import express from 'express'
 import fs from 'fs'
-import { initialiseName } from './utils'
+import { initialiseName, pluralise } from './utils'
 import config from '../config'
 import logger from '../../logger'
 import paths from '../paths'
@@ -41,6 +41,7 @@ export default function nunjucksSetup(app: express.Express): void {
   )
 
   njkEnv.addFilter('initialiseName', initialiseName)
+  njkEnv.addFilter('pluralise', pluralise)
   njkEnv.addFilter('assetMap', (url: string) => assetManifest[url] || url)
   njkEnv.addGlobal('paths', { ...paths, ...staticPaths })
   njkEnv.addGlobal('layoutUtils', LayoutUtils)

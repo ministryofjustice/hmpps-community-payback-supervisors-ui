@@ -31,3 +31,7 @@ export const notFound = (res: Response) => {
     status: 404,
   })
 }
+
+export const pluralise = (str: string, count: number, suffix: string = 's') => {
+  return count !== 1 ? `${str}${suffix}` : str
+}
