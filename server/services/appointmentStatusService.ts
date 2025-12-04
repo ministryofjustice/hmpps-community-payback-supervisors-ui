@@ -116,8 +116,8 @@ export default class AppointmentStatusService {
     await this.formClient.save(formKey, username, { appointmentStatuses })
   }
 
-  private getNewAppointmentStatus(appointment: AppointmentDto | AppointmentSummaryDto): AppointmentStatus {
-    const status: AppointmentStatusType = 'Scheduled'
+  private getNewAppointmentStatus(appointment: AppointmentSummaryDto): AppointmentStatus {
+    const status: AppointmentStatusType = appointment.contactOutcome ? 'Not expected' : 'Scheduled'
     return {
       appointmentId: appointment.id,
       status,

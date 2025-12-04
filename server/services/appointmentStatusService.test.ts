@@ -85,7 +85,7 @@ describe('AppointmentStatusService', () => {
       )
       formClient.find.mockResolvedValue({ appointmentStatuses })
 
-      const newAppointment = appointmentSummaryFactory.build()
+      const newAppointment = appointmentSummaryFactory.build({ contactOutcome: null })
       session.appointmentSummaries.push(newAppointment)
       const updatedStatuses = [...appointmentStatuses, { appointmentId: newAppointment.id, status: 'Scheduled' }]
 
@@ -102,7 +102,7 @@ describe('AppointmentStatusService', () => {
     })
 
     it('calls form client with project code and date and saves new form if result is null', async () => {
-      const appointmentSummary = appointmentSummaryFactory.build()
+      const appointmentSummary = appointmentSummaryFactory.build({ contactOutcome: null })
       const session = sessionFactory.build({ appointmentSummaries: [appointmentSummary] })
 
       formClient.find.mockResolvedValue(null)
