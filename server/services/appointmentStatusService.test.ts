@@ -1,4 +1,5 @@
 import { FormKeyDto } from '../@types/shared'
+import { AppointmentStatusType } from '../@types/user-defined'
 import config from '../config'
 import FormClient from '../data/formClient'
 import appointmentFactory from '../testutils/factories/appointmentFactory'
@@ -35,28 +36,42 @@ describe('AppointmentStatusService', () => {
       }
 
       expect(formClient.find).toHaveBeenCalledWith(expectedFormKey, userName)
-      expect(result).toEqual(expectedStatus)
+      expect(result).toEqual(expectedStatus.status)
     })
 
-    it('throws an error if given appointment status does not exist on the session statuses list', async () => {
-      const appointment = appointmentFactory.build()
-      const appointmentStatuses = appointmentStatusFactory.buildList(2)
+    it.each([
+      ['code', 'Not expected'],
+      [null, 'Scheduled'],
+      [undefined, 'Scheduled'],
+    ])(
+      'returns default appointment status does not exist on the session statuses list',
+      async (contactOutcomeCode: string, status: AppointmentStatusType) => {
+        const appointment = appointmentFactory.build({ contactOutcomeCode })
+        const appointmentStatuses = appointmentStatusFactory.buildList(2)
 
-      formClient.find.mockResolvedValue({ appointmentStatuses })
+        formClient.find.mockResolvedValue({ appointmentStatuses })
 
-      expect(() => appointmentStatusService.getStatus(appointment, userName)).rejects.toThrow(
-        `No appointment status found for project ${appointment.projectCode} on ${appointment.date}`,
-      )
-    })
+        const result = await appointmentStatusService.getStatus(appointment, userName)
 
-    it('throws an error if no status list exists for the session', async () => {
-      const appointment = appointmentFactory.build()
+        expect(result).toEqual(status)
+      },
+    )
 
-      formClient.find.mockResolvedValue(null)
-      expect(() => appointmentStatusService.getStatus(appointment, userName)).rejects.toThrow(
-        `No appointment status found for project ${appointment.projectCode} on ${appointment.date}`,
-      )
-    })
+    it.each([
+      ['code', 'Not expected'],
+      [null, 'Scheduled'],
+      [undefined, 'Scheduled'],
+    ])(
+      'returns default appointment status if no status list exists for the session',
+      async (contactOutcomeCode: string, status: AppointmentStatusType) => {
+        const appointment = appointmentFactory.build({ contactOutcomeCode })
+
+        formClient.find.mockResolvedValue(null)
+        const result = await appointmentStatusService.getStatus(appointment, userName)
+
+        expect(result).toEqual(status)
+      },
+    )
   })
 
   describe('getStatusesForSession', () => {
@@ -78,14 +93,14 @@ describe('AppointmentStatusService', () => {
       expect(result).toEqual(appointmentStatuses)
     })
 
-    it('creates new statuses for any new appointments on a session', async () => {
+    it('returns default statuses for any new appointments on a session', async () => {
       const session = sessionFactory.build()
       const appointmentStatuses = session.appointmentSummaries.map(appointment =>
         appointmentStatusFactory.build({ appointmentId: appointment.id }),
       )
       formClient.find.mockResolvedValue({ appointmentStatuses })
 
-      const newAppointment = appointmentSummaryFactory.build()
+      const newAppointment = appointmentSummaryFactory.build({ contactOutcome: null })
       session.appointmentSummaries.push(newAppointment)
       const updatedStatuses = [...appointmentStatuses, { appointmentId: newAppointment.id, status: 'Scheduled' }]
 
@@ -96,25 +111,19 @@ describe('AppointmentStatusService', () => {
       }
 
       expect(formClient.find).toHaveBeenCalledWith(expectedFormKey, userName)
-      expect(formClient.save).toHaveBeenCalledWith(expectedFormKey, userName, { appointmentStatuses: updatedStatuses })
 
       expect(result).toEqual(updatedStatuses)
     })
 
-    it('calls form client with project code and date and saves new form if result is null', async () => {
-      const appointmentSummary = appointmentSummaryFactory.build()
+    it('calls form client with project code and date and returns default statuses if result is null', async () => {
+      const appointmentSummary = appointmentSummaryFactory.build({ contactOutcome: null })
       const session = sessionFactory.build({ appointmentSummaries: [appointmentSummary] })
 
       formClient.find.mockResolvedValue(null)
       const result = await appointmentStatusService.getStatusesForSession(session, userName)
-      const expectedFormKey: FormKeyDto = {
-        type: APPOINTMENT_STATUS_FORM_TYPE,
-        id: session.projectCode + session.date,
-      }
 
       const appointmentStatuses = [{ appointmentId: appointmentSummary.id, status: 'Scheduled' }]
 
-      expect(formClient.save).toHaveBeenCalledWith(expectedFormKey, userName, { appointmentStatuses })
       expect(result).toEqual(appointmentStatuses)
     })
   })
@@ -140,24 +149,38 @@ describe('AppointmentStatusService', () => {
       })
     })
 
-    it('throws an error if given appointment status does not exist on the session statuses list', async () => {
+    it('saves new status if given appointment status does not exist on the session statuses list', async () => {
+      const status = 'Working'
       const appointment = appointmentFactory.build()
       const appointmentStatuses = appointmentStatusFactory.buildList(2)
 
       formClient.find.mockResolvedValue({ appointmentStatuses })
 
-      expect(() => appointmentStatusService.updateStatus(appointment, 'Working', userName)).rejects.toThrow(
-        `No appointment status found for project ${appointment.projectCode} on ${appointment.date}`,
-      )
+      const updatedStatuses = [...appointmentStatuses, { appointmentId: appointment.id, status }]
+      const expectedFormKey: FormKeyDto = {
+        type: APPOINTMENT_STATUS_FORM_TYPE,
+        id: appointment.projectCode + appointment.date,
+      }
+
+      await appointmentStatusService.updateStatus(appointment, status, userName)
+
+      expect(formClient.save).toHaveBeenCalledWith(expectedFormKey, userName, { appointmentStatuses: updatedStatuses })
     })
 
-    it('throws an error if no status list exists for the session', async () => {
+    it('saves new status if no status list exists for the session', async () => {
+      const status = 'Working'
       const appointment = appointmentFactory.build()
 
       formClient.find.mockResolvedValue(null)
-      expect(() => appointmentStatusService.updateStatus(appointment, 'Working', userName)).rejects.toThrow(
-        `No appointment status found for project ${appointment.projectCode} on ${appointment.date}`,
-      )
+      const appointmentStatuses = [{ appointmentId: appointment.id, status }]
+      const expectedFormKey: FormKeyDto = {
+        type: APPOINTMENT_STATUS_FORM_TYPE,
+        id: appointment.projectCode + appointment.date,
+      }
+
+      await appointmentStatusService.updateStatus(appointment, status, userName)
+
+      expect(formClient.save).toHaveBeenCalledWith(expectedFormKey, userName, { appointmentStatuses })
     })
   })
 

@@ -25,7 +25,7 @@ export default class ShowDetailsController {
 
       const page = new AppointmentShowDetailsPage()
 
-      res.render('appointments/show', page.viewData(appointment, appointmentStatus.status))
+      res.render('appointments/show', page.viewData(appointment, appointmentStatus))
     }
   }
 }

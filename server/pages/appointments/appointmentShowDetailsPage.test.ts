@@ -1,3 +1,4 @@
+import { AppointmentStatusType } from '../../@types/user-defined'
 import Offender from '../../models/offender'
 import paths from '../../paths'
 import appointmentFactory from '../../testutils/factories/appointmentFactory'
@@ -54,23 +55,26 @@ describe('AppointmentShowDetailsPage', () => {
     })
 
     describe('actions', () => {
-      it('should include arrived links if status is "Scheduled"', () => {
-        const appointment = appointmentFactory.build()
-        const page = new AppointmentShowDetailsPage()
-        const result = page.viewData(appointment, 'Scheduled')
-        const { projectCode, id } = appointment
+      it.each(['Scheduled', 'Not expected'])(
+        'should include arrived links if status is "%s"',
+        (status: AppointmentStatusType) => {
+          const appointment = appointmentFactory.build()
+          const page = new AppointmentShowDetailsPage()
+          const result = page.viewData(appointment, status)
+          const { projectCode, id } = appointment
 
-        expect(result.actions).toEqual([
-          {
-            text: 'Arrived',
-            href: paths.appointments.arrived.startTime({ projectCode, appointmentId: id.toString() }),
-          },
-          {
-            text: 'Not arrived',
-            href: paths.appointments.absent.startTime({ projectCode, appointmentId: id.toString() }),
-          },
-        ])
-      })
+          expect(result.actions).toEqual([
+            {
+              text: 'Arrived',
+              href: paths.appointments.arrived.startTime({ projectCode, appointmentId: id.toString() }),
+            },
+            {
+              text: 'Not arrived',
+              href: paths.appointments.absent.startTime({ projectCode, appointmentId: id.toString() }),
+            },
+          ])
+        },
+      )
 
       it('should include finish session links if status is "Working"', () => {
         const appointment = appointmentFactory.build()
