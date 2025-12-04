@@ -38,24 +38,30 @@ describe('AppointmentStatusService', () => {
       expect(result).toEqual(expectedStatus)
     })
 
-    it('throws an error if given appointment status does not exist on the session statuses list', async () => {
+    it('returns default appointment status does not exist on the session statuses list', async () => {
       const appointment = appointmentFactory.build()
       const appointmentStatuses = appointmentStatusFactory.buildList(2)
 
       formClient.find.mockResolvedValue({ appointmentStatuses })
 
-      expect(() => appointmentStatusService.getStatus(appointment, userName)).rejects.toThrow(
-        `No appointment status found for project ${appointment.projectCode} on ${appointment.date}`,
-      )
+      const result = await appointmentStatusService.getStatus(appointment, userName)
+
+      expect(result).toEqual({
+        appointmentId: appointment.id,
+        status: 'Scheduled',
+      })
     })
 
-    it('throws an error if no status list exists for the session', async () => {
+    it('returns default appointment status if no status list exists for the session', async () => {
       const appointment = appointmentFactory.build()
 
       formClient.find.mockResolvedValue(null)
-      expect(() => appointmentStatusService.getStatus(appointment, userName)).rejects.toThrow(
-        `No appointment status found for project ${appointment.projectCode} on ${appointment.date}`,
-      )
+      const result = await appointmentStatusService.getStatus(appointment, userName)
+
+      expect(result).toEqual({
+        appointmentId: appointment.id,
+        status: 'Scheduled',
+      })
     })
   })
 
