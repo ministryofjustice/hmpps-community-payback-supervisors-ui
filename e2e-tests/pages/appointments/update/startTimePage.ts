@@ -5,11 +5,13 @@ import BasePage from '../../basePage'
 import { AppointmentArrivedAction } from '../../../../server/@types/user-defined'
 
 export default class StartTimePage extends BasePage {
-  readonly titleText = this.getExpectedTitle()
+  readonly titleText = this.getExpectedTitlePattern()
 
   readonly expect: StartTimePageAssertions
 
   private readonly startTimeFieldLocator: Locator
+
+  question: Locator
 
   constructor(
     readonly page: Page,
@@ -18,12 +20,12 @@ export default class StartTimePage extends BasePage {
     super(page)
     this.expect = new StartTimePageAssertions(this)
     this.startTimeFieldLocator = page.getByLabel(this.titleText)
+    this.question = this.headingLocator.getByText("You're logging")
   }
 
-  getExpectedTitle() {
-    return this.action === 'arrived'
-      ? "You're logging Harry Wormwood as having arrived at:"
-      : "You're logging Harry Wormwood as absent today at:"
+  getExpectedTitlePattern() {
+    const questionEnd = this.action === 'arrived' ? 'as having arrived at:' : 'as absent today at:'
+    return new RegExp(`You're logging ([a-zA-Z- ]*) ${questionEnd}`)
   }
 
   async enterAStartTime() {
@@ -35,6 +37,6 @@ class StartTimePageAssertions {
   constructor(private readonly page: StartTimePage) {}
 
   async toBeOnThePage() {
-    await expect(this.page.headingLocator).toContainText(this.page.getExpectedTitle())
+    await expect(this.page.question).toContainText(this.page.getExpectedTitlePattern())
   }
 }

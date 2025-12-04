@@ -5,7 +5,7 @@ import BasePage from '../../basePage'
 import { AppointmentCompletedAction } from '../../../../server/@types/user-defined'
 
 export default class EndTimePage extends BasePage {
-  readonly titleText = this.getExpectedTitle()
+  readonly titleText = this.getExpectedTitlePattern()
 
   readonly expect: EndTimePageAssertions
 
@@ -17,10 +17,10 @@ export default class EndTimePage extends BasePage {
     this.expect = new EndTimePageAssertions(this)
   }
 
-  getExpectedTitle() {
+  getExpectedTitlePattern() {
     return this.action === 'completed'
-      ? "You're logging Harry Wormwood as finishing today at:"
-      : "You're logging out Harry Wormwood early at:"
+      ? /You're logging ([a-zA-Z- ]*) as finishing today at:/
+      : /You're logging out ([a-zA-Z- ]*) early at:/
   }
 }
 
@@ -28,6 +28,6 @@ class EndTimePageAssertions {
   constructor(private readonly page: EndTimePage) {}
 
   async toBeOnThePage() {
-    await expect(this.page.headingLocator).toContainText(this.page.getExpectedTitle())
+    await expect(this.page.headingLocator).toContainText(this.page.getExpectedTitlePattern())
   }
 }
