@@ -34,18 +34,15 @@ export default class AppointmentStatusService {
     const formKey = this.getFormKey(session)
     const data = await this.formClient.find<AppointmentStatuses>(formKey, username)
 
-    if (data) {
-      return this.getOrCreateAllAppointmentStatuses(data.appointmentStatuses, session, formKey, username)
-    }
+    const statusEntries = data?.appointmentStatuses ?? []
 
-    return this.createStatusesForSession(session, username)
+    return session.appointmentSummaries.map(appointment => {
+      return (
+        statusEntries.find(entry => entry.appointmentId === appointment.id) ?? this.getNewAppointmentStatus(appointment)
+      )
+    })
   }
 
-  /**
-   * Updates an existing status for a single appointment.
-   * Assumes that `getStatusesForSession` (and implicitly `createStatusesForSession`) has been called previously for a session,
-   * as the appointment page is only accessible from the session page—where statuses are set up for the session appointments.
-   */
   async updateStatus(appointment: AppointmentDto, statusType: AppointmentStatusType, username: string): Promise<void> {
     const formKey = this.getFormKey(appointment)
     const data = await this.formClient.find<AppointmentStatuses>(formKey, username)
@@ -74,34 +71,6 @@ export default class AppointmentStatusService {
     }
 
     throw new Error('Clearing session statuses not enabled')
-  }
-
-  private async getOrCreateAllAppointmentStatuses(
-    appointmentStatuses: AppointmentStatus[],
-    session: SessionDto,
-    formKey: FormKeyDto,
-    username: string,
-  ) {
-    const newAppointmentStatuses = session.appointmentSummaries
-      .filter(appointment => !appointmentStatuses.find(status => status.appointmentId === appointment.id))
-      .map(this.getNewAppointmentStatus)
-
-    if (newAppointmentStatuses.length) {
-      appointmentStatuses.push(...newAppointmentStatuses)
-      await this.saveStatusesForSession(formKey, username, appointmentStatuses)
-    }
-
-    return appointmentStatuses
-  }
-
-  private async createStatusesForSession(session: SessionDto, username: string): Promise<AppointmentStatus[]> {
-    const formKey = this.getFormKey(session)
-
-    const appointmentStatuses = session.appointmentSummaries.map(this.getNewAppointmentStatus)
-
-    await this.saveStatusesForSession(formKey, username, appointmentStatuses)
-
-    return appointmentStatuses
   }
 
   private async saveStatusesForSession(
