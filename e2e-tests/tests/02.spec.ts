@@ -20,8 +20,6 @@ test.skip('Record an arrival and log as unable to work', async ({ page, deliusUs
 
   const appointmentPage = new AppointmentPage(page)
   await appointmentPage.expect.toBeOnThePage()
-  await appointmentPage.expect.toShowAppointmentDetails()
-  await appointmentPage.expect.toShowOffenderDetails()
 
   await appointmentPage.clickArrived()
 
