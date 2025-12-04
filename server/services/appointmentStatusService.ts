@@ -27,7 +27,7 @@ export default class AppointmentStatusService {
       return appointmentStatus
     }
 
-    return this.getNewAppointmentStatus(appointment)
+    return this.getDefaultAppointmentStatus(appointment)
   }
 
   async getStatusesForSession(session: SessionDto, username: string): Promise<AppointmentStatus[]> {
@@ -38,7 +38,8 @@ export default class AppointmentStatusService {
 
     return session.appointmentSummaries.map(appointment => {
       return (
-        statusEntries.find(entry => entry.appointmentId === appointment.id) ?? this.getNewAppointmentStatus(appointment)
+        statusEntries.find(entry => entry.appointmentId === appointment.id) ??
+        this.getDefaultAppointmentStatus(appointment)
       )
     })
   }
@@ -81,7 +82,7 @@ export default class AppointmentStatusService {
     await this.formClient.save(formKey, username, { appointmentStatuses })
   }
 
-  private getNewAppointmentStatus(appointment: AppointmentDto | AppointmentSummaryDto): AppointmentStatus {
+  private getDefaultAppointmentStatus(appointment: AppointmentDto | AppointmentSummaryDto): AppointmentStatus {
     const status: AppointmentStatusType = 'Scheduled'
     return {
       appointmentId: appointment.id,
