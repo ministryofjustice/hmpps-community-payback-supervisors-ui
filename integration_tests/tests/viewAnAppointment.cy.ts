@@ -36,11 +36,15 @@ import appointmentFactory from '../../server/testutils/factories/appointmentFact
 import StartTimePage from '../pages/appointments/update/startTimePage'
 import appointmentStatusFactory from '../../server/testutils/factories/appointmentStatusFactory'
 import EndTimePage from '../pages/appointments/update/endTimePage'
+import sessionSummaryFactory from '../../server/testutils/factories/sessionSummaryFactory'
 
 context('viewAnAppointment', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
+
+    const sessionSummary = sessionSummaryFactory.build({ date: '2025-09-15' })
+    cy.task('stubNextSessions', { sessionSummary })
   })
 
   //  Scenario: viewing an appointment

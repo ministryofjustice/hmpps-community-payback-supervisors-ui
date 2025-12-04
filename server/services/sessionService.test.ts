@@ -2,6 +2,7 @@ import SessionClient from '../data/sessionClient'
 import SessionService from './sessionService'
 import sessionFactory from '../testutils/factories/sessionFactory'
 import sessionSummaryFactory from '../testutils/factories/sessionSummaryFactory'
+import { SessionSummariesDto } from '../@types/user-defined'
 
 jest.mock('../data/sessionClient')
 
@@ -29,15 +30,18 @@ describe('ProviderService', () => {
   })
 
   it('should call nextSession on the client and return its result', async () => {
-    const sessionSummary = sessionSummaryFactory.build()
+    const sessionData = {
+      allocations: [sessionSummaryFactory.build(), sessionSummaryFactory.build()],
+    } as SessionSummariesDto
 
-    sessionClient.nextSession.mockResolvedValue(sessionSummary)
-    const result = await sessionService.getNextSession({
-      supervisorCode: '1234',
+    sessionClient.nextSessions.mockResolvedValue(sessionData)
+    const result = await sessionService.getNextSessions({
+      teamCode: 'N56DTX',
+      providerCode: 'N56',
       username: 'some-username',
     })
 
-    expect(sessionClient.nextSession).toHaveBeenCalledTimes(1)
-    expect(result).toEqual(sessionSummary)
+    expect(sessionClient.nextSessions).toHaveBeenCalledTimes(1)
+    expect(result).toEqual(sessionData)
   })
 })

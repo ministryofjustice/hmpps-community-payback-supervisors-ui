@@ -4,7 +4,9 @@ import DateTimeFormats from '../utils/dateTimeUtils'
 import paths from '../paths'
 
 export default class indexController {
-  private readonly supervisorCode = 'N56A108'
+  private readonly providerCode = 'N56'
+
+  private readonly teamCode = 'N56DTX'
 
   private readonly projectCode = 'N56123456'
 
@@ -14,7 +16,8 @@ export default class indexController {
     return async (_req: Request, res: Response) => {
       const request = {
         username: res.locals.user.username,
-        supervisorCode: this.supervisorCode,
+        teamCode: this.teamCode,
+        providerCode: this.providerCode,
       }
 
       const sessionData = await this.sessionService.getNextSessions(request)
@@ -23,7 +26,7 @@ export default class indexController {
         return res.render('pages/index')
       }
 
-      const sessions = sessionData
+      const sessions = sessionData.allocations
         .filter(session => session !== null)
         .sort((a, b) => {
           return +DateTimeFormats.isoToDateObj(a.date) - +DateTimeFormats.isoToDateObj(b.date)

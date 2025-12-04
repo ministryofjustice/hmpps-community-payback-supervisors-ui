@@ -43,7 +43,7 @@ context('Home', () => {
   //  Scenario: viewing the home page
   it('shows the find a session search form', () => {
     const sessionSummary = sessionSummaryFactory.build({ date: '2025-09-15', projectCode: 'N56123456' })
-    cy.task('stubNextSession', { sessionSummary })
+    cy.task('stubNextSessions', { sessionSummary })
 
     // Given I am logged in
     cy.signIn()
@@ -72,7 +72,7 @@ context('Session', () => {
     cy.task('stubSignIn')
 
     const sessionSummary = sessionSummaryFactory.build({ date: '2025-09-15' })
-    cy.task('stubNextSession', { sessionSummary })
+    cy.task('stubNextSessions', { sessionSummary })
 
     cy.signIn()
   })

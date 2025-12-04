@@ -5,6 +5,7 @@ import DateTimeFormats from '../utils/dateTimeUtils'
 import paths from '../paths'
 import IndexController from './indexController'
 import sessionSummaryFactory from '../testutils/factories/sessionSummaryFactory'
+import { SessionSummariesDto } from '../@types/user-defined'
 
 describe('IndexController', () => {
   const request: DeepMocked<Request> = createMock<Request>({})
@@ -19,7 +20,9 @@ describe('IndexController', () => {
 
   describe('index', () => {
     it('should render the index page', async () => {
-      const sessionData = [sessionSummaryFactory.build(), sessionSummaryFactory.build()]
+      const sessionData = {
+        allocations: [sessionSummaryFactory.build(), sessionSummaryFactory.build()],
+      } as SessionSummariesDto
 
       sessionService.getNextSessions.mockResolvedValue(sessionData)
 
@@ -28,7 +31,7 @@ describe('IndexController', () => {
 
       await requestHandler(request, response, next)
 
-      const sessions = sessionData
+      const sessions = sessionData.allocations
         .sort((a, b) => {
           return +DateTimeFormats.isoToDateObj(a.date) - +DateTimeFormats.isoToDateObj(b.date)
         })

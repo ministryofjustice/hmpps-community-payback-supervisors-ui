@@ -21,6 +21,7 @@ import { AppointmentDto } from '../../../../server/@types/shared'
 import { AppointmentStatus } from '../../../../server/services/appointmentStatusService'
 import EndTimePage from '../../../pages/appointments/update/endTimePage'
 import CompliancePage from '../../../pages/appointments/update/compliancePage'
+import sessionSummaryFactory from '../../../../server/testutils/factories/sessionSummaryFactory'
 
 context('Log finish time ', () => {
   let appointment: AppointmentDto
@@ -33,6 +34,8 @@ context('Log finish time ', () => {
     cy.task('stubSignIn')
     cy.task('stubGetForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
     cy.task('stubFindAppointment', { appointment })
+    const sessionSummary = sessionSummaryFactory.build({ date: '2025-09-15' })
+    cy.task('stubNextSessions', { sessionSummary })
 
     cy.signIn()
   })

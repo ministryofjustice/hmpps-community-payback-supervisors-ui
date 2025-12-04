@@ -8,6 +8,7 @@ import ConfirmCompletedPage from '../../../pages/appointments/update/confirm/con
 import EndTimePage from '../../../pages/appointments/update/endTimePage'
 import CompliancePage from '../../../pages/appointments/update/compliancePage'
 import Page from '../../../pages/page'
+import sessionSummaryFactory from '../../../../server/testutils/factories/sessionSummaryFactory'
 
 //  Scenario: Validating the log compliance page
 //    Given I am on the log compliance page for an appointment
@@ -41,6 +42,9 @@ context('Log compliance', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
+    const sessionSummary = sessionSummaryFactory.build({ date: '2025-09-15' })
+    cy.task('stubNextSessions', { sessionSummary })
+
     cy.signIn()
 
     const appointment = appointmentFactory.build({})
