@@ -146,24 +146,38 @@ describe('AppointmentStatusService', () => {
       })
     })
 
-    it('throws an error if given appointment status does not exist on the session statuses list', async () => {
+    it('saves new status if given appointment status does not exist on the session statuses list', async () => {
+      const status = 'Working'
       const appointment = appointmentFactory.build()
       const appointmentStatuses = appointmentStatusFactory.buildList(2)
 
       formClient.find.mockResolvedValue({ appointmentStatuses })
 
-      expect(() => appointmentStatusService.updateStatus(appointment, 'Working', userName)).rejects.toThrow(
-        `No appointment status found for project ${appointment.projectCode} on ${appointment.date}`,
-      )
+      const updatedStatuses = [...appointmentStatuses, { appointmentId: appointment.id, status }]
+      const expectedFormKey: FormKeyDto = {
+        type: APPOINTMENT_STATUS_FORM_TYPE,
+        id: appointment.projectCode + appointment.date,
+      }
+
+      await appointmentStatusService.updateStatus(appointment, status, userName)
+
+      expect(formClient.save).toHaveBeenCalledWith(expectedFormKey, userName, { appointmentStatuses: updatedStatuses })
     })
 
-    it('throws an error if no status list exists for the session', async () => {
+    it('saves new status if no status list exists for the session', async () => {
+      const status = 'Working'
       const appointment = appointmentFactory.build()
 
       formClient.find.mockResolvedValue(null)
-      expect(() => appointmentStatusService.updateStatus(appointment, 'Working', userName)).rejects.toThrow(
-        `No appointment status found for project ${appointment.projectCode} on ${appointment.date}`,
-      )
+      const appointmentStatuses = [{ appointmentId: appointment.id, status }]
+      const expectedFormKey: FormKeyDto = {
+        type: APPOINTMENT_STATUS_FORM_TYPE,
+        id: appointment.projectCode + appointment.date,
+      }
+
+      await appointmentStatusService.updateStatus(appointment, status, userName)
+
+      expect(formClient.save).toHaveBeenCalledWith(expectedFormKey, userName, { appointmentStatuses })
     })
   })
 

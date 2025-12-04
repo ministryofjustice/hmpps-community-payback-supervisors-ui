@@ -50,16 +50,17 @@ export default class AppointmentStatusService {
     const formKey = this.getFormKey(appointment)
     const data = await this.formClient.find<AppointmentStatuses>(formKey, username)
 
-    const appointmentStatusIndex = data?.appointmentStatuses.findIndex(
-      status => status.appointmentId === appointment.id,
-    )
+    const statuses = data?.appointmentStatuses ?? []
+
+    const appointmentStatusIndex = statuses.findIndex(status => status.appointmentId === appointment.id)
 
     if (appointmentStatusIndex > -1) {
-      data.appointmentStatuses[appointmentStatusIndex].status = statusType
-      return this.saveStatusesForSession(formKey, username, data.appointmentStatuses)
+      statuses[appointmentStatusIndex].status = statusType
+    } else {
+      statuses.push({ appointmentId: appointment.id, status: statusType })
     }
 
-    throw new Error(`No appointment status found for project ${appointment.projectCode} on ${appointment.date}`)
+    return this.saveStatusesForSession(formKey, username, statuses)
   }
 
   /**
