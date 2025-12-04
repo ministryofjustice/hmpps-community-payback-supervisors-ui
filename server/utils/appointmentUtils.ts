@@ -12,5 +12,6 @@ export default class AppointmentUtils {
     Scheduled: 'grey',
     Working: 'green',
     Completed: 'blue',
+    'Not expected': 'red',
   }
 }
