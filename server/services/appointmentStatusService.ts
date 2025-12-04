@@ -40,7 +40,7 @@ export default class AppointmentStatusService {
     const data = await this.formClient.find<AppointmentStatuses>(formKey, username)
 
     if (data) {
-      return this.getOrCreateAllAppointmentStatuses(data.appointmentStatuses, session, formKey, username)
+      return this.getOrUpdateAllAppointmentStatuses(data.appointmentStatuses, session, formKey, username)
     }
 
     return this.createStatusesForSession(session, username)
@@ -80,22 +80,35 @@ export default class AppointmentStatusService {
     throw new Error('Clearing session statuses not enabled')
   }
 
-  private async getOrCreateAllAppointmentStatuses(
+  private async getOrUpdateAllAppointmentStatuses(
     appointmentStatuses: AppointmentStatus[],
     session: SessionDto,
     formKey: FormKeyDto,
     username: string,
   ) {
-    const newAppointmentStatuses = session.appointmentSummaries
-      .filter(appointment => !appointmentStatuses.find(status => status.appointmentId === appointment.id))
-      .map(this.getNewAppointmentStatus)
+    let hasChanged = false
 
-    if (newAppointmentStatuses.length) {
-      appointmentStatuses.push(...newAppointmentStatuses)
-      await this.saveStatusesForSession(formKey, username, appointmentStatuses)
+    const updatedStatuses = session.appointmentSummaries.map(appointment => {
+      const statusEntry = appointmentStatuses.find(status => status.appointmentId === appointment.id)
+      if (!statusEntry) {
+        hasChanged = true
+        return this.getNewAppointmentStatus(appointment)
+      }
+
+      if (statusEntry.status === 'Scheduled' && appointment.contactOutcome?.code) {
+        statusEntry.status = 'Not expected'
+        hasChanged = true
+        return statusEntry
+      }
+
+      return statusEntry
+    })
+
+    if (hasChanged) {
+      await this.saveStatusesForSession(formKey, username, updatedStatuses)
     }
 
-    return appointmentStatuses
+    return updatedStatuses
   }
 
   private async createStatusesForSession(session: SessionDto, username: string): Promise<AppointmentStatus[]> {

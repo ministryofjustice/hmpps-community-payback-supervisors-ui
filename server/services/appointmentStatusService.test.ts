@@ -4,6 +4,7 @@ import FormClient from '../data/formClient'
 import appointmentFactory from '../testutils/factories/appointmentFactory'
 import appointmentStatusFactory from '../testutils/factories/appointmentStatusFactory'
 import appointmentSummaryFactory from '../testutils/factories/appointmentSummaryFactory'
+import { contactOutcomeFactory } from '../testutils/factories/contactOutcomeFactory'
 import sessionFactory from '../testutils/factories/sessionFactory'
 import AppointmentStatusService, { APPOINTMENT_STATUS_FORM_TYPE } from './appointmentStatusService'
 
@@ -99,6 +100,54 @@ describe('AppointmentStatusService', () => {
       expect(formClient.save).toHaveBeenCalledWith(expectedFormKey, userName, { appointmentStatuses: updatedStatuses })
 
       expect(result).toEqual(updatedStatuses)
+    })
+
+    it('changes any scheduled statuses to not expected if they have a contact outcome', async () => {
+      const appointmentSummaries = appointmentSummaryFactory.buildList(2, {
+        contactOutcome: contactOutcomeFactory.build(),
+      })
+      const session = sessionFactory.build({ appointmentSummaries })
+      const appointmentStatuses = appointmentSummaries.map(appointment =>
+        appointmentStatusFactory.build({ appointmentId: appointment.id, status: 'Scheduled' }),
+      )
+
+      formClient.find.mockResolvedValue({ appointmentStatuses })
+
+      const result = await appointmentStatusService.getStatusesForSession(session, userName)
+      const expectedFormKey: FormKeyDto = {
+        type: APPOINTMENT_STATUS_FORM_TYPE,
+        id: session.projectCode + session.date,
+      }
+
+      const updatedStatuses = appointmentStatuses.map(status => ({ ...status, status: 'Not expected' }))
+
+      expect(formClient.find).toHaveBeenCalledWith(expectedFormKey, userName)
+      expect(formClient.save).toHaveBeenCalledWith(expectedFormKey, userName, { appointmentStatuses: updatedStatuses })
+
+      expect(result).toEqual(updatedStatuses)
+    })
+
+    it('does not change any statuses if no changes', async () => {
+      const appointmentSummaries = appointmentSummaryFactory.buildList(2, {
+        contactOutcome: null,
+      })
+      const session = sessionFactory.build({ appointmentSummaries })
+      const appointmentStatuses = appointmentSummaries.map(appointment =>
+        appointmentStatusFactory.build({ appointmentId: appointment.id }),
+      )
+
+      formClient.find.mockResolvedValue({ appointmentStatuses })
+
+      const result = await appointmentStatusService.getStatusesForSession(session, userName)
+      const expectedFormKey: FormKeyDto = {
+        type: APPOINTMENT_STATUS_FORM_TYPE,
+        id: session.projectCode + session.date,
+      }
+
+      expect(formClient.find).toHaveBeenCalledWith(expectedFormKey, userName)
+      expect(formClient.save).not.toHaveBeenCalled()
+
+      expect(result).toEqual(appointmentStatuses)
     })
 
     it('calls form client with project code and date and saves new form if result is null', async () => {
