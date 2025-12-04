@@ -30,17 +30,16 @@ export default class AppointmentShowDetailsPage {
   private appointmentActions(appointment: AppointmentDto, appointmentStatus: AppointmentStatusType): LinkItem[] {
     const appointmentPathParams = { projectCode: appointment.projectCode, appointmentId: appointment.id.toString() }
 
-    if (appointmentStatus === 'Scheduled') {
-      return [
-        { text: 'Arrived', href: paths.appointments.arrived.startTime(appointmentPathParams) },
-        { text: 'Not arrived', href: paths.appointments.absent.startTime(appointmentPathParams) },
-      ]
+    if (appointmentStatus === 'Completed') {
+      return []
     }
-
     if (appointmentStatus === 'Working') {
       return [{ text: 'Finish session', href: paths.appointments.completed.endTime(appointmentPathParams) }]
     }
 
-    return []
+    return [
+      { text: 'Arrived', href: paths.appointments.arrived.startTime(appointmentPathParams) },
+      { text: 'Not arrived', href: paths.appointments.absent.startTime(appointmentPathParams) },
+    ]
   }
 }
