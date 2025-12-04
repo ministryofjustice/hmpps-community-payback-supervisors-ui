@@ -2,11 +2,14 @@ import IndexPage from '../pages/index'
 import AuthSignInPage from '../pages/authSignIn'
 import Page from '../pages/page'
 import AuthManageDetailsPage from '../pages/authManageDetails'
+import sessionSummaryFactory from '../../server/testutils/factories/sessionSummaryFactory'
 
 context('Sign In', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
+    const sessionSummary = sessionSummaryFactory.build({ date: '2025-09-15' })
+    cy.task('stubNextSessions', { sessionSummary })
   })
 
   it('Unauthenticated user directed to auth', () => {

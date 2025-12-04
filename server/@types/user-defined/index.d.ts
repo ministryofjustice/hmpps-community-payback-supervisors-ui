@@ -9,8 +9,13 @@ export interface GetSessionRequest extends BaseRequest {
   date: string
 }
 
-export interface GetNextSessionRequest extends BaseRequest {
-  supervisorCode: string
+export interface GetNextSessionsRequest extends BaseRequest {
+  teamCode: string
+  providerCode: string
+}
+
+export type SessionSummariesDto = {
+  allocations: SessionSummaryDto[]
 }
 
 export interface GetAppointmentRequest extends BaseRequest {

@@ -16,7 +16,12 @@ export default {
     outcome: singleAppointmentPath.path('outcome'),
   },
   sessions: {
-    next: supervisorUiPath.path('supervisors').path(':supervisorCode').path('sessions/next'),
+    next: supervisorUiPath
+      .path('providers')
+      .path(':providerCode')
+      .path('teams')
+      .path(':teamCode')
+      .path('sessions/future'),
   },
   referenceData: {
     contactOutcomes: referenceDataPath.path('contact-outcomes'),

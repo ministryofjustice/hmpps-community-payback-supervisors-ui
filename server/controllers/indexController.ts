@@ -4,7 +4,9 @@ import DateTimeFormats from '../utils/dateTimeUtils'
 import paths from '../paths'
 
 export default class indexController {
-  private readonly supervisorCode = 'N56A108'
+  private readonly providerCode = 'N56'
+
+  private readonly teamCode = 'N56DTX'
 
   private readonly projectCode = 'N56123456'
 
@@ -14,27 +16,33 @@ export default class indexController {
     return async (_req: Request, res: Response) => {
       const request = {
         username: res.locals.user.username,
-        supervisorCode: this.supervisorCode,
+        teamCode: this.teamCode,
+        providerCode: this.providerCode,
       }
 
-      const sessionData = await this.sessionService.getNextSession(request)
+      const sessionData = await this.sessionService.getNextSessions(request)
 
       if (!sessionData) {
         return res.render('pages/index')
       }
 
-      const nextSession = {
-        ...sessionData,
-        projectCode: this.projectCode,
-        date: DateTimeFormats.isoDateToUIDate(sessionData.date, { format: 'dashed' }),
-        formattedDate: DateTimeFormats.isoDateToUIDate(sessionData.date, { format: 'medium' }),
-      }
+      const sessions = sessionData.allocations
+        .filter(session => session !== null)
+        .sort((a, b) => {
+          return +DateTimeFormats.isoToDateObj(a.date) - +DateTimeFormats.isoToDateObj(b.date)
+        })
+        .map(session => {
+          return {
+            ...session,
+            projectCode: this.projectCode,
+            date: DateTimeFormats.isoDateToUIDate(session.date, { format: 'dashed' }),
+            formattedDate: DateTimeFormats.isoDateToUIDate(session.date, { format: 'medium' }),
+            path: paths.sessions.show({ ...session }),
+          }
+        })
 
       return res.render('pages/index', {
-        session: {
-          ...nextSession,
-          path: paths.sessions.show({ ...nextSession }),
-        },
+        sessions,
       })
     }
   }

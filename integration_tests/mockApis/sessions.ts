@@ -2,6 +2,7 @@ import type { SuperAgentRequest } from 'superagent'
 import { stubFor } from './wiremock'
 import paths from '../../server/paths/api'
 import type { SessionDto, SessionSummaryDto } from '../../server/@types/shared'
+import { SessionSummariesDto } from '../../server/@types/user-defined'
 
 export default {
   stubFindSession: ({ session }: { session: SessionDto }): SuperAgentRequest => {
@@ -18,17 +19,21 @@ export default {
       },
     })
   },
-  stubNextSession: ({ sessionSummary }: { sessionSummary: SessionSummaryDto }): SuperAgentRequest => {
+  stubNextSessions: ({ sessionSummary }: { sessionSummary: SessionSummaryDto[] }): SuperAgentRequest => {
+    const jsonBody = {
+      allocations: [sessionSummary],
+    } as SessionSummariesDto
+
     return stubFor({
       request: {
         method: 'GET',
-        urlPathPattern: paths.sessions.next({ supervisorCode: 'N56A108' }),
+        urlPathPattern: paths.sessions.next({ providerCode: 'N56', teamCode: 'N56DTX' }),
       },
 
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: sessionSummary,
+        jsonBody,
       },
     })
   },

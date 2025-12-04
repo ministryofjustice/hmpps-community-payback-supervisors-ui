@@ -35,7 +35,7 @@ afterEach(() => {
 describe('GET /', () => {
   it('should render index page', () => {
     auditService.logPageView.mockResolvedValue(null)
-    sessionService.getNextSession.mockImplementation(() => null)
+    sessionService.getNextSessions.mockImplementation(() => null)
 
     return request(app)
       .get('/')
@@ -43,7 +43,11 @@ describe('GET /', () => {
       .expect(200)
       .expect(res => {
         expect(res.text).toContain('Next session')
-        expect(sessionService.getNextSession).toHaveBeenCalledWith({ username: 'user1', supervisorCode: 'N56A108' })
+        expect(sessionService.getNextSessions).toHaveBeenCalledWith({
+          username: 'user1',
+          teamCode: 'N56DTX',
+          providerCode: 'N56',
+        })
         expect(auditService.logPageView).toHaveBeenCalledWith(Page.INDEX_PAGE, {
           who: user.username,
           correlationId: expect.any(String),

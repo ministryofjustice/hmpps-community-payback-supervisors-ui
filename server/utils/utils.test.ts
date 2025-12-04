@@ -1,6 +1,6 @@
 import type { Response } from 'express'
 import { createMock } from '@golevelup/ts-jest'
-import { convertToTitleCase, initialiseName, notFound } from './utils'
+import { convertToTitleCase, initialiseName, notFound, pluralise } from './utils'
 
 describe('convert to title case', () => {
   it.each([
@@ -38,5 +38,25 @@ describe('notFound', () => {
 
     expect(response.status).toHaveBeenCalledWith(404)
     expect(response.render).toHaveBeenCalledWith('pages/error', { message: 'Page not found', status: 404 })
+  })
+})
+
+describe('pluralise', () => {
+  it('should pluralise basic English words', () => {
+    expect(pluralise('Next session', 2)).toEqual('Next sessions')
+    expect(pluralise('Appointment', 3)).toEqual('Appointments')
+  })
+  it('should pluralise English words with a different suffix', () => {
+    expect(pluralise('Box', 4, 'es')).toEqual('Boxes')
+    expect(pluralise('Ox', 5, 'en')).toEqual('Oxen')
+  })
+  it('should return the singular when there is only 1', () => {
+    expect(pluralise('Next session', 1)).toEqual('Next session')
+    expect(pluralise('Appointment', 1)).toEqual('Appointment')
+    expect(pluralise('Ox', 1, 'en')).toEqual('Ox')
+  })
+  it('should not handle difficult Latin plurals, sadly', () => {
+    expect(pluralise('Appendix', 3)).not.toEqual('Appendices')
+    expect(pluralise('Datum', 3)).not.toEqual('Data')
   })
 })
