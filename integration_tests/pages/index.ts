@@ -15,13 +15,15 @@ export default class IndexPage extends Page {
   clickViewSession = () => cy.get('a').contains('View details').click()
 
   shouldShowSessionSummaryDetails() {
-    cy.get('[data-cy=session-details]').within(() => {
-      cy.get('h2').should(
-        'contain.text',
-        DateTimeFormats.isoDateToUIDate(this.sessionSummary.date, { format: 'medium' }),
-      )
-      cy.get('h3').should('contain.text', this.sessionSummary.projectName)
-      cy.get('p').should('contain.text', this.sessionSummary.numberOfOffendersAllocated)
-    })
+    cy.get('[data-cy=session-details]')
+      .first()
+      .within(() => {
+        cy.get('h2').should(
+          'contain.text',
+          DateTimeFormats.isoDateToUIDate(this.sessionSummary.date, { format: 'medium' }),
+        )
+        cy.get('h3').should('contain.text', this.sessionSummary.projectName)
+        cy.get('p').should('contain.text', this.sessionSummary.numberOfOffendersAllocated)
+      })
   }
 }

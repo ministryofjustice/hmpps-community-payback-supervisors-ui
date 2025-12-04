@@ -8,11 +8,11 @@
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-l">Next session</h1>
+      <h1 class="govuk-heading-l">Next sessions</h1>
     </div>
   </div>
 
-  {% if session %}
+  {% for session in sessions %}
 
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
@@ -38,7 +38,6 @@
       </div>
     </div>
 
-  {% endif %}
-
+  {% endfor %}
 
 {% endblock %}

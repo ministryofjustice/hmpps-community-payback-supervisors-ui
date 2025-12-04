@@ -42,7 +42,7 @@ context('Home', () => {
 
   //  Scenario: viewing the home page
   it('shows the find a session search form', () => {
-    const sessionSummary = sessionSummaryFactory.build({ date: '2025-09-15' })
+    const sessionSummary = sessionSummaryFactory.build({ date: '2025-09-15', projectCode: 'N56123456' })
     cy.task('stubNextSession', { sessionSummary })
 
     // Given I am logged in
@@ -70,6 +70,10 @@ context('Session', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
+
+    const sessionSummary = sessionSummaryFactory.build({ date: '2025-09-15' })
+    cy.task('stubNextSession', { sessionSummary })
+
     cy.signIn()
   })
 

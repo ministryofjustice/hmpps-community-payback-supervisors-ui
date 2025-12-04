@@ -17,24 +17,29 @@ export default class indexController {
         supervisorCode: this.supervisorCode,
       }
 
-      const sessionData = await this.sessionService.getNextSession(request)
+      const sessionData = await this.sessionService.getNextSessions(request)
 
       if (!sessionData) {
         return res.render('pages/index')
       }
 
-      const nextSession = {
-        ...sessionData,
-        projectCode: this.projectCode,
-        date: DateTimeFormats.isoDateToUIDate(sessionData.date, { format: 'dashed' }),
-        formattedDate: DateTimeFormats.isoDateToUIDate(sessionData.date, { format: 'medium' }),
-      }
+      const sessions = sessionData
+        .filter(session => session !== null)
+        .sort((a, b) => {
+          return +DateTimeFormats.isoToDateObj(a.date) - +DateTimeFormats.isoToDateObj(b.date)
+        })
+        .map(session => {
+          return {
+            ...session,
+            projectCode: this.projectCode,
+            date: DateTimeFormats.isoDateToUIDate(session.date, { format: 'dashed' }),
+            formattedDate: DateTimeFormats.isoDateToUIDate(session.date, { format: 'medium' }),
+            path: paths.sessions.show({ ...session }),
+          }
+        })
 
       return res.render('pages/index', {
-        session: {
-          ...nextSession,
-          path: paths.sessions.show({ ...nextSession }),
-        },
+        sessions,
       })
     }
   }

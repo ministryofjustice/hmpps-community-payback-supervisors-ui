@@ -23,7 +23,8 @@ export default class SessionPage extends Page {
   }
 
   shouldShowSessionDetails() {
-    cy.get('[data-cy=project-details')
+    cy.get('[data-cy=project-details]')
+      .first()
       .should('contain.text', this.session.projectName)
       .and('contain.text', DateTimeFormats.isoDateToUIDate(this.session.date, { format: 'medium' }))
 

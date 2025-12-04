@@ -18,7 +18,7 @@ export default {
       },
     })
   },
-  stubNextSession: ({ sessionSummary }: { sessionSummary: SessionSummaryDto }): SuperAgentRequest => {
+  stubNextSession: ({ sessionSummary }: { sessionSummary: SessionSummaryDto[] }): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',

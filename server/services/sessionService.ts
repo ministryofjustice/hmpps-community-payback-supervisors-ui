@@ -12,4 +12,10 @@ export default class SessionService {
   getNextSession(request: GetNextSessionRequest): Promise<SessionSummaryDto> {
     return this.sessionClient.nextSession(request)
   }
+
+  async getNextSessions(request: GetNextSessionRequest): Promise<SessionSummaryDto[]> {
+    const session = await this.sessionClient.nextSession(request)
+
+    return [session, session]
+  }
 }
