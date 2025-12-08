@@ -4,7 +4,7 @@ import { Locator, Page, expect } from '@playwright/test'
 import BasePage from '../../basePage'
 
 export default class IsAbleToWorkPage extends BasePage {
-  readonly titleText = 'Can Harry Wormwood work today?'
+  readonly titleTextPattern = /Can ([a-zA-Z- ]*) work today?/
 
   readonly expect: IsAbleToWorkPageAssertions
 
@@ -13,7 +13,7 @@ export default class IsAbleToWorkPage extends BasePage {
   constructor(readonly page: Page) {
     super(page)
     this.expect = new IsAbleToWorkPageAssertions(this)
-    this.ableToWorkLocator = page.getByRole('group', { name: this.titleText })
+    this.ableToWorkLocator = page.getByRole('group', { name: this.titleTextPattern })
   }
 
   async checkYes() {
@@ -29,6 +29,6 @@ class IsAbleToWorkPageAssertions {
   constructor(private readonly page: IsAbleToWorkPage) {}
 
   async toBeOnThePage() {
-    await expect(this.page.headingLocator).toContainText(this.page.titleText)
+    await expect(this.page.headingLocator).toContainText(this.page.titleTextPattern)
   }
 }

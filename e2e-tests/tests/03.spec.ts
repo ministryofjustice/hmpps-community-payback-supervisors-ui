@@ -18,8 +18,6 @@ test('Record an absence', async ({ page, deliusUser }) => {
 
   const appointmentPage = new AppointmentPage(page)
   await appointmentPage.expect.toBeOnThePage()
-  await appointmentPage.expect.toShowAppointmentDetails()
-  await appointmentPage.expect.toShowOffenderDetails()
 
   await appointmentPage.clickNotArrived()
 

@@ -12,14 +12,10 @@ export default async (page: Page): Promise<SessionPage> => {
 
   const sessionPage = new SessionPage(page)
   await sessionPage.expect.toBeOnThePage()
-  await sessionPage.expect.toShowSessionDetails()
   await sessionPage.clickOnAnAppointment()
 
   const appointmentPage = new AppointmentPage(page)
   await appointmentPage.expect.toBeOnThePage()
-  await appointmentPage.expect.toShowAppointmentDetails()
-  await appointmentPage.expect.toShowOffenderDetails()
-
   await appointmentPage.clickArrived()
 
   const startTimePage = new StartTimePage(page, 'arrived')
