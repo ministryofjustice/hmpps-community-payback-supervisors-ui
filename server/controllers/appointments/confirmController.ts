@@ -85,7 +85,7 @@ export default class ConfirmController {
       const { name } = new Offender(appointment.offender)
 
       res.render('appointments/update/confirm', {
-        title: `${name} session has been completed`,
+        title: `${name} has completed the session`,
         sessionPath: paths.sessions.show({ projectCode: appointment.projectCode, date: appointment.date }),
       })
     }
