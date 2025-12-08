@@ -30,7 +30,10 @@ export default class EndTimePage extends BaseAppointmentUpdatePage<Body> {
   }
 
   nextPath(appointmentId: string, projectCode: string): string {
-    // TODO: Add logic for left early journey
+    if (this.action === 'leftEarly') {
+      return paths.appointments.leftEarly.reason({ projectCode, appointmentId })
+    }
+
     return paths.appointments.completed.compliance({
       projectCode,
       appointmentId,

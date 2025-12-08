@@ -86,7 +86,7 @@ describe('EndTimePage', () => {
 
   describe('next', () => {
     describe('completed', () => {
-      it('should be able to work path with project code and appointment Id', () => {
+      it('should be completed compliance path with project code and appointment Id', () => {
         const appointmentId = '1'
         const projectCode = '2'
         const page = new EndTimePage('completed')
@@ -99,6 +99,17 @@ describe('EndTimePage', () => {
             contactOutcomeCode: ReferenceDataService.attendedCompliedOutcomeCode,
           }),
         )
+      })
+    })
+
+    describe('leftEarly', () => {
+      it('should be left early reason path with project code and appointment Id', () => {
+        const appointmentId = '1'
+        const projectCode = '2'
+        const page = new EndTimePage('leftEarly')
+        const result = page.nextPath(appointmentId, projectCode)
+
+        expect(result).toEqual(paths.appointments.leftEarly.reason({ projectCode, appointmentId }))
       })
     })
   })
