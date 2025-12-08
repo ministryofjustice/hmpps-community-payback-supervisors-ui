@@ -9,6 +9,7 @@ import EndTimePage from '../../../pages/appointments/update/endTimePage'
 import CompliancePage from '../../../pages/appointments/update/compliancePage'
 import Page from '../../../pages/page'
 import sessionSummaryFactory from '../../../../server/testutils/factories/sessionSummaryFactory'
+import ConfirmLeftEarlyPage from '../../../pages/appointments/update/confirm/confirmLeftEarlyPage'
 
 //  Scenario: Validating the log compliance page
 //    Given I am on the log compliance page for an appointment
@@ -32,7 +33,7 @@ import sessionSummaryFactory from '../../../../server/testutils/factories/sessio
 //      Given I am on the log compliance page for an appointment
 //      And I complete the form
 //      When I submit the form
-//      Then I see the confirm details page
+//      Then I see the confirm left early page
 //    Scenario: Returning to the log hours page
 //      Given I am on the log compliance page for an appointment
 //      When I click back
@@ -121,8 +122,8 @@ context('Log compliance', () => {
         cy.task('stubUpdateAppointmentOutcome', { appointment: this.appointment })
         page.clickSubmit()
 
-        // Then I see the confirm details page
-        Page.verifyOnPage(ConfirmCompletedPage, this.appointment)
+        // Then I see the confirm left early page
+        Page.verifyOnPage(ConfirmLeftEarlyPage, this.appointment)
       })
     })
 
