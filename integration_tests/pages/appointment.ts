@@ -26,16 +26,16 @@ export default class AppointmentPage extends Page {
     return new AppointmentPage(appointment)
   }
 
-  clickArrived() {
-    cy.get('a').contains('Arrived').click()
+  arrivedButton() {
+    return cy.get('a').contains('Arrived')
   }
 
-  clickNotArrived() {
-    cy.get('a').contains('Not arrived').click()
+  notArrivedButton() {
+    return cy.get('a').contains('Not arrived')
   }
 
-  clickFinished() {
-    cy.get('a').contains('Finish session').click()
+  finishedButton() {
+    return cy.get('a').contains('Finish session')
   }
 
   shouldShowOffenderDetails(): void {
