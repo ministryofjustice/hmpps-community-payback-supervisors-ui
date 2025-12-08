@@ -54,7 +54,7 @@ describe('SessionsController', () => {
       const location = '12 Hampton Road'
       jest.spyOn(LocationUtils, 'locationToParagraph').mockReturnValue(location)
 
-      const statusTag = { text: 'Completed' as AppointmentStatusType, classes: 'govuk-tag--blue' }
+      const statusTag = { text: 'Session complete' as AppointmentStatusType, classes: 'govuk-tag--blue' }
       jest.spyOn(AppointmentUtils, 'getStatusTagViewData').mockReturnValue(statusTag)
 
       await requestHandler(request, response, next)

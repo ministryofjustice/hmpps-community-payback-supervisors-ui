@@ -15,7 +15,7 @@ describe('AppointmentUtils', () => {
     it.each([
       ['Scheduled', 'grey'],
       ['Working', 'green'],
-      ['Completed', 'blue'],
+      ['Session complete', 'blue'],
       ['Not expected', 'red'],
       ['Absent', 'yellow'],
     ])('Maps status to a Gov.UK colour', (status: AppointmentStatusType, colour: GovUkStatusTagColour) => {

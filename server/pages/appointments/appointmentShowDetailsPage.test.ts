@@ -92,7 +92,7 @@ describe('AppointmentShowDetailsPage', () => {
         ])
       })
 
-      it.each(['Completed', 'Absent'])('should be empty if status is "%s"', (status: AppointmentStatusType) => {
+      it.each(['Session complete', 'Absent'])('should be empty if status is "%s"', (status: AppointmentStatusType) => {
         const appointment = appointmentFactory.build()
         const page = new AppointmentShowDetailsPage()
         const result = page.viewData(appointment, status)

@@ -26,6 +26,9 @@
 //    Given I am on the appointment page
 //    When I click on 'Finished'
 //    Then I should be taken to the first page of the finish session form
+//  Scenario: Appointment with completed status
+//    Given I am on the appointment page
+//    Then I should not see any appointment update actions
 
 import Page from '../pages/page'
 import SessionPage from '../pages/session'
@@ -37,6 +40,7 @@ import StartTimePage from '../pages/appointments/update/startTimePage'
 import appointmentStatusFactory from '../../server/testutils/factories/appointmentStatusFactory'
 import EndTimePage from '../pages/appointments/update/endTimePage'
 import sessionSummaryFactory from '../../server/testutils/factories/sessionSummaryFactory'
+import { AppointmentStatusType } from '../../server/@types/user-defined'
 
 context('viewAnAppointment', () => {
   beforeEach(() => {
@@ -154,20 +158,25 @@ context('viewAnAppointment', () => {
     })
   })
 
-  describe('absent appointment', () => {
-    it('should not have any available actions', () => {
-      // Given I am on the appointment page
-      const appointment = appointmentFactory.build()
-      const appointmentStatus = appointmentStatusFactory.build({ appointmentId: appointment.id, status: 'Absent' })
+  describe('complete appointment should not have any actions', () => {
+    const completedStatuses = ['Absent', 'Session complete']
 
-      cy.signIn()
-      cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
-      cy.task('stubGetForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
+    completedStatuses.forEach((action: AppointmentStatusType) => {
+      // Scenario: Appointment with completed status
+      it(`${action} status`, () => {
+        // Given I am on the appointment page
+        const appointment = appointmentFactory.build()
+        const appointmentStatus = appointmentStatusFactory.build({ appointmentId: appointment.id, status: action })
 
-      const appointmentPage = AppointmentPage.visit(appointment)
+        cy.signIn()
+        cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
+        cy.task('stubGetForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
 
-      // Then I should not see any appointment update actions
-      appointmentPage.shouldNotHaveAnyActions()
+        const appointmentPage = AppointmentPage.visit(appointment)
+
+        // Then I should not see any appointment update actions
+        appointmentPage.shouldNotHaveAnyActions()
+      })
     })
   })
 })
