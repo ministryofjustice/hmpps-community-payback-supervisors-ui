@@ -20,7 +20,7 @@ export default class EndTimePage extends BasePage {
   getExpectedTitlePattern() {
     return this.action === 'completed'
       ? /You're logging ([a-zA-Z- ]*) as finishing today at:/
-      : /You're logging out ([a-zA-Z- ]*) early at:/
+      : /You're logging out ([a-zA-Z- ]*) early today at:/
   }
 }
 
