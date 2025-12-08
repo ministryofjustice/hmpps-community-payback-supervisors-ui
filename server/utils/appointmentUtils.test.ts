@@ -23,4 +23,24 @@ describe('AppointmentUtils', () => {
       expect(AppointmentUtils.statusTagColour[status]).toEqual(colour)
     })
   })
+
+  describe('isSessionComplete', () => {
+    it.each(['Session complete', 'Absent', 'Cannot work'])(
+      'should be true if status is "%s"',
+      (status: AppointmentStatusType) => {
+        const result = AppointmentUtils.isSessionComplete(status)
+
+        expect(result).toBe(true)
+      },
+    )
+
+    it.each(['Scheduled', 'Not expected', 'Working'])(
+      'should be false if status is "%s"',
+      (status: AppointmentStatusType) => {
+        const result = AppointmentUtils.isSessionComplete(status)
+
+        expect(result).toBe(false)
+      },
+    )
+  })
 })

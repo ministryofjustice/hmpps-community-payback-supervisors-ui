@@ -2,6 +2,7 @@ import { AppointmentStatusType } from '../../@types/user-defined'
 import Offender from '../../models/offender'
 import paths from '../../paths'
 import appointmentFactory from '../../testutils/factories/appointmentFactory'
+import AppointmentUtils from '../../utils/appointmentUtils'
 import StatusTagUtils from '../../utils/GovUKFrontend/statusTagUtils'
 import AppointmentShowDetailsPage from './appointmentShowDetailsPage'
 
@@ -58,6 +59,7 @@ describe('AppointmentShowDetailsPage', () => {
       it.each(['Scheduled', 'Not expected'])(
         'should include arrived links if status is "%s"',
         (status: AppointmentStatusType) => {
+          jest.spyOn(AppointmentUtils, 'isSessionComplete').mockReturnValue(false)
           const appointment = appointmentFactory.build()
           const page = new AppointmentShowDetailsPage()
           const result = page.viewData(appointment, status)
@@ -77,6 +79,7 @@ describe('AppointmentShowDetailsPage', () => {
       )
 
       it('should include finish session links if status is "Working"', () => {
+        jest.spyOn(AppointmentUtils, 'isSessionComplete').mockReturnValue(false)
         const appointment = appointmentFactory.build()
         const page = new AppointmentShowDetailsPage()
         const result = page.viewData(appointment, 'Working')
@@ -99,10 +102,11 @@ describe('AppointmentShowDetailsPage', () => {
         ])
       })
 
-      it.each(['Session complete', 'Absent'])('should be empty if status is "%s"', (status: AppointmentStatusType) => {
+      it('should be empty if status is complete', () => {
+        jest.spyOn(AppointmentUtils, 'isSessionComplete').mockReturnValue(true)
         const appointment = appointmentFactory.build()
         const page = new AppointmentShowDetailsPage()
-        const result = page.viewData(appointment, status)
+        const result = page.viewData(appointment, 'Session complete')
 
         expect(result.actions).toEqual([])
       })

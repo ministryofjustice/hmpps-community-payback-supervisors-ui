@@ -16,4 +16,9 @@ export default class AppointmentUtils {
     'Not expected': 'red',
     'Cannot work': 'purple',
   }
+
+  static isSessionComplete(status: AppointmentStatusType): boolean {
+    const sessionCompleteStatuses: AppointmentStatusType[] = ['Absent', 'Cannot work', 'Session complete']
+    return sessionCompleteStatuses.includes(status)
+  }
 }

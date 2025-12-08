@@ -30,9 +30,10 @@ export default class AppointmentShowDetailsPage {
   private appointmentActions(appointment: AppointmentDto, appointmentStatus: AppointmentStatusType): LinkItem[] {
     const appointmentPathParams = { projectCode: appointment.projectCode, appointmentId: appointment.id.toString() }
 
-    if (appointmentStatus === 'Session complete' || appointmentStatus === 'Absent') {
+    if (AppointmentUtils.isSessionComplete(appointmentStatus)) {
       return []
     }
+
     if (appointmentStatus === 'Working') {
       return [
         { text: 'Finish session', href: paths.appointments.completed.endTime(appointmentPathParams) },
