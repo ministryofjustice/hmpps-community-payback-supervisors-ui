@@ -153,4 +153,21 @@ context('viewAnAppointment', () => {
       Page.verifyOnPage(EndTimePage, appointment, 'completed')
     })
   })
+
+  describe('absent appointment', () => {
+    it('should not have any available actions', () => {
+      // Given I am on the appointment page
+      const appointment = appointmentFactory.build()
+      const appointmentStatus = appointmentStatusFactory.build({ appointmentId: appointment.id, status: 'Absent' })
+
+      cy.signIn()
+      cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
+      cy.task('stubGetForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
+
+      const appointmentPage = AppointmentPage.visit(appointment)
+
+      // Then I should not see any appointment update actions
+      appointmentPage.shouldNotHaveAnyActions()
+    })
+  })
 })

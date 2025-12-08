@@ -92,10 +92,10 @@ describe('AppointmentShowDetailsPage', () => {
         ])
       })
 
-      it('should be empty if status is not "Working" or "Scheduled"', () => {
+      it.each(['Completed', 'Absent'])('should be empty if status is "%s"', (status: AppointmentStatusType) => {
         const appointment = appointmentFactory.build()
         const page = new AppointmentShowDetailsPage()
-        const result = page.viewData(appointment, 'Completed')
+        const result = page.viewData(appointment, status)
 
         expect(result.actions).toEqual([])
       })

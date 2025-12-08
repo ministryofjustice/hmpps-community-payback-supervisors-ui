@@ -50,4 +50,10 @@ export default class AppointmentPage extends Page {
     this.appointmentDetails.getValueWithLabel('Start time').should('contain.text', this.appointment.startTime)
     this.appointmentDetails.getValueWithLabel('Finish time').should('contain.text', this.appointment.endTime)
   }
+
+  shouldNotHaveAnyActions() {
+    this.arrivedButton().should('not.exist')
+    this.notArrivedButton().should('not.exist')
+    this.finishedButton().should('not.exist')
+  }
 }
