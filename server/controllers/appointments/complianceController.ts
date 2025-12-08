@@ -4,9 +4,13 @@ import generateErrorSummary from '../../utils/errorUtils'
 import { AppointmentCompletedAction, AppointmentParams } from '../../@types/user-defined'
 import CompliancePage from '../../pages/appointments/update/compliancePage'
 import ReferenceDataService from '../../services/referenceDataService'
+import AppointmentStatusService from '../../services/appointmentStatusService'
 
 export default class ComplianceController {
-  constructor(private readonly appointmentService: AppointmentService) {}
+  constructor(
+    private readonly appointmentService: AppointmentService,
+    private readonly appointmentStatusService: AppointmentStatusService,
+  ) {}
 
   show(action: AppointmentCompletedAction): RequestHandler {
     return async (_req: Request, res: Response) => {
@@ -49,6 +53,10 @@ export default class ComplianceController {
         projectCode: appointmentParams.projectCode,
         data: payload,
       })
+
+      if (action === 'completed') {
+        this.appointmentStatusService.updateStatus(appointment, 'Session complete', res.locals.user.name)
+      }
 
       return res.redirect(page.nextPath(appointmentParams.projectCode, appointmentParams.appointmentId))
     }
