@@ -213,7 +213,7 @@ describe('CompliancePage', () => {
       page = new CompliancePage(action, {}, contactOutcomeCode)
 
       expect(page.nextPath(projectCode, appointmentId)).toBe(
-        paths.appointments.confirm.completed({ projectCode, appointmentId }),
+        paths.appointments.confirm[action]({ projectCode, appointmentId }),
       )
     })
   })

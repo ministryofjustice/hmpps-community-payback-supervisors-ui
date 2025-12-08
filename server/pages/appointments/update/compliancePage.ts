@@ -98,8 +98,7 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
   }
 
   nextPath(projectCode: string, appointmentId: string): string {
-    // TODO: Add routing logic to different confirm pages based on action
-    return paths.appointments.confirm.completed({ projectCode, appointmentId })
+    return paths.appointments.confirm[this.action]({ projectCode, appointmentId })
   }
 
   protected updatePath(appointment: AppointmentDto): string {
