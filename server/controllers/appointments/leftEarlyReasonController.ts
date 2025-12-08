@@ -20,7 +20,7 @@ export default class LeftEarlyReasonController {
         username: res.locals.user.username,
       })
 
-      const contactOutcomes = await this.referenceDataService.getContactOutcomesForArrivedUnableToWork(
+      const contactOutcomes = await this.referenceDataService.getAttendedNonWorkingContactOutcomes(
         res.locals.user.username,
       )
 
@@ -44,7 +44,7 @@ export default class LeftEarlyReasonController {
       page.validate()
 
       if (page.hasErrors) {
-        const contactOutcomes = await this.referenceDataService.getContactOutcomesForArrivedUnableToWork(
+        const contactOutcomes = await this.referenceDataService.getAttendedNonWorkingContactOutcomes(
           res.locals.user.username,
         )
 

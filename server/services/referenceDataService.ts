@@ -12,7 +12,7 @@ export default class ReferenceDataService {
     return this.referenceDataClient.getContactOutcomes(userName)
   }
 
-  async getContactOutcomesForArrivedUnableToWork(userName: string): Promise<ContactOutcomesDto> {
+  async getAttendedNonWorkingContactOutcomes(userName: string): Promise<ContactOutcomesDto> {
     const contactOutcomes = await this.getContactOutcomes(userName)
 
     return {
