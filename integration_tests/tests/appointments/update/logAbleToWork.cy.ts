@@ -197,6 +197,7 @@ context('Log able to work ', () => {
       page.checkSensitiveInformation()
 
       // When I submit the form
+      cy.task('stubSaveForm', { sessionOrAppointment: appointment })
       page.clickSubmit()
 
       // Then I am taken to the confirm unable to work page

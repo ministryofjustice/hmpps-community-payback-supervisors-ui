@@ -20,7 +20,11 @@ const appointmentControllers = (services: Services) => {
     services.appointmentService,
     services.appointmentStatusService,
   )
-  const unableToWorkController = new UnableToWorkController(services.appointmentService, services.referenceDataService)
+  const unableToWorkController = new UnableToWorkController(
+    services.appointmentService,
+    services.appointmentStatusService,
+    services.referenceDataService,
+  )
   const endTimeController = new EndTimeController(services.appointmentService)
   const complianceController = new ComplianceController(services.appointmentService, services.appointmentStatusService)
   const confirmController = new ConfirmController(services.appointmentService)
