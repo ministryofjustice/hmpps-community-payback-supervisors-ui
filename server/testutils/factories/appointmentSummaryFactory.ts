@@ -11,5 +11,6 @@ export default Factory.define<AppointmentSummaryDto>(() => ({
   contactOutcome: contactOutcomeFactory.build(),
   requirementMinutes: faker.number.int(1000),
   completedMinutes: faker.number.int(1000),
+  adjustmentMinutes: faker.number.int(1000),
   offender: offenderFullFactory.build(),
 }))
