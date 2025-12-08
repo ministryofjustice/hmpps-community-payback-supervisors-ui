@@ -6,7 +6,7 @@ import BaseConfirmPage from './baseConfirmPage'
 export default class ConfirmCompletedPage extends BaseConfirmPage {
   constructor(appointment: AppointmentDto) {
     const offender = new Offender(appointment.offender)
-    const title = `${offender.name} session has been completed`
+    const title = `${offender.name} has completed the session`
     super(title)
   }
 
