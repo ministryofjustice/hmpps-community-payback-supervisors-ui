@@ -19,7 +19,7 @@ export default class AppointmentUtils {
   }
 
   static isSessionComplete(status: AppointmentStatusType): boolean {
-    const sessionCompleteStatuses: AppointmentStatusType[] = ['Absent', 'Cannot work', 'Session complete']
+    const sessionCompleteStatuses: AppointmentStatusType[] = ['Absent', 'Cannot work', 'Session complete', 'Left site']
     return sessionCompleteStatuses.includes(status)
   }
 }

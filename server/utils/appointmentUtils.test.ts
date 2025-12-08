@@ -26,7 +26,7 @@ describe('AppointmentUtils', () => {
   })
 
   describe('isSessionComplete', () => {
-    it.each(['Session complete', 'Absent', 'Cannot work'])(
+    it.each(['Session complete', 'Absent', 'Cannot work', 'Left site'])(
       'should be true if status is "%s"',
       (status: AppointmentStatusType) => {
         const result = AppointmentUtils.isSessionComplete(status)
