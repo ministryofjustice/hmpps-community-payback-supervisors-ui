@@ -42,10 +42,16 @@ export type AppointmentArrivedAction = 'arrived' | 'absent'
 
 export type AppointmentCompletedAction = 'completed' | 'leftEarly'
 
-export type AppointmentStatusType = 'Scheduled' | 'Working' | 'Session complete' | 'Not expected' | 'Absent'
+export type AppointmentStatusType =
+  | 'Scheduled'
+  | 'Working'
+  | 'Session complete'
+  | 'Not expected'
+  | 'Absent'
+  | 'Cannot work'
 
 // Should be a known colour variation of the GOV.UK Design System Tag component: https://design-system.service.gov.uk/components/tag/
-export type GovUkStatusTagColour = 'grey' | 'green' | 'blue' | 'pink' | 'red' | 'orange' | 'yellow'
+export type GovUkStatusTagColour = 'grey' | 'green' | 'blue' | 'pink' | 'red' | 'orange' | 'yellow' | 'purple'
 
 export type ValidationErrors<T> = Partial<Record<keyof T, Record<'text', string>>>
 

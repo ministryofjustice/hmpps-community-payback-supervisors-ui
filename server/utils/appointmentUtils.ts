@@ -9,10 +9,16 @@ export default class AppointmentUtils {
   }
 
   static statusTagColour: Record<AppointmentStatusType, GovUkStatusTagColour> = {
+    Absent: 'yellow',
     Scheduled: 'grey',
     Working: 'green',
     'Session complete': 'blue',
     'Not expected': 'red',
-    Absent: 'yellow',
+    'Cannot work': 'purple',
+  }
+
+  static isSessionComplete(status: AppointmentStatusType): boolean {
+    const sessionCompleteStatuses: AppointmentStatusType[] = ['Absent', 'Cannot work', 'Session complete']
+    return sessionCompleteStatuses.includes(status)
   }
 }

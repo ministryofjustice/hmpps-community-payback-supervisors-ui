@@ -166,7 +166,7 @@ context('viewAnAppointment', () => {
   })
 
   describe('complete appointment should not have any actions', () => {
-    const completedStatuses = ['Absent', 'Session complete']
+    const completedStatuses: AppointmentStatusType[] = ['Absent', 'Cannot work', 'Session complete']
 
     completedStatuses.forEach((action: AppointmentStatusType) => {
       // Scenario: Appointment with completed status

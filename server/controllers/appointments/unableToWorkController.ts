@@ -4,10 +4,12 @@ import generateErrorSummary from '../../utils/errorUtils'
 import paths from '../../paths'
 import UnableToWorkPage from '../../pages/appointments/update/unableToWorkPage'
 import ReferenceDataService from '../../services/referenceDataService'
+import AppointmentStatusService from '../../services/appointmentStatusService'
 
 export default class UnableToWorkController {
   constructor(
     private readonly appointmentService: AppointmentService,
+    private readonly appointmentStatusService: AppointmentStatusService,
     private readonly referenceDataService: ReferenceDataService,
   ) {}
 
@@ -64,6 +66,8 @@ export default class UnableToWorkController {
         projectCode,
         data: payload,
       })
+
+      this.appointmentStatusService.updateStatus(appointment, 'Cannot work', res.locals.user.name)
 
       return res.redirect(paths.appointments.confirm.unableToWork({ projectCode, appointmentId }))
     }
