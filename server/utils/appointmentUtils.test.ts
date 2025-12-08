@@ -18,6 +18,7 @@ describe('AppointmentUtils', () => {
       ['Session complete', 'blue'],
       ['Not expected', 'red'],
       ['Absent', 'yellow'],
+      ['Cannot work', 'purple'],
     ])('Maps status to a Gov.UK colour', (status: AppointmentStatusType, colour: GovUkStatusTagColour) => {
       expect(AppointmentUtils.statusTagColour[status]).toEqual(colour)
     })

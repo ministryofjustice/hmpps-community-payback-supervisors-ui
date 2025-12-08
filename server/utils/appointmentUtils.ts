@@ -9,10 +9,11 @@ export default class AppointmentUtils {
   }
 
   static statusTagColour: Record<AppointmentStatusType, GovUkStatusTagColour> = {
+    Absent: 'yellow',
     Scheduled: 'grey',
     Working: 'green',
     'Session complete': 'blue',
     'Not expected': 'red',
-    Absent: 'yellow',
+    'Cannot work': 'purple',
   }
 }
