@@ -34,7 +34,10 @@ export default class AppointmentShowDetailsPage {
       return []
     }
     if (appointmentStatus === 'Working') {
-      return [{ text: 'Finish session', href: paths.appointments.completed.endTime(appointmentPathParams) }]
+      return [
+        { text: 'Finish session', href: paths.appointments.completed.endTime(appointmentPathParams) },
+        { text: 'Left site early', href: paths.appointments.leftEarly.endTime(appointmentPathParams) },
+      ]
     }
 
     return [

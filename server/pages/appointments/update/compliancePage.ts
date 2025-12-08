@@ -32,11 +32,12 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
   constructor(
     private readonly action: AppointmentCompletedAction,
     private readonly query: ComplianceQuery,
+    private readonly contactOutcomeCode: string,
   ) {
     super()
   }
 
-  requestBody(appointment: AppointmentDto, contactOutcomeCode: string): UpdateAppointmentOutcomeDto {
+  requestBody(appointment: AppointmentDto): UpdateAppointmentOutcomeDto {
     const data = this.appointmentRequestBody(appointment)
     return {
       ...data,
@@ -48,7 +49,7 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
         workQuality: this.query.workQuality,
         behaviour: this.query.behaviour,
       },
-      contactOutcomeCode,
+      contactOutcomeCode: this.contactOutcomeCode,
     }
   }
 
@@ -97,14 +98,14 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
   }
 
   nextPath(projectCode: string, appointmentId: string): string {
-    // TODO: Add routing logic to different confirm pages based on action
-    return paths.appointments.confirm.completed({ projectCode, appointmentId })
+    return paths.appointments.confirm[this.action]({ projectCode, appointmentId })
   }
 
   protected updatePath(appointment: AppointmentDto): string {
     return paths.appointments[this.action].compliance({
       projectCode: appointment.projectCode,
       appointmentId: appointment.id.toString(),
+      contactOutcomeCode: this.contactOutcomeCode,
     })
   }
 

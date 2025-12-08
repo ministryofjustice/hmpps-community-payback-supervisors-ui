@@ -21,7 +21,7 @@ export default class UnableToWorkController {
         username: res.locals.user.username,
       })
 
-      const contactOutcomes = await this.referenceDataService.getContactOutcomesForArrivedUnableToWork(
+      const contactOutcomes = await this.referenceDataService.getAttendedNonWorkingContactOutcomes(
         res.locals.user.username,
       )
 
@@ -45,7 +45,7 @@ export default class UnableToWorkController {
       page.validate()
 
       if (page.hasErrors) {
-        const contactOutcomes = await this.referenceDataService.getContactOutcomesForArrivedUnableToWork(
+        const contactOutcomes = await this.referenceDataService.getAttendedNonWorkingContactOutcomes(
           res.locals.user.username,
         )
 

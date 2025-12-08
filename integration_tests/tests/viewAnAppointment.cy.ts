@@ -26,9 +26,16 @@
 //    Given I am on the appointment page
 //    When I click on 'Finished'
 //    Then I should be taken to the first page of the finish session form
+//
 //  Scenario: Appointment with completed status
 //    Given I am on the appointment page
 //    Then I should not see any appointment update actions
+//
+//  Scenario: left early appointment
+//    Scenario: starting a left early session form
+//    Given I am on the appointment page
+//    When I click on 'Left site early'
+//    Then I should be taken to the first page of the left early session form
 
 import Page from '../pages/page'
 import SessionPage from '../pages/session'
@@ -177,6 +184,28 @@ context('viewAnAppointment', () => {
         // Then I should not see any appointment update actions
         appointmentPage.shouldNotHaveAnyActions()
       })
+    })
+  })
+
+  // Scenario: left early appointment
+  describe('left early appointment', () => {
+    // Scenario: starting a left early session form
+    it('I can navigate to the left early session form', () => {
+      // Given I am on the appointment page
+      const appointment = appointmentFactory.build()
+      const appointmentStatus = appointmentStatusFactory.build({ appointmentId: appointment.id, status: 'Working' })
+
+      cy.signIn()
+      cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
+      cy.task('stubGetForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
+
+      const appointmentPage = AppointmentPage.visit(appointment)
+
+      // When I click on 'Left site early'
+      appointmentPage.clickLeftSiteEarly()
+
+      // Then I should be taken to the first page of the left early session form
+      Page.verifyOnPage(EndTimePage, appointment, 'leftEarly')
     })
   })
 })

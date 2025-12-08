@@ -12,6 +12,8 @@ describe('CompliancePage', () => {
   let page: CompliancePage
   let appointment: AppointmentDto
 
+  const contactOutcomeCode = 'XXXX'
+
   beforeEach(() => {
     jest.resetAllMocks()
   })
@@ -20,7 +22,7 @@ describe('CompliancePage', () => {
     const offenderMock: jest.Mock = Offender as unknown as jest.Mock<Offender>
 
     beforeEach(() => {
-      page = new CompliancePage('completed', {})
+      page = new CompliancePage('completed', {}, contactOutcomeCode)
       appointment = appointmentFactory.build()
     })
 
@@ -43,7 +45,7 @@ describe('CompliancePage', () => {
     it.each(['completed', 'leftEarly'])(
       'should return an object containing a back link to the end time page',
       async (action: AppointmentCompletedAction) => {
-        page = new CompliancePage(action, {})
+        page = new CompliancePage(action, {}, contactOutcomeCode)
         const result = page.viewData(appointment)
         expect(result.backPath).toBe(
           paths.appointments[action].endTime({
@@ -57,12 +59,13 @@ describe('CompliancePage', () => {
     it.each(['completed', 'leftEarly'])(
       'should return an object containing an update link for the form',
       async (action: AppointmentCompletedAction) => {
-        page = new CompliancePage(action, {})
+        page = new CompliancePage(action, {}, contactOutcomeCode)
         const result = page.viewData(appointment)
         expect(result.updatePath).toBe(
           paths.appointments[action].compliance({
             projectCode: appointment.projectCode,
             appointmentId: appointment.id.toString(),
+            contactOutcomeCode,
           }),
         )
       },
@@ -156,7 +159,7 @@ describe('CompliancePage', () => {
     const action = 'completed'
     describe('when hiVis is not present', () => {
       it('should return the correct error', () => {
-        page = new CompliancePage(action, { hiVis: null })
+        page = new CompliancePage(action, { hiVis: null }, contactOutcomeCode)
         page.validate()
 
         expect(page.validationErrors.hiVis).toEqual({
@@ -168,7 +171,7 @@ describe('CompliancePage', () => {
 
     describe('when workedIntensively is not present', () => {
       it('should return the correct error', () => {
-        page = new CompliancePage(action, { workedIntensively: null })
+        page = new CompliancePage(action, { workedIntensively: null }, contactOutcomeCode)
         page.validate()
 
         expect(page.validationErrors.workedIntensively).toEqual({
@@ -180,7 +183,7 @@ describe('CompliancePage', () => {
 
     describe('when workQuality is not present', () => {
       it('should return the correct error', () => {
-        page = new CompliancePage(action, { workQuality: null })
+        page = new CompliancePage(action, { workQuality: null }, contactOutcomeCode)
         page.validate()
 
         expect(page.validationErrors.workQuality).toEqual({
@@ -192,7 +195,7 @@ describe('CompliancePage', () => {
 
     describe('when behaviour is not present', () => {
       it('should return the correct error', () => {
-        page = new CompliancePage(action, { behaviour: null })
+        page = new CompliancePage(action, { behaviour: null }, contactOutcomeCode)
         page.validate()
 
         expect(page.validationErrors.behaviour).toEqual({
@@ -207,10 +210,10 @@ describe('CompliancePage', () => {
     it.each(['completed', 'leftEarly'])('should return confirm page link', (action: AppointmentCompletedAction) => {
       const appointmentId = '1'
       const projectCode = '2'
-      page = new CompliancePage(action, {})
+      page = new CompliancePage(action, {}, contactOutcomeCode)
 
       expect(page.nextPath(projectCode, appointmentId)).toBe(
-        paths.appointments.confirm.completed({ projectCode, appointmentId }),
+        paths.appointments.confirm[action]({ projectCode, appointmentId }),
       )
     })
   })
@@ -231,9 +234,9 @@ describe('CompliancePage', () => {
         notes: 'good',
       }
 
-      page = new CompliancePage(action, query)
+      page = new CompliancePage(action, query, contactOutcomeCode)
 
-      const result = page.requestBody(appointment, '')
+      const result = page.requestBody(appointment)
 
       expect(result).toEqual(
         expect.objectContaining({
@@ -258,9 +261,9 @@ describe('CompliancePage', () => {
         notes: 'good',
       }
 
-      page = new CompliancePage(action, query)
+      page = new CompliancePage(action, query, contactOutcomeCode)
 
-      const result = page.requestBody(appointment, '')
+      const result = page.requestBody(appointment)
 
       expect(result).toEqual(
         expect.objectContaining({
@@ -278,9 +281,9 @@ describe('CompliancePage', () => {
     })
 
     it('saves the given contactOutcomeCode', () => {
-      page = new CompliancePage(action, {})
+      page = new CompliancePage(action, {}, 'code')
 
-      const result = page.requestBody(appointment, 'code')
+      const result = page.requestBody(appointment)
 
       expect(result.contactOutcomeCode).toEqual('code')
     })

@@ -38,6 +38,10 @@ export default class AppointmentPage extends Page {
     return cy.get('a').contains('Finish session')
   }
 
+  clickLeftSiteEarly() {
+    cy.get('a').contains('Left site early').click()
+  }
+
   shouldShowOffenderDetails(): void {
     cy.get('span').contains(this.appointment.offender.crn)
   }

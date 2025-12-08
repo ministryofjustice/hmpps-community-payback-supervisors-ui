@@ -2,6 +2,7 @@ import { AppointmentDto, UpdateAppointmentOutcomeDto } from '../../../@types/sha
 import { AppointmentCompletedAction } from '../../../@types/user-defined'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
+import ReferenceDataService from '../../../services/referenceDataService'
 import appointmentFactory from '../../../testutils/factories/appointmentFactory'
 import DateTimeFormats from '../../../utils/dateTimeUtils'
 import EndTimePage from './endTimePage'
@@ -85,13 +86,30 @@ describe('EndTimePage', () => {
 
   describe('next', () => {
     describe('completed', () => {
-      it('should be able to work path with project code and appointment Id', () => {
+      it('should be completed compliance path with project code and appointment Id', () => {
         const appointmentId = '1'
         const projectCode = '2'
         const page = new EndTimePage('completed')
         const result = page.nextPath(appointmentId, projectCode)
 
-        expect(result).toEqual(paths.appointments.completed.compliance({ projectCode, appointmentId }))
+        expect(result).toEqual(
+          paths.appointments.completed.compliance({
+            projectCode,
+            appointmentId,
+            contactOutcomeCode: ReferenceDataService.attendedCompliedOutcomeCode,
+          }),
+        )
+      })
+    })
+
+    describe('leftEarly', () => {
+      it('should be left early reason path with project code and appointment Id', () => {
+        const appointmentId = '1'
+        const projectCode = '2'
+        const page = new EndTimePage('leftEarly')
+        const result = page.nextPath(appointmentId, projectCode)
+
+        expect(result).toEqual(paths.appointments.leftEarly.reason({ projectCode, appointmentId }))
       })
     })
   })

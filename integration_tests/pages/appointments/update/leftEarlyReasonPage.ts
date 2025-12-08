@@ -3,21 +3,21 @@ import paths from '../../../../server/paths'
 import Offender from '../../../../server/models/offender'
 import PageWithNotes from './base/pageWithNotes'
 
-export default class UnableToWorkPage extends PageWithNotes {
+export default class LeftEarlyReasonPage extends PageWithNotes {
   constructor(appointment: AppointmentDto) {
     const offender = new Offender(appointment.offender)
-    const title = `Why is ${offender.name} unable to work today?`
+    const title = `Why did ${offender.name} leave early?`
     super(title)
   }
 
-  static visit(appointment: AppointmentDto): UnableToWorkPage {
-    const path = paths.appointments.arrived.unableToWork({
+  static visit(appointment: AppointmentDto): LeftEarlyReasonPage {
+    const path = paths.appointments.leftEarly.reason({
       appointmentId: appointment.id.toString(),
       projectCode: appointment.projectCode,
     })
     cy.visit(path)
 
-    return new UnableToWorkPage(appointment)
+    return new LeftEarlyReasonPage(appointment)
   }
 
   selectSentHomeServiceIssues(): void {

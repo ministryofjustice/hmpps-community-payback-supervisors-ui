@@ -29,7 +29,11 @@ export default class LeftEarlyReasonPage extends BaseAppointmentUpdatePage<Body>
   }
 
   nextPath(appointmentId: string, projectCode: string): string {
-    return paths.appointments.leftEarly.compliance({ projectCode, appointmentId })
+    return paths.appointments.leftEarly.compliance({
+      projectCode,
+      appointmentId,
+      contactOutcomeCode: this.query.leftEarlyReason,
+    })
   }
 
   protected backPath(appointment: AppointmentDto): string {

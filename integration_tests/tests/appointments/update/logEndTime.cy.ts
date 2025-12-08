@@ -12,6 +12,16 @@
 //      Given I am on the end time page for a finish session form
 //      When I a submit a valid time
 //      Then I see the form next page
+//
+//  Scenario: Left early session
+//    Scenario: Validates time entered
+//      Given I am on the end time page for a left early session form
+//      When I submit an invalid time
+//      Then I see the same page with errors
+//    Scenario: Submitting a valid time
+//      Given I am on the end time page for a left early session form
+//      When I a submit a valid time
+//      Then I see the form next page
 
 import appointmentFactory from '../../../../server/testutils/factories/appointmentFactory'
 import appointmentStatusFactory from '../../../../server/testutils/factories/appointmentStatusFactory'
@@ -22,6 +32,7 @@ import { AppointmentStatus } from '../../../../server/services/appointmentStatus
 import EndTimePage from '../../../pages/appointments/update/endTimePage'
 import CompliancePage from '../../../pages/appointments/update/compliancePage'
 import sessionSummaryFactory from '../../../../server/testutils/factories/sessionSummaryFactory'
+import LeftEarlyReasonPage from '../../../pages/appointments/update/leftEarlyReasonPage'
 
 context('Log finish time ', () => {
   let appointment: AppointmentDto
@@ -40,11 +51,11 @@ context('Log finish time ', () => {
     cy.signIn()
   })
 
-  //  Scenario: Arrived
+  //  Scenario: Finish session
   describe('completed', () => {
     //  Scenario: Validates time entered
     it('validates the time entered on submit', () => {
-      // Given I am on the start time page for an arrival form
+      // Given I am on the end time page for a completed session form
       const page = EndTimePage.visit(appointment, 'completed')
 
       // When I submit an invalid time
@@ -58,7 +69,7 @@ context('Log finish time ', () => {
     })
 
     it('validates the entered time is before start time on submit', () => {
-      // Given I am on the start time page for an arrival form
+      // Given I am on the end time page for a completed session form
       const page = EndTimePage.visit(appointment, 'completed')
 
       // When I submit an invalid time
@@ -72,8 +83,8 @@ context('Log finish time ', () => {
     })
 
     //  Scenario: Submitting a valid time
-    it('submits start time and navigates to next page', () => {
-      // Given I am on the start time page for an arrival form
+    it('submits end time and navigates to next page', () => {
+      // Given I am on the end time page for an arrival form
       const page = EndTimePage.visit(appointment, 'completed')
 
       // When I submit a valid time
@@ -83,6 +94,53 @@ context('Log finish time ', () => {
 
       // Then I see the next form page
       Page.verifyOnPage(CompliancePage, appointment)
+    })
+  })
+
+  //  Scenario: Left early session
+  describe('leftEarly', () => {
+    //  Scenario: Validates time entered
+    it('validates the time entered on submit', () => {
+      // Given I am on the end time page for a left early journey
+      const page = EndTimePage.visit(appointment, 'leftEarly')
+
+      // When I submit an invalid time
+      page.clearTime()
+      page.clickSubmit()
+
+      // Then I see the same page with errors
+      Page.verifyOnPage(EndTimePage, appointment, 'leftEarly')
+      page.shouldShowValidationErrors()
+      page.shouldHaveTimeValue('')
+    })
+
+    it('validates the entered time is before end time on submit', () => {
+      // Given I am on the end time page for a left early journey
+      const page = EndTimePage.visit(appointment, 'leftEarly')
+
+      // When I submit an invalid time
+      page.enterTime('07:00')
+      page.clickSubmit()
+
+      // Then I see the same page with errors
+      Page.verifyOnPage(EndTimePage, appointment, 'leftEarly')
+      page.shouldShowStartTimeValidationErrors()
+      page.shouldHaveTimeValue('07:00')
+    })
+
+    //  Scenario: Submitting a valid time
+    it('submits end time and navigates to next page', () => {
+      // Given I am on the end time page for a left early journey
+      const page = EndTimePage.visit(appointment, 'leftEarly')
+
+      // When I submit a valid time
+      cy.task('stubUpdateAppointmentOutcome', { appointment })
+      cy.task('stubGetContactOutcomes')
+      page.enterTime('09:30')
+      page.clickSubmit()
+
+      // Then I see the next form page
+      Page.verifyOnPage(LeftEarlyReasonPage, appointment)
     })
   })
 })

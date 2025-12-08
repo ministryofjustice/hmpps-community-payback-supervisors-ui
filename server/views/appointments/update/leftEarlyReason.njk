@@ -17,12 +17,12 @@
     }
   }) %}
     {{ govukRadios({
-      name: "leftEarly",
+      name: "leftEarlyReason",
       hint: {
         text: "Select one option"
       },
       items: items,
-      errorMessage: errors.leftEarly
+      errorMessage: errors.leftEarlyReason
     }) }}
 
     {{ govukCharacterCount({

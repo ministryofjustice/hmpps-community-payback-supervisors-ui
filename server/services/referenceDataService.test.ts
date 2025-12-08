@@ -47,7 +47,7 @@ describe('ReferenceDataService', () => {
 
       referenceDataClient.getContactOutcomes.mockResolvedValue(contactOutcomes)
 
-      const result = await referenceDataService.getContactOutcomesForArrivedUnableToWork('some-username')
+      const result = await referenceDataService.getAttendedNonWorkingContactOutcomes('some-username')
 
       expect(referenceDataClient.getContactOutcomes).toHaveBeenCalledTimes(1)
       expect(result.contactOutcomes).toEqual([

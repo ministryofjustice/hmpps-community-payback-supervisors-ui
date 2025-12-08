@@ -16,6 +16,8 @@ export default class AppointmentPage extends BasePage {
 
   readonly finishButtonLocator: Locator
 
+  readonly leftSiteEarlyButtonLocator: Locator
+
   readonly personDetailsHeading: Locator
 
   constructor(readonly page: Page) {
@@ -25,6 +27,7 @@ export default class AppointmentPage extends BasePage {
     this.arrivedButtonLocator = page.getByRole('button', { name: 'Arrived', exact: true })
     this.notArrivedButtonLocator = page.getByRole('button', { name: 'Not arrived' })
     this.finishButtonLocator = page.getByRole('button', { name: 'Finish session' })
+    this.leftSiteEarlyButtonLocator = page.getByRole('button', { name: 'Left site early' })
     this.personDetailsHeading = this.page.getByRole('heading', { name: 'Person details' })
   }
 
@@ -38,6 +41,10 @@ export default class AppointmentPage extends BasePage {
 
   async clickFinishSession() {
     await this.finishButtonLocator.click()
+  }
+
+  async clickLeftSiteEarly() {
+    await this.leftSiteEarlyButtonLocator.click()
   }
 }
 
