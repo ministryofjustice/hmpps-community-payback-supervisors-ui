@@ -15,6 +15,7 @@ export default class AppointmentUtils {
     'Session complete': 'blue',
     'Not expected': 'red',
     'Cannot work': 'purple',
+    'Left site': 'orange',
   }
 
   static isSessionComplete(status: AppointmentStatusType): boolean {
