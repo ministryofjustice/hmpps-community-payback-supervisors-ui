@@ -1,7 +1,6 @@
 import type { Request, RequestHandler, Response } from 'express'
 import AppointmentService from '../../services/appointmentService'
 import generateErrorSummary from '../../utils/errorUtils'
-import paths from '../../paths'
 import LeftEarlyReasonPage from '../../pages/appointments/update/leftEarlyReasonPage'
 import ReferenceDataService from '../../services/referenceDataService'
 
@@ -56,7 +55,7 @@ export default class LeftEarlyReasonController {
         })
       }
 
-      return res.redirect(paths.appointments.confirm.leftEarly({ projectCode, appointmentId }))
+      return res.redirect(page.nextPath(appointmentId, projectCode))
     }
   }
 }

@@ -3,6 +3,7 @@ import { AppointmentCompletedAction, ValidationErrors } from '../../../@types/us
 import InvalidUpdateActionError from '../../../errors/invalidUpdateActionError'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
+import ReferenceDataService from '../../../services/referenceDataService'
 import DateTimeFormats from '../../../utils/dateTimeUtils'
 import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './baseAppointmentUpdatePage'
 
@@ -30,7 +31,11 @@ export default class EndTimePage extends BaseAppointmentUpdatePage<Body> {
 
   nextPath(appointmentId: string, projectCode: string): string {
     // TODO: Add logic for left early journey
-    return paths.appointments.completed.compliance({ projectCode, appointmentId })
+    return paths.appointments.completed.compliance({
+      projectCode,
+      appointmentId,
+      contactOutcomeCode: ReferenceDataService.attendedCompliedOutcomeCode,
+    })
   }
 
   protected backPath(appointment: AppointmentDto): string {

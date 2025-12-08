@@ -2,6 +2,7 @@ import { AppointmentDto, UpdateAppointmentOutcomeDto } from '../../../@types/sha
 import { AppointmentCompletedAction } from '../../../@types/user-defined'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
+import ReferenceDataService from '../../../services/referenceDataService'
 import appointmentFactory from '../../../testutils/factories/appointmentFactory'
 import DateTimeFormats from '../../../utils/dateTimeUtils'
 import EndTimePage from './endTimePage'
@@ -91,7 +92,13 @@ describe('EndTimePage', () => {
         const page = new EndTimePage('completed')
         const result = page.nextPath(appointmentId, projectCode)
 
-        expect(result).toEqual(paths.appointments.completed.compliance({ projectCode, appointmentId }))
+        expect(result).toEqual(
+          paths.appointments.completed.compliance({
+            projectCode,
+            appointmentId,
+            contactOutcomeCode: ReferenceDataService.attendedCompliedOutcomeCode,
+          }),
+        )
       })
     })
   })
