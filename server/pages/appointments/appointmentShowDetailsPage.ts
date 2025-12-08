@@ -30,7 +30,7 @@ export default class AppointmentShowDetailsPage {
   private appointmentActions(appointment: AppointmentDto, appointmentStatus: AppointmentStatusType): LinkItem[] {
     const appointmentPathParams = { projectCode: appointment.projectCode, appointmentId: appointment.id.toString() }
 
-    if (appointmentStatus === 'Completed') {
+    if (appointmentStatus === 'Completed' || appointmentStatus === 'Absent') {
       return []
     }
     if (appointmentStatus === 'Working') {

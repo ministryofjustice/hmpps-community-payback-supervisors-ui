@@ -106,7 +106,7 @@ context('viewAnAppointment', () => {
       const appointmentPage = AppointmentPage.visit(appointment)
 
       // When I click on 'Arrived'
-      appointmentPage.clickArrived()
+      appointmentPage.arrivedButton().click()
 
       // Then I should be taken to the first page of the arrival form
       Page.verifyOnPage(StartTimePage, appointment, 'arrived')
@@ -125,7 +125,7 @@ context('viewAnAppointment', () => {
       const appointmentPage = AppointmentPage.visit(appointment)
 
       // When I click on 'Not arrived'
-      appointmentPage.clickNotArrived()
+      appointmentPage.notArrivedButton().click()
 
       // Then I should be taken to the first page of the absent form
       Page.verifyOnPage(StartTimePage, appointment, 'absent')
@@ -147,10 +147,27 @@ context('viewAnAppointment', () => {
       const appointmentPage = AppointmentPage.visit(appointment)
 
       // When I click on 'Finished'
-      appointmentPage.clickFinished()
+      appointmentPage.finishedButton().click()
 
       // Then I should be taken to the first page of the finish session form
       Page.verifyOnPage(EndTimePage, appointment, 'completed')
+    })
+  })
+
+  describe('absent appointment', () => {
+    it('should not have any available actions', () => {
+      // Given I am on the appointment page
+      const appointment = appointmentFactory.build()
+      const appointmentStatus = appointmentStatusFactory.build({ appointmentId: appointment.id, status: 'Absent' })
+
+      cy.signIn()
+      cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
+      cy.task('stubGetForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
+
+      const appointmentPage = AppointmentPage.visit(appointment)
+
+      // Then I should not see any appointment update actions
+      appointmentPage.shouldNotHaveAnyActions()
     })
   })
 })

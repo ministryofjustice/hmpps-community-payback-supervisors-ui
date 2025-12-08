@@ -26,16 +26,16 @@ export default class AppointmentPage extends Page {
     return new AppointmentPage(appointment)
   }
 
-  clickArrived() {
-    cy.get('a').contains('Arrived').click()
+  arrivedButton() {
+    return cy.get('a').contains('Arrived')
   }
 
-  clickNotArrived() {
-    cy.get('a').contains('Not arrived').click()
+  notArrivedButton() {
+    return cy.get('a').contains('Not arrived')
   }
 
-  clickFinished() {
-    cy.get('a').contains('Finish session').click()
+  finishedButton() {
+    return cy.get('a').contains('Finish session')
   }
 
   shouldShowOffenderDetails(): void {
@@ -49,5 +49,11 @@ export default class AppointmentPage extends Page {
   shouldShowAppointmentDetails(): void {
     this.appointmentDetails.getValueWithLabel('Start time').should('contain.text', this.appointment.startTime)
     this.appointmentDetails.getValueWithLabel('Finish time').should('contain.text', this.appointment.endTime)
+  }
+
+  shouldNotHaveAnyActions() {
+    this.arrivedButton().should('not.exist')
+    this.notArrivedButton().should('not.exist')
+    this.finishedButton().should('not.exist')
   }
 }
