@@ -112,6 +112,7 @@ context('Log start time ', () => {
 
       // When I submit a valid time
       cy.task('stubUpdateAppointmentOutcome', { appointment })
+      cy.task('stubSaveForm', { sessionOrAppointment: appointment })
       page.enterTime('09:30')
       page.clickSubmit()
 
