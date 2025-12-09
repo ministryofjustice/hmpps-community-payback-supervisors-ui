@@ -1,5 +1,5 @@
 import { AppointmentDto } from '../../../@types/shared'
-import { AppointmentCompletedAction, GovUkRadioOption } from '../../../@types/user-defined'
+import { AppointmentCompletedAction, AppointmentStatusType, GovUkRadioOption } from '../../../@types/user-defined'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
 import appointmentFactory from '../../../testutils/factories/appointmentFactory'
@@ -286,6 +286,17 @@ describe('CompliancePage', () => {
       const result = page.requestBody(appointment)
 
       expect(result.contactOutcomeCode).toEqual('code')
+    })
+  })
+
+  describe('completedStatus', () => {
+    it.each([
+      ['Session complete', 'completed'],
+      ['Left site', 'leftEarly'],
+    ])('returns "%s" status if action is "%s"', (status: AppointmentStatusType, action: AppointmentCompletedAction) => {
+      page = new CompliancePage(action, {}, contactOutcomeCode)
+
+      expect(page.completedStatus()).toEqual(status)
     })
   })
 })

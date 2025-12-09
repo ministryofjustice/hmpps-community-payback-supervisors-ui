@@ -56,9 +56,9 @@ export default class ComplianceController {
         data: payload,
       })
 
-      if (action === 'completed') {
-        this.appointmentStatusService.updateStatus(appointment, 'Session complete', res.locals.user.name)
-      }
+      const completedStatus = page.completedStatus()
+
+      this.appointmentStatusService.updateStatus(appointment, completedStatus, res.locals.user.name)
 
       return res.redirect(page.nextPath(appointmentParams.projectCode, appointmentParams.appointmentId))
     }

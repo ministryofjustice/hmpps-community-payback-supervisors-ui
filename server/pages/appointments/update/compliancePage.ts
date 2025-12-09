@@ -1,5 +1,11 @@
 import { AttendanceDataDto, AppointmentDto, UpdateAppointmentOutcomeDto } from '../../../@types/shared'
-import { GovUkRadioOption, YesOrNo, ValidationErrors, AppointmentCompletedAction } from '../../../@types/user-defined'
+import {
+  GovUkRadioOption,
+  YesOrNo,
+  ValidationErrors,
+  AppointmentCompletedAction,
+  AppointmentStatusType,
+} from '../../../@types/user-defined'
 import paths from '../../../paths'
 import GovUkRadioGroup from '../../../utils/GovUKFrontend/GovUkRadioGroup'
 import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './baseAppointmentUpdatePage'
@@ -68,6 +74,10 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
     }
   }
 
+  completedStatus(): AppointmentStatusType {
+    return this.completedStatusType[this.action]
+  }
+
   protected getValidationErrors(): ValidationErrors<Body> {
     const errors: ValidationErrors<Body> = {}
 
@@ -123,5 +133,10 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
       ...option,
       checked: option.value === checkedValue,
     }))
+  }
+
+  private completedStatusType: Record<AppointmentCompletedAction, AppointmentStatusType> = {
+    completed: 'Session complete',
+    leftEarly: 'Left site',
   }
 }
