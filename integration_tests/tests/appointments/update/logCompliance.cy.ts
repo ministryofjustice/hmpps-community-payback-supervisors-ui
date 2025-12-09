@@ -120,6 +120,8 @@ context('Log compliance', () => {
 
         // When I submit the form
         cy.task('stubUpdateAppointmentOutcome', { appointment: this.appointment })
+        cy.task('stubSaveForm', { sessionOrAppointment: this.appointment })
+
         page.clickSubmit()
 
         // Then I see the confirm left early page
