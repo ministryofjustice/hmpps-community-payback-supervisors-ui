@@ -169,8 +169,8 @@ describe('CompliancePage', () => {
           )
         })
 
-        it('should populate with appointment values and null notes if query does not exist', () => {
-          const radioItems = [{ text: 'yes', value: 'yes', checked: true }]
+        it('should populate with null values if the contact outcome has changed from the saved appointment', () => {
+          const radioItems = [{ text: 'yes', value: 'yes', checked: false }]
           jest.spyOn(GovUkRadioGroup, 'yesNoItems').mockReturnValue(radioItems)
 
           appointment = appointmentFactory.build({
@@ -179,6 +179,46 @@ describe('CompliancePage', () => {
           })
 
           page = new CompliancePage('completed', {}, contactOutcomeCode)
+          const result = page.viewData(appointment)
+
+          expect(GovUkRadioGroup.yesNoItems).toHaveBeenNthCalledWith(1, { checkedValue: null })
+          expect(GovUkRadioGroup.yesNoItems).toHaveBeenNthCalledWith(2, { checkedValue: null })
+
+          expect(result).toEqual(
+            expect.objectContaining({
+              hiVisItems: radioItems,
+              workedIntensivelyItems: radioItems,
+              workQualityItems: [
+                { text: 'Excellent', value: 'EXCELLENT', checked: false },
+                { text: 'Good', value: 'GOOD', checked: false },
+                { text: 'Satisfactory', value: 'SATISFACTORY', checked: false },
+                { text: 'Unsatisfactory', value: 'UNSATISFACTORY', checked: false },
+                { text: 'Poor', value: 'POOR', checked: false },
+                { text: 'Not applicable', value: 'NOT_APPLICABLE', checked: false },
+              ],
+              behaviourItems: [
+                { text: 'Excellent', value: 'EXCELLENT', checked: false },
+                { text: 'Good', value: 'GOOD', checked: false },
+                { text: 'Satisfactory', value: 'SATISFACTORY', checked: false },
+                { text: 'Unsatisfactory', value: 'UNSATISFACTORY', checked: false },
+                { text: 'Poor', value: 'POOR', checked: false },
+                { text: 'Not applicable', value: 'NOT_APPLICABLE', checked: false },
+              ],
+              notes: null,
+            }),
+          )
+        })
+
+        it('should populate with appointment values and null notes if query does not exist and contact outcome matches the saved appointment', () => {
+          const radioItems = [{ text: 'yes', value: 'yes', checked: true }]
+          jest.spyOn(GovUkRadioGroup, 'yesNoItems').mockReturnValue(radioItems)
+
+          appointment = appointmentFactory.build({
+            attendanceData: { hiVisWorn: null, workedIntensively: true, workQuality: 'GOOD', behaviour: 'EXCELLENT' },
+            notes: 'some note',
+          })
+
+          page = new CompliancePage('completed', {}, appointment.contactOutcomeCode)
           const result = page.viewData(appointment)
 
           expect(GovUkRadioGroup.yesNoItems).toHaveBeenNthCalledWith(1, { checkedValue: null })

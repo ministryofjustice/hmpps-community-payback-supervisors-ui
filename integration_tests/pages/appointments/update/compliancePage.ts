@@ -43,6 +43,30 @@ export default class CompliancePage extends Page {
     this.shouldHaveSelectedBehavourValue(attendanceData.behaviour)
   }
 
+  shouldHaveFormWithEmptyValues() {
+    this.hiVisOption('yes').should('not.be.checked')
+    this.hiVisOption('no').should('not.be.checked')
+
+    this.workedIntensivelyOption('yes').should('not.be.checked')
+    this.workedIntensivelyOption('no').should('not.be.checked')
+
+    this.behaviourOption('EXCELLENT').should('not.be.checked')
+    this.behaviourOption('GOOD').should('not.be.checked')
+    this.behaviourOption('NOT_APPLICABLE').should('not.be.checked')
+    this.behaviourOption('POOR').should('not.be.checked')
+    this.behaviourOption('SATISFACTORY').should('not.be.checked')
+    this.behaviourOption('UNSATISFACTORY').should('not.be.checked')
+
+    this.workQualityOption('EXCELLENT').should('not.be.checked')
+    this.workQualityOption('GOOD').should('not.be.checked')
+    this.workQualityOption('NOT_APPLICABLE').should('not.be.checked')
+    this.workQualityOption('POOR').should('not.be.checked')
+    this.workQualityOption('SATISFACTORY').should('not.be.checked')
+    this.workQualityOption('UNSATISFACTORY').should('not.be.checked')
+
+    this.shouldHaveEmptyNotes()
+  }
+
   selectHiVisValue() {
     this.hiVisOption().check()
   }

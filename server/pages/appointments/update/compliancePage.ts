@@ -147,6 +147,16 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
       return this.query
     }
 
+    if (this.contactOutcomeCode !== appointment.contactOutcomeCode) {
+      return {
+        hiVis: null,
+        workedIntensively: null,
+        workQuality: null,
+        behaviour: null,
+        notes: null,
+      }
+    }
+
     return {
       hiVis: GovUkRadioGroup.determineCheckedValue(appointment.attendanceData?.hiVisWorn),
       workedIntensively: GovUkRadioGroup.determineCheckedValue(appointment.attendanceData?.workedIntensively),

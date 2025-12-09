@@ -17,6 +17,10 @@ import ConfirmLeftEarlyPage from '../../../pages/appointments/update/confirm/con
 //    When I submit the form
 //    Then I see the log compliance page with errors
 
+//  Scenario: viewing empty form if a new contact outcome is recorded
+//    Given I am on the log compliance page for an appointment
+//    Then I should see the form with empty values
+
 //  Scenario: Viewing my submitted answers when there are errors
 //    Given I am on the log compliance page for an appointment
 //    And I complete some of the form
@@ -120,6 +124,25 @@ context('Log compliance', () => {
       page.shouldHaveEnteredNotes()
     })
 
+    // Scenario: viewing empty form if a new contact outcome is recorded
+    it('shows empty form if contact outcome has changed', function test() {
+      const appointment = appointmentFactory.build({
+        contactOutcomeCode: 'X',
+        attendanceData: {
+          hiVisWorn: true,
+          workedIntensively: false,
+          workQuality: 'GOOD',
+          behaviour: 'UNSATISFACTORY',
+        },
+      })
+      // Given I am on the log compliance page for an appointment
+      cy.task('stubFindAppointment', { appointment })
+      const page = CompliancePage.visit(appointment, 'completed', 'AATC')
+
+      // Then I should see the form with empty values
+      page.shouldHaveFormWithEmptyValues()
+    })
+
     // Scenario: viewing saved answers on an appointment if a previously recorded contact outcome has not changed
     it('shows saved appointment data if contact outcome has not changed', function test() {
       const appointment = appointmentFactory.build({
@@ -152,6 +175,7 @@ context('Log compliance', () => {
         // When I submit the form
         cy.task('stubUpdateAppointmentOutcome', { appointment: this.appointment })
         cy.task('stubSaveForm', { sessionOrAppointment: this.appointment })
+        page.completeForm()
         page.clickSubmit()
 
         // Then I see the confirm details page
@@ -185,6 +209,7 @@ context('Log compliance', () => {
         cy.task('stubUpdateAppointmentOutcome', { appointment: this.appointment })
         cy.task('stubSaveForm', { sessionOrAppointment: this.appointment })
 
+        page.completeForm()
         page.clickSubmit()
 
         // Then I see the confirm left early page
