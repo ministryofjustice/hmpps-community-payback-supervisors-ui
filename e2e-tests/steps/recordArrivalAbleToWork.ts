@@ -33,5 +33,6 @@ export default async (page: Page, selectedAppointment: number): Promise<SessionP
   await confirmWorkingPage.clickLinkToSessionPage()
 
   await sessionPage.expect.toBeOnThePage()
+  await sessionPage.expect.appointmentToHaveStatus(selectedAppointment, 'Working')
   return sessionPage
 }

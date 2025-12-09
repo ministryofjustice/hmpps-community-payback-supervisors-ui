@@ -34,4 +34,6 @@ test('Record an absence', async ({ page, deliusUser }) => {
   await confirmAbsentPage.clickLinkToSessionPage()
 
   await sessionPage.expect.toBeOnThePage()
+
+  await sessionPage.expect.appointmentToHaveStatus(selectedAppointment, 'Absent')
 })

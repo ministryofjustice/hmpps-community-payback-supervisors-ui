@@ -40,4 +40,6 @@ test('Record an appointment which starts on time but finishes early', async ({ p
 
   await confirmCompletedPage.clickLinkToSessionPage()
   await sessionPage.expect.toBeOnThePage()
+
+  await sessionPage.expect.appointmentToHaveStatus(selectedAppointment, 'Left site')
 })

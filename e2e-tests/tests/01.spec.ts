@@ -33,4 +33,6 @@ test('Record an appointment which starts and finishes on time', async ({ page, d
 
   await confirmCompletedPage.clickLinkToSessionPage()
   await sessionPage.expect.toBeOnThePage()
+
+  await sessionPage.expect.appointmentToHaveStatus(selectedAppointment, 'Session complete')
 })

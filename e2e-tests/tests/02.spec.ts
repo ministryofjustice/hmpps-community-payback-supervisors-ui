@@ -46,4 +46,6 @@ test.skip('Record an arrival and log as unable to work', async ({ page, deliusUs
   await confirmUnableToWorkPage.clickLinkToSessionPage()
 
   await sessionPage.expect.toBeOnThePage()
+
+  await sessionPage.expect.appointmentToHaveStatus(selectedAppointment, 'Cannot work')
 })
