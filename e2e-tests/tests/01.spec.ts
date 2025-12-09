@@ -8,14 +8,15 @@ import CompliancePage from '../pages/appointments/update/compliancePage'
 import ConfirmCompletedPage from '../pages/appointments/update/confirm/confirmCompletedPage'
 
 test('Record an appointment which starts and finishes on time', async ({ page, deliusUser }) => {
+  const selectedAppointment = 0
   await signIn(page, deliusUser)
   await clearSessionData(page)
 
   // record arrival able to work
-  const sessionPage = await recordArrivalAbleToWork(page)
+  const sessionPage = await recordArrivalAbleToWork(page, selectedAppointment)
 
   // record finished on time
-  await sessionPage.clickOnAnAppointment()
+  await sessionPage.clickOnAppointment(selectedAppointment)
   const appointmentPage = new AppointmentPage(page)
   await appointmentPage.clickFinishSession()
 

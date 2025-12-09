@@ -17,8 +17,8 @@ export default class SessionPage extends BasePage {
     this.clearSessionDataLinkLocator = page.getByRole('link', { name: 'Clear session data' })
   }
 
-  async clickOnAnAppointment() {
-    await this.viewDetailsLinkLocator.nth(0).click()
+  async clickOnAppointment(n: number) {
+    await this.viewDetailsLinkLocator.nth(n).click()
   }
 }
 

@@ -9,14 +9,15 @@ import LeftEarlyReasonPage from '../pages/appointments/update/leftEarlyReasonPag
 import ConfirmLeftEarlyPage from '../pages/appointments/update/confirm/confirmLeftEarlyPage'
 
 test('Record an appointment which starts on time but finishes early', async ({ page, deliusUser }) => {
+  const selectedAppointment = 0
   await signIn(page, deliusUser)
   await clearSessionData(page)
 
   // record arrival able to work
-  const sessionPage = await recordArrivalAbleToWork(page)
+  const sessionPage = await recordArrivalAbleToWork(page, selectedAppointment)
 
   // record left early
-  await sessionPage.clickOnAnAppointment()
+  await sessionPage.clickOnAppointment(selectedAppointment)
   const appointmentPage = new AppointmentPage(page)
   await appointmentPage.clickLeftSiteEarly()
 
