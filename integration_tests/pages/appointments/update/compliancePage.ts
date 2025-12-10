@@ -2,6 +2,7 @@ import { AppointmentDto, AttendanceDataDto } from '../../../../server/@types/sha
 import { AppointmentCompletedAction, YesOrNo } from '../../../../server/@types/user-defined'
 import paths from '../../../../server/paths'
 import Page from '../../page'
+import GovUkRadioGroup from '../../../../server/utils/GovUKFrontend/GovUkRadioGroup'
 
 export default class CompliancePage extends Page {
   constructor(private readonly appointment: AppointmentDto) {
@@ -30,6 +31,16 @@ export default class CompliancePage extends Page {
     this.selectWorkQualityValue()
     this.behaviourOption().check()
     this.enterNotes()
+  }
+
+  shouldHaveFormWithAppointmentValues() {
+    const { attendanceData } = this.appointment
+    this.shouldHaveSelectedHiVisValue(GovUkRadioGroup.determineCheckedValue(attendanceData.hiVisWorn))
+    this.shouldHaveSelectedWorkedIntensivelyValue(
+      GovUkRadioGroup.determineCheckedValue(attendanceData.workedIntensively),
+    )
+    this.shouldHaveSelectedWorkQualityValue(attendanceData.workQuality)
+    this.shouldHaveSelectedBehavourValue(attendanceData.behaviour)
   }
 
   selectHiVisValue() {
@@ -66,6 +77,10 @@ export default class CompliancePage extends Page {
 
   shouldHaveEnteredNotes() {
     this.notesField().should('have.value', 'Attendance notes')
+  }
+
+  shouldHaveEmptyNotes() {
+    this.notesField().should('have.value', '')
   }
 
   private hiVisOption = (value: YesOrNo = 'yes') => this.getRadioByNameAndValue('hiVis', value)
