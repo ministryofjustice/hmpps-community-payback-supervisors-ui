@@ -34,6 +34,7 @@ import appointmentFactory from '../../server/testutils/factories/appointmentFact
 import sessionSummaryFactory from '../../server/testutils/factories/sessionSummaryFactory'
 import appointmentStatusFactory from '../../server/testutils/factories/appointmentStatusFactory'
 import { contactOutcomeFactory } from '../../server/testutils/factories/contactOutcomeFactory'
+import { SessionSummariesDto } from '../../server/@types/shared'
 
 context('Home', () => {
   beforeEach(() => {
@@ -43,8 +44,19 @@ context('Home', () => {
 
   //  Scenario: viewing the home page
   it('shows the find a session search form', () => {
-    const sessionSummary = sessionSummaryFactory.build({ date: '2025-09-15', projectCode: 'N56123456' })
-    cy.task('stubNextSessions', { sessionSummary })
+    const sessionSummary = sessionSummaryFactory.build({
+      date: '2025-09-15',
+      projectCode: 'N56123456',
+      numberOfOffendersAllocated: 1,
+    })
+    const sessionSummary2 = sessionSummaryFactory.build({
+      ...sessionSummary,
+      numberOfOffendersAllocated: 2,
+    })
+
+    const sessionSummaries = { allocations: [sessionSummary, sessionSummary2] } as SessionSummariesDto
+
+    cy.task('stubNextSessions', { sessionSummaries })
 
     // Given I am logged in
     cy.signIn()

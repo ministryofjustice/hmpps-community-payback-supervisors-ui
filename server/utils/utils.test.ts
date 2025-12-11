@@ -59,4 +59,8 @@ describe('pluralise', () => {
     expect(pluralise('Appendix', 3)).not.toEqual('Appendices')
     expect(pluralise('Datum', 3)).not.toEqual('Data')
   })
+  it('should handle predefined inflections correctly', () => {
+    expect(pluralise('person', 1)).toEqual('person')
+    expect(pluralise('person', 2)).toEqual('people')
+  })
 })

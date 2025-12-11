@@ -1,7 +1,7 @@
 import type { SuperAgentRequest } from 'superagent'
 import { stubFor } from './wiremock'
 import paths from '../../server/paths/api'
-import type { SessionDto, SessionSummaryDto } from '../../server/@types/shared'
+import type { SessionDto } from '../../server/@types/shared'
 import { SessionSummariesDto } from '../../server/@types/user-defined'
 
 export default {
@@ -19,11 +19,7 @@ export default {
       },
     })
   },
-  stubNextSessions: ({ sessionSummary }: { sessionSummary: SessionSummaryDto[] }): SuperAgentRequest => {
-    const jsonBody = {
-      allocations: [sessionSummary],
-    } as SessionSummariesDto
-
+  stubNextSessions: ({ sessionSummaries }: { sessionSummaries: SessionSummariesDto }): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
@@ -33,7 +29,7 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody,
+        jsonBody: sessionSummaries,
       },
     })
   },
