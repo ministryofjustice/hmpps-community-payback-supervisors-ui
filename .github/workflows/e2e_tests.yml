@@ -44,7 +44,7 @@ jobs:
         if: steps.refresh-cache.outputs.cache-hit != 'true'
         shell: bash
         run: |
-          npm ci --no-audit
+          npm run setup
       - name: install playwright
         shell: bash
         run: |
