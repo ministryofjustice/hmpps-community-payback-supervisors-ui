@@ -93,63 +93,160 @@ describe('CompliancePage', () => {
         expect(result.notes).toEqual(null)
       })
 
-      describe('workQuality', () => {
-        it('should return items for workQuality without checked answer', async () => {
-          appointment = appointmentFactory.build({ attendanceData: { workQuality: null } })
+      it('should return items for workQuality', async () => {
+        appointment = appointmentFactory.build({ attendanceData: { workQuality: null } })
 
-          const result = page.viewData(appointment)
-          expect(result.workQualityItems).toEqual([
-            { text: 'Excellent', value: 'EXCELLENT', checked: false },
-            { text: 'Good', value: 'GOOD', checked: false },
-            { text: 'Satisfactory', value: 'SATISFACTORY', checked: false },
-            { text: 'Unsatisfactory', value: 'UNSATISFACTORY', checked: false },
-            { text: 'Poor', value: 'POOR', checked: false },
-            { text: 'Not applicable', value: 'NOT_APPLICABLE', checked: false },
-          ])
-        })
-
-        it('should return items for workQuality with checked answer', async () => {
-          appointment = appointmentFactory.build({ attendanceData: { workQuality: 'GOOD' } })
-
-          const result = page.viewData(appointment)
-          expect(result.workQualityItems).toEqual([
-            { text: 'Excellent', value: 'EXCELLENT', checked: false },
-            { text: 'Good', value: 'GOOD', checked: true },
-            { text: 'Satisfactory', value: 'SATISFACTORY', checked: false },
-            { text: 'Unsatisfactory', value: 'UNSATISFACTORY', checked: false },
-            { text: 'Poor', value: 'POOR', checked: false },
-            { text: 'Not applicable', value: 'NOT_APPLICABLE', checked: false },
-          ])
-        })
+        const result = page.viewData(appointment)
+        expect(result.workQualityItems).toEqual([
+          { text: 'Excellent', value: 'EXCELLENT', checked: false },
+          { text: 'Good', value: 'GOOD', checked: false },
+          { text: 'Satisfactory', value: 'SATISFACTORY', checked: false },
+          { text: 'Unsatisfactory', value: 'UNSATISFACTORY', checked: false },
+          { text: 'Poor', value: 'POOR', checked: false },
+          { text: 'Not applicable', value: 'NOT_APPLICABLE', checked: false },
+        ])
       })
 
-      describe('behaviour', () => {
-        it('should return items for behaviour without checked answer', async () => {
-          appointment = appointmentFactory.build({ attendanceData: { behaviour: null } })
+      it('should return items for behaviour', async () => {
+        appointment = appointmentFactory.build({ attendanceData: { behaviour: null } })
 
+        const result = page.viewData(appointment)
+        expect(result.behaviourItems).toEqual([
+          { text: 'Excellent', value: 'EXCELLENT', checked: false },
+          { text: 'Good', value: 'GOOD', checked: false },
+          { text: 'Satisfactory', value: 'SATISFACTORY', checked: false },
+          { text: 'Unsatisfactory', value: 'UNSATISFACTORY', checked: false },
+          { text: 'Poor', value: 'POOR', checked: false },
+          { text: 'Not applicable', value: 'NOT_APPLICABLE', checked: false },
+        ])
+      })
+
+      describe('populated form data', () => {
+        it('should populate with query values if query exists', () => {
+          const radioItems = [{ text: 'yes', value: 'yes', checked: true }]
+          jest.spyOn(GovUkRadioGroup, 'yesNoItems').mockReturnValue(radioItems)
+          const query: ComplianceQuery = {
+            hiVis: 'yes',
+            workedIntensively: 'no',
+            workQuality: null,
+            behaviour: 'GOOD',
+            notes: 'note',
+          }
+
+          appointment = appointmentFactory.build({
+            attendanceData: { hiVisWorn: null, workedIntensively: true, workQuality: 'GOOD', behaviour: 'EXCELLENT' },
+            notes: 'some note',
+          })
+
+          page = new CompliancePage('completed', query, contactOutcomeCode)
           const result = page.viewData(appointment)
-          expect(result.behaviourItems).toEqual([
-            { text: 'Excellent', value: 'EXCELLENT', checked: false },
-            { text: 'Good', value: 'GOOD', checked: false },
-            { text: 'Satisfactory', value: 'SATISFACTORY', checked: false },
-            { text: 'Unsatisfactory', value: 'UNSATISFACTORY', checked: false },
-            { text: 'Poor', value: 'POOR', checked: false },
-            { text: 'Not applicable', value: 'NOT_APPLICABLE', checked: false },
-          ])
+
+          expect(GovUkRadioGroup.yesNoItems).toHaveBeenNthCalledWith(1, { checkedValue: 'yes' })
+          expect(GovUkRadioGroup.yesNoItems).toHaveBeenNthCalledWith(2, { checkedValue: 'no' })
+
+          expect(result).toEqual(
+            expect.objectContaining({
+              hiVisItems: radioItems,
+              workedIntensivelyItems: radioItems,
+              workQualityItems: [
+                { text: 'Excellent', value: 'EXCELLENT', checked: false },
+                { text: 'Good', value: 'GOOD', checked: false },
+                { text: 'Satisfactory', value: 'SATISFACTORY', checked: false },
+                { text: 'Unsatisfactory', value: 'UNSATISFACTORY', checked: false },
+                { text: 'Poor', value: 'POOR', checked: false },
+                { text: 'Not applicable', value: 'NOT_APPLICABLE', checked: false },
+              ],
+              behaviourItems: [
+                { text: 'Excellent', value: 'EXCELLENT', checked: false },
+                { text: 'Good', value: 'GOOD', checked: true },
+                { text: 'Satisfactory', value: 'SATISFACTORY', checked: false },
+                { text: 'Unsatisfactory', value: 'UNSATISFACTORY', checked: false },
+                { text: 'Poor', value: 'POOR', checked: false },
+                { text: 'Not applicable', value: 'NOT_APPLICABLE', checked: false },
+              ],
+              notes: 'note',
+            }),
+          )
         })
 
-        it('should return items for behaviour with checked answer', async () => {
-          appointment = appointmentFactory.build({ attendanceData: { behaviour: 'UNSATISFACTORY' } })
+        it('should populate with null values if the contact outcome has changed from the saved appointment', () => {
+          const radioItems = [{ text: 'yes', value: 'yes', checked: false }]
+          jest.spyOn(GovUkRadioGroup, 'yesNoItems').mockReturnValue(radioItems)
 
+          appointment = appointmentFactory.build({
+            attendanceData: { hiVisWorn: null, workedIntensively: true, workQuality: 'GOOD', behaviour: 'EXCELLENT' },
+            notes: 'some note',
+          })
+
+          page = new CompliancePage('completed', {}, contactOutcomeCode)
           const result = page.viewData(appointment)
-          expect(result.behaviourItems).toEqual([
-            { text: 'Excellent', value: 'EXCELLENT', checked: false },
-            { text: 'Good', value: 'GOOD', checked: false },
-            { text: 'Satisfactory', value: 'SATISFACTORY', checked: false },
-            { text: 'Unsatisfactory', value: 'UNSATISFACTORY', checked: true },
-            { text: 'Poor', value: 'POOR', checked: false },
-            { text: 'Not applicable', value: 'NOT_APPLICABLE', checked: false },
-          ])
+
+          expect(GovUkRadioGroup.yesNoItems).toHaveBeenNthCalledWith(1, { checkedValue: null })
+          expect(GovUkRadioGroup.yesNoItems).toHaveBeenNthCalledWith(2, { checkedValue: null })
+
+          expect(result).toEqual(
+            expect.objectContaining({
+              hiVisItems: radioItems,
+              workedIntensivelyItems: radioItems,
+              workQualityItems: [
+                { text: 'Excellent', value: 'EXCELLENT', checked: false },
+                { text: 'Good', value: 'GOOD', checked: false },
+                { text: 'Satisfactory', value: 'SATISFACTORY', checked: false },
+                { text: 'Unsatisfactory', value: 'UNSATISFACTORY', checked: false },
+                { text: 'Poor', value: 'POOR', checked: false },
+                { text: 'Not applicable', value: 'NOT_APPLICABLE', checked: false },
+              ],
+              behaviourItems: [
+                { text: 'Excellent', value: 'EXCELLENT', checked: false },
+                { text: 'Good', value: 'GOOD', checked: false },
+                { text: 'Satisfactory', value: 'SATISFACTORY', checked: false },
+                { text: 'Unsatisfactory', value: 'UNSATISFACTORY', checked: false },
+                { text: 'Poor', value: 'POOR', checked: false },
+                { text: 'Not applicable', value: 'NOT_APPLICABLE', checked: false },
+              ],
+              notes: null,
+            }),
+          )
+        })
+
+        it('should populate with appointment values and null notes if query does not exist and contact outcome matches the saved appointment', () => {
+          const radioItems = [{ text: 'yes', value: 'yes', checked: true }]
+          jest.spyOn(GovUkRadioGroup, 'yesNoItems').mockReturnValue(radioItems)
+
+          appointment = appointmentFactory.build({
+            attendanceData: { hiVisWorn: null, workedIntensively: true, workQuality: 'GOOD', behaviour: 'EXCELLENT' },
+            notes: 'some note',
+          })
+
+          page = new CompliancePage('completed', {}, appointment.contactOutcomeCode)
+          const result = page.viewData(appointment)
+
+          expect(GovUkRadioGroup.yesNoItems).toHaveBeenNthCalledWith(1, { checkedValue: null })
+          expect(GovUkRadioGroup.yesNoItems).toHaveBeenNthCalledWith(2, { checkedValue: 'yes' })
+
+          expect(result).toEqual(
+            expect.objectContaining({
+              hiVisItems: radioItems,
+              workedIntensivelyItems: radioItems,
+              workQualityItems: [
+                { text: 'Excellent', value: 'EXCELLENT', checked: false },
+                { text: 'Good', value: 'GOOD', checked: true },
+                { text: 'Satisfactory', value: 'SATISFACTORY', checked: false },
+                { text: 'Unsatisfactory', value: 'UNSATISFACTORY', checked: false },
+                { text: 'Poor', value: 'POOR', checked: false },
+                { text: 'Not applicable', value: 'NOT_APPLICABLE', checked: false },
+              ],
+              behaviourItems: [
+                { text: 'Excellent', value: 'EXCELLENT', checked: true },
+                { text: 'Good', value: 'GOOD', checked: false },
+                { text: 'Satisfactory', value: 'SATISFACTORY', checked: false },
+                { text: 'Unsatisfactory', value: 'UNSATISFACTORY', checked: false },
+                { text: 'Poor', value: 'POOR', checked: false },
+                { text: 'Not applicable', value: 'NOT_APPLICABLE', checked: false },
+              ],
+              notes: null,
+            }),
+          )
         })
       })
     })

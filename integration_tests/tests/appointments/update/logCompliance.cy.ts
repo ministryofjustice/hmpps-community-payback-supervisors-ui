@@ -17,6 +17,20 @@ import ConfirmLeftEarlyPage from '../../../pages/appointments/update/confirm/con
 //    When I submit the form
 //    Then I see the log compliance page with errors
 
+//  Scenario: viewing empty form if a new contact outcome is recorded
+//    Given I am on the log compliance page for an appointment
+//    Then I should see the form with empty values
+
+//  Scenario: Viewing my submitted answers when there are errors
+//    Given I am on the log compliance page for an appointment
+//    And I complete some of the form
+//    When I submit the form
+//    Then I see the log compliance page with errors and my entered answers
+
+//  Scenario: viewing saved answers on an appointment if a previously recorded contact outcome has not changed
+//    Given I am on the log compliance page for an appointment
+//    Then I should see the form populated with appointment data
+
 // Scenario: Completed
 //    Scenario: Completing the log compliance page
 //      Given I am on the log compliance page for an appointment
@@ -78,6 +92,78 @@ context('Log compliance', () => {
     page.shouldShowErrorSummary('behaviour', 'Select their behaviour')
   })
 
+  describe('populating the form', function describe() {
+    // Scenario: Viewing my submitted answers when there are errors
+    it('should show user submitted values when showing validation errors', () => {
+      const appointment = appointmentFactory.build({
+        attendanceData: {
+          hiVisWorn: null,
+          workedIntensively: null,
+          workQuality: null,
+          behaviour: null,
+        },
+      })
+      // Given I am on the log compliance page for an appointment
+      cy.task('stubFindAppointment', { appointment })
+      const page = CompliancePage.visit(appointment, 'completed', 'ATSS')
+
+      // And I complete some of the form
+      page.selectHiVisValue()
+      page.selectWorkedIntensivelyValue()
+      page.selectWorkQualityValue()
+      page.enterNotes()
+
+      // When I submit the form
+      page.clickSubmit()
+
+      // Then I see the log compliance page with errors and my entered answers
+      page.shouldShowErrorSummary('behaviour', 'Select their behaviour')
+      page.shouldHaveSelectedHiVisValue()
+      page.shouldHaveSelectedWorkedIntensivelyValue()
+      page.shouldHaveSelectedWorkQualityValue()
+      page.shouldHaveEnteredNotes()
+    })
+
+    // Scenario: viewing empty form if a new contact outcome is recorded
+    it('shows empty form if contact outcome has changed', function test() {
+      const appointment = appointmentFactory.build({
+        contactOutcomeCode: 'X',
+        attendanceData: {
+          hiVisWorn: true,
+          workedIntensively: false,
+          workQuality: 'GOOD',
+          behaviour: 'UNSATISFACTORY',
+        },
+      })
+      // Given I am on the log compliance page for an appointment
+      cy.task('stubFindAppointment', { appointment })
+      const page = CompliancePage.visit(appointment, 'completed', 'AATC')
+
+      // Then I should see the form with empty values
+      page.shouldHaveFormWithEmptyValues()
+    })
+
+    // Scenario: viewing saved answers on an appointment if a previously recorded contact outcome has not changed
+    it('shows saved appointment data if contact outcome has not changed', function test() {
+      const appointment = appointmentFactory.build({
+        contactOutcomeCode: 'X',
+        attendanceData: {
+          hiVisWorn: true,
+          workedIntensively: false,
+          workQuality: 'GOOD',
+          behaviour: 'UNSATISFACTORY',
+        },
+      })
+      // Given I am on the log compliance page for an appointment
+      cy.task('stubFindAppointment', { appointment })
+      const page = CompliancePage.visit(appointment, 'completed', appointment.contactOutcomeCode)
+
+      // Then I should see the form populated with appointment data
+      page.shouldHaveFormWithAppointmentValues()
+      page.shouldHaveEmptyNotes()
+    })
+  })
+
   describe('completed', function scenario() {
     describe('submit', function describe() {
       // Scenario: Completing the log compliance page
@@ -89,6 +175,7 @@ context('Log compliance', () => {
         // When I submit the form
         cy.task('stubUpdateAppointmentOutcome', { appointment: this.appointment })
         cy.task('stubSaveForm', { sessionOrAppointment: this.appointment })
+        page.completeForm()
         page.clickSubmit()
 
         // Then I see the confirm details page
@@ -122,6 +209,7 @@ context('Log compliance', () => {
         cy.task('stubUpdateAppointmentOutcome', { appointment: this.appointment })
         cy.task('stubSaveForm', { sessionOrAppointment: this.appointment })
 
+        page.completeForm()
         page.clickSubmit()
 
         // Then I see the confirm left early page

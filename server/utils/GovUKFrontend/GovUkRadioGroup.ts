@@ -1,7 +1,7 @@
 import { GovUkRadioOption, YesOrNo } from '../../@types/user-defined'
 
 export default class GovUkRadioGroup {
-  static yesNoItems({ checkedValue }: { checkedValue?: boolean }): GovUkRadioOption[] {
+  static yesNoItems({ checkedValue }: { checkedValue?: YesOrNo }): GovUkRadioOption[] {
     const options = [
       { text: 'Yes', value: 'yes' },
       { text: 'No', value: 'no' },
@@ -9,11 +9,11 @@ export default class GovUkRadioGroup {
 
     return options.map(option => ({
       ...option,
-      checked: option.value === GovUkRadioGroup.determineCheckedValue(checkedValue),
+      checked: option.value === checkedValue,
     }))
   }
 
-  private static determineCheckedValue(value?: boolean): 'yes' | 'no' | null {
+  static determineCheckedValue(value?: boolean): 'yes' | 'no' | null {
     if (value === false) {
       return 'no'
     }

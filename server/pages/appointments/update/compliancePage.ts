@@ -60,17 +60,19 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
   }
 
   viewData(appointment: AppointmentDto): ViewData {
+    const formValues = this.formValues(appointment)
+
     return {
       ...this.commonViewData(appointment),
       hiVisItems: GovUkRadioGroup.yesNoItems({
-        checkedValue: appointment.attendanceData?.hiVisWorn,
+        checkedValue: formValues.hiVis,
       }),
       workedIntensivelyItems: GovUkRadioGroup.yesNoItems({
-        checkedValue: appointment.attendanceData?.workedIntensively,
+        checkedValue: formValues.workedIntensively,
       }),
-      workQualityItems: this.getItems(appointment.attendanceData?.workQuality),
-      behaviourItems: this.getItems(appointment.attendanceData?.behaviour),
-      notes: null,
+      workQualityItems: this.getItems(formValues.workQuality),
+      behaviourItems: this.getItems(formValues.behaviour),
+      notes: formValues.notes,
     }
   }
 
@@ -138,5 +140,33 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
   private completedStatusType: Record<AppointmentCompletedAction, AppointmentStatusType> = {
     completed: 'Session complete',
     leftEarly: 'Left site',
+  }
+
+  private formValues(appointment: AppointmentDto): ComplianceQuery {
+    if (this.hasFormBody) {
+      return this.query
+    }
+
+    if (this.contactOutcomeCode !== appointment.contactOutcomeCode) {
+      return {
+        hiVis: null,
+        workedIntensively: null,
+        workQuality: null,
+        behaviour: null,
+        notes: null,
+      }
+    }
+
+    return {
+      hiVis: GovUkRadioGroup.determineCheckedValue(appointment.attendanceData?.hiVisWorn),
+      workedIntensively: GovUkRadioGroup.determineCheckedValue(appointment.attendanceData?.workedIntensively),
+      workQuality: appointment.attendanceData?.workQuality,
+      behaviour: appointment.attendanceData?.behaviour,
+      notes: null,
+    }
+  }
+
+  private get hasFormBody() {
+    return Object.keys(this.query).length > 0
   }
 }

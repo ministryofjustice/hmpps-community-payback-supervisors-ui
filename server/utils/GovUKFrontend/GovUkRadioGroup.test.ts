@@ -19,14 +19,14 @@ describe('GovUkRadioGroup', () => {
 
     describe('handling checked values', () => {
       it('should flag "yes" option as checked if checked value is true', () => {
-        expect(GovUkRadioGroup.yesNoItems({ checkedValue: true })).toStrictEqual([
+        expect(GovUkRadioGroup.yesNoItems({ checkedValue: 'yes' })).toStrictEqual([
           { text: 'Yes', value: 'yes', checked: true },
           { text: 'No', value: 'no', checked: false },
         ])
       })
 
       it('should flag "no" option as checked if checked value is false', () => {
-        expect(GovUkRadioGroup.yesNoItems({ checkedValue: false })).toStrictEqual([
+        expect(GovUkRadioGroup.yesNoItems({ checkedValue: 'no' })).toStrictEqual([
           { text: 'Yes', value: 'yes', checked: false },
           { text: 'No', value: 'no', checked: true },
         ])
@@ -38,6 +38,18 @@ describe('GovUkRadioGroup', () => {
           { text: 'No', value: 'no', checked: false },
         ])
       })
+    })
+  })
+
+  describe('determineCheckedValue', () => {
+    it.each([
+      ['yes', true],
+      ['no', false],
+      [null, null],
+    ])('returns %s given %s', (returnValue: YesOrNo | null, value: boolean) => {
+      const result = GovUkRadioGroup.determineCheckedValue(value)
+
+      expect(result).toBe(returnValue)
     })
   })
 
