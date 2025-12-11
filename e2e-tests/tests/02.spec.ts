@@ -9,6 +9,7 @@ import ConfirmUnableToWorkPage from '../pages/appointments/update/confirm/confir
 import clearSessionData from '../steps/clearSessionData'
 
 test.skip('Record an arrival and log as unable to work', async ({ page, deliusUser }) => {
+  const selectedAppointment = 0
   const homePage = await signIn(page, deliusUser)
   await clearSessionData(page)
   await homePage.viewDetailsLinkLocator.click()
@@ -16,7 +17,7 @@ test.skip('Record an arrival and log as unable to work', async ({ page, deliusUs
   const sessionPage = new SessionPage(page)
   await sessionPage.expect.toBeOnThePage()
   await sessionPage.expect.toShowSessionDetails()
-  await sessionPage.clickOnAnAppointment()
+  await sessionPage.clickOnAppointment(selectedAppointment)
 
   const appointmentPage = new AppointmentPage(page)
   await appointmentPage.expect.toBeOnThePage()
@@ -45,4 +46,6 @@ test.skip('Record an arrival and log as unable to work', async ({ page, deliusUs
   await confirmUnableToWorkPage.clickLinkToSessionPage()
 
   await sessionPage.expect.toBeOnThePage()
+
+  await sessionPage.expect.appointmentToHaveStatus(selectedAppointment, 'Cannot work')
 })

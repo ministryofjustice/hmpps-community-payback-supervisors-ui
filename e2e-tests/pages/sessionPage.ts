@@ -2,6 +2,7 @@
 
 import { Locator, Page, expect } from '@playwright/test'
 import BasePage from './basePage'
+import { AppointmentStatusType } from '../../server/@types/user-defined'
 
 export default class SessionPage extends BasePage {
   readonly expect: SessionPageAssertions
@@ -17,8 +18,12 @@ export default class SessionPage extends BasePage {
     this.clearSessionDataLinkLocator = page.getByRole('link', { name: 'Clear session data' })
   }
 
-  async clickOnAnAppointment() {
-    await this.viewDetailsLinkLocator.nth(0).click()
+  async clickOnAppointment(n: number) {
+    await this.viewDetailsLinkLocator.nth(n).click()
+  }
+
+  async appointment(n: number): Promise<Locator> {
+    return this.page.getByRole('listitem').filter({ hasText: 'View details' }).nth(n)
   }
 }
 
@@ -37,5 +42,10 @@ class SessionPageAssertions {
       'Agatha Trunchbull',
       'Zinnia Wormwood',
     ])
+  }
+
+  async appointmentToHaveStatus(selectedAppointment: number, status: AppointmentStatusType) {
+    const appointment = await this.page.appointment(selectedAppointment)
+    await expect(appointment).toContainText(status)
   }
 }

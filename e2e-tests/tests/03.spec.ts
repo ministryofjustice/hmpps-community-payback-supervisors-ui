@@ -7,6 +7,8 @@ import ConfirmAbsentPage from '../pages/appointments/update/confirm/confirmAbsen
 import clearSessionData from '../steps/clearSessionData'
 
 test('Record an absence', async ({ page, deliusUser }) => {
+  const selectedAppointment = 0
+
   const homePage = await signIn(page, deliusUser)
   await clearSessionData(page)
   await homePage.viewDetailsLinkLocator.click()
@@ -14,7 +16,7 @@ test('Record an absence', async ({ page, deliusUser }) => {
   const sessionPage = new SessionPage(page)
   await sessionPage.expect.toBeOnThePage()
   await sessionPage.expect.toShowSessionDetails()
-  await sessionPage.clickOnAnAppointment()
+  await sessionPage.clickOnAppointment(selectedAppointment)
 
   const appointmentPage = new AppointmentPage(page)
   await appointmentPage.expect.toBeOnThePage()
@@ -32,4 +34,6 @@ test('Record an absence', async ({ page, deliusUser }) => {
   await confirmAbsentPage.clickLinkToSessionPage()
 
   await sessionPage.expect.toBeOnThePage()
+
+  await sessionPage.expect.appointmentToHaveStatus(selectedAppointment, 'Absent')
 })

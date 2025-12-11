@@ -6,13 +6,13 @@ import StartTimePage from '../pages/appointments/update/startTimePage'
 import IsAbleToWorkPage from '../pages/appointments/update/isAbleToWorkPage'
 import ConfirmWorkingPage from '../pages/appointments/update/confirm/confirmWorkingPage'
 
-export default async (page: Page): Promise<SessionPage> => {
+export default async (page: Page, selectedAppointment: number): Promise<SessionPage> => {
   const homePage = new HomePage(page)
   await homePage.viewDetailsLinkLocator.click()
 
   const sessionPage = new SessionPage(page)
   await sessionPage.expect.toBeOnThePage()
-  await sessionPage.clickOnAnAppointment()
+  await sessionPage.clickOnAppointment(selectedAppointment)
 
   const appointmentPage = new AppointmentPage(page)
   await appointmentPage.expect.toBeOnThePage()
@@ -33,5 +33,6 @@ export default async (page: Page): Promise<SessionPage> => {
   await confirmWorkingPage.clickLinkToSessionPage()
 
   await sessionPage.expect.toBeOnThePage()
+  await sessionPage.expect.appointmentToHaveStatus(selectedAppointment, 'Working')
   return sessionPage
 }
