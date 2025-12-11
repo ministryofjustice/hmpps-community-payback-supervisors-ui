@@ -24,6 +24,13 @@ export default class IndexPage extends Page {
         )
         cy.get('h3').should('contain.text', this.sessionSummary.projectName)
         cy.get('p').should('contain.text', this.sessionSummary.numberOfOffendersAllocated)
+        cy.get('p').should('contain.text', 'person')
+      })
+
+    cy.get('[data-cy=session-details]')
+      .last()
+      .within(() => {
+        cy.get('p').should('contain.text', 'people')
       })
   }
 }

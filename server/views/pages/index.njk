@@ -26,7 +26,7 @@
             <h3 class="govuk-notification-banner__heading">
               {{session.projectName}}
             </h3>
-            <p class="govuk-body">{{ session.numberOfOffendersAllocated }} people scheduled to work this session</p>
+            <p class="govuk-body">{{ session.numberOfOffendersAllocated }} {{ 'person' | pluralise(session.numberOfOffendersAllocated) }} scheduled to work this session</p>
 
             {{ govukButton({
               text: "View details",

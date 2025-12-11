@@ -32,6 +32,15 @@ export const notFound = (res: Response) => {
   })
 }
 
+const inflections = {
+  plural: {
+    person: 'people',
+  } as Record<string, string>,
+}
+
 export const pluralise = (str: string, count: number, suffix: string = 's') => {
-  return count !== 1 ? `${str}${suffix}` : str
+  if (count === 1) {
+    return str
+  }
+  return inflections.plural[str] ?? `${str}${suffix}`
 }
