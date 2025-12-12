@@ -14,7 +14,7 @@ export default class SessionPage extends BasePage {
   constructor(readonly page: Page) {
     super(page)
     this.expect = new SessionPageAssertions(this)
-    this.viewDetailsLinkLocator = page.getByRole('link', { name: 'View details' })
+    this.viewDetailsLinkLocator = page.getByRole('link', { name: 'View and update' })
     this.clearSessionDataLinkLocator = page.getByRole('link', { name: 'Clear session data' })
   }
 
@@ -23,7 +23,7 @@ export default class SessionPage extends BasePage {
   }
 
   async appointment(n: number): Promise<Locator> {
-    return this.page.getByRole('listitem').filter({ hasText: 'View details' }).nth(n)
+    return this.page.getByRole('listitem').filter({ hasText: 'View and update' }).nth(n)
   }
 }
 

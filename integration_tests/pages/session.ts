@@ -19,7 +19,7 @@ export default class SessionPage extends Page {
   }
 
   clickOnAnAppointment() {
-    cy.get('a').contains('View details').click()
+    cy.get('a').contains('View and update').click()
   }
 
   shouldShowSessionDetails() {
