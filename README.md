@@ -91,6 +91,16 @@ Or to run with Cypress UI:
 
 `npm run test:integration:local:ui`
 
+## Managing dependencies
+
+This app uses [hmpps-npm-script-allowlist](https://github.com/ministryofjustice/hmpps-typescript-lib/tree/main/packages/npm-script-allowlist) to restrict pre/post install scripts to help mitigate supply-chain attacks using this vector. Any `npm ci` that you would normally execute or put in scripts, should be replaced by `npm run setup` which ensures the allowlist checks are run.
+
+This library forbids these scripts to run as part of `npm install`. If the library you are installing depends on them, you will need to run `npm run setup` afterward and then go through any warnings and check any scripts it needs.
+
+If a change to the allow list configuration is required (as prompted when running `npm run setup`), follow the [guidance in the package README](https://github.com/ministryofjustice/hmpps-typescript-lib/tree/main/packages/npm-script-allowlist#how-can-i-tell-whether-a-script-is-safe-to-allowforbid) on how to investigate whether scripts should be allowed or forbidden.
+
+If you're unsure about whether a script should be allowed, ask in the #typescript channel on Slack.
+
 ## Change log
 
 A changelog for the service is available [here](./CHANGELOG.md)
