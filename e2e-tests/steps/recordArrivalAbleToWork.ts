@@ -5,14 +5,16 @@ import AppointmentPage from '../pages/appointmentPage'
 import StartTimePage from '../pages/appointments/update/startTimePage'
 import IsAbleToWorkPage from '../pages/appointments/update/isAbleToWorkPage'
 import ConfirmWorkingPage from '../pages/appointments/update/confirm/confirmWorkingPage'
+import DeliusTestData from '../delius/deliusTestData'
 
-export default async (page: Page, selectedAppointment: number): Promise<SessionPage> => {
+export default async (page: Page, deliusData: DeliusTestData, personName: string): Promise<SessionPage> => {
   const homePage = new HomePage(page)
-  await homePage.viewDetailsLinkLocator.click()
+  await homePage.clickViewDetailsForProject(deliusData.project.name)
 
   const sessionPage = new SessionPage(page)
   await sessionPage.expect.toBeOnThePage()
-  await sessionPage.clickOnAppointment(selectedAppointment)
+  await sessionPage.expect.toShowSessionDetails(deliusData)
+  await sessionPage.clickOnAnAppointmentForPerson(personName)
 
   const appointmentPage = new AppointmentPage(page)
   await appointmentPage.expect.toBeOnThePage()
@@ -33,6 +35,6 @@ export default async (page: Page, selectedAppointment: number): Promise<SessionP
   await confirmWorkingPage.clickLinkToSessionPage()
 
   await sessionPage.expect.toBeOnThePage()
-  await sessionPage.expect.appointmentToHaveStatus(selectedAppointment, 'Working')
+  await sessionPage.expect.appointmentToHaveStatus(personName, 'Working')
   return sessionPage
 }

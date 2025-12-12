@@ -1,23 +1,24 @@
 import test from '../test'
 import signIn from '../steps/signIn'
-import clearSessionData from '../steps/clearSessionData'
 import recordArrivalAbleToWork from '../steps/recordArrivalAbleToWork'
 import AppointmentPage from '../pages/appointmentPage'
 import EndTimePage from '../pages/appointments/update/endTimePage'
 import CompliancePage from '../pages/appointments/update/compliancePage'
 import LeftEarlyReasonPage from '../pages/appointments/update/leftEarlyReasonPage'
 import ConfirmLeftEarlyPage from '../pages/appointments/update/confirm/confirmLeftEarlyPage'
+import { readDeliusData } from '../delius/deliusTestData'
+import PersonOnProbation from '../delius/personOnProbation'
 
-test('Record an appointment which starts on time but finishes early', async ({ page, deliusUser }) => {
-  const selectedAppointment = 0
-  await signIn(page, deliusUser)
-  await clearSessionData(page)
+test('Record an appointment which starts on time but finishes early', async ({ page, supervisorUser }) => {
+  const deliusTestData = await readDeliusData()
+  const person = deliusTestData.pops[3] as PersonOnProbation
+  await signIn(page, supervisorUser)
 
   // record arrival able to work
-  const sessionPage = await recordArrivalAbleToWork(page, selectedAppointment)
+  const sessionPage = await recordArrivalAbleToWork(page, deliusTestData, person.getFullName())
 
   // record left early
-  await sessionPage.clickOnAppointment(selectedAppointment)
+  await sessionPage.clickOnAnAppointmentForPerson(person.getFullName())
   const appointmentPage = new AppointmentPage(page)
   await appointmentPage.clickLeftSiteEarly()
 
@@ -41,5 +42,5 @@ test('Record an appointment which starts on time but finishes early', async ({ p
   await confirmCompletedPage.clickLinkToSessionPage()
   await sessionPage.expect.toBeOnThePage()
 
-  await sessionPage.expect.appointmentToHaveStatus(selectedAppointment, 'Left site')
+  await sessionPage.expect.appointmentToHaveStatus(person.getFullName(), 'Left site')
 })

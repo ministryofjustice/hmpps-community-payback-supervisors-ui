@@ -1,7 +1,8 @@
 /* eslint max-classes-per-file: "off" -- splitting out these classes would cause an import dependency loop */
 
-import { Locator, Page, expect } from '@playwright/test'
+import { expect, Locator, Page } from '@playwright/test'
 import BasePage from './basePage'
+import DeliusTestData from '../delius/deliusTestData'
 import { AppointmentStatusType } from '../../server/@types/user-defined'
 
 export default class SessionPage extends BasePage {
@@ -18,12 +19,19 @@ export default class SessionPage extends BasePage {
     this.clearSessionDataLinkLocator = page.getByRole('link', { name: 'Clear session data' })
   }
 
-  async clickOnAppointment(n: number) {
-    await this.viewDetailsLinkLocator.nth(n).click()
+  async clickOnAnAppointmentForPerson(personName: string) {
+    await this.page
+      .locator('.govuk-summary-card', {
+        has: this.page.getByRole('heading', { name: personName }),
+      })
+      .getByRole('link', { name: 'View and update' })
+      .click()
   }
 
-  async appointment(n: number): Promise<Locator> {
-    return this.page.getByRole('listitem').filter({ hasText: 'View and update' }).nth(n)
+  async appointment(personName: string): Promise<Locator> {
+    return this.page.locator('.govuk-summary-card', {
+      has: this.page.getByRole('heading', { name: personName }),
+    })
   }
 }
 
@@ -34,18 +42,32 @@ class SessionPageAssertions {
     await expect(this.page.headingLocator).toContainText('Session details')
   }
 
-  async toShowSessionDetails() {
-    await expect(this.page.page.getByRole('heading', { name: 'Cleaning streets' })).toBeVisible()
-    await expect(this.page.page.getByRole('heading', { name: 'Sunday 1 March 2026' })).toBeVisible()
-    await expect(this.page.page.getByRole('listitem')).toContainText([
-      'Harry Wormwood',
-      'Agatha Trunchbull',
-      'Zinnia Wormwood',
-    ])
+  async toShowSessionDetails(deliusTestData: DeliusTestData) {
+    await expect(this.page.page.getByRole('heading', { name: deliusTestData.project.name })).toBeVisible()
+    await expect(
+      this.page.page.getByRole('heading', {
+        name: this.getCurrentDateInFormatForSession(),
+      }),
+    ).toBeVisible()
+    const expectedNames = deliusTestData.pops.map(pop => pop.getFullName())
+    const summaryCardTitles = this.page.page.locator('h3.govuk-summary-card__title')
+
+    const actualNames = (await summaryCardTitles.allInnerTexts()).map(text => text.trim().replace(/\s+/g, ' '))
+    expect(actualNames.sort()).toEqual(expectedNames.sort())
   }
 
-  async appointmentToHaveStatus(selectedAppointment: number, status: AppointmentStatusType) {
-    const appointment = await this.page.appointment(selectedAppointment)
+  private getCurrentDateInFormatForSession() {
+    const formattedDate = new Date().toLocaleDateString('en-GB', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    })
+    return formattedDate.replace(/,/g, '')
+  }
+
+  async appointmentToHaveStatus(personName: string, status: AppointmentStatusType) {
+    const appointment = await this.page.appointment(personName)
     await expect(appointment).toContainText(status)
   }
 }

@@ -1,22 +1,23 @@
 import test from '../test'
 import signIn from '../steps/signIn'
-import clearSessionData from '../steps/clearSessionData'
 import recordArrivalAbleToWork from '../steps/recordArrivalAbleToWork'
 import AppointmentPage from '../pages/appointmentPage'
 import EndTimePage from '../pages/appointments/update/endTimePage'
 import CompliancePage from '../pages/appointments/update/compliancePage'
 import ConfirmCompletedPage from '../pages/appointments/update/confirm/confirmCompletedPage'
+import { readDeliusData } from '../delius/deliusTestData'
+import PersonOnProbation from '../delius/personOnProbation'
 
-test('Record an appointment which starts and finishes on time', async ({ page, deliusUser }) => {
-  const selectedAppointment = 0
-  await signIn(page, deliusUser)
-  await clearSessionData(page)
+test('Record an appointment which starts and finishes on time', async ({ page, supervisorUser }) => {
+  const deliusTestData = await readDeliusData()
+  const person = deliusTestData.pops[0] as PersonOnProbation
+  await signIn(page, supervisorUser)
 
   // record arrival able to work
-  const sessionPage = await recordArrivalAbleToWork(page, selectedAppointment)
+  const sessionPage = await recordArrivalAbleToWork(page, deliusTestData, person.getFullName())
 
   // record finished on time
-  await sessionPage.clickOnAppointment(selectedAppointment)
+  await sessionPage.clickOnAnAppointmentForPerson(person.getFullName())
   const appointmentPage = new AppointmentPage(page)
   await appointmentPage.clickFinishSession()
 
@@ -34,5 +35,5 @@ test('Record an appointment which starts and finishes on time', async ({ page, d
   await confirmCompletedPage.clickLinkToSessionPage()
   await sessionPage.expect.toBeOnThePage()
 
-  await sessionPage.expect.appointmentToHaveStatus(selectedAppointment, 'Session complete')
+  await sessionPage.expect.appointmentToHaveStatus(person.getFullName(), 'Session complete')
 })
