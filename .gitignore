@@ -126,3 +126,4 @@ integration_tests/screenshots/
 **/Chart.lock
 **/.DS_Store
 e2e-tests/playwright-report/
+delius-data.json
