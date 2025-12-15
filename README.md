@@ -56,9 +56,7 @@ This script will also generate the latest types from the API schema (generated l
 The script will set up most of your dependencies for you, but you will need to do the following to get it running:
 
 - Set up [CP Stack](https://github.com/ministryofjustice/hmpps-community-payback-api/tree/main/tools/cp-stack)
-- Update the .env file in the root of the project with the following variables. You can find the username and password in the Community Payback 1password vault.
-  - `DELIUS_USERNAME=`
-  - `DELIUS_PASSWORD=`
+- Update the .env file in the root of the project with the variables listed under `# Credentials and variables needed for e2e tests` in [.env.example](.env.example). You can find the username and password values in the Community Payback 1password vault.
 
 #### Test options
 
@@ -90,6 +88,31 @@ For local running, use:
 Or to run with Cypress UI:
 
 `npm run test:integration:local:ui`
+
+## Running e2e tests
+
+1. Update the .env file in the root of the project with the variables listed under `# Credentials and variables needed for e2e tests` in [.env.example](.env.example). You can find the username and password values in the Community Payback 1password vault.
+
+2. Install Playwright
+
+```bash
+npm run setup
+npx playwright install
+```
+
+3. Start the server
+
+```bash
+script/server
+```
+
+3. Test with and without UI
+
+```bash
+npm run test:e2e:local:ui
+# or
+npm run test:e2e:local
+```
 
 ## Managing dependencies
 
