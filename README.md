@@ -19,21 +19,27 @@ After following the setup the common commands are:
 
 When running the API as a docker container and deploying everything (inc. this UI):
 
-```
+```bash
 cp-stack start --local-sui
+
+# or
+script/server
 ```
 
 When running the API locally and deploying everything (inc. this UI):
 
-```
+```bash
 cp-stack start --local-sui --local-api
+
+# or
+script/server --local-api
 ```
 
 The service should then be available at http://localhost:3001
 
 The same credentials used to login to the dev instance of the Community Payback UI should be used.
 
-To stop the deployment:
+To stop the server:
 
 ```
 cp-stack stop
