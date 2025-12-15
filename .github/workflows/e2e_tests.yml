@@ -53,6 +53,9 @@ jobs:
         env:
           DELIUS_USERNAME: ${{ secrets.DELIUS_USERNAME }}
           DELIUS_PASSWORD: ${{ secrets.DELIUS_PASSWORD }}
+          SUPERVISOR_USERNAME: ${{ secrets.SUPERVISOR_USERNAME }}
+          SUPERVISOR_PASSWORD: ${{ secrets.SUPERVISOR_PASSWORD }}
+          DELIUS_URL: ${{ vars.DELIUS_URL }}
         shell: bash
         run: |
           npm run test:e2e

@@ -7,17 +7,21 @@ import IsAbleToWorkPage from '../pages/appointments/update/isAbleToWorkPage'
 import UnableToWorkPage from '../pages/appointments/update/unableToWorkPage'
 import ConfirmUnableToWorkPage from '../pages/appointments/update/confirm/confirmUnableToWorkPage'
 import clearSessionData from '../steps/clearSessionData'
+import { readDeliusData } from '../delius/deliusTestData'
+import PersonOnProbation from '../delius/personOnProbation'
 
 test.skip('Record an arrival and log as unable to work', async ({ page, deliusUser }) => {
-  const selectedAppointment = 0
+  const deliusTestData = await readDeliusData()
+  const person = deliusTestData.pops[1] as PersonOnProbation
   const homePage = await signIn(page, deliusUser)
-  await clearSessionData(page)
-  await homePage.viewDetailsLinkLocator.click()
+  await clearSessionData(page, deliusTestData)
+
+  await homePage.clickViewDetailsForProject(deliusTestData.project.name)
 
   const sessionPage = new SessionPage(page)
   await sessionPage.expect.toBeOnThePage()
-  await sessionPage.expect.toShowSessionDetails()
-  await sessionPage.clickOnAppointment(selectedAppointment)
+  await sessionPage.expect.toShowSessionDetails(deliusTestData)
+  await sessionPage.clickOnAnAppointmentForPerson(person.getFullName())
 
   const appointmentPage = new AppointmentPage(page)
   await appointmentPage.expect.toBeOnThePage()
@@ -47,5 +51,5 @@ test.skip('Record an arrival and log as unable to work', async ({ page, deliusUs
 
   await sessionPage.expect.toBeOnThePage()
 
-  await sessionPage.expect.appointmentToHaveStatus(selectedAppointment, 'Cannot work')
+  await sessionPage.expect.appointmentToHaveStatus(person.getFullName(), 'Cannot work')
 })
