@@ -19,21 +19,27 @@ After following the setup the common commands are:
 
 When running the API as a docker container and deploying everything (inc. this UI):
 
-```
+```bash
 cp-stack start --local-sui
+
+# or
+script/server
 ```
 
 When running the API locally and deploying everything (inc. this UI):
 
-```
+```bash
 cp-stack start --local-sui --local-api
+
+# or
+script/server --local-api
 ```
 
 The service should then be available at http://localhost:3001
 
 The same credentials used to login to the dev instance of the Community Payback UI should be used.
 
-To stop the deployment:
+To stop the server:
 
 ```
 cp-stack stop
@@ -56,9 +62,7 @@ This script will also generate the latest types from the API schema (generated l
 The script will set up most of your dependencies for you, but you will need to do the following to get it running:
 
 - Set up [CP Stack](https://github.com/ministryofjustice/hmpps-community-payback-api/tree/main/tools/cp-stack)
-- Update the .env file in the root of the project with the following variables. You can find the username and password in the Community Payback 1password vault.
-  - `DELIUS_USERNAME=`
-  - `DELIUS_PASSWORD=`
+- Update the .env file in the root of the project with the variables listed under `# Credentials and variables needed for e2e tests` in [.env.example](.env.example). You can find the username and password values in the Community Payback 1password vault.
 
 #### Test options
 
@@ -90,6 +94,31 @@ For local running, use:
 Or to run with Cypress UI:
 
 `npm run test:integration:local:ui`
+
+## Running e2e tests
+
+1. Update the .env file in the root of the project with the variables listed under `# Credentials and variables needed for e2e tests` in [.env.example](.env.example). You can find the username and password values in the Community Payback 1password vault.
+
+2. Install Playwright
+
+```bash
+npm run setup
+npx playwright install
+```
+
+3. Start the server
+
+```bash
+script/server
+```
+
+3. Test with and without UI
+
+```bash
+npm run test:e2e:local:ui
+# or
+npm run test:e2e:local
+```
 
 ## Managing dependencies
 
