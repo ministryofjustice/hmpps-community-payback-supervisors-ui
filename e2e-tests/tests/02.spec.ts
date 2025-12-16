@@ -10,10 +10,10 @@ import clearSessionData from '../steps/clearSessionData'
 import { readDeliusData } from '../delius/deliusTestData'
 import PersonOnProbation from '../delius/personOnProbation'
 
-test.skip('Record an arrival and log as unable to work', async ({ page, deliusUser }) => {
+test.skip('Record an arrival and log as unable to work', async ({ page, supervisorUser }) => {
   const deliusTestData = await readDeliusData()
   const person = deliusTestData.pops[1] as PersonOnProbation
-  const homePage = await signIn(page, deliusUser)
+  const homePage = await signIn(page, supervisorUser)
   await clearSessionData(page, deliusTestData)
 
   await homePage.clickViewDetailsForProject(deliusTestData.project.name)

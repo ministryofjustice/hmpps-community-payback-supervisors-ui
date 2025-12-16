@@ -9,10 +9,10 @@ import ConfirmCompletedPage from '../pages/appointments/update/confirm/confirmCo
 import { readDeliusData } from '../delius/deliusTestData'
 import PersonOnProbation from '../delius/personOnProbation'
 
-test('Record an appointment which starts and finishes on time', async ({ page, deliusUser }) => {
+test('Record an appointment which starts and finishes on time', async ({ page, supervisorUser }) => {
   const deliusTestData = await readDeliusData()
   const person = deliusTestData.pops[0] as PersonOnProbation
-  await signIn(page, deliusUser)
+  await signIn(page, supervisorUser)
   await clearSessionData(page, deliusTestData)
 
   // record arrival able to work
