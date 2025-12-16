@@ -8,10 +8,10 @@ import clearSessionData from '../steps/clearSessionData'
 import { readDeliusData } from '../delius/deliusTestData'
 import PersonOnProbation from '../delius/personOnProbation'
 
-test('Record an absence', async ({ page, deliusUser }) => {
+test('Record an absence', async ({ page, supervisorUser }) => {
   const deliusTestData = await readDeliusData()
   const person = deliusTestData.pops[2] as PersonOnProbation
-  const homePage = await signIn(page, deliusUser)
+  const homePage = await signIn(page, supervisorUser)
   await clearSessionData(page, deliusTestData)
 
   await homePage.clickViewDetailsForProject(deliusTestData.project.name)

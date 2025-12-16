@@ -3,6 +3,7 @@ import type { Response } from 'superagent'
 
 import { stubFor, getMatchingRequests } from './wiremock'
 import tokenVerification from './tokenVerification'
+import config from '../../server/config'
 
 interface UserToken {
   name?: string
@@ -130,6 +131,8 @@ export default {
   getSignInUrl,
   stubAuthPing: ping,
   stubAuthManageDetails: manageDetails,
-  stubSignIn: (userToken: UserToken = {}): Promise<[Response, Response, Response, Response, Response]> =>
+  stubSignIn: (
+    userToken: UserToken = { roles: [config.requiredSupervisorRole] },
+  ): Promise<[Response, Response, Response, Response, Response]> =>
     Promise.all([favicon(), redirect(), signOut(), token(userToken), tokenVerification.stubVerifyToken()]),
 }

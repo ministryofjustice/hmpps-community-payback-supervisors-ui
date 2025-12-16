@@ -10,10 +10,10 @@ import ConfirmLeftEarlyPage from '../pages/appointments/update/confirm/confirmLe
 import { readDeliusData } from '../delius/deliusTestData'
 import PersonOnProbation from '../delius/personOnProbation'
 
-test('Record an appointment which starts on time but finishes early', async ({ page, deliusUser }) => {
+test('Record an appointment which starts on time but finishes early', async ({ page, supervisorUser }) => {
   const deliusTestData = await readDeliusData()
   const person = deliusTestData.pops[3] as PersonOnProbation
-  await signIn(page, deliusUser)
+  await signIn(page, supervisorUser)
   await clearSessionData(page, deliusTestData)
 
   // record arrival able to work
