@@ -100,4 +100,5 @@ export default {
   flags: {
     enableClearSessionStatuses: getAsBoolean('CLEAR_SESSION_STATUSES_ENABLED', false),
   },
+  requiredSupervisorRole: 'ROLE_CP_SUPERVISE_SESSION',
 }
