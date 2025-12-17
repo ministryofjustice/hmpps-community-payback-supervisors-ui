@@ -4,10 +4,18 @@ import AppointmentStatusService from './appointmentStatusService'
 import AuditService from './auditService'
 import SessionService from './sessionService'
 import ReferenceDataService from './referenceDataService'
+import SupervisorService from './supervisorService'
 
 export const services = () => {
-  const { applicationInfo, hmppsAuditClient, sessionClient, appointmentClient, referenceDataClient, formClient } =
-    dataAccess()
+  const {
+    applicationInfo,
+    hmppsAuditClient,
+    sessionClient,
+    appointmentClient,
+    referenceDataClient,
+    formClient,
+    supervisorClient,
+  } = dataAccess()
 
   return {
     applicationInfo,
@@ -16,6 +24,7 @@ export const services = () => {
     appointmentService: new AppointmentService(appointmentClient),
     referenceDataService: new ReferenceDataService(referenceDataClient),
     appointmentStatusService: new AppointmentStatusService(formClient),
+    supervisorService: new SupervisorService(supervisorClient),
   }
 }
 
