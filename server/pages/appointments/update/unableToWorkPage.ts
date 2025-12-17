@@ -2,6 +2,7 @@ import { AppointmentDto, ContactOutcomeDto, UpdateAppointmentOutcomeDto } from '
 import { GovUkRadioOption, ValidationErrors } from '../../../@types/user-defined'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
+import ReferenceDataService from '../../../services/referenceDataService'
 import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './baseAppointmentUpdatePage'
 
 interface ViewData extends AppointmentUpdatePageViewData {
@@ -76,6 +77,27 @@ export default class UnableToWorkPage extends BaseAppointmentUpdatePage<Body> {
 
     if (this.query.isSensitive) {
       body.sensitive = true
+    }
+
+    if (
+      this.query.unableToWork === ReferenceDataService.attendedSentHomeServiceIssuesOutcomeCode ||
+      this.query.unableToWork === ReferenceDataService.attendedFailedToComplyOutcomeCode
+    ) {
+      body.attendanceData = {
+        hiVisWorn: false,
+        workedIntensively: false,
+        workQuality: 'NOT_APPLICABLE',
+        behaviour: 'NOT_APPLICABLE',
+      }
+    }
+
+    if (this.query.unableToWork === ReferenceDataService.attendedSentHomeBehaviourOutcomeCode) {
+      body.attendanceData = {
+        hiVisWorn: false,
+        workedIntensively: false,
+        workQuality: 'NOT_APPLICABLE',
+        behaviour: 'UNSATISFACTORY',
+      }
     }
 
     return body
