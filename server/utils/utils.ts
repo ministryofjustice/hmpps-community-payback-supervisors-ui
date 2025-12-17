@@ -1,4 +1,5 @@
 import type { Response } from 'express'
+import qs, { IStringifyOptions } from 'qs'
 
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
@@ -43,4 +44,11 @@ export const pluralise = (str: string, count: number, suffix: string = 's') => {
     return str
   }
   return inflections.plural[str] ?? `${str}${suffix}`
+}
+
+export const createQueryString = (
+  params: Record<string, unknown> | string,
+  options: IStringifyOptions = { encode: false, indices: false },
+): string => {
+  return qs.stringify(params, options)
 }
