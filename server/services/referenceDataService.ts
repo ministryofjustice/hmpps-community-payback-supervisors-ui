@@ -4,7 +4,17 @@ import ReferenceDataClient from '../data/referenceDataClient'
 export default class ReferenceDataService {
   static readonly attendedCompliedOutcomeCode = 'ATTC'
 
-  static readonly attendedNonWorkingOutcomeCodes = ['ATSS', 'ATSH', 'AFTC']
+  static readonly attendedSentHomeBehaviourOutcomeCode = 'ATSH'
+
+  static readonly attendedSentHomeServiceIssuesOutcomeCode = 'ATSS'
+
+  static readonly attendedFailedToComplyOutcomeCode = 'AFTC'
+
+  static readonly attendedNonWorkingOutcomeCodes = [
+    this.attendedSentHomeServiceIssuesOutcomeCode,
+    this.attendedSentHomeBehaviourOutcomeCode,
+    this.attendedFailedToComplyOutcomeCode,
+  ]
 
   constructor(private readonly referenceDataClient: ReferenceDataClient) {}
 
