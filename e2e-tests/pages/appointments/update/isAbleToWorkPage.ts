@@ -4,7 +4,7 @@ import { Locator, Page, expect } from '@playwright/test'
 import BasePage from '../../basePage'
 
 export default class IsAbleToWorkPage extends BasePage {
-  readonly titleTextPattern = /Can ([a-zA-Z- ]*) work today?/
+  readonly titleTextPattern = /Can (.*) work today?/
 
   readonly expect: IsAbleToWorkPageAssertions
 

@@ -25,7 +25,7 @@ export default class StartTimePage extends BasePage {
 
   getExpectedTitlePattern() {
     const questionEnd = this.action === 'arrived' ? 'as having arrived at:' : 'as absent today at:'
-    return new RegExp(`You're logging ([a-zA-Z- ]*) ${questionEnd}`)
+    return new RegExp(`You're logging (.*) ${questionEnd}`)
   }
 
   async enterAStartTime() {
