@@ -4,7 +4,7 @@ import { Locator, Page, expect } from '@playwright/test'
 import BasePage from '../../basePage'
 
 export default class UnableToWorkPage extends BasePage {
-  readonly titleText = 'Why is Harry Wormwood unable to work today?'
+  readonly titleText = /Why is (.*) unable to work today?/
 
   readonly expect: UnableToWorkPageAssertions
 

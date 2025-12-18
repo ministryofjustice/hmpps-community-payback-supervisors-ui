@@ -1,6 +1,7 @@
 import { UpdateAppointmentOutcomeDto } from '../../../@types/shared'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
+import ReferenceDataService from '../../../services/referenceDataService'
 import appointmentFactory from '../../../testutils/factories/appointmentFactory'
 import { contactOutcomesFactory } from '../../../testutils/factories/contactOutcomeFactory'
 import UnableToWorkPage from './unableToWorkPage'
@@ -177,6 +178,67 @@ describe('UnableToWorkPage', () => {
         const result = page.requestBody(appointment)
 
         expect(result.sensitive).toBeUndefined()
+      })
+    })
+
+    describe('attendanceData', () => {
+      describe('when the contact outcome is "Attended - Sent home (behaviour)"', () => {
+        it('sets the correct attendance data', () => {
+          const appointment = appointmentFactory.build()
+
+          const page = new UnableToWorkPage({ unableToWork: ReferenceDataService.attendedSentHomeBehaviourOutcomeCode })
+
+          const result = page.requestBody(appointment)
+
+          expect(result.attendanceData).toEqual(
+            expect.objectContaining({
+              hiVisWorn: false,
+              workedIntensively: false,
+              workQuality: 'NOT_APPLICABLE',
+              behaviour: 'UNSATISFACTORY',
+            }),
+          )
+        })
+      })
+
+      describe('when the contact outcome is "Attended - Sent home (service issues)"', () => {
+        it('sets the correct attendance data', () => {
+          const appointment = appointmentFactory.build()
+
+          const page = new UnableToWorkPage({
+            unableToWork: ReferenceDataService.attendedSentHomeServiceIssuesOutcomeCode,
+          })
+
+          const result = page.requestBody(appointment)
+
+          expect(result.attendanceData).toEqual(
+            expect.objectContaining({
+              hiVisWorn: false,
+              workedIntensively: false,
+              workQuality: 'NOT_APPLICABLE',
+              behaviour: 'NOT_APPLICABLE',
+            }),
+          )
+        })
+      })
+
+      describe('when the contact outcome is "Attended - Failed to comply"', () => {
+        it('sets the correct attendance data', () => {
+          const appointment = appointmentFactory.build()
+
+          const page = new UnableToWorkPage({ unableToWork: ReferenceDataService.attendedFailedToComplyOutcomeCode })
+
+          const result = page.requestBody(appointment)
+
+          expect(result.attendanceData).toEqual(
+            expect.objectContaining({
+              hiVisWorn: false,
+              workedIntensively: false,
+              workQuality: 'NOT_APPLICABLE',
+              behaviour: 'NOT_APPLICABLE',
+            }),
+          )
+        })
       })
     })
 
