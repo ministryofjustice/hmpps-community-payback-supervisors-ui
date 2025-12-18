@@ -4,7 +4,7 @@ import { Locator, Page, expect } from '@playwright/test'
 import BasePage from '../../basePage'
 
 export default class LeftEarlyReasonPage extends BasePage {
-  readonly titleText = /Why did ([a-zA-Z- ]*) leave early?/
+  readonly titleText = /Why did (.*) leave early?/
 
   readonly expect: LeftEarlyReasonPageAssertions
 
