@@ -36,6 +36,7 @@ import appointmentStatusFactory from '../../server/testutils/factories/appointme
 import { contactOutcomeFactory } from '../../server/testutils/factories/contactOutcomeFactory'
 import { SessionSummariesDto } from '../../server/@types/shared'
 import supervisorFactory from '../../server/testutils/factories/supervisorFactory'
+import supervisorTeamFactory from '../../server/testutils/factories/supervisorTeamFactory'
 
 context('Home', () => {
   beforeEach(() => {
@@ -44,7 +45,7 @@ context('Home', () => {
   })
 
   //  Scenario: viewing the home page
-  it('shows the find a session search form', () => {
+  it('shows a list of next sessions', () => {
     const sessionSummary = sessionSummaryFactory.build({
       date: '2025-09-15',
       projectCode: 'N56123456',
@@ -64,8 +65,10 @@ context('Home', () => {
     // Given I am logged in
     cy.signIn()
 
-    const page = Page.verifyOnPage(IndexPage, sessionSummary)
+    const page = Page.verifyOnPage(IndexPage, [sessionSummary, sessionSummary2])
     page.shouldShowSessionSummaryDetails()
+    page.shouldContainPersonTextForSession(0)
+    page.shouldContainPeopleTextForSession(1)
 
     //  When I visit a session page
     const appointmentSummaries = appointmentSummaryFactory.buildList(3)
