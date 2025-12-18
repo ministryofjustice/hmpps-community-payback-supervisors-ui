@@ -2,6 +2,8 @@ import jwt from 'jsonwebtoken'
 import type { Request, Response } from 'express'
 
 import authorisationMiddleware from './authorisationMiddleware'
+import SupervisorService from '../services/supervisorService'
+import supervisorFactory from '../testutils/factories/supervisorFactory'
 
 function createToken(authorities: string[]) {
   const payload = {
@@ -20,6 +22,9 @@ describe('authorisationMiddleware', () => {
   let req: Request
   const next = jest.fn()
 
+  const supervisor = supervisorFactory.build({ isUnpaidWorkTeamMember: true })
+  let mockedGetSupervisor: jest.SpyInstance
+
   function createResWithToken({ authorities }: { authorities: string[] }): Response {
     return {
       locals: {
@@ -33,39 +38,64 @@ describe('authorisationMiddleware', () => {
 
   beforeEach(() => {
     jest.resetAllMocks()
+
+    mockedGetSupervisor = jest.spyOn(SupervisorService.prototype, 'getSupervisor')
+    mockedGetSupervisor.mockResolvedValue(supervisor)
   })
 
-  it('should return next when no required roles', () => {
+  it('should return next when no required roles', async () => {
     const res = createResWithToken({ authorities: [] })
 
-    authorisationMiddleware()(req, res, next)
+    await authorisationMiddleware()(req, res, next)
 
     expect(next).toHaveBeenCalled()
     expect(res.redirect).not.toHaveBeenCalled()
   })
 
-  it('should redirect when user has no authorised roles', () => {
+  it('should redirect when user has no authorised roles', async () => {
     const res = createResWithToken({ authorities: [] })
 
-    authorisationMiddleware(['SOME_REQUIRED_ROLE'])(req, res, next)
+    await authorisationMiddleware(['SOME_REQUIRED_ROLE'])(req, res, next)
 
     expect(next).not.toHaveBeenCalled()
     expect(res.redirect).toHaveBeenCalledWith('/authError')
   })
 
-  it('should return next when user has authorised role', () => {
+  it('should redirect when user has authorised role but is not an unpaid work team member', async () => {
+    mockedGetSupervisor.mockResolvedValue({ ...supervisor, isUnpaidWorkTeamMember: false })
+
     const res = createResWithToken({ authorities: ['ROLE_SOME_REQUIRED_ROLE'] })
 
-    authorisationMiddleware(['SOME_REQUIRED_ROLE'])(req, res, next)
+    await authorisationMiddleware(['ROLE_SOME_REQUIRED_ROLE'])(req, res, next)
+
+    expect(next).not.toHaveBeenCalled()
+    expect(res.redirect).toHaveBeenCalledWith('/authError')
+  })
+
+  it('should redirect when user has no authorised roles and is not an unpaid work team member', async () => {
+    mockedGetSupervisor.mockResolvedValue({ ...supervisor, isUnpaidWorkTeamMember: false })
+
+    const res = createResWithToken({ authorities: [] })
+
+    await authorisationMiddleware(['SOME_REQUIRED_ROLE'])(req, res, next)
+
+    expect(next).not.toHaveBeenCalled()
+    expect(res.redirect).toHaveBeenCalledWith('/authError')
+  })
+
+  it('should return next when user has authorised role', async () => {
+    const res = createResWithToken({ authorities: ['ROLE_SOME_REQUIRED_ROLE'] })
+
+    await authorisationMiddleware(['SOME_REQUIRED_ROLE'])(req, res, next)
 
     expect(next).toHaveBeenCalled()
     expect(res.redirect).not.toHaveBeenCalled()
   })
 
-  it('should return next when user has authorised role and middleware created with ROLE_ prefix', () => {
+  it('should return next when user has authorised role and middleware created with ROLE_ prefix', async () => {
     const res = createResWithToken({ authorities: ['ROLE_SOME_REQUIRED_ROLE'] })
 
-    authorisationMiddleware(['ROLE_SOME_REQUIRED_ROLE'])(req, res, next)
+    await authorisationMiddleware(['ROLE_SOME_REQUIRED_ROLE'])(req, res, next)
 
     expect(next).toHaveBeenCalled()
     expect(res.redirect).not.toHaveBeenCalled()

@@ -2,9 +2,9 @@ import { SupervisorDto } from '../@types/shared'
 import SupervisorClient from '../data/supervisorClient'
 
 export default class SupervisorService {
-  constructor(private readonly sessionClient: SupervisorClient) {}
+  constructor(private readonly supervisorClient: SupervisorClient) {}
 
   getSupervisor(username: string): Promise<SupervisorDto> {
-    return this.sessionClient.find(username)
+    return this.supervisorClient.find(username)
   }
 }
