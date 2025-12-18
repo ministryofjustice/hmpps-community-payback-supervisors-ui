@@ -7,6 +7,9 @@
 //      Given I am logged in
 //      When I visit a session page
 //      Then I see the session details
+//  Scenario: viewing the home page with multiple teams
+//    Given I am logged in
+//    Then I see session details for all of the sessions for my teams
 //
 //  Scenario: viewing an individual appointment
 //    Given I am on a session page
@@ -81,6 +84,31 @@ context('Home', () => {
     const sessionPage = Page.verifyOnPage(SessionPage, session)
     sessionPage.shouldShowSessionDetails()
     sessionPage.shouldShowAppointmentsForEachOffender()
+  })
+
+  //  Scenario: viewing the home page with multiple teams
+  it('shows a list of next sessions for a supervisor on two teams', () => {
+    const unpaidWorkTeams = supervisorTeamFactory.buildList(2)
+    const supervisor = supervisorFactory.build({ unpaidWorkTeams })
+    const firstTeamAllocations = sessionSummaryFactory.buildList(2)
+    const secondTeamAllocations = sessionSummaryFactory.buildList(1)
+
+    cy.task('stubFindSupervisor', { supervisor })
+    cy.task('stubNextSessions', {
+      sessionSummaries: { allocations: firstTeamAllocations },
+      supervisorTeam: supervisor.unpaidWorkTeams[0],
+    })
+    cy.task('stubNextSessions', {
+      sessionSummaries: { allocations: secondTeamAllocations },
+      supervisorTeam: supervisor.unpaidWorkTeams[1],
+    })
+
+    // Given I am logged in
+    cy.signIn()
+
+    //  Then I see session details for all of the sessions for my teams
+    const page = Page.verifyOnPage(IndexPage, [...firstTeamAllocations, ...secondTeamAllocations])
+    page.shouldShowSessionSummaryDetails()
   })
 })
 
