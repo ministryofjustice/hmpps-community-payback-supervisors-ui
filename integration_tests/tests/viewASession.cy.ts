@@ -35,6 +35,7 @@ import sessionSummaryFactory from '../../server/testutils/factories/sessionSumma
 import appointmentStatusFactory from '../../server/testutils/factories/appointmentStatusFactory'
 import { contactOutcomeFactory } from '../../server/testutils/factories/contactOutcomeFactory'
 import { SessionSummariesDto } from '../../server/@types/shared'
+import supervisorFactory from '../../server/testutils/factories/supervisorFactory'
 
 context('Home', () => {
   beforeEach(() => {
@@ -54,9 +55,11 @@ context('Home', () => {
       numberOfOffendersAllocated: 2,
     })
 
+    const supervisor = supervisorFactory.build()
     const sessionSummaries = { allocations: [sessionSummary, sessionSummary2] } as SessionSummariesDto
 
-    cy.task('stubNextSessions', { sessionSummaries })
+    cy.task('stubFindSupervisor', { supervisor })
+    cy.task('stubNextSessions', { sessionSummaries, supervisorTeam: supervisor.unpaidWorkTeams[0] })
 
     // Given I am logged in
     cy.signIn()
@@ -83,8 +86,10 @@ context('Session', () => {
     cy.task('reset')
     cy.task('stubSignIn')
 
-    const sessionSummary = sessionSummaryFactory.build({ date: '2025-09-15' })
-    cy.task('stubNextSessions', { sessionSummary })
+    const supervisor = supervisorFactory.build()
+    const allocations = [sessionSummaryFactory.build({ date: '2025-09-15' })]
+    cy.task('stubFindSupervisor', { supervisor })
+    cy.task('stubNextSessions', { sessionSummaries: { allocations }, supervisorTeam: supervisor.unpaidWorkTeams[0] })
 
     cy.signIn()
   })

@@ -5,13 +5,16 @@ import AuthManageDetailsPage from '../pages/authManageDetails'
 import sessionSummaryFactory from '../../server/testutils/factories/sessionSummaryFactory'
 import config from '../../server/config'
 import AuthErrorPage from '../pages/authErrorPage'
+import supervisorFactory from '../../server/testutils/factories/supervisorFactory'
 
 context('Sign In', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
-    const sessionSummary = sessionSummaryFactory.build({ date: '2025-09-15' })
-    cy.task('stubNextSessions', { sessionSummary })
+    const supervisor = supervisorFactory.build()
+    const allocations = [sessionSummaryFactory.build({ date: '2025-09-15' })]
+    cy.task('stubFindSupervisor', { supervisor })
+    cy.task('stubNextSessions', { sessionSummaries: { allocations }, supervisorTeam: supervisor.unpaidWorkTeams[0] })
   })
 
   it('Unauthenticated user directed to auth', () => {

@@ -1,5 +1,5 @@
-import { SessionDto } from '../@types/shared'
-import { GetSessionRequest, GetNextSessionsRequest, SessionSummariesDto } from '../@types/user-defined'
+import { SessionDto, SessionSummaryDto, SupervisorDto } from '../@types/shared'
+import { GetSessionRequest } from '../@types/user-defined'
 import SessionClient from '../data/sessionClient'
 
 export default class SessionService {
@@ -9,7 +9,21 @@ export default class SessionService {
     return this.sessionClient.find(request)
   }
 
-  getNextSessions(request: GetNextSessionsRequest): Promise<SessionSummariesDto> {
-    return this.sessionClient.nextSessions(request)
+  async getNextSessions(username: string, supervisor: SupervisorDto): Promise<SessionSummaryDto[]> {
+    const nextSessions: SessionSummaryDto[] = []
+    const { unpaidWorkTeams } = supervisor
+
+    /* eslint-disable no-await-in-loop */
+    for (let i = 0; i < unpaidWorkTeams.length; i += 1) {
+      const team = unpaidWorkTeams[i]
+      const result = await this.sessionClient.nextSessions({
+        username,
+        providerCode: team.provider.code,
+        teamCode: team.code,
+      })
+      nextSessions.push(...result.allocations)
+    }
+
+    return nextSessions
   }
 }

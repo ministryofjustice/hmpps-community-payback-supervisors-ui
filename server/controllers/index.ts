@@ -8,7 +8,7 @@ import StaticController from './staticController'
 
 export const controllers = (services: Services) => {
   const sessionsController = new SessionsController(services.sessionService, services.appointmentStatusService)
-  const indexController = new IndexController(services.sessionService)
+  const indexController = new IndexController(services.sessionService, services.supervisorService)
   const staticController = new StaticController()
 
   return {

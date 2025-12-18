@@ -5,7 +5,8 @@ import DateTimeFormats from '../utils/dateTimeUtils'
 import paths from '../paths'
 import IndexController from './indexController'
 import sessionSummaryFactory from '../testutils/factories/sessionSummaryFactory'
-import { SessionSummariesDto } from '../@types/user-defined'
+import SupervisorService from '../services/supervisorService'
+import supervisorFactory from '../testutils/factories/supervisorFactory'
 
 describe('IndexController', () => {
   const request: DeepMocked<Request> = createMock<Request>({})
@@ -13,25 +14,26 @@ describe('IndexController', () => {
 
   let indexController: IndexController
   const sessionService = createMock<SessionService>()
+  const supervisorService = createMock<SupervisorService>()
 
   beforeEach(() => {
-    indexController = new IndexController(sessionService)
+    indexController = new IndexController(sessionService, supervisorService)
   })
 
   describe('index', () => {
     it('should render the index page', async () => {
-      const sessionData = {
-        allocations: [sessionSummaryFactory.build(), sessionSummaryFactory.build()],
-      } as SessionSummariesDto
+      const supervisor = supervisorFactory.build()
+      const sessionResult = sessionSummaryFactory.buildList(2)
 
-      sessionService.getNextSessions.mockResolvedValue(sessionData)
+      supervisorService.getSupervisor.mockResolvedValue(supervisor)
+      sessionService.getNextSessions.mockResolvedValue(sessionResult)
 
       const requestHandler = indexController.index()
       const response = createMock<Response>()
 
       await requestHandler(request, response, next)
 
-      const sessions = sessionData.allocations
+      const sessions = sessionResult
         .sort((a, b) => {
           return +DateTimeFormats.isoToDateObj(a.date) - +DateTimeFormats.isoToDateObj(b.date)
         })
