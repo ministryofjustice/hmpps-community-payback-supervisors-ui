@@ -2,7 +2,8 @@ import SessionClient from '../data/sessionClient'
 import SessionService from './sessionService'
 import sessionFactory from '../testutils/factories/sessionFactory'
 import sessionSummaryFactory from '../testutils/factories/sessionSummaryFactory'
-import { SessionSummariesDto } from '../@types/user-defined'
+import supervisorTeamFactory from '../testutils/factories/supervisorTeamFactory'
+import supervisorFactory from '../testutils/factories/supervisorFactory'
 
 jest.mock('../data/sessionClient')
 
@@ -12,6 +13,7 @@ describe('ProviderService', () => {
 
   beforeEach(() => {
     sessionService = new SessionService(sessionClient)
+    jest.clearAllMocks()
   })
 
   it('should call find on the client and return its result', async () => {
@@ -30,18 +32,28 @@ describe('ProviderService', () => {
   })
 
   it('should call nextSession on the client and return its result', async () => {
-    const sessionData = {
-      allocations: [sessionSummaryFactory.build(), sessionSummaryFactory.build()],
-    } as SessionSummariesDto
+    const team = supervisorTeamFactory.build()
+    const supervisor = supervisorFactory.build({ unpaidWorkTeams: [team] })
+    const allocations = sessionSummaryFactory.buildList(2)
 
-    sessionClient.nextSessions.mockResolvedValue(sessionData)
-    const result = await sessionService.getNextSessions({
-      teamCode: 'N56DTX',
-      providerCode: 'N56',
-      username: 'some-username',
-    })
+    sessionClient.nextSessions.mockResolvedValue({ allocations })
+    const result = await sessionService.getNextSessions('some-username', supervisor)
 
     expect(sessionClient.nextSessions).toHaveBeenCalledTimes(1)
-    expect(result).toEqual(sessionData)
+    expect(result).toEqual(allocations)
+  })
+
+  it('should make a call to nextSession for each unpaid work team and return one list', async () => {
+    const unpaidWorkTeams = supervisorTeamFactory.buildList(2)
+    const supervisor = supervisorFactory.build({ unpaidWorkTeams })
+    const firstTeamAllocations = sessionSummaryFactory.buildList(2)
+    const secondTeamAllocations = sessionSummaryFactory.buildList(1)
+
+    sessionClient.nextSessions.mockResolvedValueOnce({ allocations: firstTeamAllocations })
+    sessionClient.nextSessions.mockResolvedValueOnce({ allocations: secondTeamAllocations })
+
+    const result = await sessionService.getNextSessions('some-username', supervisor)
+    expect(sessionClient.nextSessions).toHaveBeenCalledTimes(2)
+    expect(result).toEqual([...firstTeamAllocations, ...secondTeamAllocations])
   })
 })

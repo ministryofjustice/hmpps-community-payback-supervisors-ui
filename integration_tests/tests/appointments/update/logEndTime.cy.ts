@@ -33,6 +33,7 @@ import EndTimePage from '../../../pages/appointments/update/endTimePage'
 import CompliancePage from '../../../pages/appointments/update/compliancePage'
 import sessionSummaryFactory from '../../../../server/testutils/factories/sessionSummaryFactory'
 import LeftEarlyReasonPage from '../../../pages/appointments/update/leftEarlyReasonPage'
+import supervisorFactory from '../../../../server/testutils/factories/supervisorFactory'
 
 context('Log finish time ', () => {
   let appointment: AppointmentDto
@@ -45,8 +46,10 @@ context('Log finish time ', () => {
     cy.task('stubSignIn')
     cy.task('stubGetForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
     cy.task('stubFindAppointment', { appointment })
-    const sessionSummary = sessionSummaryFactory.build({ date: '2025-09-15' })
-    cy.task('stubNextSessions', { sessionSummary })
+    const supervisor = supervisorFactory.build()
+    const allocations = [sessionSummaryFactory.build({ date: '2025-09-15' })]
+    cy.task('stubFindSupervisor', { supervisor })
+    cy.task('stubNextSessions', { sessionSummaries: { allocations }, supervisorTeam: supervisor.unpaidWorkTeams[0] })
 
     cy.signIn()
   })

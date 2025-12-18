@@ -62,6 +62,7 @@ import SessionPage from '../../../pages/session'
 import { AppointmentDto } from '../../../../server/@types/shared'
 import { AppointmentStatus } from '../../../../server/services/appointmentStatusService'
 import sessionSummaryFactory from '../../../../server/testutils/factories/sessionSummaryFactory'
+import supervisorFactory from '../../../../server/testutils/factories/supervisorFactory'
 
 context('Log able to work ', () => {
   let appointment: AppointmentDto
@@ -74,8 +75,11 @@ context('Log able to work ', () => {
     cy.task('stubSignIn')
     cy.task('stubGetForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
     cy.task('stubFindAppointment', { appointment })
-    const sessionSummary = sessionSummaryFactory.build({ date: '2025-09-15' })
-    cy.task('stubNextSessions', { sessionSummary })
+
+    const supervisor = supervisorFactory.build()
+    const allocations = [sessionSummaryFactory.build({ date: '2025-09-15' })]
+    cy.task('stubFindSupervisor', { supervisor })
+    cy.task('stubNextSessions', { sessionSummaries: { allocations }, supervisorTeam: supervisor.unpaidWorkTeams[0] })
 
     cy.signIn()
   })

@@ -21,7 +21,7 @@ export default base.extend<TestOptions>({
   team: [
     {
       provider: 'East of England',
-      name: 'Default Designated Transfer Team',
+      name: 'CPB Automated Test Team',
     },
     { option: true },
   ],
