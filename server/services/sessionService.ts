@@ -23,6 +23,7 @@ export default class SessionService {
       })
       nextSessions.push(...result.allocations)
     }
+    /* eslint-enable no-await-in-loop */
 
     return nextSessions
   }
