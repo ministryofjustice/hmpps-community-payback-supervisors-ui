@@ -38,7 +38,6 @@ describe('IndexController', () => {
         .map(session => {
           return {
             ...session,
-            projectCode: 'N56123456',
             date: DateTimeFormats.isoDateToUIDate(session.date, { format: 'dashed' }),
             formattedDate: DateTimeFormats.isoDateToUIDate(session.date, { format: 'medium' }),
             path: paths.sessions.show({ ...session }),

@@ -27,4 +27,7 @@ export default {
     contactOutcomes: referenceDataPath.path('contact-outcomes'),
   },
   forms: formsPath.path(':type/:id'),
+  supervisors: {
+    supervisor: supervisorUiPath.path('supervisors'),
+  },
 }

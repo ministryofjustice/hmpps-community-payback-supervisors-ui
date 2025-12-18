@@ -8,8 +8,6 @@ export default class indexController {
 
   private readonly teamCode = 'N56DTX'
 
-  private readonly projectCode = 'N56123456'
-
   constructor(private readonly sessionService: SessionService) {}
 
   index(): RequestHandler {
@@ -34,7 +32,6 @@ export default class indexController {
         .map(session => {
           return {
             ...session,
-            projectCode: this.projectCode,
             date: DateTimeFormats.isoDateToUIDate(session.date, { format: 'dashed' }),
             formattedDate: DateTimeFormats.isoDateToUIDate(session.date, { format: 'medium' }),
             path: paths.sessions.show({ ...session }),
