@@ -94,4 +94,11 @@ context('Sign In', () => {
     cy.signIn({ failOnStatusCode: false })
     Page.verifyOnPage(AuthErrorPage)
   })
+
+  it('shows the authorisation error page if the user is not an unpaid work team member', () => {
+    cy.task('stubFindSupervisor', { supervisor: supervisorFactory.build({ isUnpaidWorkTeamMember: false }) })
+
+    cy.signIn({ failOnStatusCode: false })
+    Page.verifyOnPage(AuthErrorPage)
+  })
 })

@@ -7,7 +7,7 @@ import { createQueryString } from '../utils/utils'
 
 export default class SupervisorClient extends RestClient {
   constructor(authenticationClient: AuthenticationClient) {
-    super('sessionClient', config.apis.communityPaybackApi, logger, authenticationClient)
+    super('supervisorClient', config.apis.communityPaybackApi, logger, authenticationClient)
   }
 
   async find(username: string): Promise<SupervisorDto> {
