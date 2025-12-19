@@ -11,12 +11,19 @@ import Page from '../../../pages/page'
 import sessionSummaryFactory from '../../../../server/testutils/factories/sessionSummaryFactory'
 import ConfirmLeftEarlyPage from '../../../pages/appointments/update/confirm/confirmLeftEarlyPage'
 import supervisorFactory from '../../../../server/testutils/factories/supervisorFactory'
+import AppointmentPage from '../../../pages/appointment'
+import paths from '../../../../server/paths'
 
 //  Scenario: Validating the log compliance page
 //    Given I am on the log compliance page for an appointment
 //    And I do not complete the form
 //    When I submit the form
 //    Then I see the log compliance page with errors
+
+//  Scenario: Redirecting with an invalid outcome code
+//    Given I visit a log compliance page with an invalid outcome code
+//    And I am redirected to the appointment page
+//    Then I should see an appropriate error summary
 
 //  Scenario: viewing empty form if a new contact outcome is recorded
 //    Given I am on the log compliance page for an appointment
@@ -94,6 +101,32 @@ context('Log compliance', () => {
     page.shouldShowErrorSummary('behaviour', 'Select their behaviour')
   })
 
+  // Scenario: Redirecting with an invalid outcome code
+  it('redirects if the outcome code provided is invalid', () => {
+    const appointment = appointmentFactory.build({
+      attendanceData: {
+        hiVisWorn: null,
+        workedIntensively: null,
+        workQuality: null,
+        behaviour: null,
+      },
+    })
+    cy.task('stubFindAppointment', { appointment })
+
+    // Given I visit a log compliance page with an invalid outcome code
+    const path = paths.appointments.completed.compliance({
+      projectCode: appointment.projectCode,
+      appointmentId: appointment.id.toString(),
+      contactOutcomeCode: 'XXX',
+    })
+    cy.visit(path)
+
+    // And I am redirected to the appointment page
+    const page = Page.verifyOnPage(AppointmentPage, appointment)
+    // Then I should see an appropriate error summary
+    page.shouldShowErrorSummary('', 'Invalid outcome code')
+  })
+
   describe('populating the form', function describe() {
     // Scenario: Viewing my submitted answers when there are errors
     it('should show user submitted values when showing validation errors', () => {
@@ -139,7 +172,7 @@ context('Log compliance', () => {
       })
       // Given I am on the log compliance page for an appointment
       cy.task('stubFindAppointment', { appointment })
-      const page = CompliancePage.visit(appointment, 'completed', 'AATC')
+      const page = CompliancePage.visit(appointment, 'completed', 'ATTC')
 
       // Then I should see the form with empty values
       page.shouldHaveFormWithEmptyValues()
@@ -148,7 +181,7 @@ context('Log compliance', () => {
     // Scenario: viewing saved answers on an appointment if a previously recorded contact outcome has not changed
     it('shows saved appointment data if contact outcome has not changed', function test() {
       const appointment = appointmentFactory.build({
-        contactOutcomeCode: 'X',
+        contactOutcomeCode: 'ATTC',
         attendanceData: {
           hiVisWorn: true,
           workedIntensively: false,

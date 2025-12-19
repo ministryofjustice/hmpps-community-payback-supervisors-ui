@@ -23,7 +23,7 @@ export default class ShowDetailsController {
       const appointment = await this.appointmentService.getAppointment(request)
       const appointmentStatus = await this.appointmentStatusService.getStatus(appointment, res.locals.user.name)
 
-      const page = new AppointmentShowDetailsPage()
+      const page = new AppointmentShowDetailsPage(_req.query)
 
       res.render('appointments/show', page.viewData(appointment, appointmentStatus))
     }
