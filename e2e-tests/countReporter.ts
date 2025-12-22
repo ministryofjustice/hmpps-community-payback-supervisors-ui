@@ -6,4 +6,8 @@ export default class CountReporter implements Reporter {
     const total = suite.allTests().filter(test => !test.location.file.endsWith('setup.ts')).length
     process.env.PW_TOTAL_TESTS = String(total)
   }
+
+  printsToStdio(): boolean {
+    return false
+  }
 }
