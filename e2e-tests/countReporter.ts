@@ -3,7 +3,9 @@ import type { FullConfig } from '@playwright/test'
 
 export default class CountReporter implements Reporter {
   onBegin(config: FullConfig, suite: Suite) {
-    const total = suite.allTests().filter(test => !test.location.file.endsWith('setup.ts')).length
+    const total = suite
+      .allTests()
+      .filter(test => !test.location.file.endsWith('setup.ts') && test.expectedStatus !== 'skipped').length
     process.env.PW_TOTAL_TESTS = String(total)
   }
 

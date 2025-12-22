@@ -10,8 +10,9 @@ import { readDeliusData } from '../delius/deliusTestData'
 import PersonOnProbation from '../delius/personOnProbation'
 
 test('Record an appointment which starts and finishes on time', async ({ page, supervisorUser }) => {
+  const index = test.info().parallelIndex
   const deliusTestData = await readDeliusData()
-  const person = deliusTestData.pops[0] as PersonOnProbation
+  const person = deliusTestData.pops[index] as PersonOnProbation
   await signIn(page, supervisorUser)
   await clearSessionData(page, deliusTestData)
 

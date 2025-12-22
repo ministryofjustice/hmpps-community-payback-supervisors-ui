@@ -11,8 +11,9 @@ import { readDeliusData } from '../delius/deliusTestData'
 import PersonOnProbation from '../delius/personOnProbation'
 
 test('Record an arrival and log as unable to work', async ({ page, supervisorUser }) => {
+  const index = test.info().parallelIndex
   const deliusTestData = await readDeliusData()
-  const person = deliusTestData.pops[1] as PersonOnProbation
+  const person = deliusTestData.pops[index] as PersonOnProbation
   const homePage = await signIn(page, supervisorUser)
   await clearSessionData(page, deliusTestData)
 
