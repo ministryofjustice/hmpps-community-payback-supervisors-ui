@@ -16,6 +16,8 @@ export default class ReferenceDataService {
     this.attendedFailedToComplyOutcomeCode,
   ]
 
+  static readonly allOutcomeCodes = [this.attendedCompliedOutcomeCode, ...this.attendedNonWorkingOutcomeCodes]
+
   constructor(private readonly referenceDataClient: ReferenceDataClient) {}
 
   async getContactOutcomes(userName: string): Promise<ContactOutcomesDto> {

@@ -55,6 +55,17 @@ describe('AppointmentShowDetailsPage', () => {
       })
     })
 
+    it('should generate an error summary if an invalid outcome code error has been passed as a query', () => {
+      const appointment = appointmentFactory.build()
+      const page = new AppointmentShowDetailsPage({ errors: 'invalid-outcome-code' })
+      const viewData = page.viewData(appointment, 'Scheduled')
+
+      expect(page.hasErrors).toEqual(true)
+      expect(viewData.errorSummary).toEqual(
+        expect.arrayContaining([expect.objectContaining({ text: 'Invalid outcome code' })]),
+      )
+    })
+
     describe('actions', () => {
       it.each(['Scheduled', 'Not expected'])(
         'should include arrived links if status is "%s"',
