@@ -61,7 +61,7 @@ jobs:
           npm run test:e2e
       - name: upload results
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: npm_e2e_test_artifacts_supervisors_ui
           path: |
