@@ -57,6 +57,7 @@
     "csrf-sync": "^4.2.1",
     "date-fns": "^4.1.0",
     "dotenv": "^17.2.3",
+    "encoding": "0.1.13",
     "express": "^5.1.0",
     "express-session": "^1.18.2",
     "govuk-frontend": "^5.13.0",
