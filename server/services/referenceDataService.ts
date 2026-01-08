@@ -16,9 +16,18 @@ export default class ReferenceDataService {
     this.attendedFailedToComplyOutcomeCode,
   ]
 
-  static readonly allOutcomeCodes = [this.attendedCompliedOutcomeCode, ...this.attendedNonWorkingOutcomeCodes]
-
   constructor(private readonly referenceDataClient: ReferenceDataClient) {}
+
+  static validOutcomeCodeForRoute(code: string, route: string): boolean {
+    const rules: Record<string, string[]> = {
+      'left-early': this.attendedNonWorkingOutcomeCodes,
+      completed: [this.attendedCompliedOutcomeCode],
+    }
+
+    return Object.entries(rules).some(([routePattern, codes]) => {
+      return new RegExp(routePattern).test(route) && codes.includes(code)
+    })
+  }
 
   async getContactOutcomes(userName: string): Promise<ContactOutcomesDto> {
     return this.referenceDataClient.getContactOutcomes(userName)

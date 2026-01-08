@@ -5,7 +5,7 @@ import { AppointmentCompletedAction, AppointmentParams } from '../../@types/user
 import CompliancePage from '../../pages/appointments/update/compliancePage'
 import AppointmentStatusService from '../../services/appointmentStatusService'
 import ReferenceDataService from '../../services/referenceDataService'
-import paths from '../../paths'
+import { notFound } from '../../utils/utils'
 
 type AppointmentParamsWithContactOutcomeCode = AppointmentParams & { contactOutcomeCode: string }
 
@@ -19,8 +19,8 @@ export default class ComplianceController {
     return async (_req: Request, res: Response) => {
       const appointmentParams = _req.params as unknown as AppointmentParamsWithContactOutcomeCode
 
-      if (!ReferenceDataService.allOutcomeCodes.includes(appointmentParams.contactOutcomeCode)) {
-        return res.redirect(`${paths.appointments.show({ ...appointmentParams })}?errors=invalid-outcome-code`)
+      if (!ReferenceDataService.validOutcomeCodeForRoute(appointmentParams.contactOutcomeCode, _req.path)) {
+        return notFound(res)
       }
 
       const appointment = await this.appointmentService.getAppointment({
