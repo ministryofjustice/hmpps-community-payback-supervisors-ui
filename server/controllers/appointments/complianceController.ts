@@ -4,6 +4,8 @@ import generateErrorSummary from '../../utils/errorUtils'
 import { AppointmentCompletedAction, AppointmentParams } from '../../@types/user-defined'
 import CompliancePage from '../../pages/appointments/update/compliancePage'
 import AppointmentStatusService from '../../services/appointmentStatusService'
+import ReferenceDataService from '../../services/referenceDataService'
+import { notFound } from '../../utils/utils'
 
 type AppointmentParamsWithContactOutcomeCode = AppointmentParams & { contactOutcomeCode: string }
 
@@ -17,6 +19,10 @@ export default class ComplianceController {
     return async (_req: Request, res: Response) => {
       const appointmentParams = _req.params as unknown as AppointmentParamsWithContactOutcomeCode
 
+      if (!ReferenceDataService.validOutcomeCodeForRoute(appointmentParams.contactOutcomeCode, _req.path)) {
+        return notFound(res)
+      }
+
       const appointment = await this.appointmentService.getAppointment({
         ...appointmentParams,
         username: res.locals.user.username,
@@ -24,7 +30,7 @@ export default class ComplianceController {
 
       const page = new CompliancePage(action, {}, appointmentParams.contactOutcomeCode)
 
-      res.render('appointments/update/compliance', page.viewData(appointment))
+      return res.render('appointments/update/compliance', page.viewData(appointment))
     }
   }
 

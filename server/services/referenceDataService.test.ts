@@ -63,4 +63,32 @@ describe('ReferenceDataService', () => {
       expect(ReferenceDataService.attendedCompliedOutcomeCode).toEqual('ATTC')
     })
   })
+
+  describe('validOutcomeCodeForRoute', () => {
+    it('returns true for ATSH/ATSS/AFTC on left early route', () => {
+      const route = '/xx/yy/zz/left-early/aa/bb'
+      expect(ReferenceDataService.validOutcomeCodeForRoute('ATSH', route)).toEqual(true)
+      expect(ReferenceDataService.validOutcomeCodeForRoute('ATSS', route)).toEqual(true)
+      expect(ReferenceDataService.validOutcomeCodeForRoute('AFTC', route)).toEqual(true)
+    })
+
+    it('returns true for ATTC on completed route', () => {
+      const route = '/xx/yy/zz/completed/aa/bb'
+      expect(ReferenceDataService.validOutcomeCodeForRoute('ATTC', route)).toEqual(true)
+    })
+
+    it('returns false for a valid code on the wrong route', () => {
+      const route = '/xx/yy/zz/completed/aa/bb'
+      const route2 = '/xx/yy/zz/left-early/aa/bb'
+      expect(ReferenceDataService.validOutcomeCodeForRoute('ATSH', route)).toEqual(false)
+      expect(ReferenceDataService.validOutcomeCodeForRoute('ATTC', route2)).toEqual(false)
+    })
+
+    it('returns false for a bad code on a good route', () => {
+      const route = '/xx/yy/zz/completed/aa/bb'
+      const route2 = '/xx/yy/zz/left-early/aa/bb'
+      expect(ReferenceDataService.validOutcomeCodeForRoute('XXXX', route)).toEqual(false)
+      expect(ReferenceDataService.validOutcomeCodeForRoute('YYYY', route2)).toEqual(false)
+    })
+  })
 })
