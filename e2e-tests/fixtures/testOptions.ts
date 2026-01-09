@@ -1,6 +1,11 @@
-import PersonOnProbation from './delius/personOnProbation'
+import { AppointmentTestData } from '../delius/deliusTestData'
+import PersonOnProbation from '../delius/personOnProbation'
 
-export type TestOptions = {
+export interface AppointmentTestOptions extends TestOptions {
+  testData: AppointmentTestData
+}
+
+export interface TestOptions {
   deliusUser: {
     username: string
     password: string

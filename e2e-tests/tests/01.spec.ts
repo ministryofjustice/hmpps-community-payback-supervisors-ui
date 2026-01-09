@@ -1,4 +1,4 @@
-import test from '../test'
+import test from '../fixtures/appointmentTest'
 import signIn from '../steps/signIn'
 import clearSessionData from '../steps/clearSessionData'
 import recordArrivalAbleToWork from '../steps/recordArrivalAbleToWork'
@@ -6,18 +6,14 @@ import AppointmentPage from '../pages/appointmentPage'
 import EndTimePage from '../pages/appointments/update/endTimePage'
 import CompliancePage from '../pages/appointments/update/compliancePage'
 import ConfirmCompletedPage from '../pages/appointments/update/confirm/confirmCompletedPage'
-import { readDeliusData } from '../delius/deliusTestData'
-import PersonOnProbation from '../delius/personOnProbation'
 
-test('Record an appointment which starts and finishes on time', async ({ page, supervisorUser }) => {
-  const index = test.info().parallelIndex
-  const deliusTestData = await readDeliusData()
-  const person = deliusTestData.pops[index] as PersonOnProbation
+test('Record an appointment which starts and finishes on time', async ({ page, supervisorUser, testData }) => {
+  const { person, project } = testData
   await signIn(page, supervisorUser)
-  await clearSessionData(page, deliusTestData)
+  await clearSessionData(page, project)
 
   // record arrival able to work
-  const sessionPage = await recordArrivalAbleToWork(page, deliusTestData, person.getFullName())
+  const sessionPage = await recordArrivalAbleToWork(page, testData, person.getFullName())
 
   // record finished on time
   await sessionPage.clickOnAnAppointmentForPerson(person.getFullName())

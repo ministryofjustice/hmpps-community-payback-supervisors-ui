@@ -1,7 +1,7 @@
 import { test as base } from '@playwright/test'
 
 import { TestOptions } from './testOptions'
-import PersonOnProbation from './delius/personOnProbation'
+import PersonOnProbation from '../delius/personOnProbation'
 
 export default base.extend<TestOptions>({
   deliusUser: [
