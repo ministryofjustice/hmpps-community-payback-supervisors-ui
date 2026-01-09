@@ -15,7 +15,10 @@ export default defineConfig<TestOptions>({
   retries: 1,
   maxFailures: 2,
   workers: 1,
-  reporter: [['./e2e-tests/countReporter.ts'], ['html', { outputFolder: './e2e-tests/playwright-report/index.html' }]],
+  reporter: [
+    ['./e2e-tests/testInfoCollator.ts'],
+    ['html', { outputFolder: './e2e-tests/playwright-report/index.html' }],
+  ],
   timeout: process.env.CI ? 5 * 60 * 1000 : 2 * 60 * 1000,
   use: {
     trace: 'retain-on-failure',
