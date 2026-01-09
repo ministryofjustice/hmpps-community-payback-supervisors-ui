@@ -8,10 +8,9 @@ import CompliancePage from '../pages/appointments/update/compliancePage'
 import ConfirmCompletedPage from '../pages/appointments/update/confirm/confirmCompletedPage'
 
 test('Record an appointment which starts and finishes on time', async ({ page, supervisorUser, testData }) => {
-  const index = test.info().parallelIndex
-  const person = testData.pops[index]
+  const { person, project } = testData
   await signIn(page, supervisorUser)
-  await clearSessionData(page, testData)
+  await clearSessionData(page, project)
 
   // record arrival able to work
   const sessionPage = await recordArrivalAbleToWork(page, testData, person.getFullName())

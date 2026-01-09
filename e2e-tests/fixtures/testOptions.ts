@@ -1,8 +1,8 @@
-import DeliusTestData from '../delius/deliusTestData'
+import { AppointmentTestData } from '../delius/deliusTestData'
 import PersonOnProbation from '../delius/personOnProbation'
 
 export interface AppointmentTestOptions extends TestOptions {
-  testData: DeliusTestData
+  testData: AppointmentTestData
 }
 
 export interface TestOptions {

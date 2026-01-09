@@ -9,10 +9,9 @@ import LeftEarlyReasonPage from '../pages/appointments/update/leftEarlyReasonPag
 import ConfirmLeftEarlyPage from '../pages/appointments/update/confirm/confirmLeftEarlyPage'
 
 test('Record an appointment which starts on time but finishes early', async ({ page, supervisorUser, testData }) => {
-  const index = test.info().parallelIndex
-  const person = testData.pops[index]
+  const { person, project } = testData
   await signIn(page, supervisorUser)
-  await clearSessionData(page, testData)
+  await clearSessionData(page, project)
 
   // record arrival able to work
   const sessionPage = await recordArrivalAbleToWork(page, testData, person.getFullName())
