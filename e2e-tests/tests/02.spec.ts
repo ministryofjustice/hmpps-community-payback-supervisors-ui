@@ -1,4 +1,4 @@
-import test from '../fixtures/test'
+import test from '../fixtures/appointmentTest'
 import signIn from '../steps/signIn'
 import SessionPage from '../pages/sessionPage'
 import AppointmentPage from '../pages/appointmentPage'
@@ -7,21 +7,18 @@ import IsAbleToWorkPage from '../pages/appointments/update/isAbleToWorkPage'
 import UnableToWorkPage from '../pages/appointments/update/unableToWorkPage'
 import ConfirmUnableToWorkPage from '../pages/appointments/update/confirm/confirmUnableToWorkPage'
 import clearSessionData from '../steps/clearSessionData'
-import { readDeliusData } from '../delius/deliusTestData'
-import PersonOnProbation from '../delius/personOnProbation'
 
-test('Record an arrival and log as unable to work', async ({ page, supervisorUser }) => {
+test('Record an arrival and log as unable to work', async ({ page, supervisorUser, testData }) => {
   const index = test.info().parallelIndex
-  const deliusTestData = await readDeliusData()
-  const person = deliusTestData.pops[index] as PersonOnProbation
+  const person = testData.pops[index]
   const homePage = await signIn(page, supervisorUser)
-  await clearSessionData(page, deliusTestData)
+  await clearSessionData(page, testData)
 
-  await homePage.clickViewDetailsForProject(deliusTestData.project.name)
+  await homePage.clickViewDetailsForProject(testData.project.name)
 
   const sessionPage = new SessionPage(page)
   await sessionPage.expect.toBeOnThePage()
-  await sessionPage.expect.toShowSessionDetails(deliusTestData)
+  await sessionPage.expect.toShowSessionDetails(testData)
   await sessionPage.clickOnAnAppointmentForPerson(person.getFullName())
 
   const appointmentPage = new AppointmentPage(page)

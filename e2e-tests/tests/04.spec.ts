@@ -1,4 +1,4 @@
-import test from '../fixtures/test'
+import test from '../fixtures/appointmentTest'
 import signIn from '../steps/signIn'
 import clearSessionData from '../steps/clearSessionData'
 import recordArrivalAbleToWork from '../steps/recordArrivalAbleToWork'
@@ -7,18 +7,15 @@ import EndTimePage from '../pages/appointments/update/endTimePage'
 import CompliancePage from '../pages/appointments/update/compliancePage'
 import LeftEarlyReasonPage from '../pages/appointments/update/leftEarlyReasonPage'
 import ConfirmLeftEarlyPage from '../pages/appointments/update/confirm/confirmLeftEarlyPage'
-import { readDeliusData } from '../delius/deliusTestData'
-import PersonOnProbation from '../delius/personOnProbation'
 
-test('Record an appointment which starts on time but finishes early', async ({ page, supervisorUser }) => {
+test('Record an appointment which starts on time but finishes early', async ({ page, supervisorUser, testData }) => {
   const index = test.info().parallelIndex
-  const deliusTestData = await readDeliusData()
-  const person = deliusTestData.pops[index] as PersonOnProbation
+  const person = testData.pops[index]
   await signIn(page, supervisorUser)
-  await clearSessionData(page, deliusTestData)
+  await clearSessionData(page, testData)
 
   // record arrival able to work
-  const sessionPage = await recordArrivalAbleToWork(page, deliusTestData, person.getFullName())
+  const sessionPage = await recordArrivalAbleToWork(page, testData, person.getFullName())
 
   // record left early
   await sessionPage.clickOnAnAppointmentForPerson(person.getFullName())
