@@ -1,7 +1,7 @@
 import type { Reporter, Suite } from '@playwright/test/reporter'
 import type { FullConfig } from '@playwright/test'
 
-export default class CountReporter implements Reporter {
+export default class TestInfoCollator implements Reporter {
   onBegin(config: FullConfig, suite: Suite) {
     const total = suite
       .allTests()
