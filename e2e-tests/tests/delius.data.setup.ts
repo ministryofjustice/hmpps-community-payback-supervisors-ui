@@ -9,8 +9,8 @@ import { createUpwProject } from '@ministryofjustice/hmpps-probation-integration
 import { allocateCurrentCaseToUpwProject } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/upw/allocate-current-case-to-upw-project'
 import { Page } from '@playwright/test'
 import DeliusTestData, { writeDeliusData } from '../delius/deliusTestData'
-import test from '../test'
-import { Team } from '../testOptions'
+import test from '../fixtures/test'
+import { Team } from '../fixtures/testOptions'
 import PersonOnProbation from '../delius/personOnProbation'
 
 test('deliusData', async ({ page, team, testCount, canCreateNewPops, existingPops }) => {

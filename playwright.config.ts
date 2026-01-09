@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test'
 import { config } from 'dotenv'
-import { TestOptions } from './e2e-tests/testOptions'
+import { TestOptions } from './e2e-tests/fixtures/testOptions'
 
 config({
   path: `.env`,

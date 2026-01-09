@@ -1,4 +1,4 @@
-import PersonOnProbation from './delius/personOnProbation'
+import PersonOnProbation from '../delius/personOnProbation'
 
 export type TestOptions = {
   deliusUser: {

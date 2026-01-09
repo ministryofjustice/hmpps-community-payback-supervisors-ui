@@ -1,4 +1,4 @@
-import test from '../test'
+import test from '../fixtures/test'
 import signIn from '../steps/signIn'
 import SessionPage from '../pages/sessionPage'
 import AppointmentPage from '../pages/appointmentPage'
