@@ -3,6 +3,14 @@
 import { Locator, Page, expect } from '@playwright/test'
 import BasePage from '../../basePage'
 
+export interface ComplianceDetails {
+  hiVis: 'Yes' | 'No'
+  workedIntensively: 'Yes' | 'No'
+  workQuality: 'Excellent' | 'Good' | 'Not Applicable' | 'Poor' | 'Satisfactory' | 'Unsatisfactory'
+  behaviour: 'Excellent' | 'Good' | 'Not Applicable' | 'Poor' | 'Satisfactory' | 'Unsatisfactory'
+  notes: string
+}
+
 export default class CompliancePage extends BasePage {
   hiVisFieldLocator: Locator
 
@@ -26,12 +34,12 @@ export default class CompliancePage extends BasePage {
     this.notesFieldLocator = page.getByLabel('Notes')
   }
 
-  async enterComplianceDetails() {
-    await this.hiVisFieldLocator.getByRole('radio', { name: 'Yes' }).check()
-    await this.workedIntensivelyFieldLocator.getByRole('radio', { name: 'Yes' }).check()
-    await this.workedQualityFieldLocator.getByRole('radio', { name: 'Good' }).check()
-    await this.behaviourFieldLocator.getByRole('radio', { name: 'Poor' }).check()
-    await this.notesFieldLocator.fill('They did a good job')
+  async enterComplianceDetails(details: ComplianceDetails) {
+    await this.hiVisFieldLocator.getByRole('radio', { name: details.hiVis }).check()
+    await this.workedIntensivelyFieldLocator.getByRole('radio', { name: details.workedIntensively }).check()
+    await this.workedQualityFieldLocator.getByRole('radio', { name: details.workQuality }).check()
+    await this.behaviourFieldLocator.getByRole('radio', { name: details.behaviour }).check()
+    await this.notesFieldLocator.fill(details.notes)
   }
 }
 

@@ -4,7 +4,7 @@ import clearSessionData from '../steps/clearSessionData'
 import recordArrivalAbleToWork from '../steps/recordArrivalAbleToWork'
 import AppointmentPage from '../pages/appointmentPage'
 import EndTimePage from '../pages/appointments/update/endTimePage'
-import CompliancePage from '../pages/appointments/update/compliancePage'
+import CompliancePage, { ComplianceDetails } from '../pages/appointments/update/compliancePage'
 import LeftEarlyReasonPage from '../pages/appointments/update/leftEarlyReasonPage'
 import ConfirmLeftEarlyPage from '../pages/appointments/update/confirm/confirmLeftEarlyPage'
 import { readDeliusData } from '../delius/deliusTestData'
@@ -36,7 +36,14 @@ test('Record an appointment which starts on time but finishes early', async ({ p
   await leftEarlyReasonPage.clickContinue()
 
   const compliancePage = new CompliancePage(page)
-  await compliancePage.enterComplianceDetails()
+  const complianceDetails: ComplianceDetails = {
+    hiVis: 'Yes',
+    workedIntensively: 'Yes',
+    workQuality: 'Good',
+    behaviour: 'Poor',
+    notes: 'They did a good job',
+  }
+  await compliancePage.enterComplianceDetails(complianceDetails)
   await compliancePage.clickContinue()
 
   const confirmCompletedPage = new ConfirmLeftEarlyPage(page)
@@ -46,4 +53,6 @@ test('Record an appointment which starts on time but finishes early', async ({ p
   await sessionPage.expect.toBeOnThePage()
 
   await sessionPage.expect.appointmentToHaveStatus(person.getFullName(), 'Left site')
+
+  // checkAppointmentOnDelius(complianceDetails) // From probation e2e tests repo
 })

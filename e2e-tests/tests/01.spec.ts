@@ -4,7 +4,7 @@ import clearSessionData from '../steps/clearSessionData'
 import recordArrivalAbleToWork from '../steps/recordArrivalAbleToWork'
 import AppointmentPage from '../pages/appointmentPage'
 import EndTimePage from '../pages/appointments/update/endTimePage'
-import CompliancePage from '../pages/appointments/update/compliancePage'
+import CompliancePage, { ComplianceDetails } from '../pages/appointments/update/compliancePage'
 import ConfirmCompletedPage from '../pages/appointments/update/confirm/confirmCompletedPage'
 import { readDeliusData } from '../delius/deliusTestData'
 import PersonOnProbation from '../delius/personOnProbation'
@@ -29,7 +29,14 @@ test('Record an appointment which starts and finishes on time', async ({ page, s
   await endTimePage.clickContinue()
 
   const compliancePage = new CompliancePage(page)
-  await compliancePage.enterComplianceDetails()
+  const complianceDetails: ComplianceDetails = {
+    hiVis: 'Yes',
+    workedIntensively: 'Yes',
+    workQuality: 'Good',
+    behaviour: 'Poor',
+    notes: 'They did a good job',
+  }
+  await compliancePage.enterComplianceDetails(complianceDetails)
   await compliancePage.clickContinue()
 
   const confirmCompletedPage = new ConfirmCompletedPage(page)
@@ -39,4 +46,6 @@ test('Record an appointment which starts and finishes on time', async ({ page, s
   await sessionPage.expect.toBeOnThePage()
 
   await sessionPage.expect.appointmentToHaveStatus(person.getFullName(), 'Session complete')
+
+  // checkAppointmentOnDelius(complianceDetails) // From probation e2e tests repo
 })
