@@ -7,12 +7,11 @@ import ConfirmAbsentPage from '../pages/appointments/update/confirm/confirmAbsen
 import clearSessionData from '../steps/clearSessionData'
 
 test('Record an absence', async ({ page, supervisorUser, testData }) => {
-  const index = test.info().parallelIndex
-  const person = testData.pops[index]
+  const { person, project } = testData
   const homePage = await signIn(page, supervisorUser)
-  await clearSessionData(page, testData)
+  await clearSessionData(page, project)
 
-  await homePage.clickViewDetailsForProject(testData.project.name)
+  await homePage.clickViewDetailsForProject(project.name)
 
   const sessionPage = new SessionPage(page)
   await sessionPage.expect.toBeOnThePage()

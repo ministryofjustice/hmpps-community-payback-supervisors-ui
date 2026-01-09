@@ -5,9 +5,9 @@ import AppointmentPage from '../pages/appointmentPage'
 import StartTimePage from '../pages/appointments/update/startTimePage'
 import IsAbleToWorkPage from '../pages/appointments/update/isAbleToWorkPage'
 import ConfirmWorkingPage from '../pages/appointments/update/confirm/confirmWorkingPage'
-import DeliusTestData from '../delius/deliusTestData'
+import { AppointmentTestData } from '../delius/deliusTestData'
 
-export default async (page: Page, deliusData: DeliusTestData, personName: string): Promise<SessionPage> => {
+export default async (page: Page, deliusData: AppointmentTestData, personName: string): Promise<SessionPage> => {
   const homePage = new HomePage(page)
   await homePage.clickViewDetailsForProject(deliusData.project.name)
 
