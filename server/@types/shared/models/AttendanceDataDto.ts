@@ -6,9 +6,11 @@ export type AttendanceDataDto = {
     hiVisWorn: boolean;
     workedIntensively: boolean;
     /**
-     * Duration formatted as HH:MM
+     * Deprecated, use penaltyMinutes instead
+     * @deprecated
      */
     penaltyTime?: string;
+    penaltyMinutes?: number;
     workQuality: 'EXCELLENT' | 'GOOD' | 'NOT_APPLICABLE' | 'POOR' | 'SATISFACTORY' | 'UNSATISFACTORY';
     behaviour: 'EXCELLENT' | 'GOOD' | 'NOT_APPLICABLE' | 'POOR' | 'SATISFACTORY' | 'UNSATISFACTORY';
 };
