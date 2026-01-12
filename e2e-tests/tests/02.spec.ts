@@ -1,3 +1,5 @@
+import { login as deliusLogin } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/login'
+import { checkAppointmentOnDelius } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/upw/checkAppointmentDetails'
 import test from '../fixtures/appointmentTest'
 import signIn from '../steps/signIn'
 import SessionPage from '../pages/sessionPage'
@@ -8,7 +10,7 @@ import UnableToWorkPage from '../pages/appointments/update/unableToWorkPage'
 import ConfirmUnableToWorkPage from '../pages/appointments/update/confirm/confirmUnableToWorkPage'
 import clearSessionData from '../steps/clearSessionData'
 
-test('Record an arrival and log as unable to work', async ({ page, supervisorUser, testData }) => {
+test('Record an arrival and log as unable to work', async ({ page, supervisorUser, testData, team }) => {
   const { person, project } = testData
   const homePage = await signIn(page, supervisorUser)
   await clearSessionData(page, project)
@@ -49,4 +51,18 @@ test('Record an arrival and log as unable to work', async ({ page, supervisorUse
   await sessionPage.expect.toBeOnThePage()
 
   await sessionPage.expect.appointmentToHaveStatus(person.getFullName(), 'Cannot work')
+
+  await deliusLogin(page)
+  await page.getByRole('link', { name: 'UPW Project Diary' }).click()
+  await page.waitForSelector('span.float-start:has-text("UPW Project Diary")')
+  await checkAppointmentOnDelius(page, {
+    teamProvider: team.provider,
+    teamName: team.name,
+    projectName: testData.project.name,
+    popCrn: person.crn,
+    popName: person.getDisplayName(),
+    startTime: '09:00',
+    endTime: '17:00',
+    outcome: 'Attended - Failed to Comply',
+  })
 })

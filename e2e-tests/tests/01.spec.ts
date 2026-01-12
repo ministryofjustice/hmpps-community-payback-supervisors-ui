@@ -1,3 +1,5 @@
+import { login as deliusLogin } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/login'
+import { checkAppointmentOnDelius } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/upw/checkAppointmentDetails'
 import test from '../fixtures/appointmentTest'
 import signIn from '../steps/signIn'
 import clearSessionData from '../steps/clearSessionData'
@@ -7,7 +9,7 @@ import EndTimePage from '../pages/appointments/update/endTimePage'
 import CompliancePage from '../pages/appointments/update/compliancePage'
 import ConfirmCompletedPage from '../pages/appointments/update/confirm/confirmCompletedPage'
 
-test('Record an appointment which starts and finishes on time', async ({ page, supervisorUser, testData }) => {
+test('Record an appointment which starts and finishes on time', async ({ page, supervisorUser, testData, team }) => {
   const { person, project } = testData
   await signIn(page, supervisorUser)
   await clearSessionData(page, project)
@@ -35,4 +37,18 @@ test('Record an appointment which starts and finishes on time', async ({ page, s
   await sessionPage.expect.toBeOnThePage()
 
   await sessionPage.expect.appointmentToHaveStatus(person.getFullName(), 'Session complete')
+
+  await deliusLogin(page)
+  await page.getByRole('link', { name: 'UPW Project Diary' }).click()
+  await page.waitForSelector('span.float-start:has-text("UPW Project Diary")')
+  await checkAppointmentOnDelius(page, {
+    teamProvider: team.provider,
+    teamName: team.name,
+    projectName: testData.project.name,
+    popCrn: person.crn,
+    popName: person.getDisplayName(),
+    startTime: '09:00',
+    endTime: '17:00',
+    outcome: 'Attended - Complied',
+  })
 })

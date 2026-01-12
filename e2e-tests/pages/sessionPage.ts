@@ -2,7 +2,7 @@
 
 import { expect, Locator, Page } from '@playwright/test'
 import BasePage from './basePage'
-import DeliusTestData from '../delius/deliusTestData'
+import { AppointmentTestData } from '../delius/deliusTestData'
 import { AppointmentStatusType } from '../../server/@types/user-defined'
 
 export default class SessionPage extends BasePage {
@@ -42,7 +42,7 @@ class SessionPageAssertions {
     await expect(this.page.headingLocator).toContainText('Session details')
   }
 
-  async toShowSessionDetails(deliusTestData: DeliusTestData) {
+  async toShowSessionDetails(deliusTestData: AppointmentTestData) {
     await expect(this.page.page.getByRole('heading', { name: deliusTestData.project.name })).toBeVisible()
     await expect(
       this.page.page.getByRole('heading', {

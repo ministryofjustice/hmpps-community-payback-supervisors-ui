@@ -1,3 +1,5 @@
+import { login as deliusLogin } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/login'
+import { checkAppointmentOnDelius } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/upw/checkAppointmentDetails'
 import test from '../fixtures/appointmentTest'
 import signIn from '../steps/signIn'
 import SessionPage from '../pages/sessionPage'
@@ -6,7 +8,7 @@ import StartTimePage from '../pages/appointments/update/startTimePage'
 import ConfirmAbsentPage from '../pages/appointments/update/confirm/confirmAbsentPage'
 import clearSessionData from '../steps/clearSessionData'
 
-test('Record an absence', async ({ page, supervisorUser, testData }) => {
+test('Record an absence', async ({ page, supervisorUser, testData, team }) => {
   const { person, project } = testData
   const homePage = await signIn(page, supervisorUser)
   await clearSessionData(page, project)
@@ -36,4 +38,18 @@ test('Record an absence', async ({ page, supervisorUser, testData }) => {
   await sessionPage.expect.toBeOnThePage()
 
   await sessionPage.expect.appointmentToHaveStatus(person.getFullName(), 'Absent')
+
+  await deliusLogin(page)
+  await page.getByRole('link', { name: 'UPW Project Diary' }).click()
+  await page.waitForSelector('span.float-start:has-text("UPW Project Diary")')
+  await checkAppointmentOnDelius(page, {
+    teamProvider: team.provider,
+    teamName: team.name,
+    projectName: testData.project.name,
+    popCrn: person.crn,
+    popName: person.getDisplayName(),
+    startTime: '09:00',
+    endTime: '17:00',
+    outcome: 'Unacceptable Absence',
+  })
 })

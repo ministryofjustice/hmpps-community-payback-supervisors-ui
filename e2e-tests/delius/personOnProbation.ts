@@ -8,4 +8,9 @@ export default class PersonOnProbation {
   public getFullName() {
     return `${this.firstName} ${this.lastName}`
   }
+
+  public getDisplayName() {
+    const initial = this.firstName?.[0]?.toUpperCase() ?? ''
+    return `${this.lastName}, ${initial}`
+  }
 }

@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises'
 import { mkdir, writeFile } from 'fs/promises'
 import Project from './project'
 import PersonOnProbation from './personOnProbation'
+import Team from './team'
 
 const DELIUS_DATA_FILE_NAME = 'delius-data.json'
 const DELIUS_DATA_DIRECTORY = 'tmp'
@@ -16,10 +17,13 @@ export interface AppointmentTestData {
 export default class DeliusTestData {
   project: Project
 
+  team: Team
+
   pops: PersonOnProbation[]
 
-  constructor(project: Project, pops: PersonOnProbation[]) {
+  constructor(project: Project, team: Team, pops: PersonOnProbation[]) {
     this.project = project
+    this.team = team
     this.pops = pops
   }
 }
