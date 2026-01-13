@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test'
-import test from '../test'
+import test from '../fixtures/test'
 
 test('signOut', async ({ page }) => {
   await page.goto('/sign-out')
