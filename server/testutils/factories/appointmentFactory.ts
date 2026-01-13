@@ -8,6 +8,7 @@ import enforcementDataFactory from './enforcementDataFactory'
 export default Factory.define<AppointmentDto>(() => ({
   id: faker.number.int(),
   version: faker.string.uuid(),
+  deliusEventNumber: faker.number.int(),
   projectName: faker.company.name(),
   projectCode: faker.string.alpha(10),
   projectTypeName: faker.company.buzzPhrase(),
