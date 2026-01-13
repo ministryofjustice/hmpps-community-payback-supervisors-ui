@@ -11,6 +11,7 @@ import type { PickUpDataDto } from './PickUpDataDto';
 export type AppointmentDto = {
     id: number;
     version: string;
+    deliusEventNumber: number;
     projectName: string;
     projectCode: string;
     projectTypeName: string;
