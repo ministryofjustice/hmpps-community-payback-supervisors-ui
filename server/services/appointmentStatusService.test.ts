@@ -5,6 +5,7 @@ import FormClient from '../data/formClient'
 import appointmentFactory from '../testutils/factories/appointmentFactory'
 import appointmentStatusFactory from '../testutils/factories/appointmentStatusFactory'
 import appointmentSummaryFactory from '../testutils/factories/appointmentSummaryFactory'
+import { contactOutcomeFactory } from '../testutils/factories/contactOutcomeFactory'
 import sessionFactory from '../testutils/factories/sessionFactory'
 import AppointmentStatusService, { APPOINTMENT_STATUS_FORM_TYPE } from './appointmentStatusService'
 
@@ -91,6 +92,90 @@ describe('AppointmentStatusService', () => {
 
       expect(formClient.find).toHaveBeenCalledWith(expectedFormKey, userName)
       expect(result).toEqual(appointmentStatuses)
+    })
+
+    describe('when appointment has existing status', () => {
+      describe('and has a contact outcome', () => {
+        it('returns the existing status', async () => {
+          const appointmentSummary = appointmentSummaryFactory.build({ contactOutcome: contactOutcomeFactory.build() })
+          const session = sessionFactory.build({ appointmentSummaries: [appointmentSummary] })
+
+          const appointmentStatus = appointmentStatusFactory.build({
+            appointmentId: appointmentSummary.id,
+            status: 'Working',
+          })
+
+          formClient.find.mockResolvedValue({ appointmentStatuses: [appointmentStatus] })
+
+          const result = await appointmentStatusService.getStatusesForSession(session, userName)
+
+          expect(result).toEqual([
+            {
+              appointmentId: appointmentSummary.id,
+              status: appointmentStatus.status,
+            },
+          ])
+        })
+      })
+      describe('and does not have a contact outcome', () => {
+        it('returns the existing status', async () => {
+          const appointmentSummary = appointmentSummaryFactory.build({ contactOutcome: null })
+          const session = sessionFactory.build({ appointmentSummaries: [appointmentSummary] })
+
+          const appointmentStatus = appointmentStatusFactory.build({
+            appointmentId: appointmentSummary.id,
+            status: 'Working',
+          })
+
+          formClient.find.mockResolvedValue({ appointmentStatuses: [appointmentStatus] })
+
+          const result = await appointmentStatusService.getStatusesForSession(session, userName)
+
+          expect(result).toEqual([
+            {
+              appointmentId: appointmentSummary.id,
+              status: appointmentStatus.status,
+            },
+          ])
+        })
+      })
+    })
+
+    describe('when appointment does not have an existing status', () => {
+      describe('and has a contact outcome', () => {
+        it('returns "Not expected" status', async () => {
+          const appointmentSummary = appointmentSummaryFactory.build({ contactOutcome: contactOutcomeFactory.build() })
+          const session = sessionFactory.build({ appointmentSummaries: [appointmentSummary] })
+
+          formClient.find.mockResolvedValue({ appointmentStatuses: [] })
+
+          const result = await appointmentStatusService.getStatusesForSession(session, userName)
+
+          expect(result).toEqual([
+            {
+              appointmentId: appointmentSummary.id,
+              status: 'Not expected',
+            },
+          ])
+        })
+      })
+      describe('and does not have a contact outcome', () => {
+        it('returns "Scheduled" status', async () => {
+          const appointmentSummary = appointmentSummaryFactory.build({ contactOutcome: null })
+          const session = sessionFactory.build({ appointmentSummaries: [appointmentSummary] })
+
+          formClient.find.mockResolvedValue({ appointmentStatuses: [] })
+
+          const result = await appointmentStatusService.getStatusesForSession(session, userName)
+
+          expect(result).toEqual([
+            {
+              appointmentId: appointmentSummary.id,
+              status: 'Scheduled',
+            },
+          ])
+        })
+      })
     })
 
     it('returns default statuses for any new appointments on a session', async () => {
