@@ -39,7 +39,7 @@ export default class AppointmentStatusService {
     return session.appointmentSummaries.map(appointment => {
       const status = statusEntries.find(entry => entry.appointmentId === appointment.id)
 
-      if (status) {
+      if (status && appointment.contactOutcome) {
         return status
       }
 

@@ -118,7 +118,7 @@ describe('AppointmentStatusService', () => {
         })
       })
       describe('and does not have a contact outcome', () => {
-        it('returns the existing status', async () => {
+        it('returns "Scheduled" status', async () => {
           const appointmentSummary = appointmentSummaryFactory.build({ contactOutcome: null })
           const session = sessionFactory.build({ appointmentSummaries: [appointmentSummary] })
 
@@ -134,7 +134,7 @@ describe('AppointmentStatusService', () => {
           expect(result).toEqual([
             {
               appointmentId: appointmentSummary.id,
-              status: appointmentStatus.status,
+              status: 'Scheduled',
             },
           ])
         })
