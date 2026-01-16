@@ -26,6 +26,7 @@ test('deliusData', async ({ page, team, testCount, canCreateNewPops, existingPop
 
   const deliusTestData: DeliusTestData = {
     project: { name: upwProject.projectName, code: upwProject.projectCode },
+    team,
     pops: [],
   }
   /* eslint-disable no-await-in-loop */

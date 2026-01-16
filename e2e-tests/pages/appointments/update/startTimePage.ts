@@ -29,7 +29,7 @@ export default class StartTimePage extends BasePage {
   }
 
   async enterAStartTime() {
-    await this.startTimeFieldLocator.fill('09:30')
+    await this.startTimeFieldLocator.fill('09:00')
   }
 }
 

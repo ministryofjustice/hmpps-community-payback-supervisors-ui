@@ -1,3 +1,4 @@
+import { checkAppointmentOnDelius } from '../steps/delius'
 import test from '../fixtures/appointmentTest'
 import signIn from '../steps/signIn'
 import SessionPage from '../pages/sessionPage'
@@ -8,7 +9,7 @@ import UnableToWorkPage from '../pages/appointments/update/unableToWorkPage'
 import ConfirmUnableToWorkPage from '../pages/appointments/update/confirm/confirmUnableToWorkPage'
 import clearSessionData from '../steps/clearSessionData'
 
-test('Record an arrival and log as unable to work', async ({ page, supervisorUser, testData }) => {
+test('Record an arrival and log as unable to work', async ({ page, supervisorUser, testData, team }) => {
   const { person, project } = testData
   const homePage = await signIn(page, supervisorUser)
   await clearSessionData(page, project)
@@ -49,4 +50,6 @@ test('Record an arrival and log as unable to work', async ({ page, supervisorUse
   await sessionPage.expect.toBeOnThePage()
 
   await sessionPage.expect.appointmentToHaveStatus(person.getFullName(), 'Cannot work')
+
+  await checkAppointmentOnDelius(page, team, testData, { outcome: 'Attended - Failed to Comply' })
 })

@@ -1,3 +1,4 @@
+import { checkAppointmentOnDelius } from '../steps/delius'
 import test from '../fixtures/appointmentTest'
 import signIn from '../steps/signIn'
 import SessionPage from '../pages/sessionPage'
@@ -6,7 +7,7 @@ import StartTimePage from '../pages/appointments/update/startTimePage'
 import ConfirmAbsentPage from '../pages/appointments/update/confirm/confirmAbsentPage'
 import clearSessionData from '../steps/clearSessionData'
 
-test('Record an absence', async ({ page, supervisorUser, testData }) => {
+test('Record an absence', async ({ page, supervisorUser, testData, team }) => {
   const { person, project } = testData
   const homePage = await signIn(page, supervisorUser)
   await clearSessionData(page, project)
@@ -36,4 +37,6 @@ test('Record an absence', async ({ page, supervisorUser, testData }) => {
   await sessionPage.expect.toBeOnThePage()
 
   await sessionPage.expect.appointmentToHaveStatus(person.getFullName(), 'Absent')
+
+  await checkAppointmentOnDelius(page, team, testData, { outcome: 'Unacceptable Absence' })
 })

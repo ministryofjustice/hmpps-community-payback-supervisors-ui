@@ -1,3 +1,4 @@
+import { checkAppointmentOnDelius } from '../steps/delius'
 import test from '../fixtures/appointmentTest'
 import signIn from '../steps/signIn'
 import clearSessionData from '../steps/clearSessionData'
@@ -8,7 +9,12 @@ import CompliancePage from '../pages/appointments/update/compliancePage'
 import LeftEarlyReasonPage from '../pages/appointments/update/leftEarlyReasonPage'
 import ConfirmLeftEarlyPage from '../pages/appointments/update/confirm/confirmLeftEarlyPage'
 
-test('Record an appointment which starts on time but finishes early', async ({ page, supervisorUser, testData }) => {
+test('Record an appointment which starts on time but finishes early', async ({
+  page,
+  supervisorUser,
+  testData,
+  team,
+}) => {
   const { person, project } = testData
   await signIn(page, supervisorUser)
   await clearSessionData(page, project)
@@ -42,4 +48,6 @@ test('Record an appointment which starts on time but finishes early', async ({ p
   await sessionPage.expect.toBeOnThePage()
 
   await sessionPage.expect.appointmentToHaveStatus(person.getFullName(), 'Left site')
+
+  await checkAppointmentOnDelius(page, team, testData, { outcome: 'Attended - Failed to Comply' })
 })

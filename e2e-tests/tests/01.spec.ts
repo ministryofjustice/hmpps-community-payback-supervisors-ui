@@ -1,3 +1,4 @@
+import { checkAppointmentOnDelius } from '../steps/delius'
 import test from '../fixtures/appointmentTest'
 import signIn from '../steps/signIn'
 import clearSessionData from '../steps/clearSessionData'
@@ -7,7 +8,7 @@ import EndTimePage from '../pages/appointments/update/endTimePage'
 import CompliancePage from '../pages/appointments/update/compliancePage'
 import ConfirmCompletedPage from '../pages/appointments/update/confirm/confirmCompletedPage'
 
-test('Record an appointment which starts and finishes on time', async ({ page, supervisorUser, testData }) => {
+test('Record an appointment which starts and finishes on time', async ({ page, supervisorUser, testData, team }) => {
   const { person, project } = testData
   await signIn(page, supervisorUser)
   await clearSessionData(page, project)
@@ -35,4 +36,6 @@ test('Record an appointment which starts and finishes on time', async ({ page, s
   await sessionPage.expect.toBeOnThePage()
 
   await sessionPage.expect.appointmentToHaveStatus(person.getFullName(), 'Session complete')
+
+  await checkAppointmentOnDelius(page, team, testData, { outcome: 'Attended - Complied' })
 })
