@@ -1,5 +1,4 @@
-import { login as deliusLogin } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/login'
-import { checkAppointmentOnDelius } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/upw/checkAppointmentDetails'
+import { checkAppointmentOnDelius } from '../steps/delius'
 import test from '../fixtures/appointmentTest'
 import signIn from '../steps/signIn'
 import SessionPage from '../pages/sessionPage'
@@ -39,17 +38,5 @@ test('Record an absence', async ({ page, supervisorUser, testData, team }) => {
 
   await sessionPage.expect.appointmentToHaveStatus(person.getFullName(), 'Absent')
 
-  await deliusLogin(page)
-  await page.getByRole('link', { name: 'UPW Project Diary' }).click()
-  await page.waitForSelector('span.float-start:has-text("UPW Project Diary")')
-  await checkAppointmentOnDelius(page, {
-    teamProvider: team.provider,
-    teamName: team.name,
-    projectName: testData.project.name,
-    popCrn: person.crn,
-    popName: person.getDisplayName(),
-    startTime: '09:00',
-    endTime: '17:00',
-    outcome: 'Unacceptable Absence',
-  })
+  await checkAppointmentOnDelius(page, team, testData, { outcome: 'Unacceptable Absence' })
 })
