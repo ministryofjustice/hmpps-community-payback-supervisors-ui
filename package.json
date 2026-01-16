@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-sqs": "^3.931.0",
-    "@golevelup/ts-jest": "^0.7.0",
+    "@golevelup/ts-jest": "^1.2.0",
     "@ministryofjustice/frontend": "^8.0.0",
     "@ministryofjustice/hmpps-auth-clients": "^1.0.0",
     "@ministryofjustice/hmpps-monitoring": "^1.0.0",
