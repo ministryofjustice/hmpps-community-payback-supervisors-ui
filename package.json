@@ -47,7 +47,7 @@
     "@ministryofjustice/hmpps-probation-integration-e2e-tests": "^1.136.0",
     "@ministryofjustice/hmpps-rest-client": "^1.0.0",
     "@playwright/test": "^1.56.1",
-    "applicationinsights": "^2.9.8",
+    "applicationinsights": "^3.12.1",
     "body-parser": "^2.2.0",
     "bunyan": "^1.8.15",
     "bunyan-format": "^0.2.1",
