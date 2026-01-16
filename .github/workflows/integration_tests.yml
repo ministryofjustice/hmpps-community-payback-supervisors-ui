@@ -23,7 +23,7 @@ jobs:
         with:
           node-version-file: ${{ inputs.node_version_file }}
       - name: download artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: npm_build_artifacts
       - name: restore cache
@@ -37,7 +37,7 @@ jobs:
             ~/.cache/Cypress
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
       - name: download the artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: npm_build_artifacts
           path: |
@@ -60,7 +60,7 @@ jobs:
         # replacing the above with if: always()
       - name: upload results
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: npm_integration_test_artifacts
           path: |
