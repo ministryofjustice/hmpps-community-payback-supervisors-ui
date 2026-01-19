@@ -80,7 +80,7 @@ export default class EndTimePage extends BaseAppointmentUpdatePage<Body> {
       return { time: { text: 'Enter a valid finish time, for example 17:00' } }
     }
 
-    if (DateTimeFormats.isBeforeTime(this.query.time, appointment.startTime)) {
+    if (!DateTimeFormats.isAfterTime(this.query.time, appointment.startTime)) {
       return {
         time: {
           text: `Finish time must be after ${DateTimeFormats.stripTime(appointment.startTime)} when they started the session`,

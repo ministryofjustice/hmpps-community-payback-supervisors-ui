@@ -158,13 +158,36 @@ describe('EndTimePage', () => {
       })
     })
 
-    describe('when time is before start time', () => {
+    describe('when endTime is before start time', () => {
       let page: EndTimePage
       beforeEach(() => {
         jest.spyOn(DateTimeFormats, 'isValidTime').mockReturnValue(true)
-        jest.spyOn(DateTimeFormats, 'isBeforeTime').mockReturnValue(true)
+        jest.spyOn(DateTimeFormats, 'isAfterTime').mockReturnValue(false)
 
-        page = new EndTimePage(action, { time: '8475438' })
+        page = new EndTimePage(action, { time: '08:00' })
+      })
+      it('hasErrors should be true', () => {
+        page.validate(appointment)
+
+        expect(page.hasErrors).toEqual(true)
+      })
+
+      it('validationErrors should contain error message', () => {
+        page.validate(appointment)
+
+        expect(page.validationErrors.time).toEqual({
+          text: 'Finish time must be after 09:00 when they started the session',
+        })
+      })
+    })
+
+    describe('when endTime is equal to start time', () => {
+      let page: EndTimePage
+      beforeEach(() => {
+        jest.spyOn(DateTimeFormats, 'isValidTime').mockReturnValue(true)
+        jest.spyOn(DateTimeFormats, 'isAfterTime').mockReturnValue(false)
+
+        page = new EndTimePage(action, { time: '09:00' })
       })
       it('hasErrors should be true', () => {
         page.validate(appointment)
@@ -184,7 +207,7 @@ describe('EndTimePage', () => {
     describe('when no errors', () => {
       beforeEach(() => {
         jest.spyOn(DateTimeFormats, 'isValidTime').mockReturnValue(true)
-        jest.spyOn(DateTimeFormats, 'isBeforeTime').mockReturnValue(false)
+        jest.spyOn(DateTimeFormats, 'isAfterTime').mockReturnValue(true)
       })
       it('should return false', () => {
         const page = new EndTimePage(action, { time: '10:00' })
