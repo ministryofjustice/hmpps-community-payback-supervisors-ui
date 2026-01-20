@@ -40,6 +40,7 @@ describe('StartTimePage', () => {
         time: startTime,
         question: `You're logging Sam Smith as having arrived at:`,
         documentTitle: 'Log start time',
+        deliusVersion: appointment.version,
       })
     })
 
@@ -170,6 +171,24 @@ describe('StartTimePage', () => {
 
         expect(page.validationErrors.time).toEqual({
           text: 'Start time must be before 17:00 when they are expected to finish the session',
+        })
+      })
+    })
+
+    describe('when the delius versions do not match', () => {
+      it('validationErrors should contain error message', () => {
+        const oldDeliusVersion = '1'
+        const newDeliusVersion = '2'
+
+        const appointmentWithUpdatedVersion = appointmentFactory.build({ version: newDeliusVersion })
+
+        const page = new StartTimePage(action, { time: '09:00', deliusVersion: oldDeliusVersion })
+
+        page.validate(appointmentWithUpdatedVersion)
+
+        expect(page.hasErrors).toEqual(true)
+        expect(page.validationErrors.time).toEqual({
+          text: 'The arrival time has already been updated in the database, try again',
         })
       })
     })

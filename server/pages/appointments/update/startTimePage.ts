@@ -10,14 +10,17 @@ interface ViewData extends AppointmentUpdatePageViewData {
   time: string
   question: string
   documentTitle: string
+  deliusVersion: string
 }
 
 interface Query {
   time?: string
+  deliusVersion?: string
 }
 
 interface Body {
   time: string
+  deliusVersion: string
 }
 
 export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
@@ -75,10 +78,17 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
       time: hasFormBody ? this.query.time : appointment.startTime,
       question: this.getPageTitle(commonViewData.offender),
       documentTitle: 'Log start time',
+      deliusVersion: appointment.version,
     }
   }
 
   protected getValidationErrors(appointment: AppointmentDto): ValidationErrors<Body> | undefined {
+    if (this.query.deliusVersion && this.query.deliusVersion !== appointment.version) {
+      return {
+        time: { text: 'The arrival time has already been updated in the database, try again' },
+      }
+    }
+
     if (!this.query.time) {
       return { time: { text: 'Enter a start time' } }
     }

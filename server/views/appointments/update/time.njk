@@ -4,6 +4,8 @@
 {% set pageTitle = documentTitle %}
 
 {% block formContent %}
+  <input type="hidden" name="deliusVersion" value="{{ deliusVersion }}"/>
+
   {{ govukInput({
     label: {
       text: question,
