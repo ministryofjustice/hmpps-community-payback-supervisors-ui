@@ -1,7 +1,21 @@
-name: Deploy to test
+name: Deploy branch to environment
 
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment"
+        type: choice
+        required: true
+        options:
+          - dev
+          - test
+          - preprod
+          - prod
+      branch:
+        description: "branch"
+        required: true
+        default: "main"
 
 permissions:
   contents: read
@@ -23,15 +37,16 @@ jobs:
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/test_helm_lint.yml@v2 # WORKFLOW_VERSION
     secrets: inherit
     with:
-      environment: test
-  deploy_test:
-    name: Deploy to the test environment
+      environment: ${{ inputs.environment }}
+
+  deploy:
+    name: Deploy to chosen environment
     needs:
       - docker_build
       - helm_lint
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2
     secrets: inherit
     with:
-      environment: 'test'
+      environment: ${{ inputs.environment }}
       app_version: '${{ needs.docker_build.outputs.app_version }}'
       show_changelog: false
