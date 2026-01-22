@@ -19,7 +19,7 @@ export default function routes(controllers: Controllers, { auditService }: Servi
     await handler(req, res, next)
   })
 
-  staticRoutes(staticController, router)
+  staticRoutes(staticController, router, auditService)
   sessionRoutes(sessionsController, router, auditService)
   appointmentRoutes(controllers, router, auditService)
 
