@@ -3,7 +3,7 @@ generic-service:
   productId: 'HMPPS552' # productId for the product that this belongs too, i.e. DPS001, see README.md for details
 
   # the IRSA service account name for accessing AWS resources
-  # serviceAccountName: "hmpps-community-payback-supervisors-ui"
+  serviceAccountName: "hmpps-community-payback-supervisors-ui-account"
 
   replicaCount: 4
 
