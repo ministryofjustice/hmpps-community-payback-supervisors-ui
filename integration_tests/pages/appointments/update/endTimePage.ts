@@ -35,10 +35,10 @@ export default class EndTimePage extends LogTimePage {
   }
 
   shouldShowValidationErrors() {
-    this.shouldShowErrorSummary('time', 'Enter a finish time')
+    this.shouldShowErrorSummary('time', 'Enter the time they left')
   }
 
   shouldShowStartTimeValidationErrors() {
-    this.shouldShowErrorSummary('time', 'Finish time must be after 09:00 when they started the session')
+    this.shouldShowErrorSummary('time', 'Finish time must be after 09:00')
   }
 }

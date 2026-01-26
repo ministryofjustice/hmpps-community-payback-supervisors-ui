@@ -136,7 +136,7 @@ describe('LeftEarlyReasonPage', () => {
         page.validate()
 
         expect(page.validationErrors.leftEarlyReason).toEqual({
-          text: 'Select the reason why the person left early today',
+          text: 'Select why they cannot continue this session',
         })
       })
     })

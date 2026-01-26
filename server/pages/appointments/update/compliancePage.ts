@@ -84,19 +84,19 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
     const errors: ValidationErrors<Body> = {}
 
     if (!this.query.hiVis) {
-      errors.hiVis = { text: 'Select whether a Hi-Vis was worn' }
+      errors.hiVis = { text: 'Select yes if they wore hi-vis' }
     }
 
     if (!this.query.workedIntensively) {
-      errors.workedIntensively = { text: 'Select whether they worked intensively' }
+      errors.workedIntensively = { text: 'Select yes if they are working intensively' }
     }
 
     if (!this.query.workQuality) {
-      errors.workQuality = { text: 'Select their work quality' }
+      errors.workQuality = { text: 'Select a description of the quality of their work ' }
     }
 
     if (!this.query.behaviour) {
-      errors.behaviour = { text: 'Select their behaviour' }
+      errors.behaviour = { text: 'Select a description of their behaviour ' }
     }
 
     return errors

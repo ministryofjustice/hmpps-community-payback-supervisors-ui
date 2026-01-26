@@ -260,7 +260,7 @@ describe('CompliancePage', () => {
         page.validate()
 
         expect(page.validationErrors.hiVis).toEqual({
-          text: 'Select whether a Hi-Vis was worn',
+          text: 'Select yes if they wore hi-vis',
         })
         expect(page.hasErrors).toBe(true)
       })
@@ -272,7 +272,7 @@ describe('CompliancePage', () => {
         page.validate()
 
         expect(page.validationErrors.workedIntensively).toEqual({
-          text: 'Select whether they worked intensively',
+          text: 'Select yes if they are working intensively',
         })
         expect(page.hasErrors).toBe(true)
       })
@@ -284,7 +284,7 @@ describe('CompliancePage', () => {
         page.validate()
 
         expect(page.validationErrors.workQuality).toEqual({
-          text: 'Select their work quality',
+          text: 'Select a description of the quality of their work ',
         })
         expect(page.hasErrors).toBe(true)
       })
@@ -296,7 +296,7 @@ describe('CompliancePage', () => {
         page.validate()
 
         expect(page.validationErrors.behaviour).toEqual({
-          text: 'Select their behaviour',
+          text: 'Select a description of their behaviour ',
         })
         expect(page.hasErrors).toBe(true)
       })

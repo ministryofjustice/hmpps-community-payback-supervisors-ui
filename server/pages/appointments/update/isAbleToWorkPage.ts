@@ -57,7 +57,7 @@ export default class IsAbleToWorkPage extends BaseAppointmentUpdatePage<Body> {
 
   protected getValidationErrors(): ValidationErrors<Body> {
     if (!this.query.ableToWork) {
-      return { ableToWork: { text: 'Select whether the person is able to work today' } }
+      return { ableToWork: { text: 'Select yes if they are able to work' } }
     }
 
     return {}
