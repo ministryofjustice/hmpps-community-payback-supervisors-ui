@@ -134,7 +134,7 @@ describe('EndTimePage', () => {
         page.validate(appointment)
 
         expect(page.validationErrors.time).toEqual({
-          text: 'Enter a finish time',
+          text: 'Enter the time they left',
         })
       })
     })
@@ -176,7 +176,7 @@ describe('EndTimePage', () => {
         page.validate(appointment)
 
         expect(page.validationErrors.time).toEqual({
-          text: 'Finish time must be after 09:00 when they started the session',
+          text: 'Finish time must be after 09:00',
         })
       })
     })
@@ -199,7 +199,7 @@ describe('EndTimePage', () => {
         page.validate(appointment)
 
         expect(page.validationErrors.time).toEqual({
-          text: 'Finish time must be after 09:00 when they started the session',
+          text: 'Finish time must be after 09:00',
         })
       })
     })

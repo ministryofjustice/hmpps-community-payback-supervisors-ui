@@ -77,7 +77,7 @@ describe('IsAbleToWorkPage', () => {
         page.validate()
 
         expect(page.validationErrors.ableToWork).toEqual({
-          text: 'Select whether the person is able to work today',
+          text: 'Select yes if they are able to work',
         })
       })
     })

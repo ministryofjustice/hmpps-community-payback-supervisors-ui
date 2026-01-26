@@ -65,7 +65,7 @@ export default class LeftEarlyReasonPage extends BaseAppointmentUpdatePage<Body>
   protected getValidationErrors(): ValidationErrors<Body> {
     const errors: ValidationErrors<Body> = {}
     if (!this.query.leftEarlyReason) {
-      errors.leftEarlyReason = { text: 'Select the reason why the person left early today' }
+      errors.leftEarlyReason = { text: 'Select why they cannot continue this session' }
     }
 
     if (this.query.notes && this.query.notes.length > 4000) {

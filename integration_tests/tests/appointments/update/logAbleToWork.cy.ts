@@ -94,7 +94,7 @@ context('Log able to work ', () => {
 
     // Then I see the same page with errors
     Page.verifyOnPage(IsAbleToWorkPage, appointment)
-    page.shouldShowErrorSummary('ableToWork', 'Select whether the person is able to work today')
+    page.shouldShowErrorSummary('ableToWork', 'Select yes if they are able to work')
   })
 
   //  Context: when the person is able to work

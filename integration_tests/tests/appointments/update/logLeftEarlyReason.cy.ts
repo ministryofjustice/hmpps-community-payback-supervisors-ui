@@ -75,7 +75,7 @@ context('Log left early ', () => {
 
     // Then I see the same page with errors
     Page.verifyOnPage(LeftEarlyReasonPage, appointment)
-    page.shouldShowErrorSummary('leftEarlyReason', 'Select the reason why the person left early today')
+    page.shouldShowErrorSummary('leftEarlyReason', 'Select why they cannot continue this session')
     page.shouldShowErrorSummary('notes', 'Notes must be 4000 characters or less')
 
     // And the notes field is populated with the user's input

@@ -94,10 +94,10 @@ context('Log compliance', () => {
     page.clickSubmit()
 
     // Then I see the log compliance page with errors
-    page.shouldShowErrorSummary('hiVis', 'Select whether a Hi-Vis was worn')
-    page.shouldShowErrorSummary('workedIntensively', 'Select whether they worked intensively')
-    page.shouldShowErrorSummary('workQuality', 'Select their work quality')
-    page.shouldShowErrorSummary('behaviour', 'Select their behaviour')
+    page.shouldShowErrorSummary('hiVis', 'Select yes if they wore hi-vis')
+    page.shouldShowErrorSummary('workedIntensively', 'Select yes if they are working intensively')
+    page.shouldShowErrorSummary('workQuality', 'Select a description of the quality of their work ')
+    page.shouldShowErrorSummary('behaviour', 'Select a description of their behaviour ')
   })
 
   // Scenario: Redirecting with an invalid outcome code
@@ -149,7 +149,7 @@ context('Log compliance', () => {
       page.clickSubmit()
 
       // Then I see the log compliance page with errors and my entered answers
-      page.shouldShowErrorSummary('behaviour', 'Select their behaviour')
+      page.shouldShowErrorSummary('behaviour', 'Select a description of their behaviour ')
       page.shouldHaveSelectedHiVisValue()
       page.shouldHaveSelectedWorkedIntensivelyValue()
       page.shouldHaveSelectedWorkQualityValue()
