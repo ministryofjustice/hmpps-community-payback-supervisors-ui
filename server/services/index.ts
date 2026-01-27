@@ -5,6 +5,7 @@ import AuditService from './auditService'
 import SessionService from './sessionService'
 import ReferenceDataService from './referenceDataService'
 import SupervisorService from './supervisorService'
+import AppointmentFormService from './appointmentFormService'
 
 export const services = () => {
   const {
@@ -25,6 +26,7 @@ export const services = () => {
     referenceDataService: new ReferenceDataService(referenceDataClient),
     appointmentStatusService: new AppointmentStatusService(formClient),
     supervisorService: new SupervisorService(supervisorClient),
+    appointmentFormService: new AppointmentFormService(formClient),
   }
 }
 
