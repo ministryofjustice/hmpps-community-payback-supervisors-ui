@@ -1,0 +1,14 @@
+{% extends "../partials/layout.njk" %}
+
+{% set pageTitle = "Sorry, there is a problem with the service - " + applicationName %}
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">Sorry, there is a problem with the service</h1>
+      <p class="govuk-body">Try again later.</p>
+      <p class="govuk-body">
+       Contact <a href="mailto:{{ supportEmailAddress }}">{{ supportEmailAddress }}</a> if you’re unable to log a session.
+        </p>
+    </div>
+  </div>
+{% endblock %}
