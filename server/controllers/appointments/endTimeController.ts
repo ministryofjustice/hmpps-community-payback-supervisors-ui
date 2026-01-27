@@ -1,6 +1,6 @@
 import type { Request, RequestHandler, Response } from 'express'
 import AppointmentService from '../../services/appointmentService'
-import generateErrorSummary from '../../utils/errorUtils'
+import { generateErrorSummary } from '../../utils/errorUtils'
 import { AppointmentCompletedAction } from '../../@types/user-defined'
 import EndTimePage from '../../pages/appointments/update/endTimePage'
 

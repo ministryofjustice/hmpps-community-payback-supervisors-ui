@@ -1,4 +1,4 @@
-import generateErrorSummary from './errorUtils'
+import { generateErrorSummary } from './errorUtils'
 
 describe('errorUtils', () => {
   it('generates an error summary', () => {
