@@ -20,14 +20,15 @@ export const checkAppointmentOnDelius = async (
   await deliusLogin(page)
   await page.getByRole('link', { name: 'UPW Project Diary' }).click()
   await page.waitForSelector('span.float-start:has-text("UPW Project Diary")')
+  const { startTime, endTime } = testData.project.availability
   await _checkAppointmentOnDelius(page, {
     teamProvider: team.provider,
     teamName: team.name,
     projectName: testData.project.name,
     popCrn: testData.person.crn,
     popName: testData.person.getDisplayName(),
-    startTime: contactOutcome.startTime ?? '09:00',
-    endTime: contactOutcome.endTime ?? '17:00',
+    startTime: contactOutcome.startTime ?? startTime,
+    endTime: contactOutcome.endTime ?? endTime,
     outcome: contactOutcome.outcome,
   })
 }
