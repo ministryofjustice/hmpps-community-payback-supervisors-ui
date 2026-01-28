@@ -28,7 +28,6 @@ test('Record an arrival and log as unable to work', async ({ page, supervisorUse
 
   const startTimePage = new StartTimePage(page, 'arrived')
   await startTimePage.expect.toBeOnThePage()
-  await startTimePage.enterAStartTime()
   await startTimePage.clickContinue()
 
   const isAbleToWorkPage = new IsAbleToWorkPage(page)

@@ -9,8 +9,6 @@ export default class StartTimePage extends BasePage {
 
   readonly expect: StartTimePageAssertions
 
-  private readonly startTimeFieldLocator: Locator
-
   question: Locator
 
   constructor(
@@ -19,17 +17,12 @@ export default class StartTimePage extends BasePage {
   ) {
     super(page)
     this.expect = new StartTimePageAssertions(this)
-    this.startTimeFieldLocator = page.getByLabel(this.titleText)
     this.question = this.headingLocator.getByText("You're logging")
   }
 
   getExpectedTitlePattern() {
     const questionEnd = this.action === 'arrived' ? 'as having arrived at:' : 'as absent today at:'
     return new RegExp(`You're logging (.*) ${questionEnd}`)
-  }
-
-  async enterAStartTime() {
-    await this.startTimeFieldLocator.fill('09:00')
   }
 }
 

@@ -22,7 +22,6 @@ export default async (page: Page, deliusData: AppointmentTestData, personName: s
 
   const startTimePage = new StartTimePage(page, 'arrived')
   await startTimePage.expect.toBeOnThePage()
-  await startTimePage.enterAStartTime()
   await startTimePage.clickContinue()
 
   const isAbleToWorkPage = new IsAbleToWorkPage(page)

@@ -25,7 +25,14 @@ test('deliusData', async ({ page, team, testCount, canCreateNewPops, existingPop
   })
 
   const deliusTestData: DeliusTestData = {
-    project: { name: upwProject.projectName, code: upwProject.projectCode },
+    project: {
+      name: upwProject.projectName,
+      code: upwProject.projectCode,
+      availability: {
+        startTime: upwProject.projectAvailability.startTime,
+        endTime: upwProject.projectAvailability.endTime,
+      },
+    },
     team,
     pops: [],
   }

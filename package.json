@@ -44,7 +44,7 @@
     "@ministryofjustice/frontend": "^8.0.0",
     "@ministryofjustice/hmpps-auth-clients": "^1.0.0",
     "@ministryofjustice/hmpps-monitoring": "^1.0.0",
-    "@ministryofjustice/hmpps-probation-integration-e2e-tests": "^1.136.0",
+    "@ministryofjustice/hmpps-probation-integration-e2e-tests": "^1.156.0",
     "@ministryofjustice/hmpps-rest-client": "^1.0.0",
     "@playwright/test": "^1.56.1",
     "@sentry/node": "^10.25.0",
