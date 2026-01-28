@@ -1,6 +1,6 @@
 import type { Request, RequestHandler, Response } from 'express'
 import AppointmentService from '../../services/appointmentService'
-import generateErrorSummary from '../../utils/errorUtils'
+import { generateErrorSummary } from '../../utils/errorUtils'
 import LeftEarlyReasonPage from '../../pages/appointments/update/leftEarlyReasonPage'
 import ReferenceDataService from '../../services/referenceDataService'
 

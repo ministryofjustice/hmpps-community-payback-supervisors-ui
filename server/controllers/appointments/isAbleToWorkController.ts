@@ -1,7 +1,7 @@
 import type { Request, RequestHandler, Response } from 'express'
 import AppointmentService from '../../services/appointmentService'
 import IsAbleToWorkPage from '../../pages/appointments/update/isAbleToWorkPage'
-import generateErrorSummary from '../../utils/errorUtils'
+import { generateErrorSummary } from '../../utils/errorUtils'
 import AppointmentStatusService from '../../services/appointmentStatusService'
 
 export default class IsAbleToWorkController {
