@@ -11,6 +11,8 @@ export default class IndexPage extends Page {
 
   headerEnvironmentBanner = (): PageElement => cy.get('[data-qa=header-environment-banner]')
 
+  headerPhaseBanner = (): PageElement => cy.get('.govuk-phase-banner')
+
   clickViewSession = () => cy.get('a').contains('View details').click()
 
   shouldShowSessionSummaryDetails() {
