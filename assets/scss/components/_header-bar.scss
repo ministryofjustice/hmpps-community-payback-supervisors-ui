@@ -140,7 +140,7 @@
   }
 }
 
-.govuk-phase-banner {
+.govuk-phase-banner, .govuk-environment-banner {
   @include govuk-width-container;
   border: none;
 }
