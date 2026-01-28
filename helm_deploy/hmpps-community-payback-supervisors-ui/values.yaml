@@ -60,6 +60,8 @@ generic-service:
     sqs-hmpps-audit-secret:
       AUDIT_SQS_QUEUE_URL: 'sqs_queue_url'
       AUDIT_SQS_QUEUE_NAME: 'sqs_queue_name'
+    hmpps-community-payback-support-emails:
+      SUPPORT_EMAIL_ADDRESS: 'SUPPORT_EMAIL_ADDRESS'
 
   allowlist:
     groups:
