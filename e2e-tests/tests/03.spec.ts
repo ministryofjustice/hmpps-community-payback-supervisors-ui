@@ -26,7 +26,6 @@ test('Record an absence', async ({ page, supervisorUser, testData, team }) => {
 
   const startTimePage = new StartTimePage(page, 'absent')
   await startTimePage.expect.toBeOnThePage()
-  await startTimePage.enterAStartTime()
   await startTimePage.clickContinue()
 
   const confirmAbsentPage = new ConfirmAbsentPage(page)
