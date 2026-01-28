@@ -9,7 +9,9 @@ export default class IndexPage extends Page {
 
   headerUserName = (): PageElement => cy.get('[data-qa=header-user-name]')
 
-  headerPhaseBanner = (): PageElement => cy.get('[data-qa=header-phase-banner]')
+  headerEnvironmentBanner = (): PageElement => cy.get('[data-qa=header-environment-banner]')
+
+  headerPhaseBanner = (): PageElement => cy.get('.govuk-phase-banner')
 
   clickViewSession = () => cy.get('a').contains('View details').click()
 

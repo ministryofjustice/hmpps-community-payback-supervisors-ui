@@ -33,10 +33,16 @@ context('Sign In', () => {
     indexPage.headerUserName().should('contain.text', 'J. Smith')
   })
 
+  it('Environment banner visible in header', () => {
+    cy.signIn()
+    const indexPage = Page.verifyOnPage(IndexPage)
+    indexPage.headerEnvironmentBanner().should('contain.text', 'dev')
+  })
+
   it('Phase banner visible in header', () => {
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
-    indexPage.headerPhaseBanner().should('contain.text', 'dev')
+    indexPage.headerPhaseBanner().should('contain.text', 'Private beta')
   })
 
   it('User can sign out', () => {
