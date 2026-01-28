@@ -21,7 +21,7 @@ export default class ShowDetailsController {
       }
 
       const appointment = await this.appointmentService.getAppointment(request)
-      const appointmentStatus = await this.appointmentStatusService.getStatus(appointment, res.locals.user.name)
+      const appointmentStatus = await this.appointmentStatusService.getStatus(appointment, res.locals.user.username)
 
       const page = new AppointmentShowDetailsPage()
 

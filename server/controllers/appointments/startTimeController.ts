@@ -50,13 +50,13 @@ export default class StartTimeController {
       const payload = page.requestBody(appointment)
 
       await this.appointmentService.saveAppointment({
-        username: res.locals.user.name,
+        username: res.locals.user.username,
         projectCode,
         data: payload,
       })
 
       if (action === 'absent') {
-        this.appointmentStatusService.updateStatus(appointment, 'Absent', res.locals.user.name)
+        this.appointmentStatusService.updateStatus(appointment, 'Absent', res.locals.user.username)
       }
 
       return res.redirect(page.nextPath(appointmentId, projectCode))
