@@ -57,14 +57,14 @@ export default class ComplianceController {
       const payload = page.requestBody(appointment)
 
       await this.appointmentService.saveAppointment({
-        username: res.locals.user.name,
+        username: res.locals.user.username,
         projectCode: appointmentParams.projectCode,
         data: payload,
       })
 
       const completedStatus = page.completedStatus()
 
-      this.appointmentStatusService.updateStatus(appointment, completedStatus, res.locals.user.name)
+      this.appointmentStatusService.updateStatus(appointment, completedStatus, res.locals.user.username)
 
       return res.redirect(page.nextPath(appointmentParams.projectCode, appointmentParams.appointmentId))
     }

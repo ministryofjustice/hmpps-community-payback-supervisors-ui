@@ -26,7 +26,10 @@ export default class SessionsController {
       }
 
       const session = await this.sessionService.getSession(request)
-      const sesssionStatuses = await this.appointmentStatusService.getStatusesForSession(session, res.locals.user.name)
+      const sesssionStatuses = await this.appointmentStatusService.getStatusesForSession(
+        session,
+        res.locals.user.username,
+      )
 
       const appointmentSummaries = session.appointmentSummaries.map(appointment => {
         const appointmentStatus = sesssionStatuses.find(status => status.appointmentId === appointment.id)
@@ -95,7 +98,7 @@ export default class SessionsController {
       if (config.flags.enableClearSessionStatuses) {
         const { projectCode, date } = _req.params
 
-        await this.appointmentStatusService.clearStatusesForSession(projectCode, date, res.locals.user.name)
+        await this.appointmentStatusService.clearStatusesForSession(projectCode, date, res.locals.user.username)
 
         return res.redirect(paths.sessions.show({ projectCode, date }))
       }

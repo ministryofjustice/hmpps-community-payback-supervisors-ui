@@ -46,7 +46,7 @@ export default class EndTimeController {
       const payload = page.requestBody(appointment)
 
       await this.appointmentService.saveAppointment({
-        username: res.locals.user.name,
+        username: res.locals.user.username,
         projectCode,
         data: payload,
       })

@@ -62,12 +62,12 @@ export default class UnableToWorkController {
       const payload = page.requestBody(appointment)
 
       await this.appointmentService.saveAppointment({
-        username: res.locals.user.name,
+        username: res.locals.user.username,
         projectCode,
         data: payload,
       })
 
-      this.appointmentStatusService.updateStatus(appointment, 'Cannot work', res.locals.user.name)
+      this.appointmentStatusService.updateStatus(appointment, 'Cannot work', res.locals.user.username)
 
       return res.redirect(paths.appointments.confirm.unableToWork({ projectCode, appointmentId }))
     }

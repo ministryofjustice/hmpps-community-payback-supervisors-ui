@@ -48,7 +48,7 @@ export default class IsAbleToWorkController {
       }
 
       if (page.isAbleToWork()) {
-        this.appointmentStatusService.updateStatus(appointment, 'Working', res.locals.user.name)
+        this.appointmentStatusService.updateStatus(appointment, 'Working', res.locals.user.username)
       }
 
       return res.redirect(page.nextPath(appointmentId, projectCode))
