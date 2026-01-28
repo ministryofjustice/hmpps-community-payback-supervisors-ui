@@ -1,5 +1,7 @@
 {% extends "govuk/template.njk" %}
 
+{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+
 {% block head %}
   <link href="{{ '/assets/css/index.css' | assetMap }}" rel="stylesheet"/>
 {% endblock %}
@@ -8,6 +10,12 @@
 
 {% block header %}
   {% include "./header.njk" %}
+    {{ govukPhaseBanner({
+    tag: {
+      text: "Private beta"
+    },
+    html: 'This is a new service.'
+  }) }}
 {% endblock %}
 
 {% block bodyStart %}
