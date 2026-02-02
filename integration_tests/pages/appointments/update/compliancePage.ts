@@ -13,14 +13,12 @@ export default class CompliancePage extends Page {
   static visit(
     appointment: AppointmentDto,
     action: AppointmentCompletedAction,
-    contactOutcomeCode: string,
     formId: string = 'some-form',
   ): CompliancePage {
     const path = pathWithQuery(
       paths.appointments[action].compliance({
         projectCode: appointment.projectCode,
         appointmentId: appointment.id.toString(),
-        contactOutcomeCode,
       }),
       { form: formId },
     )

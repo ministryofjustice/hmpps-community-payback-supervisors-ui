@@ -11,8 +11,6 @@ import Page from '../../../pages/page'
 import sessionSummaryFactory from '../../../../server/testutils/factories/sessionSummaryFactory'
 import ConfirmLeftEarlyPage from '../../../pages/appointments/update/confirm/confirmLeftEarlyPage'
 import supervisorFactory from '../../../../server/testutils/factories/supervisorFactory'
-import ErrorPage from '../../../pages/errorPage'
-import paths from '../../../../server/paths'
 import appointmentOutcomeFormFactory from '../../../../server/testutils/factories/appointmentOutcomeFormFactory'
 import LeftEarlyReasonPage from '../../../pages/appointments/update/leftEarlyReasonPage'
 
@@ -21,10 +19,6 @@ import LeftEarlyReasonPage from '../../../pages/appointments/update/leftEarlyRea
 //    And I do not complete the form
 //    When I submit the form
 //    Then I see the log compliance page with errors
-
-//  Scenario: Redirecting with an invalid outcome code
-//    Given I visit a log compliance page with an invalid outcome code
-//    Then I should be redirected to the error page
 
 //  Scenario: viewing empty form if a new contact outcome is recorded
 //    Given I am on the log compliance page for an appointment
@@ -63,6 +57,7 @@ import LeftEarlyReasonPage from '../../../pages/appointments/update/leftEarlyRea
 //      Then I see the log hours page
 
 context('Log compliance', () => {
+  const formId = 'some-form'
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -70,6 +65,8 @@ context('Log compliance', () => {
     const allocations = [sessionSummaryFactory.build({ date: '2025-09-15' })]
     cy.task('stubFindSupervisor', { supervisor })
     cy.task('stubNextSessions', { sessionSummaries: { allocations }, supervisorTeam: supervisor.unpaidWorkTeams[0] })
+    cy.task('stubGetAppointmentForm', { form: appointmentOutcomeFormFactory.build(), formId })
+
     cy.signIn()
 
     const appointment = appointmentFactory.build({})
@@ -88,7 +85,7 @@ context('Log compliance', () => {
     })
     // Given I am on the log compliance page for an appointment
     cy.task('stubFindAppointment', { appointment })
-    const page = CompliancePage.visit(appointment, 'completed', 'ATTC')
+    const page = CompliancePage.visit(appointment, 'completed', formId)
 
     // And I do not complete the form
 
@@ -100,30 +97,6 @@ context('Log compliance', () => {
     page.shouldShowErrorSummary('workedIntensively', 'Select yes if they are working intensively')
     page.shouldShowErrorSummary('workQuality', 'Select a description of the quality of their work ')
     page.shouldShowErrorSummary('behaviour', 'Select a description of their behaviour ')
-  })
-
-  // Scenario: Redirecting with an invalid outcome code
-  it('redirects if the outcome code provided is invalid', () => {
-    const appointment = appointmentFactory.build({
-      attendanceData: {
-        hiVisWorn: null,
-        workedIntensively: null,
-        workQuality: null,
-        behaviour: null,
-      },
-    })
-    cy.task('stubFindAppointment', { appointment })
-
-    // Given I visit a log compliance page with an invalid outcome code
-    const path = paths.appointments.completed.compliance({
-      projectCode: appointment.projectCode,
-      appointmentId: appointment.id.toString(),
-      contactOutcomeCode: 'XXX',
-    })
-    cy.visit(path, { failOnStatusCode: false })
-
-    // Then I should be redirected to the error page
-    Page.verifyOnPage(ErrorPage, appointment)
   })
 
   describe('populating the form', function describe() {
@@ -139,7 +112,7 @@ context('Log compliance', () => {
       })
       // Given I am on the log compliance page for an appointment
       cy.task('stubFindAppointment', { appointment })
-      const page = CompliancePage.visit(appointment, 'completed', 'ATTC')
+      const page = CompliancePage.visit(appointment, 'completed', formId)
 
       // And I complete some of the form
       page.selectHiVisValue()
@@ -171,7 +144,7 @@ context('Log compliance', () => {
       })
       // Given I am on the log compliance page for an appointment
       cy.task('stubFindAppointment', { appointment })
-      const page = CompliancePage.visit(appointment, 'completed', 'ATTC')
+      const page = CompliancePage.visit(appointment, 'completed', formId)
 
       // Then I should see the form with empty values
       page.shouldHaveFormWithEmptyValues()
@@ -188,9 +161,12 @@ context('Log compliance', () => {
           behaviour: 'UNSATISFACTORY',
         },
       })
+      const form = appointmentOutcomeFormFactory.build({ contactOutcomeCode: 'ATTC' })
+      cy.task('stubGetAppointmentForm', { form, formId })
+
       // Given I am on the log compliance page for an appointment
       cy.task('stubFindAppointment', { appointment })
-      const page = CompliancePage.visit(appointment, 'completed', appointment.contactOutcomeCode)
+      const page = CompliancePage.visit(appointment, 'completed', formId)
 
       // Then I should see the form populated with appointment data
       page.shouldHaveFormWithAppointmentValues()
@@ -204,7 +180,7 @@ context('Log compliance', () => {
       it('submits the form and navigates to the next page', function test() {
         // Given I am on the log compliance page for an appointment
         cy.task('stubFindAppointment', { appointment: this.appointment })
-        const page = CompliancePage.visit(this.appointment, 'completed', 'ATTC')
+        const page = CompliancePage.visit(this.appointment, 'completed', formId)
 
         // When I submit the form
         cy.task('stubUpdateAppointmentOutcome', { appointment: this.appointment })
@@ -219,11 +195,9 @@ context('Log compliance', () => {
 
     //  Scenario: Returning to log hours page
     it('navigates back to the previous page', function test() {
-      const formId = 'some-form'
       // Given I am on the log compliance page for an appointment
       cy.task('stubFindAppointment', { appointment: this.appointment })
-      const page = CompliancePage.visit(this.appointment, 'completed', 'ATTC', formId)
-      cy.task('stubGetAppointmentForm', { form: appointmentOutcomeFormFactory.build(), formId })
+      const page = CompliancePage.visit(this.appointment, 'completed', formId)
 
       // When I click back
       page.clickBack()
@@ -239,7 +213,7 @@ context('Log compliance', () => {
       it('submits the form and navigates to the next page', function test() {
         // Given I am on the log compliance page for an appointment
         cy.task('stubFindAppointment', { appointment: this.appointment })
-        const page = CompliancePage.visit(this.appointment, 'leftEarly', 'ATSS')
+        const page = CompliancePage.visit(this.appointment, 'leftEarly', formId)
 
         // When I submit the form
         cy.task('stubUpdateAppointmentOutcome', { appointment: this.appointment })
@@ -255,11 +229,9 @@ context('Log compliance', () => {
 
     //  Scenario: Returning to log hours page
     it('navigates back to the previous page', function test() {
-      const formId = 'some-form'
       // Given I am on the log compliance page for an appointment
       cy.task('stubFindAppointment', { appointment: this.appointment })
-      const page = CompliancePage.visit(this.appointment, 'leftEarly', 'ATSS', formId)
-      cy.task('stubGetAppointmentForm', { form: appointmentOutcomeFormFactory.build(), formId })
+      const page = CompliancePage.visit(this.appointment, 'leftEarly', formId)
       cy.task('stubGetContactOutcomes')
 
       // When I click back

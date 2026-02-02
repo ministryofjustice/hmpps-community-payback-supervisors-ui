@@ -22,15 +22,21 @@ export default {
       },
     })
   },
-  stubSaveAppointmentForm: (): SuperAgentRequest =>
-    stubFor({
-      request: {
-        method: 'PUT',
-        urlPathPattern: `/common/forms/${APPOINTMENT_UPDATE_FORM_TYPE}/([a-f0-9\\-]*)`,
-      },
+  stubSaveAppointmentForm: (args?: { formId?: string }): SuperAgentRequest => {
+    const request: { method: string; urlPath?: string; urlPathPattern?: string } = {
+      method: 'PUT',
+    }
+    if (args?.formId) {
+      request.urlPath = `/common/forms/${APPOINTMENT_UPDATE_FORM_TYPE}/${args.formId}`
+    } else {
+      request.urlPathPattern = `/common/forms/${APPOINTMENT_UPDATE_FORM_TYPE}/([a-f0-9\\-]*)`
+    }
+    return stubFor({
+      request,
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
       },
-    }),
+    })
+  },
 }

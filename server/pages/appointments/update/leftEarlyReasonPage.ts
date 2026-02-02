@@ -37,7 +37,6 @@ export default class LeftEarlyReasonPage extends BaseAppointmentUpdatePage<Body>
       paths.appointments.leftEarly.compliance({
         projectCode,
         appointmentId,
-        contactOutcomeCode: this.query.leftEarlyReason,
       }),
       { form: this.formId },
     )

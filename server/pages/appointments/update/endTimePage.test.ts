@@ -2,7 +2,6 @@ import { AppointmentDto } from '../../../@types/shared'
 import { AppointmentCompletedAction, AppointmentOutcomeForm } from '../../../@types/user-defined'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
-import ReferenceDataService from '../../../services/referenceDataService'
 import appointmentFactory from '../../../testutils/factories/appointmentFactory'
 import appointmentOutcomeFormFactory from '../../../testutils/factories/appointmentOutcomeFormFactory'
 import DateTimeFormats from '../../../utils/dateTimeUtils'
@@ -103,7 +102,6 @@ describe('EndTimePage', () => {
           `${paths.appointments.completed.compliance({
             projectCode,
             appointmentId,
-            contactOutcomeCode: ReferenceDataService.attendedCompliedOutcomeCode,
           })}?form=${formId}`,
         )
       })

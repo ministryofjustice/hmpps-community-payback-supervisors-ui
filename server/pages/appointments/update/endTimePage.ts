@@ -3,7 +3,6 @@ import { AppointmentCompletedAction, AppointmentOutcomeForm, ValidationErrors } 
 import InvalidUpdateActionError from '../../../errors/invalidUpdateActionError'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
-import ReferenceDataService from '../../../services/referenceDataService'
 import DateTimeFormats from '../../../utils/dateTimeUtils'
 import { pathWithQuery } from '../../../utils/utils'
 import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './baseAppointmentUpdatePage'
@@ -40,7 +39,6 @@ export default class EndTimePage extends BaseAppointmentUpdatePage<Body> {
       paths.appointments.completed.compliance({
         projectCode,
         appointmentId,
-        contactOutcomeCode: ReferenceDataService.attendedCompliedOutcomeCode,
       }),
       { form: this.formId },
     )

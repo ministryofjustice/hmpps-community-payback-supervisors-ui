@@ -121,7 +121,7 @@ describe('LeftEarlyReasonPage', () => {
       const result = page.nextPath(appointmentId, projectCode)
 
       expect(result).toEqual(
-        `${paths.appointments.leftEarly.compliance({ projectCode, appointmentId, contactOutcomeCode })}?form=${formId}`,
+        `${paths.appointments.leftEarly.compliance({ projectCode, appointmentId })}?form=${formId}`,
       )
     })
   })

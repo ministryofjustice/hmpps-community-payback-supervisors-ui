@@ -38,8 +38,11 @@ import sessionSummaryFactory from '../../../../server/testutils/factories/sessio
 import ConfirmLeftEarlyPage from '../../../pages/appointments/update/confirm/confirmLeftEarlyPage'
 import CompliancePage from '../../../pages/appointments/update/compliancePage'
 import supervisorFactory from '../../../../server/testutils/factories/supervisorFactory'
+import appointmentOutcomeFormFactory from '../../../../server/testutils/factories/appointmentOutcomeFormFactory'
 
 context('Log left early ', () => {
+  const formId = 'some-form'
+
   let appointment: AppointmentDto
   let appointmentStatus: AppointmentStatus
 
@@ -54,6 +57,7 @@ context('Log left early ', () => {
     const allocations = [sessionSummaryFactory.build({ date: '2025-09-15' })]
     cy.task('stubFindSupervisor', { supervisor })
     cy.task('stubNextSessions', { sessionSummaries: { allocations }, supervisorTeam: supervisor.unpaidWorkTeams[0] })
+    cy.task('stubGetAppointmentForm', { form: appointmentOutcomeFormFactory.build(), formId })
 
     cy.signIn()
   })
@@ -63,7 +67,7 @@ context('Log left early ', () => {
     // Given I am on the left early page
     cy.task('stubGetContactOutcomes')
 
-    const page = LeftEarlyReasonPage.visit(appointment)
+    const page = LeftEarlyReasonPage.visit(appointment, formId)
 
     // And I do not select a reason
 
@@ -88,7 +92,7 @@ context('Log left early ', () => {
     cy.task('stubGetContactOutcomes')
     cy.task('stubUpdateAppointmentOutcome', { appointment })
 
-    const page = LeftEarlyReasonPage.visit(appointment)
+    const page = LeftEarlyReasonPage.visit(appointment, formId)
 
     // And I select a reason
     page.selectSentHomeServiceIssues()
@@ -100,6 +104,8 @@ context('Log left early ', () => {
     page.checkSensitiveInformation()
 
     // When I submit the form
+    cy.task('stubSaveAppointmentForm', { formId })
+
     page.clickSubmit()
 
     // Then I am taken to the compliance page
