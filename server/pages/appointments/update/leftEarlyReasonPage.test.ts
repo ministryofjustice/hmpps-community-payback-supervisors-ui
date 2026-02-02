@@ -1,18 +1,22 @@
 import { UpdateAppointmentOutcomeDto } from '../../../@types/shared'
+import { AppointmentOutcomeForm } from '../../../@types/user-defined'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
 import appointmentFactory from '../../../testutils/factories/appointmentFactory'
+import appointmentOutcomeFormFactory from '../../../testutils/factories/appointmentOutcomeFormFactory'
 import { contactOutcomesFactory } from '../../../testutils/factories/contactOutcomeFactory'
 import LeftEarlyReasonPage from './leftEarlyReasonPage'
 
 jest.mock('../../../models/offender')
 
 describe('LeftEarlyReasonPage', () => {
+  let form: AppointmentOutcomeForm
   const formId = '12'
   const offenderMock: jest.Mock = Offender as unknown as jest.Mock<Offender>
 
   beforeEach(() => {
     jest.resetAllMocks()
+    form = appointmentOutcomeFormFactory.build()
   })
 
   describe('viewData', () => {
@@ -34,13 +38,12 @@ describe('LeftEarlyReasonPage', () => {
       })
 
       const page = new LeftEarlyReasonPage(formId)
-      const result = page.viewData(appointment, contactOutcomes)
+      const result = page.viewData(appointment, contactOutcomes, form)
       expect(result).toEqual({
         offender,
         backPath: `${paths.appointments.leftEarly.endTime({ appointmentId, projectCode })}?form=${formId}`,
         updatePath: `${paths.appointments.leftEarly.reason({ appointmentId, projectCode })}?form=${formId}`,
         title: `Why did Sam Smith leave early?`,
-        notes: null,
         isSensitive: false,
         items: [
           {
@@ -65,7 +68,7 @@ describe('LeftEarlyReasonPage', () => {
     describe('when a value for leftEarlyReason exists in the query', () => {
       it('should set checked to true on the corresponding contact outcome', () => {
         const page = new LeftEarlyReasonPage(formId, { leftEarlyReason: contactOutcomes[0].code })
-        const result = page.viewData(appointment, contactOutcomes)
+        const result = page.viewData(appointment, contactOutcomes, form)
         expect(result.items).toEqual([
           {
             text: contactOutcomes[0].name,
@@ -89,7 +92,7 @@ describe('LeftEarlyReasonPage', () => {
     describe('when a value for notes exists in the query', () => {
       it('should return the notes value', () => {
         const page = new LeftEarlyReasonPage(formId, { notes: 'notes' })
-        const result = page.viewData(appointment, contactOutcomes)
+        const result = page.viewData(appointment, contactOutcomes, form)
         expect(result.notes).toEqual('notes')
       })
     })
@@ -97,13 +100,13 @@ describe('LeftEarlyReasonPage', () => {
     describe('when a value for isSensitive exists in the query', () => {
       it('should return true for isSensitive if a value is present', () => {
         const page = new LeftEarlyReasonPage(formId, { isSensitive: 'isSensitive' })
-        const result = page.viewData(appointment, contactOutcomes)
+        const result = page.viewData(appointment, contactOutcomes, form)
         expect(result.isSensitive).toEqual(true)
       })
 
       it('should return false for isSensitive if a value is not present', () => {
         const page = new LeftEarlyReasonPage(formId, { isSensitive: null })
-        const result = page.viewData(appointment, contactOutcomes)
+        const result = page.viewData(appointment, contactOutcomes, form)
         expect(result.isSensitive).toEqual(false)
       })
     })
@@ -264,6 +267,16 @@ describe('LeftEarlyReasonPage', () => {
       }
 
       expect(result).toEqual(expected)
+    })
+  })
+
+  describe('updatedFormData', () => {
+    it('returns leftEarlyReason query value as contactOutcome code', () => {
+      const page = new LeftEarlyReasonPage(formId, { leftEarlyReason: 'AATC' })
+
+      const result = page.updatedFormData(form)
+
+      expect(result).toEqual({ ...form, contactOutcomeCode: 'AATC' })
     })
   })
 })

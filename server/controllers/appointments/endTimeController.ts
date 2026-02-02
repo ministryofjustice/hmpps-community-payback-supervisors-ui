@@ -61,13 +61,7 @@ export default class EndTimeController {
         })
       }
 
-      const payload = page.requestBody(appointment)
-
-      await this.appointmentService.saveAppointment({
-        username: res.locals.user.username,
-        projectCode,
-        data: payload,
-      })
+      await this.appointmentFormService.saveForm(formId, res.locals.user.username, page.updatedFormData(formData))
 
       return res.redirect(page.nextPath(appointmentId, projectCode))
     }

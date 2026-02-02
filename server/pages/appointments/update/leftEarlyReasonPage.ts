@@ -1,5 +1,5 @@
 import { AppointmentDto, ContactOutcomeDto, UpdateAppointmentOutcomeDto } from '../../../@types/shared'
-import { GovUkRadioOption, ValidationErrors } from '../../../@types/user-defined'
+import { AppointmentOutcomeForm, GovUkRadioOption, ValidationErrors } from '../../../@types/user-defined'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
 import { pathWithQuery } from '../../../utils/utils'
@@ -63,15 +63,26 @@ export default class LeftEarlyReasonPage extends BaseAppointmentUpdatePage<Body>
     )
   }
 
-  viewData(appointment: AppointmentDto, contactOutcomes: ContactOutcomeDto[]): ViewData {
+  viewData(
+    appointment: AppointmentDto,
+    contactOutcomes: ContactOutcomeDto[],
+    formData: AppointmentOutcomeForm,
+  ): ViewData {
     const commonViewData = this.commonViewData(appointment)
 
     return {
       ...commonViewData,
       title: this.getPageTitle(commonViewData.offender),
-      items: this.items(contactOutcomes),
-      notes: this.query.notes || null,
+      items: this.items(contactOutcomes, formData),
+      notes: this.query.notes ?? formData.notes,
       isSensitive: Boolean(this.query.isSensitive),
+    }
+  }
+
+  updatedFormData(formData: AppointmentOutcomeForm): AppointmentOutcomeForm {
+    return {
+      ...formData,
+      contactOutcomeCode: this.query.leftEarlyReason,
     }
   }
 
@@ -106,11 +117,15 @@ export default class LeftEarlyReasonPage extends BaseAppointmentUpdatePage<Body>
     return `Why did ${offender.name} leave early?`
   }
 
-  private items(contactOutcomes: ContactOutcomeDto[]): { text: string; value: string }[] {
+  private items(
+    contactOutcomes: ContactOutcomeDto[],
+    formData: AppointmentOutcomeForm,
+  ): { text: string; value: string }[] {
+    const code = this.query.leftEarlyReason ?? formData.contactOutcomeCode
     return contactOutcomes.map(outcome => ({
       text: outcome.name,
       value: outcome.code,
-      checked: this.query.leftEarlyReason === outcome.code,
+      checked: code === outcome.code,
     }))
   }
 }

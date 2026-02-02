@@ -1,4 +1,4 @@
-import { AppointmentDto, UpdateAppointmentOutcomeDto } from '../../../@types/shared'
+import { AppointmentDto } from '../../../@types/shared'
 import { AppointmentCompletedAction, AppointmentOutcomeForm } from '../../../@types/user-defined'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
@@ -232,56 +232,14 @@ describe('EndTimePage', () => {
     })
   })
 
-  describe('requestBody', () => {
-    it.each(['completed', 'leftEarly'])(
-      'returns the original appointment object with updated endTime',
-      (action: AppointmentCompletedAction) => {
-        const appointment = appointmentFactory.build({
-          endTime: '17:00',
-          id: 1,
-          version: '2',
-          contactOutcomeCode: '3',
-          supervisorOfficerCode: '123',
-        })
-        const page = new EndTimePage(action, formId, { time: '16:00' })
+  describe('updatedFormData', () => {
+    it.each(['completed', 'leftEarly'])('returns endTime query value', (action: AppointmentCompletedAction) => {
+      const form = appointmentOutcomeFormFactory.build()
+      const page = new EndTimePage(action, formId, { time: '16:00' })
 
-        const result = page.requestBody(appointment)
+      const result = page.updatedFormData(form)
 
-        expect(result.endTime).toEqual('16:00')
-      },
-    )
-
-    it.each(['completed', 'leftEarly'])(
-      'returns the original appointment object with deliusId and deliusVersionToUpdate',
-      (action: AppointmentCompletedAction) => {
-        const appointment = appointmentFactory.build({
-          endTime: '14:00',
-          id: 1,
-          version: '2',
-          contactOutcomeCode: '3',
-          supervisorOfficerCode: '123',
-        })
-        const page = new EndTimePage(action, formId, { time: '14:00' })
-
-        const result = page.requestBody(appointment)
-
-        const expected: UpdateAppointmentOutcomeDto = {
-          contactOutcomeCode: '3',
-          deliusVersionToUpdate: '2',
-          deliusId: 1,
-          supervisorOfficerCode: '123',
-          endTime: '14:00',
-
-          alertActive: appointment.alertActive,
-          sensitive: appointment.sensitive,
-          startTime: appointment.startTime,
-          attendanceData: appointment.attendanceData,
-          enforcementData: appointment.enforcementData,
-          notes: null,
-        }
-
-        expect(result).toEqual(expected)
-      },
-    )
+      expect(result).toEqual({ ...form, endTime: '16:00' })
+    })
   })
 })

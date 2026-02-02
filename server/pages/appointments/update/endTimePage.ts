@@ -1,4 +1,4 @@
-import { AppointmentDto, UpdateAppointmentOutcomeDto } from '../../../@types/shared'
+import { AppointmentDto } from '../../../@types/shared'
 import { AppointmentCompletedAction, AppointmentOutcomeForm, ValidationErrors } from '../../../@types/user-defined'
 import InvalidUpdateActionError from '../../../errors/invalidUpdateActionError'
 import Offender from '../../../models/offender'
@@ -60,9 +60,9 @@ export default class EndTimePage extends BaseAppointmentUpdatePage<Body> {
     )
   }
 
-  requestBody(appointment: AppointmentDto): UpdateAppointmentOutcomeDto {
+  updatedFormData(formData: AppointmentOutcomeForm): AppointmentOutcomeForm {
     return {
-      ...this.appointmentRequestBody(appointment),
+      ...formData,
       endTime: this.query.time,
     }
   }

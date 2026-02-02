@@ -31,6 +31,7 @@ const appointmentControllers = (services: Services) => {
   const leftEarlyReasonController = new LeftEarlyReasonController(
     services.appointmentService,
     services.referenceDataService,
+    services.appointmentFormService,
   )
 
   return {
