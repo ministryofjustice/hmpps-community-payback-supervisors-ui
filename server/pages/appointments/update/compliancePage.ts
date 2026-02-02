@@ -105,8 +105,18 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
   }
 
   protected backPath(appointment: AppointmentDto): string {
+    if (this.action === 'completed') {
+      return pathWithQuery(
+        paths.appointments[this.action].endTime({
+          projectCode: appointment.projectCode,
+          appointmentId: appointment.id.toString(),
+        }),
+        { form: this.formId },
+      )
+    }
+
     return pathWithQuery(
-      paths.appointments[this.action].endTime({
+      paths.appointments.leftEarly.reason({
         projectCode: appointment.projectCode,
         appointmentId: appointment.id.toString(),
       }),

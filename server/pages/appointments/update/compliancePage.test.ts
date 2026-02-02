@@ -43,19 +43,29 @@ describe('CompliancePage', () => {
       expect(result.offender).toBe(offender)
     })
 
-    it.each(['completed', 'leftEarly'])(
-      'should return an object containing a back link to the end time page',
-      async (action: AppointmentCompletedAction) => {
-        page = new CompliancePage(action, formId, {}, contactOutcomeCode)
+    describe('backPath', () => {
+      it('should be to endTime if action is "completed"', () => {
+        page = new CompliancePage('completed', formId, {}, contactOutcomeCode)
         const result = page.viewData(appointment)
         expect(result.backPath).toBe(
-          `${paths.appointments[action].endTime({
+          `${paths.appointments.completed.endTime({
             projectCode: appointment.projectCode,
             appointmentId: appointment.id.toString(),
           })}?form=${formId}`,
         )
-      },
-    )
+      })
+
+      it('should be to reason page if action is "leftEarly"', () => {
+        page = new CompliancePage('leftEarly', formId, {}, contactOutcomeCode)
+        const result = page.viewData(appointment)
+        expect(result.backPath).toBe(
+          `${paths.appointments.leftEarly.reason({
+            projectCode: appointment.projectCode,
+            appointmentId: appointment.id.toString(),
+          })}?form=${formId}`,
+        )
+      })
+    })
 
     it.each(['completed', 'leftEarly'])(
       'should return an object containing an update link for the form',

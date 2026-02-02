@@ -14,6 +14,7 @@ import supervisorFactory from '../../../../server/testutils/factories/supervisor
 import ErrorPage from '../../../pages/errorPage'
 import paths from '../../../../server/paths'
 import appointmentOutcomeFormFactory from '../../../../server/testutils/factories/appointmentOutcomeFormFactory'
+import LeftEarlyReasonPage from '../../../pages/appointments/update/leftEarlyReasonPage'
 
 //  Scenario: Validating the log compliance page
 //    Given I am on the log compliance page for an appointment
@@ -259,12 +260,13 @@ context('Log compliance', () => {
       cy.task('stubFindAppointment', { appointment: this.appointment })
       const page = CompliancePage.visit(this.appointment, 'leftEarly', 'ATSS', formId)
       cy.task('stubGetAppointmentForm', { form: appointmentOutcomeFormFactory.build(), formId })
+      cy.task('stubGetContactOutcomes')
 
       // When I click back
       page.clickBack()
 
       // Then I see the log hours page
-      Page.verifyOnPage(EndTimePage, this.appointment, 'leftEarly')
+      Page.verifyOnPage(LeftEarlyReasonPage, this.appointment)
     })
   })
 })
