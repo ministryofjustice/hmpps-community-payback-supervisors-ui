@@ -2,6 +2,7 @@ import { AppointmentDto, ContactOutcomeDto, UpdateAppointmentOutcomeDto } from '
 import { GovUkRadioOption, ValidationErrors } from '../../../@types/user-defined'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
+import { pathWithQuery } from '../../../utils/utils'
 import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './baseAppointmentUpdatePage'
 
 interface ViewData extends AppointmentUpdatePageViewData {
@@ -24,30 +25,42 @@ interface Body {
 }
 
 export default class LeftEarlyReasonPage extends BaseAppointmentUpdatePage<Body> {
-  constructor(private readonly query: Query = {}) {
+  constructor(
+    private readonly formId: string,
+    private readonly query: Query = {},
+  ) {
     super()
   }
 
   nextPath(appointmentId: string, projectCode: string): string {
-    return paths.appointments.leftEarly.compliance({
-      projectCode,
-      appointmentId,
-      contactOutcomeCode: this.query.leftEarlyReason,
-    })
+    return pathWithQuery(
+      paths.appointments.leftEarly.compliance({
+        projectCode,
+        appointmentId,
+        contactOutcomeCode: this.query.leftEarlyReason,
+      }),
+      { form: this.formId },
+    )
   }
 
   protected backPath(appointment: AppointmentDto): string {
-    return paths.appointments.leftEarly.endTime({
-      projectCode: appointment.projectCode,
-      appointmentId: appointment.id.toString(),
-    })
+    return pathWithQuery(
+      paths.appointments.leftEarly.endTime({
+        projectCode: appointment.projectCode,
+        appointmentId: appointment.id.toString(),
+      }),
+      { form: this.formId },
+    )
   }
 
   protected updatePath(appointment: AppointmentDto): string {
-    return paths.appointments.leftEarly.reason({
-      projectCode: appointment.projectCode,
-      appointmentId: appointment.id.toString(),
-    })
+    return pathWithQuery(
+      paths.appointments.leftEarly.reason({
+        projectCode: appointment.projectCode,
+        appointmentId: appointment.id.toString(),
+      }),
+      { form: this.formId },
+    )
   }
 
   viewData(appointment: AppointmentDto, contactOutcomes: ContactOutcomeDto[]): ViewData {

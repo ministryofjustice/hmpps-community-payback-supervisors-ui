@@ -3,6 +3,7 @@ import { AppointmentCompletedAction, YesOrNo } from '../../../../server/@types/u
 import paths from '../../../../server/paths'
 import Page from '../../page'
 import GovUkRadioGroup from '../../../../server/utils/GovUKFrontend/GovUkRadioGroup'
+import { pathWithQuery } from '../../../../server/utils/utils'
 
 export default class CompliancePage extends Page {
   constructor(private readonly appointment: AppointmentDto) {
@@ -13,12 +14,16 @@ export default class CompliancePage extends Page {
     appointment: AppointmentDto,
     action: AppointmentCompletedAction,
     contactOutcomeCode: string,
+    formId: string = 'some-form',
   ): CompliancePage {
-    const path = paths.appointments[action].compliance({
-      projectCode: appointment.projectCode,
-      appointmentId: appointment.id.toString(),
-      contactOutcomeCode,
-    })
+    const path = pathWithQuery(
+      paths.appointments[action].compliance({
+        projectCode: appointment.projectCode,
+        appointmentId: appointment.id.toString(),
+        contactOutcomeCode,
+      }),
+      { form: formId },
+    )
 
     cy.visit(path)
 

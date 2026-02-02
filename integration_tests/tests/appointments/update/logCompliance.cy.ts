@@ -13,6 +13,7 @@ import ConfirmLeftEarlyPage from '../../../pages/appointments/update/confirm/con
 import supervisorFactory from '../../../../server/testutils/factories/supervisorFactory'
 import ErrorPage from '../../../pages/errorPage'
 import paths from '../../../../server/paths'
+import appointmentOutcomeFormFactory from '../../../../server/testutils/factories/appointmentOutcomeFormFactory'
 
 //  Scenario: Validating the log compliance page
 //    Given I am on the log compliance page for an appointment
@@ -217,9 +218,11 @@ context('Log compliance', () => {
 
     //  Scenario: Returning to log hours page
     it('navigates back to the previous page', function test() {
+      const formId = 'some-form'
       // Given I am on the log compliance page for an appointment
       cy.task('stubFindAppointment', { appointment: this.appointment })
-      const page = CompliancePage.visit(this.appointment, 'completed', 'ATTC')
+      const page = CompliancePage.visit(this.appointment, 'completed', 'ATTC', formId)
+      cy.task('stubGetAppointmentForm', { form: appointmentOutcomeFormFactory.build(), formId })
 
       // When I click back
       page.clickBack()
@@ -251,9 +254,11 @@ context('Log compliance', () => {
 
     //  Scenario: Returning to log hours page
     it('navigates back to the previous page', function test() {
+      const formId = 'some-form'
       // Given I am on the log compliance page for an appointment
       cy.task('stubFindAppointment', { appointment: this.appointment })
-      const page = CompliancePage.visit(this.appointment, 'leftEarly', 'ATSS')
+      const page = CompliancePage.visit(this.appointment, 'leftEarly', 'ATSS', formId)
+      cy.task('stubGetAppointmentForm', { form: appointmentOutcomeFormFactory.build(), formId })
 
       // When I click back
       page.clickBack()

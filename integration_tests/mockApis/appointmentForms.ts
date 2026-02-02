@@ -4,18 +4,24 @@ import { APPOINTMENT_UPDATE_FORM_TYPE } from '../../server/services/appointmentF
 import { stubFor } from './wiremock'
 
 export default {
-  stubGetAppointmentForm: (form: AppointmentOutcomeForm): SuperAgentRequest =>
-    stubFor({
-      request: {
-        method: 'GET',
-        urlPathPattern: `/common/forms/${APPOINTMENT_UPDATE_FORM_TYPE}/([a-f0-9\\-]*)`,
-      },
+  stubGetAppointmentForm: ({ form, formId }: { form: AppointmentOutcomeForm; formId?: string }): SuperAgentRequest => {
+    const request: { method: string; urlPath?: string; urlPathPattern?: string } = {
+      method: 'GET',
+    }
+    if (formId) {
+      request.urlPath = `/common/forms/${APPOINTMENT_UPDATE_FORM_TYPE}/${formId}`
+    } else {
+      request.urlPathPattern = `/common/forms/${APPOINTMENT_UPDATE_FORM_TYPE}/([a-f0-9\\-]*)`
+    }
+    return stubFor({
+      request,
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: form,
       },
-    }),
+    })
+  },
   stubSaveAppointmentForm: (): SuperAgentRequest =>
     stubFor({
       request: {

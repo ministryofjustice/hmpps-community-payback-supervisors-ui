@@ -8,6 +8,7 @@ import LeftEarlyReasonPage from './leftEarlyReasonPage'
 jest.mock('../../../models/offender')
 
 describe('LeftEarlyReasonPage', () => {
+  const formId = '12'
   const offenderMock: jest.Mock = Offender as unknown as jest.Mock<Offender>
 
   beforeEach(() => {
@@ -32,12 +33,12 @@ describe('LeftEarlyReasonPage', () => {
         return offender
       })
 
-      const page = new LeftEarlyReasonPage()
+      const page = new LeftEarlyReasonPage(formId)
       const result = page.viewData(appointment, contactOutcomes)
       expect(result).toEqual({
         offender,
-        backPath: paths.appointments.leftEarly.endTime({ appointmentId, projectCode }),
-        updatePath: paths.appointments.leftEarly.reason({ appointmentId, projectCode }),
+        backPath: `${paths.appointments.leftEarly.endTime({ appointmentId, projectCode })}?form=${formId}`,
+        updatePath: `${paths.appointments.leftEarly.reason({ appointmentId, projectCode })}?form=${formId}`,
         title: `Why did Sam Smith leave early?`,
         notes: null,
         isSensitive: false,
@@ -63,7 +64,7 @@ describe('LeftEarlyReasonPage', () => {
 
     describe('when a value for leftEarlyReason exists in the query', () => {
       it('should set checked to true on the corresponding contact outcome', () => {
-        const page = new LeftEarlyReasonPage({ leftEarlyReason: contactOutcomes[0].code })
+        const page = new LeftEarlyReasonPage(formId, { leftEarlyReason: contactOutcomes[0].code })
         const result = page.viewData(appointment, contactOutcomes)
         expect(result.items).toEqual([
           {
@@ -87,7 +88,7 @@ describe('LeftEarlyReasonPage', () => {
 
     describe('when a value for notes exists in the query', () => {
       it('should return the notes value', () => {
-        const page = new LeftEarlyReasonPage({ notes: 'notes' })
+        const page = new LeftEarlyReasonPage(formId, { notes: 'notes' })
         const result = page.viewData(appointment, contactOutcomes)
         expect(result.notes).toEqual('notes')
       })
@@ -95,13 +96,13 @@ describe('LeftEarlyReasonPage', () => {
 
     describe('when a value for isSensitive exists in the query', () => {
       it('should return true for isSensitive if a value is present', () => {
-        const page = new LeftEarlyReasonPage({ isSensitive: 'isSensitive' })
+        const page = new LeftEarlyReasonPage(formId, { isSensitive: 'isSensitive' })
         const result = page.viewData(appointment, contactOutcomes)
         expect(result.isSensitive).toEqual(true)
       })
 
       it('should return false for isSensitive if a value is not present', () => {
-        const page = new LeftEarlyReasonPage({ isSensitive: null })
+        const page = new LeftEarlyReasonPage(formId, { isSensitive: null })
         const result = page.viewData(appointment, contactOutcomes)
         expect(result.isSensitive).toEqual(false)
       })
@@ -113,11 +114,11 @@ describe('LeftEarlyReasonPage', () => {
       const appointmentId = '1'
       const projectCode = '2'
       const contactOutcomeCode = 'code'
-      const page = new LeftEarlyReasonPage({ leftEarlyReason: contactOutcomeCode })
+      const page = new LeftEarlyReasonPage(formId, { leftEarlyReason: contactOutcomeCode })
       const result = page.nextPath(appointmentId, projectCode)
 
       expect(result).toEqual(
-        paths.appointments.leftEarly.compliance({ projectCode, appointmentId, contactOutcomeCode }),
+        `${paths.appointments.leftEarly.compliance({ projectCode, appointmentId, contactOutcomeCode })}?form=${formId}`,
       )
     })
   })
@@ -125,14 +126,14 @@ describe('LeftEarlyReasonPage', () => {
   describe('validate', () => {
     describe('when leftEarlyReason is not present', () => {
       it('should return true for page.hasError', () => {
-        const page = new LeftEarlyReasonPage({})
+        const page = new LeftEarlyReasonPage(formId)
         page.validate()
 
         expect(page.hasErrors).toEqual(true)
       })
 
       it('should return the correct error', () => {
-        const page = new LeftEarlyReasonPage({})
+        const page = new LeftEarlyReasonPage(formId)
         page.validate()
 
         expect(page.validationErrors.leftEarlyReason).toEqual({
@@ -151,7 +152,7 @@ describe('LeftEarlyReasonPage', () => {
         contactOutcomeCode: 'AAAA',
         supervisorOfficerCode: '123',
       })
-      const page = new LeftEarlyReasonPage({ leftEarlyReason: 'BBBB' })
+      const page = new LeftEarlyReasonPage(formId, { leftEarlyReason: 'BBBB' })
 
       const result = page.requestBody(appointment)
 
@@ -166,7 +167,7 @@ describe('LeftEarlyReasonPage', () => {
           version: '2',
           contactOutcomeCode: 'AAAA',
         })
-        const page = new LeftEarlyReasonPage({ leftEarlyReason: 'BBBB', notes: 'yyyyy' })
+        const page = new LeftEarlyReasonPage(formId, { leftEarlyReason: 'BBBB', notes: 'yyyyy' })
 
         const result = page.requestBody(appointment)
 
@@ -180,7 +181,7 @@ describe('LeftEarlyReasonPage', () => {
           version: '2',
           contactOutcomeCode: 'AAAA',
         })
-        const page = new LeftEarlyReasonPage({ leftEarlyReason: 'BBBB' })
+        const page = new LeftEarlyReasonPage(formId, { leftEarlyReason: 'BBBB' })
 
         const result = page.requestBody(appointment)
 
@@ -193,7 +194,7 @@ describe('LeftEarlyReasonPage', () => {
         const appointment = appointmentFactory.build({
           sensitive: false,
         })
-        const page = new LeftEarlyReasonPage({ leftEarlyReason: 'BBBB', isSensitive: 'isSensitive' })
+        const page = new LeftEarlyReasonPage(formId, { leftEarlyReason: 'BBBB', isSensitive: 'isSensitive' })
 
         const result = page.requestBody(appointment)
 
@@ -204,7 +205,7 @@ describe('LeftEarlyReasonPage', () => {
         const appointment = appointmentFactory.build({
           sensitive: true,
         })
-        const page = new LeftEarlyReasonPage({ leftEarlyReason: 'BBBB' })
+        const page = new LeftEarlyReasonPage(formId, { leftEarlyReason: 'BBBB' })
 
         const result = page.requestBody(appointment)
 
@@ -215,7 +216,7 @@ describe('LeftEarlyReasonPage', () => {
         const appointment = appointmentFactory.build({
           sensitive: false,
         })
-        const page = new LeftEarlyReasonPage({ leftEarlyReason: 'BBBB' })
+        const page = new LeftEarlyReasonPage(formId, { leftEarlyReason: 'BBBB' })
 
         const result = page.requestBody(appointment)
 
@@ -226,7 +227,7 @@ describe('LeftEarlyReasonPage', () => {
         const appointment = appointmentFactory.build({
           sensitive: undefined,
         })
-        const page = new LeftEarlyReasonPage({ leftEarlyReason: 'BBBB' })
+        const page = new LeftEarlyReasonPage(formId, { leftEarlyReason: 'BBBB' })
 
         const result = page.requestBody(appointment)
 
@@ -243,7 +244,7 @@ describe('LeftEarlyReasonPage', () => {
         supervisorOfficerCode: '123',
         sensitive: true,
       })
-      const page = new LeftEarlyReasonPage({ leftEarlyReason: 'BBBB' })
+      const page = new LeftEarlyReasonPage(formId, { leftEarlyReason: 'BBBB' })
 
       const result = page.requestBody(appointment)
 

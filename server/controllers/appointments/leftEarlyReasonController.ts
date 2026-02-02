@@ -13,6 +13,7 @@ export default class LeftEarlyReasonController {
   show(): RequestHandler {
     return async (_req: Request, res: Response) => {
       const { projectCode, appointmentId } = _req.params
+      const formId = _req.query.form?.toString()
 
       const appointment = await this.appointmentService.getAppointment({
         projectCode,
@@ -24,7 +25,7 @@ export default class LeftEarlyReasonController {
         res.locals.user.username,
       )
 
-      const page = new LeftEarlyReasonPage()
+      const page = new LeftEarlyReasonPage(formId, {})
 
       res.render('appointments/update/leftEarlyReason', page.viewData(appointment, contactOutcomes.contactOutcomes))
     }
@@ -33,6 +34,7 @@ export default class LeftEarlyReasonController {
   submit(): RequestHandler {
     return async (_req: Request, res: Response) => {
       const { projectCode, appointmentId } = _req.params
+      const formId = _req.query.form?.toString()
 
       const appointment = await this.appointmentService.getAppointment({
         projectCode,
@@ -40,7 +42,7 @@ export default class LeftEarlyReasonController {
         username: res.locals.user.username,
       })
 
-      const page = new LeftEarlyReasonPage(_req.body)
+      const page = new LeftEarlyReasonPage(formId, _req.body)
       page.validate()
 
       if (page.hasErrors) {

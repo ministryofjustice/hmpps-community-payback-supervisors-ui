@@ -18,6 +18,7 @@ export default class ComplianceController {
   show(action: AppointmentCompletedAction): RequestHandler {
     return async (_req: Request, res: Response) => {
       const appointmentParams = _req.params as unknown as AppointmentParamsWithContactOutcomeCode
+      const formId = _req.query.form?.toString()
 
       if (!ReferenceDataService.validOutcomeCodeForRoute(appointmentParams.contactOutcomeCode, _req.path)) {
         return notFound(res)
@@ -28,7 +29,7 @@ export default class ComplianceController {
         username: res.locals.user.username,
       })
 
-      const page = new CompliancePage(action, {}, appointmentParams.contactOutcomeCode)
+      const page = new CompliancePage(action, formId, {}, appointmentParams.contactOutcomeCode)
 
       return res.render('appointments/update/compliance', page.viewData(appointment))
     }
@@ -37,13 +38,14 @@ export default class ComplianceController {
   submit(action: AppointmentCompletedAction): RequestHandler {
     return async (_req: Request, res: Response) => {
       const appointmentParams = _req.params as unknown as AppointmentParamsWithContactOutcomeCode
+      const formId = _req.query.form?.toString()
 
       const appointment = await this.appointmentService.getAppointment({
         ...appointmentParams,
         username: res.locals.user.username,
       })
 
-      const page = new CompliancePage(action, _req.body, appointmentParams.contactOutcomeCode)
+      const page = new CompliancePage(action, formId, _req.body, appointmentParams.contactOutcomeCode)
       page.validate()
 
       if (page.hasErrors) {

@@ -8,6 +8,7 @@ import {
 } from '../../../@types/user-defined'
 import paths from '../../../paths'
 import GovUkRadioGroup from '../../../utils/GovUKFrontend/GovUkRadioGroup'
+import { pathWithQuery } from '../../../utils/utils'
 import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './baseAppointmentUpdatePage'
 
 interface ViewData extends AppointmentUpdatePageViewData {
@@ -37,6 +38,7 @@ export interface ComplianceQuery {
 export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
   constructor(
     private readonly action: AppointmentCompletedAction,
+    private readonly formId: string,
     private readonly query: ComplianceQuery,
     private readonly contactOutcomeCode: string,
   ) {
@@ -103,10 +105,13 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
   }
 
   protected backPath(appointment: AppointmentDto): string {
-    return paths.appointments[this.action].endTime({
-      projectCode: appointment.projectCode,
-      appointmentId: appointment.id.toString(),
-    })
+    return pathWithQuery(
+      paths.appointments[this.action].endTime({
+        projectCode: appointment.projectCode,
+        appointmentId: appointment.id.toString(),
+      }),
+      { form: this.formId },
+    )
   }
 
   nextPath(projectCode: string, appointmentId: string): string {
@@ -114,11 +119,14 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
   }
 
   protected updatePath(appointment: AppointmentDto): string {
-    return paths.appointments[this.action].compliance({
-      projectCode: appointment.projectCode,
-      appointmentId: appointment.id.toString(),
-      contactOutcomeCode: this.contactOutcomeCode,
-    })
+    return pathWithQuery(
+      paths.appointments[this.action].compliance({
+        projectCode: appointment.projectCode,
+        appointmentId: appointment.id.toString(),
+        contactOutcomeCode: this.contactOutcomeCode,
+      }),
+      { form: this.formId },
+    )
   }
 
   private getItems(checkedValue?: string) {

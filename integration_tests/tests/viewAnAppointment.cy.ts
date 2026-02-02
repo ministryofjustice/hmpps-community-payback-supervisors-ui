@@ -160,7 +160,7 @@ context('viewAnAppointment', () => {
         sessionOrAppointment: appointment,
         appointmentStatuses: [appointmentStatus],
       })
-
+      cy.task('stubSaveAppointmentForm')
       const appointmentPage = AppointmentPage.visit(appointment)
 
       // When I click on 'Finished'
@@ -204,6 +204,7 @@ context('viewAnAppointment', () => {
       cy.signIn()
       cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
       cy.task('stubGetStatusesForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
+      cy.task('stubSaveAppointmentForm')
 
       const appointmentPage = AppointmentPage.visit(appointment)
 
