@@ -44,7 +44,7 @@ context('Log finish time ', () => {
     appointmentStatus = appointmentStatusFactory.build({ appointmentId: appointment.id })
     cy.task('reset')
     cy.task('stubSignIn')
-    cy.task('stubGetForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
+    cy.task('stubGetStatusesForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
     cy.task('stubFindAppointment', { appointment })
     const supervisor = supervisorFactory.build()
     const allocations = [sessionSummaryFactory.build({ date: '2025-09-15' })]

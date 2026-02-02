@@ -206,7 +206,7 @@ context('Log compliance', () => {
 
         // When I submit the form
         cy.task('stubUpdateAppointmentOutcome', { appointment: this.appointment })
-        cy.task('stubSaveForm', { sessionOrAppointment: this.appointment })
+        cy.task('stubSaveStatusesForm', { sessionOrAppointment: this.appointment })
         page.completeForm()
         page.clickSubmit()
 
@@ -239,7 +239,7 @@ context('Log compliance', () => {
 
         // When I submit the form
         cy.task('stubUpdateAppointmentOutcome', { appointment: this.appointment })
-        cy.task('stubSaveForm', { sessionOrAppointment: this.appointment })
+        cy.task('stubSaveStatusesForm', { sessionOrAppointment: this.appointment })
 
         page.completeForm()
         page.clickSubmit()
