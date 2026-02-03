@@ -39,7 +39,7 @@
     "npm": "^11"
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.931.0",
+    "@aws-sdk/client-sqs": "^3.981.0",
     "@golevelup/ts-jest": "^1.2.0",
     "@ministryofjustice/frontend": "^8.0.0",
     "@ministryofjustice/hmpps-auth-clients": "^1.0.0",
