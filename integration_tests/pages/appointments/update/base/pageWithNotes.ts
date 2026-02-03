@@ -3,7 +3,10 @@ import Page from '../../../page'
 export default class PageWithNotes extends Page {
   private userInput: string
 
-  constructor(title: string) {
+  constructor(
+    title: string,
+    private readonly notesLabel: string,
+  ) {
     super(title)
   }
 
@@ -11,11 +14,15 @@ export default class PageWithNotes extends Page {
     this.userInput = 'x'.repeat(characterLength)
 
     // Use 'invoke' instead of 'type' for performance reasons
-    this.getInputByLabel('Add notes').invoke('val', this.userInput)
+    this.notesField().invoke('val', this.userInput)
+  }
+
+  notesField() {
+    return this.getInputByLabel(this.notesLabel)
   }
 
   shouldShowSubmittedNotes(): void {
-    this.getInputByLabel('Add notes').should('have.value', this.userInput)
+    this.notesField().should('have.value', this.userInput)
   }
 
   checkSensitiveInformation(): void {

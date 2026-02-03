@@ -7,7 +7,7 @@ export default class UnableToWorkPage extends PageWithNotes {
   constructor(appointment: AppointmentDto) {
     const offender = new Offender(appointment.offender)
     const title = `Why is ${offender.name} unable to work today?`
-    super(title)
+    super(title, 'Add notes')
   }
 
   static visit(appointment: AppointmentDto): UnableToWorkPage {

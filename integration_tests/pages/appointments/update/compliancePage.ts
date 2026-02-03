@@ -1,13 +1,13 @@
 import { AppointmentDto, AttendanceDataDto } from '../../../../server/@types/shared'
 import { AppointmentCompletedAction, YesOrNo } from '../../../../server/@types/user-defined'
 import paths from '../../../../server/paths'
-import Page from '../../page'
 import GovUkRadioGroup from '../../../../server/utils/GovUKFrontend/GovUkRadioGroup'
 import { pathWithQuery } from '../../../../server/utils/utils'
+import PageWithNotes from './base/pageWithNotes'
 
-export default class CompliancePage extends Page {
+export default class CompliancePage extends PageWithNotes {
   constructor(private readonly appointment: AppointmentDto) {
-    super('Log compliance')
+    super('Log compliance', 'Notes')
   }
 
   static visit(
@@ -99,11 +99,7 @@ export default class CompliancePage extends Page {
   }
 
   enterNotes() {
-    this.notesField().type('Attendance notes')
-  }
-
-  shouldHaveEnteredNotes() {
-    this.notesField().should('have.value', 'Attendance notes')
+    this.enterNotesWithCharacterLength(4000)
   }
 
   shouldHaveEmptyNotes() {
@@ -119,6 +115,4 @@ export default class CompliancePage extends Page {
 
   private behaviourOption = (value: AttendanceDataDto['behaviour'] = 'UNSATISFACTORY') =>
     this.getRadioByNameAndValue('behaviour', value)
-
-  private notesField = () => this.getInputByLabel('Notes')
 }
