@@ -5,9 +5,12 @@ import {
   ValidationErrors,
   AppointmentCompletedAction,
   AppointmentStatusType,
+  AppointmentOutcomeForm,
 } from '../../../@types/user-defined'
 import paths from '../../../paths'
+import ReferenceDataService from '../../../services/referenceDataService'
 import GovUkRadioGroup from '../../../utils/GovUKFrontend/GovUkRadioGroup'
+import { pathWithQuery } from '../../../utils/utils'
 import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './baseAppointmentUpdatePage'
 
 interface ViewData extends AppointmentUpdatePageViewData {
@@ -37,16 +40,20 @@ export interface ComplianceQuery {
 export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
   constructor(
     private readonly action: AppointmentCompletedAction,
+    private readonly formId: string,
     private readonly query: ComplianceQuery,
-    private readonly contactOutcomeCode: string,
   ) {
     super()
   }
 
-  requestBody(appointment: AppointmentDto): UpdateAppointmentOutcomeDto {
+  requestBody(appointment: AppointmentDto, formData: AppointmentOutcomeForm): UpdateAppointmentOutcomeDto {
     const data = this.appointmentRequestBody(appointment)
+
+    const contactOutcomeCode =
+      this.action === 'completed' ? ReferenceDataService.attendedCompliedOutcomeCode : formData.contactOutcomeCode
     return {
       ...data,
+      ...formData,
       notes: this.query.notes,
       attendanceData: {
         ...data.attendanceData,
@@ -55,12 +62,12 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
         workQuality: this.query.workQuality,
         behaviour: this.query.behaviour,
       },
-      contactOutcomeCode: this.contactOutcomeCode,
+      contactOutcomeCode,
     }
   }
 
-  viewData(appointment: AppointmentDto): ViewData {
-    const formValues = this.formValues(appointment)
+  viewData(appointment: AppointmentDto, formData: AppointmentOutcomeForm): ViewData {
+    const formValues = this.formValues(appointment, formData)
 
     return {
       ...this.commonViewData(appointment),
@@ -103,10 +110,23 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
   }
 
   protected backPath(appointment: AppointmentDto): string {
-    return paths.appointments[this.action].endTime({
-      projectCode: appointment.projectCode,
-      appointmentId: appointment.id.toString(),
-    })
+    if (this.action === 'completed') {
+      return pathWithQuery(
+        paths.appointments[this.action].endTime({
+          projectCode: appointment.projectCode,
+          appointmentId: appointment.id.toString(),
+        }),
+        { form: this.formId },
+      )
+    }
+
+    return pathWithQuery(
+      paths.appointments.leftEarly.reason({
+        projectCode: appointment.projectCode,
+        appointmentId: appointment.id.toString(),
+      }),
+      { form: this.formId },
+    )
   }
 
   nextPath(projectCode: string, appointmentId: string): string {
@@ -114,11 +134,13 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
   }
 
   protected updatePath(appointment: AppointmentDto): string {
-    return paths.appointments[this.action].compliance({
-      projectCode: appointment.projectCode,
-      appointmentId: appointment.id.toString(),
-      contactOutcomeCode: this.contactOutcomeCode,
-    })
+    return pathWithQuery(
+      paths.appointments[this.action].compliance({
+        projectCode: appointment.projectCode,
+        appointmentId: appointment.id.toString(),
+      }),
+      { form: this.formId },
+    )
   }
 
   private getItems(checkedValue?: string) {
@@ -142,12 +164,12 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
     leftEarly: 'Left site',
   }
 
-  private formValues(appointment: AppointmentDto): ComplianceQuery {
+  private formValues(appointment: AppointmentDto, formData: AppointmentOutcomeForm): ComplianceQuery {
     if (this.hasFormBody) {
       return this.query
     }
 
-    if (this.contactOutcomeCode !== appointment.contactOutcomeCode) {
+    if (formData.contactOutcomeCode !== appointment.contactOutcomeCode) {
       return {
         hiVis: null,
         workedIntensively: null,

@@ -1,7 +1,8 @@
 import { AppointmentDto, ContactOutcomeDto, UpdateAppointmentOutcomeDto } from '../../../@types/shared'
-import { GovUkRadioOption, ValidationErrors } from '../../../@types/user-defined'
+import { AppointmentOutcomeForm, GovUkRadioOption, ValidationErrors } from '../../../@types/user-defined'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
+import { pathWithQuery } from '../../../utils/utils'
 import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './baseAppointmentUpdatePage'
 
 interface ViewData extends AppointmentUpdatePageViewData {
@@ -24,41 +25,63 @@ interface Body {
 }
 
 export default class LeftEarlyReasonPage extends BaseAppointmentUpdatePage<Body> {
-  constructor(private readonly query: Query = {}) {
+  constructor(
+    private readonly formId: string,
+    private readonly query: Query = {},
+  ) {
     super()
   }
 
   nextPath(appointmentId: string, projectCode: string): string {
-    return paths.appointments.leftEarly.compliance({
-      projectCode,
-      appointmentId,
-      contactOutcomeCode: this.query.leftEarlyReason,
-    })
+    return pathWithQuery(
+      paths.appointments.leftEarly.compliance({
+        projectCode,
+        appointmentId,
+      }),
+      { form: this.formId },
+    )
   }
 
   protected backPath(appointment: AppointmentDto): string {
-    return paths.appointments.leftEarly.endTime({
-      projectCode: appointment.projectCode,
-      appointmentId: appointment.id.toString(),
-    })
+    return pathWithQuery(
+      paths.appointments.leftEarly.endTime({
+        projectCode: appointment.projectCode,
+        appointmentId: appointment.id.toString(),
+      }),
+      { form: this.formId },
+    )
   }
 
   protected updatePath(appointment: AppointmentDto): string {
-    return paths.appointments.leftEarly.reason({
-      projectCode: appointment.projectCode,
-      appointmentId: appointment.id.toString(),
-    })
+    return pathWithQuery(
+      paths.appointments.leftEarly.reason({
+        projectCode: appointment.projectCode,
+        appointmentId: appointment.id.toString(),
+      }),
+      { form: this.formId },
+    )
   }
 
-  viewData(appointment: AppointmentDto, contactOutcomes: ContactOutcomeDto[]): ViewData {
+  viewData(
+    appointment: AppointmentDto,
+    contactOutcomes: ContactOutcomeDto[],
+    formData: AppointmentOutcomeForm,
+  ): ViewData {
     const commonViewData = this.commonViewData(appointment)
 
     return {
       ...commonViewData,
       title: this.getPageTitle(commonViewData.offender),
-      items: this.items(contactOutcomes),
-      notes: this.query.notes || null,
+      items: this.items(contactOutcomes, formData),
+      notes: this.query.notes ?? formData.notes,
       isSensitive: Boolean(this.query.isSensitive),
+    }
+  }
+
+  updatedFormData(formData: AppointmentOutcomeForm): AppointmentOutcomeForm {
+    return {
+      ...formData,
+      contactOutcomeCode: this.query.leftEarlyReason,
     }
   }
 
@@ -93,11 +116,15 @@ export default class LeftEarlyReasonPage extends BaseAppointmentUpdatePage<Body>
     return `Why did ${offender.name} leave early?`
   }
 
-  private items(contactOutcomes: ContactOutcomeDto[]): { text: string; value: string }[] {
+  private items(
+    contactOutcomes: ContactOutcomeDto[],
+    formData: AppointmentOutcomeForm,
+  ): { text: string; value: string }[] {
+    const code = this.query.leftEarlyReason ?? formData.contactOutcomeCode
     return contactOutcomes.map(outcome => ({
       text: outcome.name,
       value: outcome.code,
-      checked: this.query.leftEarlyReason === outcome.code,
+      checked: code === outcome.code,
     }))
   }
 }

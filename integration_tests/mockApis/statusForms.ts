@@ -4,7 +4,7 @@ import { AppointmentStatus, APPOINTMENT_STATUS_FORM_TYPE } from '../../server/se
 import { AppointmentDto, SessionDto } from '../../server/@types/shared'
 
 export default {
-  stubGetForm: ({
+  stubGetStatusesForm: ({
     sessionOrAppointment,
     appointmentStatuses,
   }: {
@@ -22,7 +22,7 @@ export default {
         jsonBody: { appointmentStatuses },
       },
     }),
-  stubGetFormNotFound: ({ session }: { session: SessionDto }): SuperAgentRequest =>
+  stubGetStatusesFormNotFound: ({ session }: { session: SessionDto }): SuperAgentRequest =>
     stubFor({
       request: {
         method: 'GET',
@@ -33,7 +33,7 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
       },
     }),
-  stubSaveForm: ({
+  stubSaveStatusesForm: ({
     sessionOrAppointment,
   }: {
     sessionOrAppointment: Pick<SessionDto | AppointmentDto, 'projectCode' | 'date'>

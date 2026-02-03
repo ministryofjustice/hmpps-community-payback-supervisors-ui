@@ -69,7 +69,7 @@ context('viewAnAppointment', () => {
     //  When I visit an appointment page
     const appointment = appointmentFactory.build()
     const appointmentStatus = appointmentStatusFactory.build({ appointmentId: appointment.id })
-    cy.task('stubGetForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
+    cy.task('stubGetStatusesForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
     cy.task('stubFindAppointment', { appointment })
 
     const appointmentPage = AppointmentPage.visit(appointment)
@@ -93,12 +93,12 @@ context('viewAnAppointment', () => {
     // Given I am on an appointment page
     cy.signIn()
     cy.task('stubFindAppointment', { appointment })
-    cy.task('stubGetForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
+    cy.task('stubGetStatusesForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
     const appointmentPage = AppointmentPage.visit(appointment)
 
     // When I click the back link
     cy.task('stubFindSession', { session })
-    cy.task('stubGetForm', { sessionOrAppointment: session, appointmentStatuses })
+    cy.task('stubGetStatusesForm', { sessionOrAppointment: session, appointmentStatuses })
     appointmentPage.clickBack()
 
     // Then I should be taken to the session page
@@ -115,7 +115,7 @@ context('viewAnAppointment', () => {
 
       cy.signIn()
       cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
-      cy.task('stubGetForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
+      cy.task('stubGetStatusesForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
 
       const appointmentPage = AppointmentPage.visit(appointment)
 
@@ -134,7 +134,7 @@ context('viewAnAppointment', () => {
 
       cy.signIn()
       cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
-      cy.task('stubGetForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
+      cy.task('stubGetStatusesForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
 
       const appointmentPage = AppointmentPage.visit(appointment)
 
@@ -156,8 +156,11 @@ context('viewAnAppointment', () => {
 
       cy.signIn()
       cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
-      cy.task('stubGetForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
-
+      cy.task('stubGetStatusesForm', {
+        sessionOrAppointment: appointment,
+        appointmentStatuses: [appointmentStatus],
+      })
+      cy.task('stubSaveAppointmentForm')
       const appointmentPage = AppointmentPage.visit(appointment)
 
       // When I click on 'Finished'
@@ -180,7 +183,7 @@ context('viewAnAppointment', () => {
 
         cy.signIn()
         cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
-        cy.task('stubGetForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
+        cy.task('stubGetStatusesForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
 
         const appointmentPage = AppointmentPage.visit(appointment)
 
@@ -200,7 +203,8 @@ context('viewAnAppointment', () => {
 
       cy.signIn()
       cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
-      cy.task('stubGetForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
+      cy.task('stubGetStatusesForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
+      cy.task('stubSaveAppointmentForm')
 
       const appointmentPage = AppointmentPage.visit(appointment)
 

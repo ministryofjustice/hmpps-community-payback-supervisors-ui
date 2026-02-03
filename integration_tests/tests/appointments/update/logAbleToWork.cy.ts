@@ -73,7 +73,7 @@ context('Log able to work ', () => {
     appointmentStatus = appointmentStatusFactory.build({ appointmentId: appointment.id })
     cy.task('reset')
     cy.task('stubSignIn')
-    cy.task('stubGetForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
+    cy.task('stubGetStatusesForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
     cy.task('stubFindAppointment', { appointment })
 
     const supervisor = supervisorFactory.build()
@@ -108,7 +108,7 @@ context('Log able to work ', () => {
       page.selectYes()
 
       // When I submit the form
-      cy.task('stubSaveForm', { sessionOrAppointment: appointment })
+      cy.task('stubSaveStatusesForm', { sessionOrAppointment: appointment })
       page.clickSubmit()
 
       // Then I am taken to the confirm working page
@@ -126,13 +126,16 @@ context('Log able to work ', () => {
 
       // Given I am on the confirm working page
       cy.task('stubFindAppointment', { appointment })
-      cy.task('stubGetForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatuses[0]] })
+      cy.task('stubGetStatusesForm', {
+        sessionOrAppointment: appointment,
+        appointmentStatuses: [appointmentStatuses[0]],
+      })
 
       const page = ConfirmWorkingPage.visit(appointment)
 
       // And I click the return to session link
       cy.task('stubFindSession', { session })
-      cy.task('stubGetForm', { sessionOrAppointment: session, appointmentStatuses })
+      cy.task('stubGetStatusesForm', { sessionOrAppointment: session, appointmentStatuses })
       page.clickLinkToSessionPage()
 
       // Then I am taken to the session page
@@ -201,7 +204,7 @@ context('Log able to work ', () => {
       page.checkSensitiveInformation()
 
       // When I submit the form
-      cy.task('stubSaveForm', { sessionOrAppointment: appointment })
+      cy.task('stubSaveStatusesForm', { sessionOrAppointment: appointment })
       page.clickSubmit()
 
       // Then I am taken to the confirm unable to work page
@@ -219,7 +222,10 @@ context('Log able to work ', () => {
 
       // Given I am on the confirm unable to work page
       cy.task('stubFindAppointment', { appointment })
-      cy.task('stubGetForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatuses[0]] })
+      cy.task('stubGetStatusesForm', {
+        sessionOrAppointment: appointment,
+        appointmentStatuses: [appointmentStatuses[0]],
+      })
 
       cy.task('stubGetContactOutcomes')
 
@@ -227,7 +233,7 @@ context('Log able to work ', () => {
 
       // And I click the return to session link
       cy.task('stubFindSession', { session })
-      cy.task('stubGetForm', { sessionOrAppointment: session, appointmentStatuses })
+      cy.task('stubGetStatusesForm', { sessionOrAppointment: session, appointmentStatuses })
       page.clickLinkToSessionPage()
 
       // Then I am taken to the session page

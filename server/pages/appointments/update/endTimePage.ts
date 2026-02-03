@@ -1,10 +1,10 @@
-import { AppointmentDto, UpdateAppointmentOutcomeDto } from '../../../@types/shared'
-import { AppointmentCompletedAction, ValidationErrors } from '../../../@types/user-defined'
+import { AppointmentDto } from '../../../@types/shared'
+import { AppointmentCompletedAction, AppointmentOutcomeForm, ValidationErrors } from '../../../@types/user-defined'
 import InvalidUpdateActionError from '../../../errors/invalidUpdateActionError'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
-import ReferenceDataService from '../../../services/referenceDataService'
 import DateTimeFormats from '../../../utils/dateTimeUtils'
+import { pathWithQuery } from '../../../utils/utils'
 import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './baseAppointmentUpdatePage'
 
 interface ViewData extends AppointmentUpdatePageViewData {
@@ -24,6 +24,7 @@ interface Body {
 export default class EndTimePage extends BaseAppointmentUpdatePage<Body> {
   constructor(
     private readonly action: AppointmentCompletedAction,
+    private formId: string,
     private readonly query: Query = {},
   ) {
     super()
@@ -31,14 +32,16 @@ export default class EndTimePage extends BaseAppointmentUpdatePage<Body> {
 
   nextPath(appointmentId: string, projectCode: string): string {
     if (this.action === 'leftEarly') {
-      return paths.appointments.leftEarly.reason({ projectCode, appointmentId })
+      return pathWithQuery(paths.appointments.leftEarly.reason({ projectCode, appointmentId }), { form: this.formId })
     }
 
-    return paths.appointments.completed.compliance({
-      projectCode,
-      appointmentId,
-      contactOutcomeCode: ReferenceDataService.attendedCompliedOutcomeCode,
-    })
+    return pathWithQuery(
+      paths.appointments.completed.compliance({
+        projectCode,
+        appointmentId,
+      }),
+      { form: this.formId },
+    )
   }
 
   protected backPath(appointment: AppointmentDto): string {
@@ -46,26 +49,29 @@ export default class EndTimePage extends BaseAppointmentUpdatePage<Body> {
   }
 
   protected updatePath(appointment: AppointmentDto): string {
-    return paths.appointments[this.action].endTime({
-      projectCode: appointment.projectCode,
-      appointmentId: appointment.id.toString(),
-    })
+    return pathWithQuery(
+      paths.appointments[this.action].endTime({
+        projectCode: appointment.projectCode,
+        appointmentId: appointment.id.toString(),
+      }),
+      { form: this.formId },
+    )
   }
 
-  requestBody(appointment: AppointmentDto): UpdateAppointmentOutcomeDto {
+  updatedFormData(formData: AppointmentOutcomeForm): AppointmentOutcomeForm {
     return {
-      ...this.appointmentRequestBody(appointment),
+      ...formData,
       endTime: this.query.time,
     }
   }
 
-  viewData(appointment: AppointmentDto): ViewData {
+  viewData(appointment: AppointmentDto, formData: AppointmentOutcomeForm): ViewData {
     const commonViewData = this.commonViewData(appointment)
     const hasFormBody = this.query.time !== undefined
 
     return {
       ...commonViewData,
-      time: hasFormBody ? this.query.time : appointment.endTime,
+      time: hasFormBody ? this.query.time : formData.endTime,
       question: this.getPageTitle(commonViewData.offender),
       documentTitle: 'Log finish time',
     }

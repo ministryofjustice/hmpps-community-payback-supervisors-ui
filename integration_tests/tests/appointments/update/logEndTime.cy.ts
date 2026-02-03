@@ -34,6 +34,7 @@ import CompliancePage from '../../../pages/appointments/update/compliancePage'
 import sessionSummaryFactory from '../../../../server/testutils/factories/sessionSummaryFactory'
 import LeftEarlyReasonPage from '../../../pages/appointments/update/leftEarlyReasonPage'
 import supervisorFactory from '../../../../server/testutils/factories/supervisorFactory'
+import appointmentOutcomeFormFactory from '../../../../server/testutils/factories/appointmentOutcomeFormFactory'
 
 context('Log finish time ', () => {
   let appointment: AppointmentDto
@@ -44,12 +45,14 @@ context('Log finish time ', () => {
     appointmentStatus = appointmentStatusFactory.build({ appointmentId: appointment.id })
     cy.task('reset')
     cy.task('stubSignIn')
-    cy.task('stubGetForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
+    cy.task('stubGetStatusesForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
     cy.task('stubFindAppointment', { appointment })
     const supervisor = supervisorFactory.build()
     const allocations = [sessionSummaryFactory.build({ date: '2025-09-15' })]
     cy.task('stubFindSupervisor', { supervisor })
     cy.task('stubNextSessions', { sessionSummaries: { allocations }, supervisorTeam: supervisor.unpaidWorkTeams[0] })
+    cy.task('stubSaveAppointmentForm')
+    cy.task('stubGetAppointmentForm', { form: appointmentOutcomeFormFactory.build() })
 
     cy.signIn()
   })
@@ -60,6 +63,8 @@ context('Log finish time ', () => {
     it('validates the time entered on submit', () => {
       // Given I am on the end time page for a completed session form
       const page = EndTimePage.visit(appointment, 'completed')
+
+      cy.task('stubGetAppointmentForm', appointmentOutcomeFormFactory.build())
 
       // When I submit an invalid time
       page.clearTime()

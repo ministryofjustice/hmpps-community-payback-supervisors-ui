@@ -25,12 +25,17 @@ const appointmentControllers = (services: Services) => {
     services.appointmentStatusService,
     services.referenceDataService,
   )
-  const endTimeController = new EndTimeController(services.appointmentService)
-  const complianceController = new ComplianceController(services.appointmentService, services.appointmentStatusService)
+  const endTimeController = new EndTimeController(services.appointmentService, services.appointmentFormService)
+  const complianceController = new ComplianceController(
+    services.appointmentService,
+    services.appointmentStatusService,
+    services.appointmentFormService,
+  )
   const confirmController = new ConfirmController(services.appointmentService)
   const leftEarlyReasonController = new LeftEarlyReasonController(
     services.appointmentService,
     services.referenceDataService,
+    services.appointmentFormService,
   )
 
   return {

@@ -2,6 +2,7 @@ import { AppointmentDto } from '../../../../server/@types/shared'
 import paths from '../../../../server/paths'
 import Offender from '../../../../server/models/offender'
 import PageWithNotes from './base/pageWithNotes'
+import { pathWithQuery } from '../../../../server/utils/utils'
 
 export default class LeftEarlyReasonPage extends PageWithNotes {
   constructor(appointment: AppointmentDto) {
@@ -10,11 +11,14 @@ export default class LeftEarlyReasonPage extends PageWithNotes {
     super(title)
   }
 
-  static visit(appointment: AppointmentDto): LeftEarlyReasonPage {
-    const path = paths.appointments.leftEarly.reason({
-      appointmentId: appointment.id.toString(),
-      projectCode: appointment.projectCode,
-    })
+  static visit(appointment: AppointmentDto, formId: string = 'some-form'): LeftEarlyReasonPage {
+    const path = pathWithQuery(
+      paths.appointments.leftEarly.reason({
+        appointmentId: appointment.id.toString(),
+        projectCode: appointment.projectCode,
+      }),
+      { form: formId },
+    )
     cy.visit(path)
 
     return new LeftEarlyReasonPage(appointment)

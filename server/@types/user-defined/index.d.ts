@@ -63,3 +63,17 @@ export interface GovUkRadioOption {
 }
 
 export type YesOrNo = 'yes' | 'no'
+
+/**
+ * The appointment data required to save an appointment as finished
+ * Start of session data will be sent separately
+ */
+export type AppointmentOutcomeForm = {
+  /**
+   * The appointment version from Delius
+   */
+  deliusVersion: string
+  endTime: string
+  contactOutcomeCode?: string
+  notes?: string
+}
