@@ -8,20 +8,14 @@ import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './base
 interface ViewData extends AppointmentUpdatePageViewData {
   title: string
   items: GovUkRadioOption[]
-  notes?: string
-  isSensitive?: boolean
 }
 
 interface Query {
   leftEarlyReason?: string
-  notes?: string
-  isSensitive?: string
 }
 
 interface Body {
   leftEarlyReason: string
-  notes?: string
-  isSensitive?: string
 }
 
 export default class LeftEarlyReasonPage extends BaseAppointmentUpdatePage<Body> {
@@ -73,8 +67,6 @@ export default class LeftEarlyReasonPage extends BaseAppointmentUpdatePage<Body>
       ...commonViewData,
       title: this.getPageTitle(commonViewData.offender),
       items: this.items(contactOutcomes, formData),
-      notes: this.query.notes ?? formData.notes,
-      isSensitive: Boolean(this.query.isSensitive),
     }
   }
 
@@ -91,25 +83,14 @@ export default class LeftEarlyReasonPage extends BaseAppointmentUpdatePage<Body>
       errors.leftEarlyReason = { text: 'Select why they cannot continue this session' }
     }
 
-    if (this.query.notes && this.query.notes.length > 4000) {
-      errors.notes = { text: 'Notes must be 4000 characters or less' }
-    }
-
     return errors
   }
 
   requestBody(appointment: AppointmentDto): UpdateAppointmentOutcomeDto {
-    const body: UpdateAppointmentOutcomeDto = {
+    return {
       ...this.appointmentRequestBody(appointment),
       contactOutcomeCode: this.query.leftEarlyReason,
-      notes: this.query.notes || null,
     }
-
-    if (this.query.isSensitive) {
-      body.sensitive = true
-    }
-
-    return body
   }
 
   private getPageTitle(offender: Offender): string {

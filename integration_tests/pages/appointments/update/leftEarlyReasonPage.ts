@@ -1,10 +1,10 @@
 import { AppointmentDto } from '../../../../server/@types/shared'
 import paths from '../../../../server/paths'
 import Offender from '../../../../server/models/offender'
-import PageWithNotes from './base/pageWithNotes'
 import { pathWithQuery } from '../../../../server/utils/utils'
+import Page from '../../page'
 
-export default class LeftEarlyReasonPage extends PageWithNotes {
+export default class LeftEarlyReasonPage extends Page {
   constructor(appointment: AppointmentDto) {
     const offender = new Offender(appointment.offender)
     const title = `Why did ${offender.name} leave early?`

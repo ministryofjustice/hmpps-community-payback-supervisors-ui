@@ -24,31 +24,5 @@
       items: items,
       errorMessage: errors.leftEarlyReason
     }) }}
-
-    {{ govukCharacterCount({
-      name: "notes",
-      value: notes,
-      maxlength: 4000,
-      threshold: 85,
-      formGroup: {
-        classes: "govuk-!-margin-bottom-0"
-      },
-      label: {
-        text: "Add notes",
-        classes: "govuk-label--m"
-      },
-      errorMessage: errors.notes
-    }) }}
-
-    {{ govukCheckboxes({
-      name: "isSensitive",
-      items: [
-        {
-          value: "isSensitive",
-          text: "This information is not to be shared with the person on probation",
-          checked: isSensitive
-        }
-      ]
-    }) }}
   {% endcall %}
 {% endblock %}

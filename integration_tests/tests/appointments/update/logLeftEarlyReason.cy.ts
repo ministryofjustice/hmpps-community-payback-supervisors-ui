@@ -6,7 +6,6 @@
 //    Scenario: Validates the left early reason form
 //      Given I am on the left early reason page
 //      And I do not select a reason
-//      And I enter a note longer than 4000 characters
 //      When I submit the form
 //      Then I see the same page with errors
 //      And the notes field is populated with the user's input
@@ -14,8 +13,6 @@
 //    Scenario: Confirms the reason the person left early
 //      Given I am on the left early reason page
 //      And I select a reason
-//      And I enter a note 4000 characters long
-//      And I check "This information is not to be shared with the person on probation"
 //      When I submit the form
 //      Then I am taken to the compliance page
 //
@@ -71,19 +68,12 @@ context('Log left early ', () => {
 
     // And I do not select a reason
 
-    // And I enter a note longer than 4000 characters
-    page.enterNotesWithCharacterLength(4001)
-
     // When I submit the form
     page.clickSubmit()
 
     // Then I see the same page with errors
     Page.verifyOnPage(LeftEarlyReasonPage, appointment)
     page.shouldShowErrorSummary('leftEarlyReason', 'Select why they cannot continue this session')
-    page.shouldShowErrorSummary('notes', 'Notes must be 4000 characters or less')
-
-    // And the notes field is populated with the user's input
-    page.shouldShowSubmittedNotes()
   })
 
   // Scenario: Confirms the reason the person left early
@@ -96,12 +86,6 @@ context('Log left early ', () => {
 
     // And I select a reason
     page.selectSentHomeServiceIssues()
-
-    // And I enter a note 4000 characters long
-    page.enterNotesWithCharacterLength(4000)
-
-    // And I check "This information is not to be shared with the person on probation"
-    page.checkSensitiveInformation()
 
     // When I submit the form
     cy.task('stubSaveAppointmentForm', { formId })
