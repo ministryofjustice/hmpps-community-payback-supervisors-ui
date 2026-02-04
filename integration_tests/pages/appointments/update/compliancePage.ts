@@ -34,6 +34,7 @@ export default class CompliancePage extends PageWithNotes {
     this.selectWorkQualityValue()
     this.behaviourOption().check()
     this.enterNotes()
+    this.checkSensitiveInformation()
   }
 
   shouldHaveFormWithAppointmentValues() {
@@ -104,6 +105,10 @@ export default class CompliancePage extends PageWithNotes {
 
   shouldHaveEmptyNotes() {
     this.notesField().should('have.value', '')
+  }
+
+  checkSensitiveInformation(): void {
+    this.getInputByLabel('This information is not to be shared with the person on probation').check()
   }
 
   private hiVisOption = (value: YesOrNo = 'yes') => this.getRadioByNameAndValue('hiVis', value)

@@ -271,6 +271,19 @@ describe('CompliancePage', () => {
         })
       })
     })
+    describe('when a value for isSensitive exists in the query', () => {
+      it('should return true for isSensitive if a value is present', () => {
+        page = new CompliancePage('completed', formId, { isSensitive: 'true' })
+        const result = page.viewData(appointment, form)
+        expect(result.isSensitive).toEqual(true)
+      })
+
+      it('should return false for isSensitive if a value is not present', () => {
+        page = new CompliancePage('completed', formId, { isSensitive: null })
+        const result = page.viewData(appointment, form)
+        expect(result.isSensitive).toEqual(false)
+      })
+    })
   })
 
   describe('validate', () => {
@@ -377,6 +390,7 @@ describe('CompliancePage', () => {
         workQuality: 'EXCELLENT',
         behaviour: 'GOOD',
         notes: 'good',
+        isSensitive: 'true',
       }
 
       page = new CompliancePage(action, formId, query)
@@ -392,6 +406,7 @@ describe('CompliancePage', () => {
             behaviour: 'GOOD',
           }),
           notes: 'good',
+          sensitive: true,
         }),
       )
     })
@@ -404,6 +419,7 @@ describe('CompliancePage', () => {
         workQuality: 'EXCELLENT',
         behaviour: 'GOOD',
         notes: 'good',
+        isSensitive: 'false',
       }
 
       page = new CompliancePage(action, formId, query)
@@ -421,6 +437,7 @@ describe('CompliancePage', () => {
             behaviour: 'GOOD',
           }),
           notes: 'good',
+          sensitive: false,
         }),
       )
     })
