@@ -19,6 +19,7 @@ interface ViewData extends AppointmentUpdatePageViewData {
   workQualityItems: GovUkRadioOption[]
   behaviourItems: GovUkRadioOption[]
   notes?: string
+  isSensitive?: boolean
 }
 
 interface Body {
@@ -27,6 +28,7 @@ interface Body {
   workQuality: NonNullable<AttendanceDataDto['workQuality']>
   behaviour: NonNullable<AttendanceDataDto['behaviour']>
   notes?: string
+  isSensitive?: string
 }
 
 export interface ComplianceQuery {
@@ -35,6 +37,7 @@ export interface ComplianceQuery {
   workQuality?: AttendanceDataDto['workQuality']
   behaviour?: AttendanceDataDto['behaviour']
   notes?: string
+  isSensitive?: string
 }
 
 export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
@@ -63,6 +66,7 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
         behaviour: this.query.behaviour,
       },
       contactOutcomeCode,
+      sensitive: this.query.isSensitive === 'true',
     }
   }
 
@@ -80,6 +84,7 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
       workQualityItems: this.getItems(formValues.workQuality),
       behaviourItems: this.getItems(formValues.behaviour),
       notes: formValues.notes,
+      isSensitive: formValues.isSensitive === 'true',
     }
   }
 
@@ -180,6 +185,7 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
         workQuality: null,
         behaviour: null,
         notes: null,
+        isSensitive: null,
       }
     }
 
@@ -189,6 +195,7 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
       workQuality: appointment.attendanceData?.workQuality,
       behaviour: appointment.attendanceData?.behaviour,
       notes: null,
+      isSensitive: appointment.sensitive ? 'true' : null,
     }
   }
 
