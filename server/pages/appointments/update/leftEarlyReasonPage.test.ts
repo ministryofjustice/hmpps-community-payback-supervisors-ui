@@ -44,7 +44,6 @@ describe('LeftEarlyReasonPage', () => {
         backPath: `${paths.appointments.leftEarly.endTime({ appointmentId, projectCode })}?form=${formId}`,
         updatePath: `${paths.appointments.leftEarly.reason({ appointmentId, projectCode })}?form=${formId}`,
         title: `Why did Sam Smith leave early?`,
-        isSensitive: false,
         items: [
           {
             text: contactOutcomes[0].name,
@@ -86,28 +85,6 @@ describe('LeftEarlyReasonPage', () => {
             checked: false,
           },
         ])
-      })
-    })
-
-    describe('when a value for notes exists in the query', () => {
-      it('should return the notes value', () => {
-        const page = new LeftEarlyReasonPage(formId, { notes: 'notes' })
-        const result = page.viewData(appointment, contactOutcomes, form)
-        expect(result.notes).toEqual('notes')
-      })
-    })
-
-    describe('when a value for isSensitive exists in the query', () => {
-      it('should return true for isSensitive if a value is present', () => {
-        const page = new LeftEarlyReasonPage(formId, { isSensitive: 'isSensitive' })
-        const result = page.viewData(appointment, contactOutcomes, form)
-        expect(result.isSensitive).toEqual(true)
-      })
-
-      it('should return false for isSensitive if a value is not present', () => {
-        const page = new LeftEarlyReasonPage(formId, { isSensitive: null })
-        const result = page.viewData(appointment, contactOutcomes, form)
-        expect(result.isSensitive).toEqual(false)
       })
     })
   })
@@ -160,82 +137,6 @@ describe('LeftEarlyReasonPage', () => {
       const result = page.requestBody(appointment)
 
       expect(result.contactOutcomeCode).toEqual('BBBB')
-    })
-
-    describe('notes', () => {
-      it('returns the original appointment object with updated notes', () => {
-        const appointment = appointmentFactory.build({
-          notes: 'xxxxx',
-          id: 1,
-          version: '2',
-          contactOutcomeCode: 'AAAA',
-        })
-        const page = new LeftEarlyReasonPage(formId, { leftEarlyReason: 'BBBB', notes: 'yyyyy' })
-
-        const result = page.requestBody(appointment)
-
-        expect(result.notes).toEqual('yyyyy')
-      })
-
-      it('returns null for notes if not included in the query', () => {
-        const appointment = appointmentFactory.build({
-          notes: 'xxxxx',
-          id: 1,
-          version: '2',
-          contactOutcomeCode: 'AAAA',
-        })
-        const page = new LeftEarlyReasonPage(formId, { leftEarlyReason: 'BBBB' })
-
-        const result = page.requestBody(appointment)
-
-        expect(result.notes).toBeNull()
-      })
-    })
-
-    describe('sensitive', () => {
-      it('returns true if isSensitive is checked', () => {
-        const appointment = appointmentFactory.build({
-          sensitive: false,
-        })
-        const page = new LeftEarlyReasonPage(formId, { leftEarlyReason: 'BBBB', isSensitive: 'isSensitive' })
-
-        const result = page.requestBody(appointment)
-
-        expect(result.sensitive).toEqual(true)
-      })
-
-      it('returns unchanged (true) if isSensitive is not checked', () => {
-        const appointment = appointmentFactory.build({
-          sensitive: true,
-        })
-        const page = new LeftEarlyReasonPage(formId, { leftEarlyReason: 'BBBB' })
-
-        const result = page.requestBody(appointment)
-
-        expect(result.sensitive).toBe(true)
-      })
-
-      it('returns unchanged (false) if isSensitive is not checked', () => {
-        const appointment = appointmentFactory.build({
-          sensitive: false,
-        })
-        const page = new LeftEarlyReasonPage(formId, { leftEarlyReason: 'BBBB' })
-
-        const result = page.requestBody(appointment)
-
-        expect(result.sensitive).toBe(false)
-      })
-
-      it('returns unchanged (undefined) if isSensitive is not checked', () => {
-        const appointment = appointmentFactory.build({
-          sensitive: undefined,
-        })
-        const page = new LeftEarlyReasonPage(formId, { leftEarlyReason: 'BBBB' })
-
-        const result = page.requestBody(appointment)
-
-        expect(result.sensitive).toBeUndefined()
-      })
     })
 
     it('returns the original appointment object with deliusId and deliusVersionToUpdate', () => {

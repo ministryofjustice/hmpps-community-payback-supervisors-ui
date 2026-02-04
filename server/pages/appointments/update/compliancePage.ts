@@ -106,6 +106,10 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
       errors.behaviour = { text: 'Select a description of their behaviour ' }
     }
 
+    if (this.query.notes && this.query.notes.length > 4000) {
+      errors.notes = { text: 'Notes must be 4000 characters or less' }
+    }
+
     return errors
   }
 

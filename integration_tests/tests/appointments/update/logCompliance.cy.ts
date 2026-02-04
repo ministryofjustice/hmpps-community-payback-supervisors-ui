@@ -17,6 +17,7 @@ import LeftEarlyReasonPage from '../../../pages/appointments/update/leftEarlyRea
 //  Scenario: Validating the log compliance page
 //    Given I am on the log compliance page for an appointment
 //    And I do not complete the form
+//    And I enter a note longer than 4000 characters
 //    When I submit the form
 //    Then I see the log compliance page with errors
 
@@ -88,7 +89,8 @@ context('Log compliance', () => {
     const page = CompliancePage.visit(appointment, 'completed', formId)
 
     // And I do not complete the form
-
+    // And I enter a note longer than 4000 characters
+    page.enterNotesWithCharacterLength(4001)
     // When I submit the form
     page.clickSubmit()
 
@@ -97,6 +99,7 @@ context('Log compliance', () => {
     page.shouldShowErrorSummary('workedIntensively', 'Select yes if they are working intensively')
     page.shouldShowErrorSummary('workQuality', 'Select a description of the quality of their work ')
     page.shouldShowErrorSummary('behaviour', 'Select a description of their behaviour ')
+    page.shouldShowErrorSummary('notes', 'Notes must be 4000 characters or less')
   })
 
   describe('populating the form', function describe() {
@@ -118,7 +121,7 @@ context('Log compliance', () => {
       page.selectHiVisValue()
       page.selectWorkedIntensivelyValue()
       page.selectWorkQualityValue()
-      page.enterNotes()
+      page.enterNotesWithCharacterLength(4001)
 
       // When I submit the form
       page.clickSubmit()
@@ -128,7 +131,7 @@ context('Log compliance', () => {
       page.shouldHaveSelectedHiVisValue()
       page.shouldHaveSelectedWorkedIntensivelyValue()
       page.shouldHaveSelectedWorkQualityValue()
-      page.shouldHaveEnteredNotes()
+      page.shouldShowSubmittedNotes()
     })
 
     // Scenario: viewing empty form if a new contact outcome is recorded

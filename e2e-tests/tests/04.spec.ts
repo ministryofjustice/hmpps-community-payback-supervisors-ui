@@ -33,8 +33,6 @@ test('Record an appointment which starts on time but finishes early', async ({
 
   const leftEarlyReasonPage = new LeftEarlyReasonPage(page)
   await leftEarlyReasonPage.checkAttendedFailedToComply()
-  await leftEarlyReasonPage.enterNotes()
-  await leftEarlyReasonPage.checkIsSensitive()
   await leftEarlyReasonPage.clickContinue()
 
   const compliancePage = new CompliancePage(page)

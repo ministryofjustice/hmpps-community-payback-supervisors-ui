@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker'
 import { AppointmentDto } from '../../../@types/shared'
 import {
   AppointmentCompletedAction,
@@ -319,6 +320,33 @@ describe('CompliancePage', () => {
           text: 'Select a description of their behaviour ',
         })
         expect(page.hasErrors).toBe(true)
+      })
+    })
+
+    describe('notes', () => {
+      it('should not have any errors if no notes value', () => {
+        page = new CompliancePage(action, formId, { behaviour: null })
+        page.validate()
+
+        expect(page.validationErrors.notes).toBeFalsy()
+      })
+
+      it.each([4000, 3999, 0])('should not have any errors if notes count is less than 4000', (count: number) => {
+        const notes = faker.string.alpha(count)
+        page = new CompliancePage(action, formId, { notes })
+        page.validate()
+
+        expect(page.validationErrors.notes).toBeFalsy()
+      })
+
+      it('should have errors if the notes count is greater than 4000', () => {
+        const notes = faker.string.alpha(4001)
+        page = new CompliancePage(action, formId, { notes })
+        page.validate()
+
+        expect(page.validationErrors.notes).toEqual({
+          text: 'Notes must be 4000 characters or less',
+        })
       })
     })
   })
