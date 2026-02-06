@@ -25,5 +25,9 @@ export type AppointmentSummaryDto = {
      */
     completedMinutes: number;
     offender: (OffenderFullDto | OffenderLimitedDto | OffenderNotFoundDto);
+    date: string;
+    startTime: string;
+    endTime: string;
+    daysOverdue?: number;
 };
 

@@ -10,6 +10,7 @@ import type { OffenderNotFoundDto } from './OffenderNotFoundDto';
 import type { PickUpDataDto } from './PickUpDataDto';
 export type AppointmentDto = {
     id: number;
+    communityPaybackId?: string;
     version: string;
     deliusEventNumber: number;
     projectName: string;
