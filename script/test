@@ -20,6 +20,14 @@ SKIP_SERVER=false
 for arg in "$@"
 do
   case $arg in
+    # use this to apply all of the skip options
+    --skip-all)
+      UPDATE=false
+      BUILD=false
+      SERVER=true
+      SKIP_SERVER=true
+      GENERATE_TYPES=false
+      ;;
     --skip-update)
       UPDATE=false
       ;;
