@@ -74,6 +74,8 @@ script/test
   --skip-build # => skip building the project
   --skip-server # => run checks against existing local running application
   --skip-generate-types # => run checks without generating any new types against the API project
+
+  --skip-all # => or combine all of the above skip options
 ```
 
 ### Run linter
