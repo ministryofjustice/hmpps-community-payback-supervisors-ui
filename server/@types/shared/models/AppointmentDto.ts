@@ -8,15 +8,33 @@ import type { OffenderFullDto } from './OffenderFullDto';
 import type { OffenderLimitedDto } from './OffenderLimitedDto';
 import type { OffenderNotFoundDto } from './OffenderNotFoundDto';
 import type { PickUpDataDto } from './PickUpDataDto';
+import type { ProjectTypeDto } from './ProjectTypeDto';
 export type AppointmentDto = {
     id: number;
     communityPaybackId?: string;
     version: string;
     deliusEventNumber: number;
-    projectName: string;
+    /**
+     * Retrieve project information from GET project instead. Whilst marked as optional to support deprecation, this will always be populated.
+     * @deprecated
+     */
+    projectName?: string;
     projectCode: string;
-    projectTypeName: string;
-    projectTypeCode: string;
+    /**
+     * Retrieve project information from GET project instead. Whilst marked as optional to support deprecation, this will always be populated.
+     * @deprecated
+     */
+    projectTypeName?: string;
+    /**
+     * Retrieve project information from GET project instead. Whilst marked as optional to support deprecation, this will always be populated.
+     * @deprecated
+     */
+    projectTypeCode?: string;
+    /**
+     * Retrieve project information from GET project instead. Whilst marked as optional to support deprecation, this will always be populated.
+     * @deprecated
+     */
+    projectType?: ProjectTypeDto;
     offender: (OffenderFullDto | OffenderLimitedDto | OffenderNotFoundDto);
     supervisingTeam: string;
     supervisingTeamCode: string;
