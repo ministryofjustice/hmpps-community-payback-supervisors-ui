@@ -6,6 +6,7 @@ import type { LocationDto } from './LocationDto';
 export type PickUpDataDto = {
     location?: LocationDto;
     locationCode?: string;
+    locationDescription?: string;
     time?: string;
 };
 
