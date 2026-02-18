@@ -24,8 +24,10 @@ export type ContactOutcomeDto = {
      */
     attended: boolean;
     /**
-     * If this outcome can be used by a supervisor
+     * If this outcome can be used by a supervisor. Deprecated, If required, use a contact outcome group instead
+     * @deprecated
      */
-    availableToSupervisors: boolean;
+    availableToSupervisors?: boolean;
+    willAlertEnforcementDiary: boolean;
 };
 
