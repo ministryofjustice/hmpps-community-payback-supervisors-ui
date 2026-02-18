@@ -13,6 +13,7 @@ interface ViewData {
   backPath: string
   actions: LinkItem[]
   statusTagHtml: string
+  canBeUpdated: boolean
 }
 
 export default class AppointmentShowDetailsPage {
@@ -24,6 +25,7 @@ export default class AppointmentShowDetailsPage {
       backPath: paths.sessions.show({ projectCode: appointment.projectCode, date: appointment.date }),
       actions: this.appointmentActions(appointment, appointmentStatus),
       statusTagHtml: StatusTagUtils.getHtml(appointmentStatus, AppointmentUtils.statusTagColour[appointmentStatus]),
+      canBeUpdated: this.appointmentIsInThePast(appointment),
     }
   }
 
@@ -45,5 +47,21 @@ export default class AppointmentShowDetailsPage {
       { text: 'Arrived', href: paths.appointments.arrived.startTime(appointmentPathParams) },
       { text: 'Not arrived', href: paths.appointments.absent.startTime(appointmentPathParams) },
     ]
+  }
+
+  private appointmentIsInThePast(appointment: AppointmentDto): boolean {
+    const baseDate = new Date(appointment.date)
+
+    const [hours, minutes] = appointment.startTime.split(':').map(Number)
+
+    const appointmentDateTime = new Date(
+      baseDate.getFullYear(),
+      baseDate.getMonth(),
+      baseDate.getDate(),
+      hours,
+      minutes,
+    )
+
+    return Date.now() > appointmentDateTime.getTime()
   }
 }
