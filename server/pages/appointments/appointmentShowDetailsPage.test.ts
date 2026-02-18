@@ -52,6 +52,7 @@ describe('AppointmentShowDetailsPage', () => {
           },
         ],
         statusTagHtml,
+        canBeUpdated: true,
       })
     })
 
@@ -109,6 +110,60 @@ describe('AppointmentShowDetailsPage', () => {
         const result = page.viewData(appointment, 'Session complete')
 
         expect(result.actions).toEqual([])
+      })
+    })
+
+    describe('canBeUpdated', () => {
+      it('returns true if the appointment date is in the past', () => {
+        const today = new Date()
+        const yesterday = new Date(today)
+        yesterday.setDate(yesterday.getDate() - 1)
+
+        const appointment = appointmentFactory.build({ date: yesterday.toISOString() })
+        const page = new AppointmentShowDetailsPage()
+        const result = page.viewData(appointment, 'Scheduled')
+
+        expect(result.canBeUpdated).toBe(true)
+      })
+
+      it('returns true if the appointment start time is in the past', () => {
+        const now = new Date()
+        const tenMinutesAgo = new Date(now)
+        tenMinutesAgo.setMinutes(tenMinutesAgo.getMinutes() - 10)
+
+        const startTime = `${tenMinutesAgo.getHours().toString().padStart(2, '0')}:${tenMinutesAgo.getMinutes().toString().padStart(2, '0')}`
+
+        const appointment = appointmentFactory.build({ date: new Date().toISOString(), startTime })
+        const page = new AppointmentShowDetailsPage()
+        const result = page.viewData(appointment, 'Scheduled')
+
+        expect(result.canBeUpdated).toBe(true)
+      })
+
+      it('returns false if the appointment date is not in the past', () => {
+        const now = new Date()
+        const tomorrow = new Date(now)
+        tomorrow.setDate(tomorrow.getDate() + 1)
+
+        const appointment = appointmentFactory.build({ date: tomorrow.toISOString() })
+        const page = new AppointmentShowDetailsPage()
+        const result = page.viewData(appointment, 'Scheduled')
+
+        expect(result.canBeUpdated).toBe(false)
+      })
+
+      it('returns false if the appointment start time is not in the past', () => {
+        const now = new Date()
+        const tenMinutesFromNow = new Date(now)
+        tenMinutesFromNow.setMinutes(now.getMinutes() + 10)
+
+        const startTime = `${tenMinutesFromNow.getHours().toString().padStart(2, '0')}:${tenMinutesFromNow.getMinutes().toString().padStart(2, '0')}`
+
+        const appointment = appointmentFactory.build({ date: new Date().toISOString(), startTime })
+        const page = new AppointmentShowDetailsPage()
+        const result = page.viewData(appointment, 'Scheduled')
+
+        expect(result.canBeUpdated).toBe(false)
       })
     })
   })
