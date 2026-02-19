@@ -3,7 +3,7 @@ import { config } from 'dotenv'
 import { TestOptions } from './e2e-tests/fixtures/testOptions'
 
 config({
-  path: `.env`,
+  path: `.e2e.env`,
   override: true,
 })
 

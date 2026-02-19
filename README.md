@@ -62,7 +62,7 @@ This script will also generate the latest types from the API schema (generated l
 The script will set up most of your dependencies for you, but you will need to do the following to get it running:
 
 - Set up [CP Stack](https://github.com/ministryofjustice/hmpps-community-payback-api/tree/main/tools/cp-stack)
-- Update the .env file in the root of the project with the variables listed under `# Credentials and variables needed for e2e tests` in [.env.example](.env.example). You can find the username and password values in the Community Payback 1password vault.
+- Run `./script/generate-e2e-env.sh` to generate an `.e2e.env` configuration file (this will automatically be created if running `npm run test:e2e:local`)
 
 #### Test options
 
@@ -99,7 +99,7 @@ Or to run with Cypress UI:
 
 ## Running e2e tests
 
-1. Update the .env file in the root of the project with the variables listed under `# Credentials and variables needed for e2e tests` in [.env.example](.env.example). You can find the username and password values in the Community Payback 1password vault.
+1. Run `./script/generate-e2e-env.sh` to generate an `.e2e.env` configuration file (this will automatically be created if running `npm run test:e2e:local`)
 
 2. Install Playwright
 

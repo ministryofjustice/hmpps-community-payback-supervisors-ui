@@ -25,8 +25,8 @@
     "test:integration:local:ui": "npm run start-test-wiremock && npx start-server-and-test start-feature:dev http://localhost:3007/ping test:integration:ui:ci",
     "test:e2e": "npx playwright test --project=setupDev --project=dev",
     "test:e2e:ui": "npm run test:e2e -- --ui",
-    "test:e2e:local": "npx playwright test --project=setupLocal --project=local",
-    "test:e2e:local:ui": "npm run test:e2e:local -- --ui",
+    "test:e2e:local": "script/generate-e2e-env.sh && npx playwright test --project=setupLocal --project=local",
+    "test:e2e:local:ui": "script/generate-e2e-env.sh && npm run test:e2e:local -- --ui",
     "clean": "rm -rf dist test_results",
     "rebuild": "npm run clean && npm i && npm run build",
     "setup": "npm ci && hmpps-npm-script-run-allowlist"
