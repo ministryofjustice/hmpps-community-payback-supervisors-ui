@@ -39,7 +39,6 @@ jobs:
   sca:
     permissions:
       contents: write
-      pull-requests: write
       issues: write
       security-events: write
       actions: read
@@ -65,3 +64,4 @@ jobs:
         uses: ministryofjustice/devsecops-actions/sca@234ac1dca7bb965417bae451d3ea284a1286d68c # v1.3.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }} # Mandatory
+          renovate: 'false' # We have renovate set up separately
