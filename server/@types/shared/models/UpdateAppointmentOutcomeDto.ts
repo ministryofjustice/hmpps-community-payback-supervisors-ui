@@ -4,7 +4,6 @@
 /* eslint-disable */
 import type { AttendanceDataDto } from './AttendanceDataDto';
 import type { EnforcementDto } from './EnforcementDto';
-import type { FormKeyDto } from './FormKeyDto';
 export type UpdateAppointmentOutcomeDto = {
     /**
      * Delius ID of the appointment to update
@@ -33,10 +32,6 @@ export type UpdateAppointmentOutcomeDto = {
     notes?: string;
     /**
      * If provided, the corresponding form data will be deleted
-     */
-    formKeyToDelete?: FormKeyDto;
-    /**
-     * If the corresponding delius contact should be alerted
      */
     alertActive?: boolean;
     /**
