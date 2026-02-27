@@ -12,7 +12,6 @@ export type { EnforcementActionDto } from './models/EnforcementActionDto';
 export type { EnforcementActionsDto } from './models/EnforcementActionsDto';
 export type { EnforcementDto } from './models/EnforcementDto';
 export type { ErrorResponse } from './models/ErrorResponse';
-export type { FormKeyDto } from './models/FormKeyDto';
 export type { LocationDto } from './models/LocationDto';
 export type { OffenderDto } from './models/OffenderDto';
 export type { OffenderFullDto } from './models/OffenderFullDto';
