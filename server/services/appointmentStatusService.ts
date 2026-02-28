@@ -37,12 +37,16 @@ export default class AppointmentStatusService {
     const statusEntries = data?.appointmentStatuses ?? []
 
     return session.appointmentSummaries.map(appointment => {
-      return (
-        statusEntries.find(entry => entry.appointmentId === appointment.id) ?? {
-          appointmentId: appointment.id,
-          status: this.defaultAppointmentStatusType(appointment.contactOutcome?.code),
-        }
-      )
+      const status = statusEntries.find(entry => entry.appointmentId === appointment.id)
+
+      if (status && appointment.contactOutcome) {
+        return status
+      }
+
+      return {
+        appointmentId: appointment.id,
+        status: this.defaultAppointmentStatusType(appointment.contactOutcome?.code),
+      }
     })
   }
 
