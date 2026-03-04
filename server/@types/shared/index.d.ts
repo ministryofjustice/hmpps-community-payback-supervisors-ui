@@ -6,13 +6,14 @@
 export type { AppointmentDto } from './models/AppointmentDto';
 export type { AppointmentSummaryDto } from './models/AppointmentSummaryDto';
 export type { AttendanceDataDto } from './models/AttendanceDataDto';
+export type { CommunityCampusPduDto } from './models/CommunityCampusPduDto';
+export type { CommunityCampusPdusDto } from './models/CommunityCampusPdusDto';
 export type { ContactOutcomeDto } from './models/ContactOutcomeDto';
 export type { ContactOutcomesDto } from './models/ContactOutcomesDto';
 export type { EnforcementActionDto } from './models/EnforcementActionDto';
 export type { EnforcementActionsDto } from './models/EnforcementActionsDto';
 export type { EnforcementDto } from './models/EnforcementDto';
 export type { ErrorResponse } from './models/ErrorResponse';
-export type { FormKeyDto } from './models/FormKeyDto';
 export type { LocationDto } from './models/LocationDto';
 export type { OffenderDto } from './models/OffenderDto';
 export type { OffenderFullDto } from './models/OffenderFullDto';
