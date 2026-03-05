@@ -1,12 +1,12 @@
 import { randomUUID } from 'crypto'
-import { AppointmentDto, FormKeyDto } from '../@types/shared'
+import { AppointmentDto } from '../@types/shared'
 import { AppointmentOutcomeForm } from '../@types/user-defined'
-import FormClient from '../data/formClient'
+import FormClient, { FormKey } from '../data/formClient'
 
 export const APPOINTMENT_UPDATE_FORM_TYPE = 'APPOINTMENT_UPDATE_SUPERVISOR'
 
 export interface Form {
-  key: FormKeyDto
+  key: FormKey
   data: AppointmentOutcomeForm
 }
 
@@ -41,7 +41,7 @@ export default class AppointmentFormService {
     return form
   }
 
-  getFormKey(id: string): FormKeyDto {
+  getFormKey(id: string): FormKey {
     return {
       id,
       type: APPOINTMENT_UPDATE_FORM_TYPE,
