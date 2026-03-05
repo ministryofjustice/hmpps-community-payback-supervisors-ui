@@ -54,7 +54,6 @@ export default class ComplianceController {
       }
 
       const payload = page.requestBody(appointment, formData)
-      payload.formKeyToDelete = this.appointmentFormService.getFormKey(formId)
 
       await this.appointmentService.saveAppointment({
         username: res.locals.user.username,
