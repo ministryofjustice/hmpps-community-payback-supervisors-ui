@@ -1,7 +1,6 @@
-import { FormKeyDto } from '../@types/shared'
 import { AppointmentStatusType } from '../@types/user-defined'
 import config from '../config'
-import FormClient from '../data/formClient'
+import FormClient, { FormKey } from '../data/formClient'
 import appointmentFactory from '../testutils/factories/appointmentFactory'
 import appointmentStatusFactory from '../testutils/factories/appointmentStatusFactory'
 import appointmentSummaryFactory from '../testutils/factories/appointmentSummaryFactory'
@@ -30,7 +29,7 @@ describe('AppointmentStatusService', () => {
       formClient.find.mockResolvedValue({ appointmentStatuses })
 
       const result = await appointmentStatusService.getStatus(appointment, userName)
-      const expectedFormKey: FormKeyDto = {
+      const expectedFormKey: FormKey = {
         type: APPOINTMENT_STATUS_FORM_TYPE,
         id: appointment.projectCode + appointment.date,
       }
@@ -84,7 +83,7 @@ describe('AppointmentStatusService', () => {
       formClient.find.mockResolvedValue({ appointmentStatuses })
 
       const result = await appointmentStatusService.getStatusesForSession(session, userName)
-      const expectedFormKey: FormKeyDto = {
+      const expectedFormKey: FormKey = {
         type: APPOINTMENT_STATUS_FORM_TYPE,
         id: session.projectCode + session.date,
       }
@@ -105,7 +104,7 @@ describe('AppointmentStatusService', () => {
       const updatedStatuses = [...appointmentStatuses, { appointmentId: newAppointment.id, status: 'Scheduled' }]
 
       const result = await appointmentStatusService.getStatusesForSession(session, userName)
-      const expectedFormKey: FormKeyDto = {
+      const expectedFormKey: FormKey = {
         type: APPOINTMENT_STATUS_FORM_TYPE,
         id: session.projectCode + session.date,
       }
@@ -139,7 +138,7 @@ describe('AppointmentStatusService', () => {
 
       await appointmentStatusService.updateStatus(appointment, 'Working', userName)
 
-      const expectedFormKey: FormKeyDto = {
+      const expectedFormKey: FormKey = {
         type: APPOINTMENT_STATUS_FORM_TYPE,
         id: appointment.projectCode + appointment.date,
       }
@@ -157,7 +156,7 @@ describe('AppointmentStatusService', () => {
       formClient.find.mockResolvedValue({ appointmentStatuses })
 
       const updatedStatuses = [...appointmentStatuses, { appointmentId: appointment.id, status }]
-      const expectedFormKey: FormKeyDto = {
+      const expectedFormKey: FormKey = {
         type: APPOINTMENT_STATUS_FORM_TYPE,
         id: appointment.projectCode + appointment.date,
       }
@@ -173,7 +172,7 @@ describe('AppointmentStatusService', () => {
 
       formClient.find.mockResolvedValue(null)
       const appointmentStatuses = [{ appointmentId: appointment.id, status }]
-      const expectedFormKey: FormKeyDto = {
+      const expectedFormKey: FormKey = {
         type: APPOINTMENT_STATUS_FORM_TYPE,
         id: appointment.projectCode + appointment.date,
       }
@@ -191,7 +190,7 @@ describe('AppointmentStatusService', () => {
       }
       const session = sessionFactory.build()
 
-      const expectedFormKey: FormKeyDto = {
+      const expectedFormKey: FormKey = {
         type: APPOINTMENT_STATUS_FORM_TYPE,
         id: session.projectCode + session.date,
       }

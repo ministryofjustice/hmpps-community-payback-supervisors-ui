@@ -2,14 +2,15 @@ import { asSystem, AuthenticationClient, RestClient } from '@ministryofjustice/h
 import config from '../config'
 import logger from '../../logger'
 import paths from '../paths/api'
-import { FormKeyDto } from '../@types/shared'
+
+export type FormKey = { type: string; id: string }
 
 export default class FormClient extends RestClient {
   constructor(authenticationClient: AuthenticationClient) {
     super('formClient', config.apis.communityPaybackApi, logger, authenticationClient)
   }
 
-  async find<T>({ type, id }: FormKeyDto, username: string): Promise<T | null> {
+  async find<T>({ type, id }: FormKey, username: string): Promise<T | null> {
     const path = paths.forms({ type, id })
     try {
       return (await this.get({ path }, asSystem(username))) as T
@@ -21,12 +22,12 @@ export default class FormClient extends RestClient {
     }
   }
 
-  async save({ type, id }: FormKeyDto, username: string, data: Record<string, unknown>): Promise<void> {
+  async save({ type, id }: FormKey, username: string, data: Record<string, unknown>): Promise<void> {
     const path = paths.forms({ type, id })
     return this.put({ path, data }, asSystem(username))
   }
 
-  async clear({ type, id }: FormKeyDto, username: string): Promise<void> {
+  async clear({ type, id }: FormKey, username: string): Promise<void> {
     const path = paths.forms({ type, id })
     return this.delete({ path }, asSystem(username))
   }
