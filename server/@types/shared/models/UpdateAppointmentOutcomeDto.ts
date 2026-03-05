@@ -30,9 +30,6 @@ export type UpdateAppointmentOutcomeDto = {
     enforcementData?: EnforcementDto;
     supervisorOfficerCode: string;
     notes?: string;
-    /**
-     * If provided, the corresponding form data will be deleted
-     */
     alertActive?: boolean;
     /**
      * If the corresponding delius contact should be marked as sensitive
