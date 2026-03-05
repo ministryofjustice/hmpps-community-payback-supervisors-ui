@@ -1,7 +1,7 @@
-import { AppointmentDto, FormKeyDto, SessionDto } from '../@types/shared'
+import { AppointmentDto, SessionDto } from '../@types/shared'
 import { AppointmentStatusType } from '../@types/user-defined'
 import config from '../config'
-import FormClient from '../data/formClient'
+import FormClient, { FormKey } from '../data/formClient'
 
 export interface AppointmentStatus {
   status: AppointmentStatusType
@@ -76,11 +76,7 @@ export default class AppointmentStatusService {
     throw new Error('Clearing session statuses not enabled')
   }
 
-  private async saveStatusesForSession(
-    formKey: FormKeyDto,
-    username: string,
-    appointmentStatuses: AppointmentStatus[],
-  ) {
+  private async saveStatusesForSession(formKey: FormKey, username: string, appointmentStatuses: AppointmentStatus[]) {
     await this.formClient.save(formKey, username, { appointmentStatuses })
   }
 
@@ -88,7 +84,7 @@ export default class AppointmentStatusService {
     return contactOutcomeCode ? 'Not expected' : 'Scheduled'
   }
 
-  private getFormKey(sessionOrAppointment: Pick<SessionDto | AppointmentDto, 'projectCode' | 'date'>): FormKeyDto {
+  private getFormKey(sessionOrAppointment: Pick<SessionDto | AppointmentDto, 'projectCode' | 'date'>): FormKey {
     return {
       id: sessionOrAppointment.projectCode + sessionOrAppointment.date,
       type: APPOINTMENT_STATUS_FORM_TYPE,

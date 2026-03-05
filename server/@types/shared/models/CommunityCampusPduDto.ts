@@ -2,8 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type FormKeyDto = {
-    type: string;
+export type CommunityCampusPduDto = {
     id: string;
+    name: string;
 };
 
