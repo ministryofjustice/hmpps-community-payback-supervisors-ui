@@ -5,5 +5,6 @@
 export type CommunityCampusPduDto = {
     id: string;
     name: string;
+    providerCode: string;
 };
 
