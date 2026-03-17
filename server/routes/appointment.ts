@@ -64,10 +64,10 @@ export default function appointmentRoutes(
     })
 
     let handler
-    if (req.body.review === 'review') {
-      handler = appointments.startTimeController.submit('absent')
-    } else {
+    if (req.body.action === 'back') {
       handler = appointments.startTimeController.show('absent')
+    } else {
+      handler = appointments.startTimeController.submit('absent')
     }
 
     await handler(req, res, next)

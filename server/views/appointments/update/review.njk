@@ -24,8 +24,6 @@
   rows: rows
 }) }}
 
-<input type="hidden" name="review" value="review">
-
-<button formaction="{{reviewBack}}" formmethod="POST" class="govuk-button govuk-button--secondary">Change answers</button>
+<button name="action" value="back" formaction="{{reviewBack}}" formmethod="POST" class="govuk-button govuk-button--secondary">Change answers</button>
 
 {% endblock %}
