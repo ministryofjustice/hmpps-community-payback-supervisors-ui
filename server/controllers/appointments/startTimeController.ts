@@ -50,7 +50,7 @@ export default class StartTimeController {
         })
       }
 
-      const reviewPage = new ReviewPage('Absent', {
+      const reviewPage = new ReviewPage('time', 'Absent', {
         Time: pageViewData.time,
       })
 

@@ -4,6 +4,7 @@ import StatusTagUtils from '../../../utils/GovUKFrontend/statusTagUtils'
 
 interface ViewData {
   rows: OutputItem[]
+  template: string
 }
 
 type InputItem = Record<string, string>
@@ -14,13 +15,17 @@ type OutputItem = {
 
 export default class ReviewPage {
   constructor(
+    private readonly template: string,
     private readonly outcome: AppointmentStatusType,
     private readonly fields: InputItem,
-  ) {}
+  ) {
+    this.template = `./${this.template}.njk`
+  }
 
   viewData(): ViewData {
     return {
       rows: this.buildRows(),
+      template: this.template,
     }
   }
 
