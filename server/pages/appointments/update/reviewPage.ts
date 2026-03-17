@@ -14,7 +14,7 @@ type OutputItem = {
 
 export default class ReviewPage {
   constructor(
-    private readonly outcome: string,
+    private readonly outcome: AppointmentStatusType,
     private readonly fields: InputItem,
   ) {}
 
