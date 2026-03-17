@@ -4,18 +4,24 @@
 {% set pageTitle = documentTitle %}
 
 {% block formContent %}
-  <input type="hidden" name="deliusVersion" value="{{ deliusVersion }}"/>
 
-  {{ govukInput({
-    label: {
-      text: question,
-      classes: "govuk-label--l",
-      isPageHeading: true
-    },
-    id: "time",
-    name: "time",
-    type: "time",
-    value: time,
-    errorMessage: errors.time
-  }) }}
+  {% macro form() %}
+    <input type="hidden" name="deliusVersion" value="{{ deliusVersion }}"/>
+
+    {{ govukInput({
+      label: {
+        text: question,
+        classes: "govuk-label--l",
+        isPageHeading: true
+      },
+      id: "time",
+      name: "time",
+      type: "time",
+      value: time,
+      errorMessage: errors.time
+    }) }}
+  {%endmacro %}
+
+  {{ form() }}
+
 {% endblock %}

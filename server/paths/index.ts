@@ -39,6 +39,12 @@ const paths = {
       completed: appointmentPath.path('confirm-completed'),
       leftEarly: appointmentPath.path('confirm-left-early'),
     },
+    review: {
+      absent: appointmentPath.path('review-absent'),
+      unableToWork: appointmentPath.path('review-unable-to-work'),
+      completed: appointmentPath.path('review-completed'),
+      leftEarly: appointmentPath.path('review-left-early'),
+    },
   },
 }
 

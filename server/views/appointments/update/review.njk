@@ -1,0 +1,31 @@
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% extends "./layout.njk" %}
+
+{% block formContent %}
+
+<h1 class="govuk-heading-l">
+  Review your answers
+</h1>
+
+{% from "./time.njk" import form with context %}
+
+<div class="govuk-!-display-none">
+  {{ form() }}
+</div>
+
+{{ govukSummaryList({
+  card: {
+    title: {
+      text: 'Answers'
+    }
+  },
+  rows: rows
+}) }}
+
+<input type="hidden" name="review" value="review">
+
+<button formaction="{{reviewBack}}" formmethod="POST" class="govuk-button govuk-button--secondary">Change answers</button>
+
+{% endblock %}

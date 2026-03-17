@@ -20,6 +20,7 @@
 //    Scenario: Submitting a valid time
 //      Given I am on the start time page for an absent form
 //      When I a submit a valid time
+//      And I continue from the review page
 //      Then I see the form next page
 //    Scenario: Navigates from confirm absent page to session page
 //      Given I am on the confirm page
@@ -39,6 +40,7 @@ import { AppointmentDto } from '../../../../server/@types/shared'
 import { AppointmentStatus } from '../../../../server/services/appointmentStatusService'
 import sessionSummaryFactory from '../../../../server/testutils/factories/sessionSummaryFactory'
 import supervisorFactory from '../../../../server/testutils/factories/supervisorFactory'
+import ReviewPage from '../../../pages/appointments/update/reviewPage'
 
 context('Log start time ', () => {
   let appointment: AppointmentDto
@@ -118,6 +120,10 @@ context('Log start time ', () => {
       cy.task('stubSaveStatusesForm', { sessionOrAppointment: appointment })
       page.enterTime('09:30')
       page.clickSubmit()
+
+      // And I continue from the review page
+      const reviewPage = Page.verifyOnPage(ReviewPage)
+      reviewPage.clickSubmit()
 
       // Then I see the next form page
       Page.verifyOnPage(ConfirmAbsentPage, appointment)

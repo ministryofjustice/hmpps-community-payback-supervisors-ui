@@ -50,12 +50,26 @@ export default function appointmentRoutes(
     await handler(req, res, next)
   })
 
+  router.post(paths.appointments.review.absent.pattern, async (req, res, next) => {
+    // TODO add audit page view
+
+    const handler = appointments.startTimeController.review('absent')
+    await handler(req, res, next)
+  })
+
   router.post(paths.appointments.absent.startTime.pattern, async (req, res, next) => {
     await auditService.logPageView(Page.SUBMIT_APPOINTMENT_ABSENT_START_TIME_PAGE, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
-    const handler = appointments.startTimeController.submit('absent')
+
+    let handler
+    if (req.body.review === 'review') {
+      handler = appointments.startTimeController.submit('absent')
+    } else {
+      handler = appointments.startTimeController.show('absent')
+    }
+
     await handler(req, res, next)
   })
 
