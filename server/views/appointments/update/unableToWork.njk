@@ -9,45 +9,50 @@
 
 {% block formContent %}
 
-  {% call govukFieldset({
-    legend: {
-      text: title,
-      classes: "govuk-fieldset__legend--l",
-      isPageHeading: true
-    }
-  }) %}
-    {{ govukRadios({
-      name: "unableToWork",
-      hint: {
-        text: "Select one option"
-      },
-      items: items,
-      errorMessage: errors.unableToWork
-    }) }}
+  {% macro form() %}
+    {% call govukFieldset({
+      legend: {
+        text: title,
+        classes: "govuk-fieldset__legend--l",
+        isPageHeading: true
+      }
+    }) %}
+      {{ govukRadios({
+        name: "unableToWork",
+        hint: {
+          text: "Select one option"
+        },
+        items: items,
+        errorMessage: errors.unableToWork
+      }) }}
 
-    {{ govukCharacterCount({
-      name: "notes",
-      value: notes,
-      maxlength: 4000,
-      threshold: 85,
-      formGroup: {
-        classes: "govuk-!-margin-bottom-0"
-      },
-      label: {
-        text: "Add notes",
-        classes: "govuk-label--m"
-      },
-      errorMessage: errors.notes
-    }) }}
+      {{ govukCharacterCount({
+        name: "notes",
+        value: notes,
+        maxlength: 4000,
+        threshold: 85,
+        formGroup: {
+          classes: "govuk-!-margin-bottom-0"
+        },
+        label: {
+          text: "Add notes",
+          classes: "govuk-label--m"
+        },
+        errorMessage: errors.notes
+      }) }}
 
-    {{ govukCheckboxes({
-      name: "isSensitive",
-      items: [
-        {
-          value: "isSensitive",
-          text: "This information is not to be shared with the person on probation"
-        }
-      ]
-    }) }}
-  {% endcall %}
+      {{ govukCheckboxes({
+        name: "isSensitive",
+        items: [
+          {
+            value: "isSensitive",
+            text: "This information is not to be shared with the person on probation",
+            checked: isSensitive
+          }
+        ]
+      }) }}
+    {% endcall %}
+  {% endmacro %}
+
+  {{ form() }}
 {% endblock %}

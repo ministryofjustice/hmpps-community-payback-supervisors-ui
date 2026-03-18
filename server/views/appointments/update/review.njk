@@ -1,12 +1,12 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
 
 {% extends "./layout.njk" %}
 
 {% block formContent %}
 
 <h1 class="govuk-heading-l">
-  Review your answers
+  Check your answers
 </h1>
 
 {% from template import form with context %}
@@ -15,15 +15,9 @@
   {{ form() }}
 </div>
 
-{{ govukSummaryList({
-  card: {
-    title: {
-      text: 'Answers'
-    }
-  },
+{{ govukTable({
+  firstCellIsHeader: true,
   rows: rows
 }) }}
-
-<button name="action" value="back" formaction="{{reviewBack}}" formmethod="POST" class="govuk-button govuk-button--secondary">Change answers</button>
 
 {% endblock %}

@@ -25,6 +25,7 @@
 //      Given I am on the able to work page
 //      And I select no
 //      When I submit the form
+//      And I continue from the review page
 //      Then I am taken to the unable to work reason page
 //
 //    Scenario: Validates the unable to work reason form
@@ -63,6 +64,7 @@ import { AppointmentDto } from '../../../../server/@types/shared'
 import { AppointmentStatus } from '../../../../server/services/appointmentStatusService'
 import sessionSummaryFactory from '../../../../server/testutils/factories/sessionSummaryFactory'
 import supervisorFactory from '../../../../server/testutils/factories/supervisorFactory'
+import ReviewPage from '../../../pages/appointments/update/reviewPage'
 
 context('Log able to work ', () => {
   let appointment: AppointmentDto
@@ -206,6 +208,10 @@ context('Log able to work ', () => {
       // When I submit the form
       cy.task('stubSaveStatusesForm', { sessionOrAppointment: appointment })
       page.clickSubmit()
+
+      // And I continue from the review page
+      const reviewPage = Page.verifyOnPage(ReviewPage)
+      reviewPage.clickSubmit()
 
       // Then I am taken to the confirm unable to work page
       Page.verifyOnPage(ConfirmUnableToWorkPage, appointment)

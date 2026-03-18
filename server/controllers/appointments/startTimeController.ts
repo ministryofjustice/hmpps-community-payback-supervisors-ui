@@ -50,14 +50,18 @@ export default class StartTimeController {
         })
       }
 
-      const reviewPage = new ReviewPage('time', 'Absent', {
-        Time: pageViewData.time,
-      })
+      const reviewPage = new ReviewPage(
+        'time',
+        'Absent',
+        {
+          Time: pageViewData.time,
+        },
+        paths.appointments.absent.startTime({ projectCode, appointmentId }),
+      )
 
       return res.render('appointments/update/review', {
         ...pageViewData,
         ...reviewPage.viewData(),
-        reviewBack: paths.appointments.absent.startTime({ projectCode, appointmentId }),
       })
     }
   }

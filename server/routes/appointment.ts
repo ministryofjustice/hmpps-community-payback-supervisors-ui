@@ -63,13 +63,7 @@ export default function appointmentRoutes(
       correlationId: req.id,
     })
 
-    let handler
-    if (req.body.action === 'back') {
-      handler = appointments.startTimeController.show('absent')
-    } else {
-      handler = appointments.startTimeController.submit('absent')
-    }
-
+    const handler = appointments.startTimeController.submit('absent')
     await handler(req, res, next)
   })
 
@@ -100,6 +94,13 @@ export default function appointmentRoutes(
     })
 
     const handler = appointments.unableToWorkController.show()
+    await handler(req, res, next)
+  })
+
+  router.post(paths.appointments.review.unableToWork.pattern, async (req, res, next) => {
+    // TODO add audit page view
+
+    const handler = appointments.unableToWorkController.review()
     await handler(req, res, next)
   })
 

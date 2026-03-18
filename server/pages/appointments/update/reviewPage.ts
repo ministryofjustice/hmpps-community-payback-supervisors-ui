@@ -2,15 +2,18 @@ import { AppointmentStatusType } from '../../../@types/user-defined'
 import AppointmentUtils from '../../../utils/appointmentUtils'
 import StatusTagUtils from '../../../utils/GovUKFrontend/statusTagUtils'
 
-interface ViewData {
-  rows: OutputItem[]
-  template: string
+type InputItem = Record<string, string>
+
+type OutputRow = OutputItem[]
+
+type OutputItem = {
+  text?: string
+  html?: string
 }
 
-type InputItem = Record<string, string>
-type OutputItem = {
-  key: { text: string }
-  value: { html: string }
+interface ViewData {
+  rows: OutputRow[]
+  template: string
 }
 
 export default class ReviewPage {
@@ -18,6 +21,7 @@ export default class ReviewPage {
     private readonly template: string,
     private readonly outcome: AppointmentStatusType,
     private readonly fields: InputItem,
+    private readonly changeLink?: string,
   ) {
     this.template = `./${this.template}.njk`
   }
@@ -29,19 +33,28 @@ export default class ReviewPage {
     }
   }
 
-  private buildRows() {
-    this.fields['Outcome status'] = StatusTagUtils.getHtml(
-      this.outcome,
-      AppointmentUtils.statusTagColour[this.outcome as AppointmentStatusType],
-    )
-
+  private buildRows(): OutputRow[] {
     const fields = Object.entries(this.fields).map(object => {
       const [key, value] = object
-      return {
-        key: { text: key },
-        value: { html: value },
-      }
+      return [
+        { text: key },
+        { html: value },
+        {
+          html: `<a href=${this.changeLink} class="govuk-link govuk-link--no-visited-state">Change</a>`,
+        },
+      ]
     })
+
+    fields.push([
+      { text: 'Outcome status' },
+      {
+        html: StatusTagUtils.getHtml(
+          this.outcome,
+          AppointmentUtils.statusTagColour[this.outcome as AppointmentStatusType],
+        ),
+      },
+      { text: '' },
+    ])
 
     return fields
   }
