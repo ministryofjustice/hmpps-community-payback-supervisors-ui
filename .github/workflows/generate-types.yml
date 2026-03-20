@@ -28,7 +28,7 @@ jobs:
       # We need to use a GitHub App token rather than a Github token to ensure further workflows are triggered when opening a pull request in the next step.
       # See: https://github.com/peter-evans/create-pull-request/blob/main/docs/concepts-guidelines.md#workarounds-to-trigger-further-workflow-runs
       - name: Generate Token
-        uses: actions/create-github-app-token@v2
+        uses: actions/create-github-app-token@v3
         id: generate-token
         with:
           app-id: ${{ secrets.APP_ID }}
