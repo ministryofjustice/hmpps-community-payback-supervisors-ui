@@ -144,6 +144,13 @@ export default function appointmentRoutes(
     await handler(req, res, next)
   })
 
+  router.post(paths.appointments.review.completed.compliance.pattern, async (req, res, next) => {
+    // TODO add audit page view
+
+    const handler = appointments.complianceController.review('completed')
+    await handler(req, res, next)
+  })
+
   router.post(paths.appointments.completed.compliance.pattern, async (req, res, next) => {
     await auditService.logPageView(Page.SUBMIT_APPOINTMENT_COMPLETED_COMPLIANCE_PAGE, {
       who: res.locals.user.username,
@@ -201,6 +208,13 @@ export default function appointmentRoutes(
     })
 
     const handler = appointments.leftEarlyReasonController.show()
+    await handler(req, res, next)
+  })
+
+  router.post(paths.appointments.review.leftEarly.compliance.pattern, async (req, res, next) => {
+    // TODO add audit page view
+
+    const handler = appointments.complianceController.review('leftEarly')
     await handler(req, res, next)
   })
 

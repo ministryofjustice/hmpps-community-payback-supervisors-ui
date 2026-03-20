@@ -13,6 +13,7 @@ import ConfirmLeftEarlyPage from '../../../pages/appointments/update/confirm/con
 import supervisorFactory from '../../../../server/testutils/factories/supervisorFactory'
 import appointmentOutcomeFormFactory from '../../../../server/testutils/factories/appointmentOutcomeFormFactory'
 import LeftEarlyReasonPage from '../../../pages/appointments/update/leftEarlyReasonPage'
+import ReviewPage from '../../../pages/appointments/update/reviewPage'
 
 //  Scenario: Validating the log compliance page
 //    Given I am on the log compliance page for an appointment
@@ -40,6 +41,7 @@ import LeftEarlyReasonPage from '../../../pages/appointments/update/leftEarlyRea
 //      Given I am on the log compliance page for an appointment
 //      And I complete the form
 //      When I submit the form
+//      And I continue from the review page
 //      Then I see the confirm details page
 //    Scenario: Returning to the log hours page
 //      Given I am on the log compliance page for an appointment
@@ -51,6 +53,7 @@ import LeftEarlyReasonPage from '../../../pages/appointments/update/leftEarlyRea
 //      Given I am on the log compliance page for an appointment
 //      And I complete the form
 //      When I submit the form
+//      And I continue from the review page
 //      Then I see the confirm left early page
 //    Scenario: Returning to the log hours page
 //      Given I am on the log compliance page for an appointment
@@ -67,6 +70,7 @@ context('Log compliance', () => {
     cy.task('stubFindSupervisor', { supervisor })
     cy.task('stubNextSessions', { sessionSummaries: { allocations }, supervisorTeam: supervisor.unpaidWorkTeams[0] })
     cy.task('stubGetAppointmentForm', { form: appointmentOutcomeFormFactory.build(), formId })
+    cy.task('stubGetContactOutcomes')
 
     cy.signIn()
 
@@ -191,6 +195,10 @@ context('Log compliance', () => {
         page.completeForm()
         page.clickSubmit()
 
+        // And I continue from the review page
+        const reviewPage = Page.verifyOnPage(ReviewPage)
+        reviewPage.clickSubmit()
+
         // Then I see the confirm details page
         Page.verifyOnPage(ConfirmCompletedPage, this.appointment)
       })
@@ -224,6 +232,10 @@ context('Log compliance', () => {
 
         page.completeForm()
         page.clickSubmit()
+
+        // And I continue from the review page
+        const reviewPage = Page.verifyOnPage(ReviewPage)
+        reviewPage.clickSubmit()
 
         // Then I see the confirm left early page
         Page.verifyOnPage(ConfirmLeftEarlyPage, this.appointment)
