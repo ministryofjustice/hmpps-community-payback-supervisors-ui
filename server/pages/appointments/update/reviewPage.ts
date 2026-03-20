@@ -2,7 +2,7 @@ import { AppointmentStatusType } from '../../../@types/user-defined'
 import AppointmentUtils from '../../../utils/appointmentUtils'
 import StatusTagUtils from '../../../utils/GovUKFrontend/statusTagUtils'
 
-type InputItem = Record<string, string>
+export type ReviewItem = Record<string, string | { value: string; changeUrl: string }>
 
 type OutputRow = OutputItem[]
 
@@ -20,8 +20,8 @@ export default class ReviewPage {
   constructor(
     private readonly template: string,
     private readonly outcome: AppointmentStatusType,
-    private readonly fields: InputItem,
-    private readonly changeLink?: string,
+    private readonly reviewFields: ReviewItem,
+    protected changeUrl?: string,
   ) {
     this.template = `./${this.template}.njk`
   }
@@ -33,14 +33,19 @@ export default class ReviewPage {
     }
   }
 
+  protected mappedReviewFields(): ReviewItem {
+    return this.reviewFields
+  }
+
   private buildRows(): OutputRow[] {
-    const fields = Object.entries(this.fields).map(object => {
-      const [key, value] = object
+    const fields = Object.entries(this.mappedReviewFields()).map(([key, v]) => {
+      const { value, changeUrl } = typeof v === 'string' ? { value: v, changeUrl: undefined } : v
+
       return [
         { text: key },
         { html: value },
         {
-          html: `<a href=${this.changeLink} class="govuk-link govuk-link--no-visited-state">Change</a>`,
+          html: `<a href=${changeUrl || this.changeUrl} class="govuk-link govuk-link--no-visited-state">Change</a>`,
         },
       ]
     })
