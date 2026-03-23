@@ -51,7 +51,10 @@ export default function appointmentRoutes(
   })
 
   router.post(paths.appointments.review.absent.pattern, async (req, res, next) => {
-    // TODO add audit page view
+    await auditService.logPageView(Page.REVIEW_APPOINTMENT_ABSENT_PAGE, {
+      who: res.locals.user.username,
+      correlationId: req.id,
+    })
 
     const handler = appointments.startTimeController.review('absent')
     await handler(req, res, next)
@@ -98,7 +101,10 @@ export default function appointmentRoutes(
   })
 
   router.post(paths.appointments.review.unableToWork.pattern, async (req, res, next) => {
-    // TODO add audit page view
+    await auditService.logPageView(Page.REVIEW_APPOINTMENT_UNABLE_TO_WORK_PAGE, {
+      who: res.locals.user.username,
+      correlationId: req.id,
+    })
 
     const handler = appointments.unableToWorkController.review()
     await handler(req, res, next)
@@ -145,7 +151,10 @@ export default function appointmentRoutes(
   })
 
   router.post(paths.appointments.review.completed.compliance.pattern, async (req, res, next) => {
-    // TODO add audit page view
+    await auditService.logPageView(Page.REVIEW_APPOINTMENT_COMPLETED_COMPLIANCE_PAGE, {
+      who: res.locals.user.username,
+      correlationId: req.id,
+    })
 
     const handler = appointments.complianceController.review('completed')
     await handler(req, res, next)
@@ -212,7 +221,10 @@ export default function appointmentRoutes(
   })
 
   router.post(paths.appointments.review.leftEarly.compliance.pattern, async (req, res, next) => {
-    // TODO add audit page view
+    await auditService.logPageView(Page.REVIEW_APPOINTMENT_LEFT_EARLY_COMPLIANCE_PAGE, {
+      who: res.locals.user.username,
+      correlationId: req.id,
+    })
 
     const handler = appointments.complianceController.review('leftEarly')
     await handler(req, res, next)
