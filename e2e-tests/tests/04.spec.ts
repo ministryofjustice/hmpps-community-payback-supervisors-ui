@@ -8,6 +8,7 @@ import EndTimePage from '../pages/appointments/update/endTimePage'
 import CompliancePage from '../pages/appointments/update/compliancePage'
 import LeftEarlyReasonPage from '../pages/appointments/update/leftEarlyReasonPage'
 import ConfirmLeftEarlyPage from '../pages/appointments/update/confirm/confirmLeftEarlyPage'
+import ReviewPage from '../pages/appointments/update/reviewPage'
 
 test('Record an appointment which starts on time but finishes early', async ({
   page,
@@ -38,6 +39,10 @@ test('Record an appointment which starts on time but finishes early', async ({
   const compliancePage = new CompliancePage(page)
   await compliancePage.enterComplianceDetails()
   await compliancePage.clickContinue()
+
+  const reviewPage = new ReviewPage(page)
+  await reviewPage.expect.toBeOnThePage()
+  await reviewPage.clickContinue()
 
   const confirmCompletedPage = new ConfirmLeftEarlyPage(page)
   await confirmCompletedPage.expect.toBeOnThePage()

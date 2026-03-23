@@ -7,6 +7,7 @@ import AppointmentPage from '../pages/appointmentPage'
 import EndTimePage from '../pages/appointments/update/endTimePage'
 import CompliancePage from '../pages/appointments/update/compliancePage'
 import ConfirmCompletedPage from '../pages/appointments/update/confirm/confirmCompletedPage'
+import ReviewPage from '../pages/appointments/update/reviewPage'
 
 test('Record an appointment which starts and finishes on time', async ({ page, supervisorUser, testData, team }) => {
   const { person, project } = testData
@@ -28,6 +29,10 @@ test('Record an appointment which starts and finishes on time', async ({ page, s
   const compliancePage = new CompliancePage(page)
   await compliancePage.enterComplianceDetails()
   await compliancePage.clickContinue()
+
+  const reviewPage = new ReviewPage(page)
+  await reviewPage.expect.toBeOnThePage()
+  await reviewPage.clickContinue()
 
   const confirmCompletedPage = new ConfirmCompletedPage(page)
   await confirmCompletedPage.expect.toBeOnThePage()
