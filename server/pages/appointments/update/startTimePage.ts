@@ -1,26 +1,24 @@
-import { AppointmentDto, UpdateAppointmentOutcomeDto } from '../../../@types/shared'
-import { AppointmentArrivedAction, ValidationErrors } from '../../../@types/user-defined'
+import { AppointmentDto } from '../../../@types/shared'
+import { AppointmentArrivedAction, AppointmentOutcomeForm, ValidationErrors } from '../../../@types/user-defined'
 import InvalidUpdateActionError from '../../../errors/invalidUpdateActionError'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
 import DateTimeFormats from '../../../utils/dateTimeUtils'
+import { pathWithQuery } from '../../../utils/utils'
 import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './baseAppointmentUpdatePage'
 
 interface ViewData extends AppointmentUpdatePageViewData {
   time: string
   question: string
   documentTitle: string
-  deliusVersion: string
 }
 
 interface Query {
   time?: string
-  deliusVersion?: string
 }
 
 interface Body {
   time: string
-  deliusVersion: string
 }
 
 export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
@@ -28,6 +26,7 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
 
   constructor(
     private readonly action: AppointmentArrivedAction,
+    private formId: string,
     private readonly query: Query = {},
     private readonly inReview: boolean = false,
   ) {
@@ -36,11 +35,13 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
 
   nextPath(appointmentId: string, projectCode: string): string {
     if (this.action === 'arrived') {
-      return paths.appointments.arrived.isAbleToWork({ projectCode, appointmentId })
+      return pathWithQuery(paths.appointments.arrived.isAbleToWork({ projectCode, appointmentId }), {
+        form: this.formId,
+      })
     }
 
     if (this.action === 'absent') {
-      return paths.appointments.confirm.absent({ projectCode, appointmentId })
+      return pathWithQuery(paths.appointments.confirm.absent({ projectCode, appointmentId }), { form: this.formId })
     }
 
     throw new InvalidUpdateActionError(`Invalid update appointment action: ${this.action}`)
@@ -58,45 +59,41 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
       path = paths.appointments[this.action].startTime
     }
 
-    return path({
-      projectCode: appointment.projectCode,
-      appointmentId: appointment.id.toString(),
-    })
+    return pathWithQuery(
+      path({
+        projectCode: appointment.projectCode,
+        appointmentId: appointment.id.toString(),
+      }),
+      { form: this.formId },
+    )
   }
 
-  requestBody(appointment: AppointmentDto): UpdateAppointmentOutcomeDto {
-    const body = {
-      ...this.appointmentRequestBody(appointment),
+  updatedFormData(formData: AppointmentOutcomeForm): AppointmentOutcomeForm {
+    const updated = {
+      ...formData,
       startTime: this.query.time,
     }
 
     if (this.action === 'absent') {
-      body.contactOutcomeCode = StartTimePage.UnacceptableAbsenceOutcomeCode
+      updated.contactOutcomeCode = StartTimePage.UnacceptableAbsenceOutcomeCode
     }
 
-    return body
+    return updated
   }
 
-  viewData(appointment: AppointmentDto): ViewData {
+  viewData(appointment: AppointmentDto, formData: AppointmentOutcomeForm): ViewData {
     const commonViewData = this.commonViewData(appointment)
     const hasFormBody = this.query.time !== undefined
 
     return {
       ...commonViewData,
-      time: hasFormBody ? this.query.time : appointment.startTime,
+      time: hasFormBody ? this.query.time : formData.startTime,
       question: this.getPageTitle(commonViewData.offender),
       documentTitle: 'Log start time',
-      deliusVersion: appointment.version,
     }
   }
 
   protected getValidationErrors(appointment: AppointmentDto): ValidationErrors<Body> | undefined {
-    if (this.query.deliusVersion && this.query.deliusVersion !== appointment.version) {
-      return {
-        time: { text: 'The arrival time has already been updated in the database, try again' },
-      }
-    }
-
     if (!this.query.time) {
       return { time: { text: 'Enter a start time' } }
     }

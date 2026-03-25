@@ -73,6 +73,7 @@ export type AppointmentOutcomeForm = {
    * The appointment version from Delius
    */
   deliusVersion: string
+  startTime: string
   endTime: string
   contactOutcomeCode?: string
   notes?: string
