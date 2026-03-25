@@ -36,6 +36,8 @@ describe('UnableToWorkPage', () => {
       const page = new UnableToWorkPage()
       const result = page.viewData(appointment, contactOutcomes)
       expect(result).toEqual({
+        notes: undefined,
+        isSensitive: undefined,
         offender,
         backPath: paths.appointments.arrived.isAbleToWork({ appointmentId, projectCode }),
         updatePath: paths.appointments.arrived.unableToWork({ appointmentId, projectCode }),
@@ -44,14 +46,17 @@ describe('UnableToWorkPage', () => {
           {
             text: contactOutcomes[0].name,
             value: contactOutcomes[0].code,
+            checked: false,
           },
           {
             text: contactOutcomes[1].name,
             value: contactOutcomes[1].code,
+            checked: false,
           },
           {
             text: contactOutcomes[2].name,
             value: contactOutcomes[2].code,
+            checked: false,
           },
         ],
       })

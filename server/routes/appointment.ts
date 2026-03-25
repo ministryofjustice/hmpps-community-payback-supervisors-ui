@@ -50,11 +50,22 @@ export default function appointmentRoutes(
     await handler(req, res, next)
   })
 
+  router.post(paths.appointments.review.absent.pattern, async (req, res, next) => {
+    await auditService.logPageView(Page.REVIEW_APPOINTMENT_ABSENT_PAGE, {
+      who: res.locals.user.username,
+      correlationId: req.id,
+    })
+
+    const handler = appointments.startTimeController.review('absent')
+    await handler(req, res, next)
+  })
+
   router.post(paths.appointments.absent.startTime.pattern, async (req, res, next) => {
     await auditService.logPageView(Page.SUBMIT_APPOINTMENT_ABSENT_START_TIME_PAGE, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
+
     const handler = appointments.startTimeController.submit('absent')
     await handler(req, res, next)
   })
@@ -86,6 +97,16 @@ export default function appointmentRoutes(
     })
 
     const handler = appointments.unableToWorkController.show()
+    await handler(req, res, next)
+  })
+
+  router.post(paths.appointments.review.unableToWork.pattern, async (req, res, next) => {
+    await auditService.logPageView(Page.REVIEW_APPOINTMENT_UNABLE_TO_WORK_PAGE, {
+      who: res.locals.user.username,
+      correlationId: req.id,
+    })
+
+    const handler = appointments.unableToWorkController.review()
     await handler(req, res, next)
   })
 
@@ -126,6 +147,16 @@ export default function appointmentRoutes(
     })
 
     const handler = appointments.complianceController.show('completed')
+    await handler(req, res, next)
+  })
+
+  router.post(paths.appointments.review.completed.compliance.pattern, async (req, res, next) => {
+    await auditService.logPageView(Page.REVIEW_APPOINTMENT_COMPLETED_COMPLIANCE_PAGE, {
+      who: res.locals.user.username,
+      correlationId: req.id,
+    })
+
+    const handler = appointments.complianceController.review('completed')
     await handler(req, res, next)
   })
 
@@ -186,6 +217,16 @@ export default function appointmentRoutes(
     })
 
     const handler = appointments.leftEarlyReasonController.show()
+    await handler(req, res, next)
+  })
+
+  router.post(paths.appointments.review.leftEarly.compliance.pattern, async (req, res, next) => {
+    await auditService.logPageView(Page.REVIEW_APPOINTMENT_LEFT_EARLY_COMPLIANCE_PAGE, {
+      who: res.locals.user.username,
+      correlationId: req.id,
+    })
+
+    const handler = appointments.complianceController.review('leftEarly')
     await handler(req, res, next)
   })
 

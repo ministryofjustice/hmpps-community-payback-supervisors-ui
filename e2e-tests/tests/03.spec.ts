@@ -6,6 +6,7 @@ import AppointmentPage from '../pages/appointmentPage'
 import StartTimePage from '../pages/appointments/update/startTimePage'
 import ConfirmAbsentPage from '../pages/appointments/update/confirm/confirmAbsentPage'
 import clearSessionData from '../steps/clearSessionData'
+import ReviewPage from '../pages/appointments/update/reviewPage'
 
 test('Record an absence', async ({ page, supervisorUser, testData, team }) => {
   const { person, project } = testData
@@ -27,6 +28,10 @@ test('Record an absence', async ({ page, supervisorUser, testData, team }) => {
   const startTimePage = new StartTimePage(page, 'absent')
   await startTimePage.expect.toBeOnThePage()
   await startTimePage.clickContinue()
+
+  const reviewPage = new ReviewPage(page)
+  await reviewPage.expect.toBeOnThePage()
+  await reviewPage.clickContinue()
 
   const confirmAbsentPage = new ConfirmAbsentPage(page)
   await confirmAbsentPage.expect.toBeOnThePage()

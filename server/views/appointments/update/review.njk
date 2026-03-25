@@ -1,0 +1,23 @@
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% extends "./layout.njk" %}
+
+{% block formContent %}
+
+<h1 class="govuk-heading-l">
+  Check your answers
+</h1>
+
+{% from template import form with context %}
+
+<div class="govuk-!-display-none">
+  {{ form() }}
+</div>
+
+{{ govukTable({
+  firstCellIsHeader: true,
+  rows: rows
+}) }}
+
+{% endblock %}

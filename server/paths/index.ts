@@ -7,6 +7,7 @@ const appointmentArrivedPath = appointmentPath.path('arrived')
 const appointmentAbsentPath = appointmentPath.path('absent')
 const appointmentCompletedPath = appointmentPath.path('completed')
 const appointmentLeftEarlyPath = appointmentPath.path('left-early')
+const appointmentReviewPath = appointmentPath.path('review')
 
 const paths = {
   sessions: {
@@ -38,6 +39,16 @@ const paths = {
       unableToWork: appointmentPath.path('confirm-unable-to-work'),
       completed: appointmentPath.path('confirm-completed'),
       leftEarly: appointmentPath.path('confirm-left-early'),
+    },
+    review: {
+      absent: appointmentReviewPath.path('absent'),
+      unableToWork: appointmentReviewPath.path('unable-to-work'),
+      leftEarly: {
+        compliance: appointmentReviewPath.path('left-early').path('compliance'),
+      },
+      completed: {
+        compliance: appointmentReviewPath.path('completed').path('compliance'),
+      },
     },
   },
 }

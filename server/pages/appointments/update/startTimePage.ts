@@ -29,6 +29,7 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
   constructor(
     private readonly action: AppointmentArrivedAction,
     private readonly query: Query = {},
+    private readonly inReview: boolean = false,
   ) {
     super()
   }
@@ -50,7 +51,14 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
   }
 
   protected updatePath(appointment: AppointmentDto): string {
-    return paths.appointments[this.action].startTime({
+    let path
+    if (this.action === 'absent' && this.inReview) {
+      path = paths.appointments.review.absent
+    } else {
+      path = paths.appointments[this.action].startTime
+    }
+
+    return path({
       projectCode: appointment.projectCode,
       appointmentId: appointment.id.toString(),
     })

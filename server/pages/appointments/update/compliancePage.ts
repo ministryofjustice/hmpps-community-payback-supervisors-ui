@@ -45,6 +45,7 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
     private readonly action: AppointmentCompletedAction,
     private readonly formId: string,
     private readonly query: ComplianceQuery,
+    private readonly inReview: boolean = false,
   ) {
     super()
   }
@@ -143,8 +144,13 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
   }
 
   protected updatePath(appointment: AppointmentDto): string {
+    const path =
+      this.inReview || this.hasErrors
+        ? paths.appointments.review[this.action].compliance
+        : paths.appointments[this.action].compliance
+
     return pathWithQuery(
-      paths.appointments[this.action].compliance({
+      path({
         projectCode: appointment.projectCode,
         appointmentId: appointment.id.toString(),
       }),

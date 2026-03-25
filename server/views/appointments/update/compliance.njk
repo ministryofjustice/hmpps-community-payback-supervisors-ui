@@ -12,93 +12,100 @@
 {% endblock %}
 
 {% block formContent %}
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-      {{ govukRadios({
-        name: "hiVis",
-        fieldset: {
-          legend: {
-            text: "Did they wear hi-vis?",
-            classes: "govuk-fieldset__legend--m"
+  {% macro form() %}
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        {{ govukRadios({
+          name: "hiVis",
+          fieldset: {
+            legend: {
+              text: "Did they wear hi-vis?",
+              classes: "govuk-fieldset__legend--m"
+            }
+          },
+          items: hiVisItems,
+          errorMessage: errors.hiVis
+        }) }}
+      </div>
+    </div>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        {{ govukRadios({
+          name: "workedIntensively",
+          fieldset: {
+            legend: {
+              text: "Are they working intensively (28 hours of unpaid work over a 4-day week)?",
+              classes: "govuk-fieldset__legend--m"
+            }
+          },
+          items: workedIntensivelyItems,
+          errorMessage: errors.workedIntensively
+        }) }}
+      </div>
+    </div>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        {{ govukRadios({
+          name: "workQuality",
+          fieldset: {
+            legend: {
+              text: "How was their work quality?",
+              classes: "govuk-fieldset__legend--m"
+            }
+          },
+          items: workQualityItems,
+          errorMessage: errors.workQuality
+        }) }}
+      </div>
+    </div>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        {{ govukRadios({
+          name: "behaviour",
+          fieldset: {
+            legend: {
+              text: "How was their behaviour?",
+              classes: "govuk-fieldset__legend--m"
+            }
+          },
+          items: behaviourItems,
+          errorMessage: errors.behaviour
+        }) }}
+      </div>
+    </div>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        {{ govukTextarea({
+          name: "notes",
+          id: "notes",
+          errorMessage: errors.notes,
+          value: notes,
+          label: {
+            text: "Notes",
+            classes: "govuk-label--m",
+            isPageHeading: false
           }
-        },
-        items: hiVisItems,
-        errorMessage: errors.hiVis
-      }) }}
+        }) }}
+      </div>
     </div>
-  </div>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-      {{ govukRadios({
-        name: "workedIntensively",
-        fieldset: {
-          legend: {
-            text: "Are they working intensively (28 hours of unpaid work over a 4-day week)?",
-            classes: "govuk-fieldset__legend--m"
-          }
-        },
-        items: workedIntensivelyItems,
-        errorMessage: errors.workedIntensively
-      }) }}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        {{ govukCheckboxes({
+          name: "isSensitive",
+          items: [
+            {
+              value: "true",
+              text: "This information is not to be shared with the person on probation",
+              checked: isSensitive
+            }
+          ]
+        }) }}
+      </div>
     </div>
-  </div>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-      {{ govukRadios({
-        name: "workQuality",
-        fieldset: {
-          legend: {
-            text: "How was their work quality?",
-            classes: "govuk-fieldset__legend--m"
-          }
-        },
-        items: workQualityItems,
-        errorMessage: errors.workQuality
-      }) }}
-    </div>
-  </div>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-      {{ govukRadios({
-        name: "behaviour",
-        fieldset: {
-          legend: {
-            text: "How was their behaviour?",
-            classes: "govuk-fieldset__legend--m"
-          }
-        },
-        items: behaviourItems,
-        errorMessage: errors.behaviour
-      }) }}
-    </div>
-  </div>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-      {{ govukTextarea({
-        name: "notes",
-        id: "notes",
-        errorMessage: errors.notes,
-        value: notes,
-        label: {
-          text: "Notes",
-          classes: "govuk-label--m",
-          isPageHeading: false
-        }
-      }) }}
-    </div>
-  </div>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-      {{ govukCheckboxes({
-        name: "isSensitive",
-        items: [
-          {
-            value: "true",
-            text: "This information is not to be shared with the person on probation",
-            checked: isSensitive
-          }
-        ]
-      }) }}
-    </div>
-  </div>
+
+  {%endmacro %}
+
+  {{ form() }}
+
 {% endblock %}

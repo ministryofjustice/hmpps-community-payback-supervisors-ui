@@ -8,6 +8,8 @@ import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './base
 interface ViewData extends AppointmentUpdatePageViewData {
   title: string
   items: GovUkRadioOption[]
+  notes?: string
+  isSensitive?: string
 }
 
 interface Query {
@@ -23,7 +25,10 @@ interface Body {
 }
 
 export default class UnableToWorkPage extends BaseAppointmentUpdatePage<Body> {
-  constructor(private readonly query: Query = {}) {
+  constructor(
+    private readonly query: Query = {},
+    private readonly inReview: boolean = false,
+  ) {
     super()
   }
 
@@ -39,7 +44,14 @@ export default class UnableToWorkPage extends BaseAppointmentUpdatePage<Body> {
   }
 
   protected updatePath(appointment: AppointmentDto): string {
-    return paths.appointments.arrived.unableToWork({
+    let path
+    if (this.inReview || this.hasErrors) {
+      path = paths.appointments.review.unableToWork
+    } else {
+      path = paths.appointments.arrived.unableToWork
+    }
+
+    return path({
       projectCode: appointment.projectCode,
       appointmentId: appointment.id.toString(),
     })
@@ -51,7 +63,9 @@ export default class UnableToWorkPage extends BaseAppointmentUpdatePage<Body> {
     return {
       ...commonViewData,
       title: this.getPageTitle(commonViewData.offender),
-      items: this.items(contactOutcomes),
+      items: this.items(contactOutcomes, this.query.unableToWork),
+      notes: this.query.notes,
+      isSensitive: this.query.isSensitive,
     }
   }
 
@@ -107,10 +121,14 @@ export default class UnableToWorkPage extends BaseAppointmentUpdatePage<Body> {
     return `Why is ${offender.name} unable to work today?`
   }
 
-  private items(contactOutcomes: ContactOutcomeDto[]): { text: string; value: string }[] {
+  private items(
+    contactOutcomes: ContactOutcomeDto[],
+    unableToWork: string,
+  ): { text: string; value: string; checked: boolean }[] {
     return contactOutcomes.map(outcome => ({
       text: outcome.name,
       value: outcome.code,
+      checked: outcome.code === unableToWork,
     }))
   }
 }
