@@ -13,6 +13,7 @@ export default class IsAbleToWorkController {
   show(): RequestHandler {
     return async (_req: Request, res: Response) => {
       const { projectCode, appointmentId } = _req.params
+      const formId = _req.query.form?.toString()
 
       const appointment = await this.appointmentService.getAppointment({
         projectCode,
@@ -20,7 +21,7 @@ export default class IsAbleToWorkController {
         username: res.locals.user.username,
       })
 
-      const page = new IsAbleToWorkPage()
+      const page = new IsAbleToWorkPage(formId)
 
       res.render('appointments/update/isAbleToWork', page.viewData(appointment))
     }
@@ -29,6 +30,7 @@ export default class IsAbleToWorkController {
   submit(): RequestHandler {
     return async (_req: Request, res: Response) => {
       const { projectCode, appointmentId } = _req.params
+      const formId = _req.query.form?.toString()
 
       const appointment = await this.appointmentService.getAppointment({
         projectCode,
@@ -36,7 +38,7 @@ export default class IsAbleToWorkController {
         username: res.locals.user.username,
       })
 
-      const page = new IsAbleToWorkPage(_req.body)
+      const page = new IsAbleToWorkPage(formId, _req.body)
       page.validate()
 
       if (page.hasErrors) {

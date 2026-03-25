@@ -92,14 +92,14 @@ describe('StartTimePage', () => {
 
   describe('next', () => {
     describe('arrived', () => {
-      it('should be able to work path with project code and appointment Id', () => {
+      it('should be completed end time path with project code and appointment Id', () => {
         const appointmentId = '1'
         const projectCode = '2'
         const page = new StartTimePage('arrived', formId)
         const result = page.nextPath(appointmentId, projectCode)
 
         expect(result).toEqual(
-          `${paths.appointments.arrived.isAbleToWork({ projectCode, appointmentId })}?form=${formId}`,
+          `${paths.appointments.completed.endTime({ projectCode, appointmentId })}?form=${formId}`,
         )
       })
     })

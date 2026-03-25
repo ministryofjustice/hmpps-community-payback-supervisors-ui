@@ -413,6 +413,7 @@ describe('CompliancePage', () => {
 
     it('updates and returns data from query given object with existing data', () => {
       appointment = appointmentFactory.build({ startTime: '10:00', attendanceData: { penaltyTime: '01:00' } })
+      form = appointmentOutcomeFormFactory.build({ startTime: '10:00' })
       const query: ComplianceQuery = {
         hiVis: 'no',
         workedIntensively: 'no',
