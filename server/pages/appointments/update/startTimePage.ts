@@ -1,4 +1,4 @@
-import { AppointmentDto } from '../../../@types/shared'
+import { AppointmentDto, UpdateAppointmentOutcomeDto } from '../../../@types/shared'
 import { AppointmentArrivedAction, AppointmentOutcomeForm, ValidationErrors } from '../../../@types/user-defined'
 import InvalidUpdateActionError from '../../../errors/invalidUpdateActionError'
 import Offender from '../../../models/offender'
@@ -64,6 +64,22 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
       }),
       { form: this.formId },
     )
+  }
+
+  requestBody(appointment: AppointmentDto, formData: AppointmentOutcomeForm): UpdateAppointmentOutcomeDto {
+    return {
+      deliusId: appointment.id,
+      deliusVersionToUpdate: formData.deliusVersion,
+      alertActive: appointment.alertActive,
+      sensitive: appointment.sensitive,
+      startTime: formData.startTime,
+      endTime: formData.endTime,
+      contactOutcomeCode: formData.contactOutcomeCode,
+      attendanceData: appointment.attendanceData,
+      enforcementData: appointment.enforcementData,
+      supervisorOfficerCode: appointment.supervisorOfficerCode,
+      notes: null,
+    }
   }
 
   updatedFormData(formData: AppointmentOutcomeForm): AppointmentOutcomeForm {

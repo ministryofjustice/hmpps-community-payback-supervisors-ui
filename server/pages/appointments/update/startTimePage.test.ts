@@ -98,9 +98,7 @@ describe('StartTimePage', () => {
         const page = new StartTimePage('arrived', formId)
         const result = page.nextPath(appointmentId, projectCode)
 
-        expect(result).toEqual(
-          `${paths.appointments.completed.endTime({ projectCode, appointmentId })}?form=${formId}`,
-        )
+        expect(result).toEqual(`${paths.appointments.completed.endTime({ projectCode, appointmentId })}?form=${formId}`)
       })
     })
 
@@ -231,6 +229,34 @@ describe('StartTimePage', () => {
           startTime: '10:00',
           contactOutcomeCode: StartTimePage.UnacceptableAbsenceOutcomeCode,
         })
+      })
+    })
+  })
+
+  describe('requestBody', () => {
+    it('builds the final payload from appointment and form data', () => {
+      const appointment = appointmentFactory.build()
+      const form = appointmentOutcomeFormFactory.build({
+        startTime: '10:00',
+        endTime: '16:00',
+        contactOutcomeCode: StartTimePage.UnacceptableAbsenceOutcomeCode,
+      })
+      const page = new StartTimePage('absent', formId)
+
+      const result = page.requestBody(appointment, form)
+
+      expect(result).toEqual({
+        deliusId: appointment.id,
+        deliusVersionToUpdate: form.deliusVersion,
+        alertActive: appointment.alertActive,
+        sensitive: appointment.sensitive,
+        startTime: '10:00',
+        endTime: '16:00',
+        contactOutcomeCode: StartTimePage.UnacceptableAbsenceOutcomeCode,
+        attendanceData: appointment.attendanceData,
+        enforcementData: appointment.enforcementData,
+        supervisorOfficerCode: appointment.supervisorOfficerCode,
+        notes: null,
       })
     })
   })
