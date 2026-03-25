@@ -4,5 +4,6 @@ import { AppointmentOutcomeForm } from '../../@types/user-defined'
 
 export default Factory.define<AppointmentOutcomeForm>(() => ({
   deliusVersion: faker.string.alphanumeric(8),
+  startTime: '09:00',
   endTime: '17:00',
 }))

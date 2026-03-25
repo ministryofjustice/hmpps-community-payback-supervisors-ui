@@ -6,7 +6,9 @@ import { ComplianceQuery } from './compliancePage'
 import ReviewPage, { ReviewItem } from './reviewPage'
 
 export default class ComplianceReviewPage extends ReviewPage {
-  private timeBackPath: string
+  private startTimeBackPath: string
+
+  private endTimeBackPath: string
 
   private attendanceBackPath: string
 
@@ -22,7 +24,15 @@ export default class ComplianceReviewPage extends ReviewPage {
 
     const path = this.action === 'leftEarly' ? paths.appointments.leftEarly : paths.appointments.completed
 
-    this.timeBackPath = pathWithQuery(
+    this.startTimeBackPath = pathWithQuery(
+      paths.appointments.arrived.startTime({
+        projectCode: this.appointment.projectCode,
+        appointmentId: this.appointment.id.toString(),
+      }),
+      { form: this.formId },
+    )
+
+    this.endTimeBackPath = pathWithQuery(
       path.endTime({
         projectCode: this.appointment.projectCode,
         appointmentId: this.appointment.id.toString(),
@@ -74,7 +84,8 @@ export default class ComplianceReviewPage extends ReviewPage {
 
     return {
       ...fields,
-      Time: { value: this.formData?.endTime, changeUrl: this.timeBackPath },
+      'Start time': { value: this.formData?.startTime, changeUrl: this.startTimeBackPath },
+      'End time': { value: this.formData?.endTime, changeUrl: this.endTimeBackPath },
       'Hi-vis': properCase(this.reqBody.hiVis),
       'Worked intensively': properCase(this.reqBody.workedIntensively),
       'Work quality': fmtLabel(this.reqBody.workQuality),
