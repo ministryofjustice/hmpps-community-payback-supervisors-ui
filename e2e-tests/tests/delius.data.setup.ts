@@ -93,6 +93,7 @@ async function createAndAllocatePerson(
 
   await test.step('Allocate person to project', async () => {
     await allocateCurrentCaseToUpwProject(page, {
+      crn: pop.crn,
       providerName: team.provider,
       teamName: team.name,
       projectName: deliusTestData.project.name,
