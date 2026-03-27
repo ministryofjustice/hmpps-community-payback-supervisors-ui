@@ -59,6 +59,7 @@ export default class StartTimeController {
         'time',
         'Absent',
         {},
+        true,
         paths.appointments.absent.startTime({ projectCode, appointmentId }),
       )
 

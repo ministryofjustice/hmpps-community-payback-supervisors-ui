@@ -28,4 +28,8 @@ export default class UnableToWorkPage extends PageWithNotes {
   selectSentHomeServiceIssues(): void {
     this.getInputByLabel('Attended - Sent Home (service issues)').check()
   }
+
+  selectSentHomeBehaviour(): void {
+    this.getInputByLabel('Attended - Sent Home (behaviour)').check()
+  }
 }

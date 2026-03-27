@@ -38,6 +38,7 @@ export interface ComplianceQuery {
   behaviour?: AttendanceDataDto['behaviour']
   notes?: string
   isSensitive?: string
+  alertPractitioner?: YesOrNo
 }
 
 export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
@@ -56,7 +57,6 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
     return {
       deliusId: appointment.id,
       deliusVersionToUpdate: formData.deliusVersion,
-      alertActive: appointment.alertActive,
       sensitive: this.query.isSensitive === 'true',
       startTime: formData.startTime,
       endTime: formData.endTime,
@@ -72,6 +72,7 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
       supervisorOfficerCode: appointment.supervisorOfficerCode,
       notes: this.query.notes,
       date: appointment.date,
+      alertActive: GovUkRadioGroup.nullableValueFromYesOrNoItem(this.query.alertPractitioner),
     }
   }
 

@@ -87,19 +87,23 @@ export default class UnableToWorkController {
         form: formId,
       })
 
+      const outcome = contactOutcomes.contactOutcomes.find(_outcome => {
+        return _outcome.code === _req.body.unableToWork
+      })
+
+      const showWillAlertPractitionerMessage = outcome.willAlertEnforcementDiary
+
       const reviewData = {
         'Start time': { value: formData?.startTime, changeUrl: startTimeChangeUrl },
         'End time': { value: formData?.endTime, changeUrl: endTimeChangeUrl },
-        Attendance: contactOutcomes.contactOutcomes.find(outcome => {
-          return outcome.code === _req.body.unableToWork
-        }).name,
+        Attendance: outcome.name,
         Notes: _req.body.notes,
         Sensitivity: _req.body.isSensitive
           ? 'Cannot be shared with person on probation'
           : 'Can be shared with person on probation',
       }
 
-      const reviewPage = new ReviewPage('unableToWork', 'Cannot work', reviewData, outcomeChangeUrl)
+      const reviewPage = new ReviewPage('unableToWork', 'Cannot work', reviewData, showWillAlertPractitionerMessage, outcomeChangeUrl)
 
       return res.render('appointments/update/review', {
         ...page.viewData(appointment, contactOutcomes.contactOutcomes),
