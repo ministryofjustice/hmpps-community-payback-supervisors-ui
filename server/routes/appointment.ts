@@ -50,7 +50,7 @@ export default function appointmentRoutes(
     await handler(req, res, next)
   })
 
-  router.post(paths.appointments.review.absent.pattern, async (req, res, next) => {
+  router.get(paths.appointments.review.absent.pattern, async (req, res, next) => {
     await auditService.logPageView(Page.REVIEW_APPOINTMENT_ABSENT_PAGE, {
       who: res.locals.user.username,
       correlationId: req.id,
