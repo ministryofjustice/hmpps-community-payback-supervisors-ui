@@ -39,28 +39,16 @@ export default class StartTimeController {
       })
 
       const page = new StartTimePage(action, _req.body)
-      page.validate(appointment)
-      const pageViewData = page.viewData(appointment)
-
-      if (page.hasErrors) {
-        return res.render('appointments/update/time', {
-          ...pageViewData,
-          errors: page.validationErrors,
-          errorSummary: generateErrorSummary(page.validationErrors),
-        })
-      }
 
       const reviewPage = new ReviewPage(
         'time',
         'Absent',
-        {
-          Time: pageViewData.time,
-        },
+        {},
         paths.appointments.absent.startTime({ projectCode, appointmentId }),
       )
 
       return res.render('appointments/update/review', {
-        ...pageViewData,
+        ...page.viewData(appointment),
         ...reviewPage.viewData(),
       })
     }
