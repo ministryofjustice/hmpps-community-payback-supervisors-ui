@@ -72,6 +72,7 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
 
     if (this.action === 'absent') {
       body.contactOutcomeCode = StartTimePage.UnacceptableAbsenceOutcomeCode
+      body.alertActive = true
     }
 
     return body

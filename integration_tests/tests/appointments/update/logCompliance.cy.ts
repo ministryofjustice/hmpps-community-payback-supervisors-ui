@@ -197,6 +197,7 @@ context('Log compliance', () => {
 
         // And I continue from the review page
         const reviewPage = Page.verifyOnPage(ReviewPage)
+        reviewPage.shouldNotShowAlertPractitionerMessage()
         reviewPage.clickSubmit()
 
         // Then I see the confirm details page
@@ -235,6 +236,7 @@ context('Log compliance', () => {
 
         // And I continue from the review page
         const reviewPage = Page.verifyOnPage(ReviewPage)
+        reviewPage.shouldNotShowAlertPractitionerMessage()
         reviewPage.clickSubmit()
 
         // Then I see the confirm left early page

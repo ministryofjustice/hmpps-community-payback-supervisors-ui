@@ -49,11 +49,13 @@
   },
   {
     "name": "Attended - Sent Home (behaviour)",
-    "code": "ATSH"
+    "code": "ATSH",
+    "willAlertEnforcementDiary": true
   },
   {
     "name": "Attended - Sent Home (service issues)",
-    "code": "ATSS"
+    "code": "ATSS",
+    "willAlertEnforcementDiary": false
   },
   {
     "name": "Failed to Comply with other Instruction",

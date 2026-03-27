@@ -62,4 +62,16 @@ describe('GovUkRadioGroup', () => {
       expect(result).toEqual(value)
     })
   })
+  describe('nullableValueFromYesOrNoItem', () => {
+    it.each([
+      ['yes', true],
+      ['no', false],
+      [undefined, null],
+      [null, null],
+      ['', null],
+    ])('returns boolean or null value from selected', (selected: YesOrNo | null, value: boolean | null) => {
+      const result = GovUkRadioGroup.nullableValueFromYesOrNoItem(selected)
+      expect(result).toEqual(value)
+    })
+  })
 })

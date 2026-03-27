@@ -1,8 +1,9 @@
 import { AppointmentDto, ContactOutcomeDto, UpdateAppointmentOutcomeDto } from '../../../@types/shared'
-import { GovUkRadioOption, ValidationErrors } from '../../../@types/user-defined'
+import { GovUkRadioOption, ValidationErrors, YesOrNo } from '../../../@types/user-defined'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
 import ReferenceDataService from '../../../services/referenceDataService'
+import GovUkRadioGroup from '../../../utils/GovUKFrontend/GovUkRadioGroup'
 import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './baseAppointmentUpdatePage'
 
 interface ViewData extends AppointmentUpdatePageViewData {
@@ -16,6 +17,7 @@ interface Query {
   unableToWork?: string
   notes?: string
   isSensitive?: string
+  alertPractitioner?: YesOrNo
 }
 
 interface Body {
@@ -112,6 +114,15 @@ export default class UnableToWorkPage extends BaseAppointmentUpdatePage<Body> {
         workQuality: 'NOT_APPLICABLE',
         behaviour: 'UNSATISFACTORY',
       }
+    }
+
+    const willAlertPractitioner = GovUkRadioGroup.nullableValueFromYesOrNoItem(this.query.alertPractitioner)
+
+    if (
+      willAlertPractitioner ||
+      this.query.unableToWork === ReferenceDataService.attendedSentHomeBehaviourOutcomeCode
+    ) {
+      body.alertActive = true
     }
 
     return body

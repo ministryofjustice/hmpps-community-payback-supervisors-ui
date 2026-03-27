@@ -56,6 +56,7 @@ export default class StartTimeController {
         {
           Time: pageViewData.time,
         },
+        true,
         paths.appointments.absent.startTime({ projectCode, appointmentId }),
       )
 
