@@ -38,6 +38,7 @@ export interface ComplianceQuery {
   behaviour?: AttendanceDataDto['behaviour']
   notes?: string
   isSensitive?: string
+  alertPractitioner?: YesOrNo
 }
 
 export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
@@ -68,6 +69,7 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
       },
       contactOutcomeCode,
       sensitive: this.query.isSensitive === 'true',
+      alertActive: GovUkRadioGroup.nullableValueFromYesOrNoItem(this.query.alertPractitioner),
     }
   }
 

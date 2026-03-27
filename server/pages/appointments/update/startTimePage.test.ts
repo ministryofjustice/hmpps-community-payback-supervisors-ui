@@ -299,7 +299,7 @@ describe('StartTimePage', () => {
           supervisorOfficerCode: '123',
           startTime: '09:00',
 
-          alertActive: appointment.alertActive,
+          alertActive: true,
           sensitive: appointment.sensitive,
           endTime: appointment.endTime,
           attendanceData: appointment.attendanceData,

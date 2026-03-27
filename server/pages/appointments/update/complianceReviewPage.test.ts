@@ -120,6 +120,19 @@ describe('ComplianceReviewPage', () => {
             [{ text: 'Outcome status' }, { html: 'Left early' }, { text: '' }],
           ],
           template: './compliance.njk',
+          showWillAlertPractitionerMessage: false,
+          alertPractitionerItems: [
+            {
+              checked: true,
+              text: 'Yes',
+              value: 'yes',
+            },
+            {
+              checked: false,
+              text: 'No',
+              value: 'no',
+            },
+          ],
         })
       })
     })
@@ -226,6 +239,19 @@ describe('ComplianceReviewPage', () => {
             [{ text: 'Outcome status' }, { html: 'Session complete' }, { text: '' }],
           ],
           template: './compliance.njk',
+          showWillAlertPractitionerMessage: false,
+          alertPractitionerItems: [
+            {
+              checked: true,
+              text: 'Yes',
+              value: 'yes',
+            },
+            {
+              checked: false,
+              text: 'No',
+              value: 'no',
+            },
+          ],
         })
       })
     })

@@ -123,6 +123,7 @@ context('Log start time ', () => {
 
       // And I continue from the review page
       const reviewPage = Page.verifyOnPage(ReviewPage)
+      reviewPage.shouldShowAlertPractitionerMessage()
       reviewPage.clickSubmit()
 
       // Then I see the next form page
