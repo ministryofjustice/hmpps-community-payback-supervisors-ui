@@ -48,7 +48,7 @@ describe('AppointmentShowDetailsPage', () => {
           },
           {
             text: 'Not arrived',
-            href: paths.appointments.absent.startTime({ projectCode, appointmentId: id.toString() }),
+            href: paths.appointments.review.absent({ projectCode, appointmentId: id.toString() }),
           },
         ],
         statusTagHtml,
@@ -73,7 +73,7 @@ describe('AppointmentShowDetailsPage', () => {
             },
             {
               text: 'Not arrived',
-              href: paths.appointments.absent.startTime({ projectCode, appointmentId: id.toString() }),
+              href: paths.appointments.review.absent({ projectCode, appointmentId: id.toString() }),
             },
           ])
         },

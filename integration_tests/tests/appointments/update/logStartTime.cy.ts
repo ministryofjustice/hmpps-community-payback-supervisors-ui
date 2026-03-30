@@ -13,17 +13,10 @@
 //      When I a submit a valid time
 //      Then I see the form next page
 //  Scenario: Absent
-//    Scenario: Validates time entered
-//      Given I am on the start time page for an absent form
-//      When I submit an invalid time
-//      Then I see the same page with errors
-//    Scenario: Submitting a valid time
-//      Given I am on the start time page for an absent form
-//      When I a submit a valid time
-//      And I continue from the review page
-//      Then I see the form next page
-//    Scenario: Navigates from confirm absent page to session page
-//      Given I am on the confirm page
+//    Scenario: Navigates from review page to confirm absent page to session page
+//      Given I am on the review page
+//      And I submit the form
+//      When I am on the confirm page
 //      And I click the return to session link
 //      Then I am taken to the session page
 
@@ -95,42 +88,8 @@ context('Log start time ', () => {
 
   //  Scenario: Absent
   describe('absent', () => {
-    //  Scenario: Validates time entered
-    it('validates the time entered on submit', () => {
-      // Given I am on the start time page for an absent form
-      const page = StartTimePage.visit(appointment, 'absent')
-
-      // When I submit an invalid time
-      page.clearTime()
-      page.clickSubmit()
-
-      // Then I see the same page with errors
-      Page.verifyOnPage(StartTimePage, appointment, 'absent')
-      page.shouldShowValidationErrors()
-      page.shouldHaveTimeValue('')
-    })
-
-    //  Scenario: Submitting a valid time
-    it('submits start time and navigates to next page', () => {
-      // Given I am on the start time page for an absent form
-      const page = StartTimePage.visit(appointment, 'absent')
-
-      // When I submit a valid time
-      cy.task('stubUpdateAppointmentOutcome', { appointment })
-      cy.task('stubSaveStatusesForm', { sessionOrAppointment: appointment })
-      page.enterTime('09:30')
-      page.clickSubmit()
-
-      // And I continue from the review page
-      const reviewPage = Page.verifyOnPage(ReviewPage)
-      reviewPage.clickSubmit()
-
-      // Then I see the next form page
-      Page.verifyOnPage(ConfirmAbsentPage, appointment)
-    })
-
     //  Scenario: Navigates from confirm absent page to session page
-    it('navigates from confirm working page to session page', () => {
+    it('navigates from confirm absent page to session page', () => {
       const appointmentSummaries = appointmentSummaryFactory.buildList(3)
       const session = sessionFactory.build({ appointmentSummaries })
       appointment = appointmentFactory.build({ projectCode: session.projectCode, date: session.date })
@@ -138,14 +97,22 @@ context('Log start time ', () => {
         appointmentStatusFactory.build({ appointmentId: appointmentSummary.id }),
       )
 
-      // Given I am on the confirm page
       cy.task('stubGetStatusesForm', {
         sessionOrAppointment: appointment,
         appointmentStatuses: [appointmentStatuses[0]],
       })
       cy.task('stubFindAppointment', { appointment })
+      cy.task('stubUpdateAppointmentOutcome', { appointment })
+      cy.task('stubSaveStatusesForm', { sessionOrAppointment: appointment })
 
-      const page = ConfirmAbsentPage.visit(appointment)
+      // Given I am on the review page
+      const reviewPage = ReviewPage.visit(appointment)
+
+      // And I submit the form
+      reviewPage.clickSubmit()
+
+      // When I am on the confirm page
+      const page = Page.verifyOnPage(ConfirmAbsentPage, appointment)
 
       // And I click the return to session link
       cy.task('stubFindSession', { session })

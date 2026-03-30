@@ -3,7 +3,6 @@ import test from '../fixtures/appointmentTest'
 import signIn from '../steps/signIn'
 import SessionPage from '../pages/sessionPage'
 import AppointmentPage from '../pages/appointmentPage'
-import StartTimePage from '../pages/appointments/update/startTimePage'
 import ConfirmAbsentPage from '../pages/appointments/update/confirm/confirmAbsentPage'
 import clearSessionData from '../steps/clearSessionData'
 import ReviewPage from '../pages/appointments/update/reviewPage'
@@ -24,10 +23,6 @@ test('Record an absence', async ({ page, supervisorUser, testData, team }) => {
   await appointmentPage.expect.toBeOnThePage()
 
   await appointmentPage.clickNotArrived()
-
-  const startTimePage = new StartTimePage(page, 'absent')
-  await startTimePage.expect.toBeOnThePage()
-  await startTimePage.clickContinue()
 
   const reviewPage = new ReviewPage(page)
   await reviewPage.expect.toBeOnThePage()
