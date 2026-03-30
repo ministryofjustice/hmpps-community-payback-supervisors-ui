@@ -16,5 +16,7 @@ export default configureAllowedScripts({
     'node_modules/playwright/node_modules/fsevents@2.3.2': 'ALLOW',
     // Native solution to quickly resolve module paths, used by jest and eslint
     'node_modules/unrs-resolver@1.11.1': 'ALLOW',
+    // verifies initial installation - https://github.com/naugtur/can-i-ignore-scripts/blob/f198a343f7cf194335ebb068d3f2c00eb065e54c/data.json#L100
+    'node_modules/protobufjs@7.5.4': 'IGNORE',
   },
 })
