@@ -3,6 +3,7 @@ import { GovUkRadioOption, ValidationErrors } from '../../../@types/user-defined
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
 import ReferenceDataService from '../../../services/referenceDataService'
+import { pathWithQuery } from '../../../utils/utils'
 import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './baseAppointmentUpdatePage'
 
 interface ViewData extends AppointmentUpdatePageViewData {
@@ -26,6 +27,7 @@ interface Body {
 
 export default class UnableToWorkPage extends BaseAppointmentUpdatePage<Body> {
   constructor(
+    private readonly formId: string,
     private readonly query: Query = {},
     private readonly inReview: boolean = false,
   ) {
@@ -37,10 +39,13 @@ export default class UnableToWorkPage extends BaseAppointmentUpdatePage<Body> {
   }
 
   protected backPath(appointment: AppointmentDto): string {
-    return paths.appointments.arrived.isAbleToWork({
-      projectCode: appointment.projectCode,
-      appointmentId: appointment.id.toString(),
-    })
+    return pathWithQuery(
+      paths.appointments.arrived.isAbleToWork({
+        projectCode: appointment.projectCode,
+        appointmentId: appointment.id.toString(),
+      }),
+      { form: this.formId },
+    )
   }
 
   protected updatePath(appointment: AppointmentDto): string {

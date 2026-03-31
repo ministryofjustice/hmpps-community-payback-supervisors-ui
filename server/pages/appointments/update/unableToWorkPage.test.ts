@@ -9,6 +9,7 @@ import UnableToWorkPage from './unableToWorkPage'
 jest.mock('../../../models/offender')
 
 describe('UnableToWorkPage', () => {
+  const formId = 'test-form-id'
   const offenderMock: jest.Mock = Offender as unknown as jest.Mock<Offender>
 
   beforeEach(() => {
@@ -33,13 +34,13 @@ describe('UnableToWorkPage', () => {
 
       const { contactOutcomes } = contactOutcomesFactory.build()
 
-      const page = new UnableToWorkPage()
+      const page = new UnableToWorkPage(formId)
       const result = page.viewData(appointment, contactOutcomes)
       expect(result).toEqual({
         notes: undefined,
         isSensitive: undefined,
         offender,
-        backPath: paths.appointments.arrived.isAbleToWork({ appointmentId, projectCode }),
+        backPath: `${paths.appointments.arrived.isAbleToWork({ appointmentId, projectCode })}?form=${formId}`,
         updatePath: paths.appointments.arrived.unableToWork({ appointmentId, projectCode }),
         title: `Why is Sam Smith unable to work today?`,
         items: [
@@ -67,7 +68,7 @@ describe('UnableToWorkPage', () => {
     it('should return path to the confirm unable to work page with project code and appointment Id', () => {
       const appointmentId = '1'
       const projectCode = '2'
-      const page = new UnableToWorkPage()
+      const page = new UnableToWorkPage(formId)
       const result = page.nextPath(appointmentId, projectCode)
 
       expect(result).toEqual(paths.appointments.confirm.unableToWork({ projectCode, appointmentId }))
@@ -77,14 +78,14 @@ describe('UnableToWorkPage', () => {
   describe('validate', () => {
     describe('when unableToWork is not present', () => {
       it('should return true for page.hasError', () => {
-        const page = new UnableToWorkPage({})
+        const page = new UnableToWorkPage(formId, {})
         page.validate()
 
         expect(page.hasErrors).toEqual(true)
       })
 
       it('should return the correct error', () => {
-        const page = new UnableToWorkPage({})
+        const page = new UnableToWorkPage(formId, {})
         page.validate()
 
         expect(page.validationErrors.unableToWork).toEqual({
@@ -103,7 +104,7 @@ describe('UnableToWorkPage', () => {
         contactOutcomeCode: 'AAAA',
         supervisorOfficerCode: '123',
       })
-      const page = new UnableToWorkPage({ unableToWork: 'BBBB' })
+      const page = new UnableToWorkPage(formId, { unableToWork: 'BBBB' })
 
       const result = page.requestBody(appointment)
 
@@ -118,7 +119,7 @@ describe('UnableToWorkPage', () => {
           version: '2',
           contactOutcomeCode: 'AAAA',
         })
-        const page = new UnableToWorkPage({ unableToWork: 'BBBB', notes: 'yyyyy' })
+        const page = new UnableToWorkPage(formId, { unableToWork: 'BBBB', notes: 'yyyyy' })
 
         const result = page.requestBody(appointment)
 
@@ -132,7 +133,7 @@ describe('UnableToWorkPage', () => {
           version: '2',
           contactOutcomeCode: 'AAAA',
         })
-        const page = new UnableToWorkPage({ unableToWork: 'BBBB' })
+        const page = new UnableToWorkPage(formId, { unableToWork: 'BBBB' })
 
         const result = page.requestBody(appointment)
 
@@ -145,7 +146,7 @@ describe('UnableToWorkPage', () => {
         const appointment = appointmentFactory.build({
           sensitive: false,
         })
-        const page = new UnableToWorkPage({ unableToWork: 'BBBB', isSensitive: 'isSensitive' })
+        const page = new UnableToWorkPage(formId, { unableToWork: 'BBBB', isSensitive: 'isSensitive' })
 
         const result = page.requestBody(appointment)
 
@@ -156,7 +157,7 @@ describe('UnableToWorkPage', () => {
         const appointment = appointmentFactory.build({
           sensitive: true,
         })
-        const page = new UnableToWorkPage({ unableToWork: 'BBBB' })
+        const page = new UnableToWorkPage(formId, { unableToWork: 'BBBB' })
 
         const result = page.requestBody(appointment)
 
@@ -167,7 +168,7 @@ describe('UnableToWorkPage', () => {
         const appointment = appointmentFactory.build({
           sensitive: false,
         })
-        const page = new UnableToWorkPage({ unableToWork: 'BBBB' })
+        const page = new UnableToWorkPage(formId, { unableToWork: 'BBBB' })
 
         const result = page.requestBody(appointment)
 
@@ -178,7 +179,7 @@ describe('UnableToWorkPage', () => {
         const appointment = appointmentFactory.build({
           sensitive: undefined,
         })
-        const page = new UnableToWorkPage({ unableToWork: 'BBBB' })
+        const page = new UnableToWorkPage(formId, { unableToWork: 'BBBB' })
 
         const result = page.requestBody(appointment)
 
@@ -191,7 +192,9 @@ describe('UnableToWorkPage', () => {
         it('sets the correct attendance data', () => {
           const appointment = appointmentFactory.build()
 
-          const page = new UnableToWorkPage({ unableToWork: ReferenceDataService.attendedSentHomeBehaviourOutcomeCode })
+          const page = new UnableToWorkPage(formId, {
+            unableToWork: ReferenceDataService.attendedSentHomeBehaviourOutcomeCode,
+          })
 
           const result = page.requestBody(appointment)
 
@@ -210,7 +213,7 @@ describe('UnableToWorkPage', () => {
         it('sets the correct attendance data', () => {
           const appointment = appointmentFactory.build()
 
-          const page = new UnableToWorkPage({
+          const page = new UnableToWorkPage(formId, {
             unableToWork: ReferenceDataService.attendedSentHomeServiceIssuesOutcomeCode,
           })
 
@@ -231,7 +234,9 @@ describe('UnableToWorkPage', () => {
         it('sets the correct attendance data', () => {
           const appointment = appointmentFactory.build()
 
-          const page = new UnableToWorkPage({ unableToWork: ReferenceDataService.attendedFailedToComplyOutcomeCode })
+          const page = new UnableToWorkPage(formId, {
+            unableToWork: ReferenceDataService.attendedFailedToComplyOutcomeCode,
+          })
 
           const result = page.requestBody(appointment)
 
@@ -256,7 +261,7 @@ describe('UnableToWorkPage', () => {
         supervisorOfficerCode: '123',
         sensitive: true,
       })
-      const page = new UnableToWorkPage({ unableToWork: 'BBBB' })
+      const page = new UnableToWorkPage(formId, { unableToWork: 'BBBB' })
 
       const result = page.requestBody(appointment)
 

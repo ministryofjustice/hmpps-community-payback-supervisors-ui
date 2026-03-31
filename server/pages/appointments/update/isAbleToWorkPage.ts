@@ -1,11 +1,13 @@
 import { AppointmentDto } from '../../../@types/shared'
-import { ValidationErrors, YesOrNo } from '../../../@types/user-defined'
+import { AppointmentOutcomeForm, ValidationErrors, YesOrNo } from '../../../@types/user-defined'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
+import { pathWithQuery } from '../../../utils/utils'
 import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './baseAppointmentUpdatePage'
 
 interface ViewData extends AppointmentUpdatePageViewData {
   title: string
+  ableToWork: YesOrNo
 }
 
 interface Query {
@@ -17,15 +19,22 @@ interface Body {
 }
 
 export default class IsAbleToWorkPage extends BaseAppointmentUpdatePage<Body> {
-  constructor(private readonly query: Query = {}) {
+  constructor(
+    private readonly formId: string,
+    private readonly query: Query = {},
+  ) {
     super()
   }
 
   nextPath(appointmentId: string, projectCode: string): string {
     if (this.isAbleToWork()) {
-      return paths.appointments.confirm.working({ projectCode, appointmentId })
+      return pathWithQuery(paths.appointments.completed.endTime({ projectCode, appointmentId }), {
+        form: this.formId,
+      })
     }
-    return paths.appointments.arrived.unableToWork({ projectCode, appointmentId })
+    return pathWithQuery(paths.appointments.arrived.unableToWork({ projectCode, appointmentId }), {
+      form: this.formId,
+    })
   }
 
   isAbleToWork() {
@@ -33,25 +42,40 @@ export default class IsAbleToWorkPage extends BaseAppointmentUpdatePage<Body> {
   }
 
   protected backPath(appointment: AppointmentDto): string {
-    return paths.appointments.arrived.startTime({
-      projectCode: appointment.projectCode,
-      appointmentId: appointment.id.toString(),
-    })
+    return pathWithQuery(
+      paths.appointments.arrived.startTime({
+        projectCode: appointment.projectCode,
+        appointmentId: appointment.id.toString(),
+      }),
+      { form: this.formId },
+    )
   }
 
   protected updatePath(appointment: AppointmentDto): string {
-    return paths.appointments.arrived.isAbleToWork({
-      projectCode: appointment.projectCode,
-      appointmentId: appointment.id.toString(),
-    })
+    return pathWithQuery(
+      paths.appointments.arrived.isAbleToWork({
+        projectCode: appointment.projectCode,
+        appointmentId: appointment.id.toString(),
+      }),
+      { form: this.formId },
+    )
   }
 
-  viewData(appointment: AppointmentDto): ViewData {
+  updatedFormData(formData: AppointmentOutcomeForm): AppointmentOutcomeForm {
+    return {
+      ...formData,
+      ableToWork: this.query.ableToWork,
+    }
+  }
+
+  viewData(appointment: AppointmentDto, formData?: AppointmentOutcomeForm): ViewData {
     const commonViewData = this.commonViewData(appointment)
+    const hasFormBody = this.query.ableToWork !== undefined
 
     return {
       ...commonViewData,
       title: this.getPageTitle(commonViewData.offender),
+      ableToWork: hasFormBody ? this.query.ableToWork : formData?.ableToWork,
     }
   }
 

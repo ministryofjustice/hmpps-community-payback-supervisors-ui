@@ -75,6 +75,7 @@ export type AppointmentOutcomeForm = {
   deliusVersion: string
   startTime: string
   endTime: string
+  ableToWork?: YesOrNo
   contactOutcomeCode?: string
   notes?: string
 }
