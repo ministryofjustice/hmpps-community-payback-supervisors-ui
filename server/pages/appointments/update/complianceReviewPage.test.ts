@@ -55,7 +55,8 @@ describe('ComplianceReviewPage', () => {
 
         const params = { projectCode, appointmentId: appointmentId.toString() }
 
-        const timeChangeLink = link`${paths.appointments.leftEarly.endTime(params)}`
+        const startTimeChangeLink = link`${paths.appointments.arrived.startTime(params)}`
+        const endTimeChangeLink = link`${paths.appointments.leftEarly.endTime(params)}`
         const attendanceChangeLink = link`${paths.appointments.leftEarly.reason(params)}`
         const changeLink = link`${paths.appointments.leftEarly.compliance(params)}`
 
@@ -69,10 +70,17 @@ describe('ComplianceReviewPage', () => {
               },
             ],
             [
-              { text: 'Time' },
+              { text: 'Start time' },
+              { html: '09:00' },
+              {
+                html: startTimeChangeLink,
+              },
+            ],
+            [
+              { text: 'End time' },
               { html: endTime },
               {
-                html: timeChangeLink,
+                html: endTimeChangeLink,
               },
             ],
             [
@@ -169,16 +177,24 @@ describe('ComplianceReviewPage', () => {
 
         const params = { projectCode, appointmentId: appointmentId.toString() }
 
-        const timeChangeLink = link`${paths.appointments.completed.endTime(params)}`
+        const startTimeChangeLink = link`${paths.appointments.arrived.startTime(params)}`
+        const endTimeChangeLink = link`${paths.appointments.completed.endTime(params)}`
         const changeLink = link`${paths.appointments.completed.compliance(params)}`
 
         expect(page.viewData()).toEqual({
           rows: [
             [
-              { text: 'Time' },
+              { text: 'Start time' },
+              { html: '09:00' },
+              {
+                html: startTimeChangeLink,
+              },
+            ],
+            [
+              { text: 'End time' },
               { html: endTime },
               {
-                html: timeChangeLink,
+                html: endTimeChangeLink,
               },
             ],
             [
