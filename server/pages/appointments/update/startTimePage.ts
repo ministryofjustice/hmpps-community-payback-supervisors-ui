@@ -8,7 +8,7 @@ import { pathWithQuery } from '../../../utils/utils'
 import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './baseAppointmentUpdatePage'
 
 interface ViewData extends AppointmentUpdatePageViewData {
-  time: string
+  time?: string
   question: string
   documentTitle: string
 }
@@ -81,13 +81,13 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
     return updated
   }
 
-  viewData(appointment: AppointmentDto, formData: AppointmentOutcomeForm): ViewData {
+  viewData(appointment: AppointmentDto, formData?: AppointmentOutcomeForm): ViewData {
     const commonViewData = this.commonViewData(appointment)
-    const hasFormBody = this.query.time !== undefined
+    const hasQueryBody = this.query.time !== undefined
 
     return {
       ...commonViewData,
-      time: hasFormBody ? this.query.time : formData.startTime,
+      time: hasQueryBody ? this.query.time : formData?.startTime,
       question: this.getPageTitle(commonViewData.offender),
       documentTitle: 'Log start time',
     }
