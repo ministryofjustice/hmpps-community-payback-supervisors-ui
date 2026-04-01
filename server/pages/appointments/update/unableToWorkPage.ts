@@ -121,15 +121,6 @@ export default class UnableToWorkPage extends BaseAppointmentUpdatePage<Body> {
       }
     }
 
-    const willAlertPractitioner = GovUkRadioGroup.nullableValueFromYesOrNoItem(this.query.alertPractitioner)
-
-    if (
-      willAlertPractitioner ||
-      this.query.unableToWork === ReferenceDataService.attendedSentHomeBehaviourOutcomeCode
-    ) {
-      body.alertActive = true
-    }
-
     return body
   }
 
