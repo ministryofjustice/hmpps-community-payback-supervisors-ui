@@ -4,6 +4,7 @@ import IsAbleToWorkPage from '../../pages/appointments/update/isAbleToWorkPage'
 import { generateErrorSummary } from '../../utils/errorUtils'
 import AppointmentStatusService from '../../services/appointmentStatusService'
 import AppointmentFormService from '../../services/appointmentFormService'
+import paths from '../../paths'
 
 export default class IsAbleToWorkController {
   constructor(
@@ -17,6 +18,10 @@ export default class IsAbleToWorkController {
       const { projectCode, appointmentId } = _req.params
       const formId = _req.query.form?.toString()
 
+      if (!formId) {
+        return res.redirect(paths.appointments.arrived.startTime({ projectCode, appointmentId }))
+      }
+
       const appointment = await this.appointmentService.getAppointment({
         projectCode,
         appointmentId,
@@ -26,7 +31,7 @@ export default class IsAbleToWorkController {
       const formData = await this.appointmentFormService.getForm(formId, res.locals.user.username)
       const page = new IsAbleToWorkPage(formId)
 
-      res.render('appointments/update/isAbleToWork', page.viewData(appointment, formData))
+      return res.render('appointments/update/isAbleToWork', page.viewData(appointment, formData))
     }
   }
 
@@ -34,6 +39,10 @@ export default class IsAbleToWorkController {
     return async (_req: Request, res: Response) => {
       const { projectCode, appointmentId } = _req.params
       const formId = _req.query.form?.toString()
+
+      if (!formId) {
+        return res.redirect(paths.appointments.arrived.startTime({ projectCode, appointmentId }))
+      }
 
       const appointment = await this.appointmentService.getAppointment({
         projectCode,

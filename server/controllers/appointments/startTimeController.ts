@@ -106,6 +106,10 @@ export default class StartTimeController {
       }
 
       const formId = _req.query.form?.toString()
+      if (!formId) {
+        return res.redirect(paths.appointments.arrived.startTime({ projectCode, appointmentId }))
+      }
+
       const page = new StartTimePage(action, formId, _req.body)
       const formData = await this.appointmentFormService.getForm(formId, res.locals.user.username)
       page.validate(appointment)
