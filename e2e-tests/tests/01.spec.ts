@@ -2,25 +2,41 @@ import { checkAppointmentOnDelius } from '../steps/delius'
 import test from '../fixtures/appointmentTest'
 import signIn from '../steps/signIn'
 import clearSessionData from '../steps/clearSessionData'
-import recordArrivalAbleToWork from '../steps/recordArrivalAbleToWork'
 import AppointmentPage from '../pages/appointmentPage'
 import EndTimePage from '../pages/appointments/update/endTimePage'
 import CompliancePage from '../pages/appointments/update/compliancePage'
 import ConfirmCompletedPage from '../pages/appointments/update/confirm/confirmCompletedPage'
 import ReviewPage from '../pages/appointments/update/reviewPage'
+import HomePage from '../pages/homePage'
+import SessionPage from '../pages/sessionPage'
+import StartTimePage from '../pages/appointments/update/startTimePage'
+import IsAbleToWorkPage from '../pages/appointments/update/isAbleToWorkPage'
 
-test('Record an appointment which starts and finishes on time', async ({ page, supervisorUser, testData, team }) => {
+test('Record an appointment as arrived and able to work', async ({ page, supervisorUser, testData, team }) => {
   const { person, project } = testData
   await signIn(page, supervisorUser)
   await clearSessionData(page, project)
 
-  // record arrival able to work
-  const sessionPage = await recordArrivalAbleToWork(page, testData, person.getFullName())
+  const homePage = new HomePage(page)
+  await homePage.clickViewDetailsForProject(testData.project.name)
 
-  // record finished on time
+  const sessionPage = new SessionPage(page)
+  await sessionPage.expect.toBeOnThePage()
+  await sessionPage.expect.toShowSessionDetails(testData)
   await sessionPage.clickOnAnAppointmentForPerson(person.getFullName())
+
   const appointmentPage = new AppointmentPage(page)
-  await appointmentPage.clickFinishSession()
+  await appointmentPage.expect.toBeOnThePage()
+  await appointmentPage.clickArrived()
+
+  const startTimePage = new StartTimePage(page, 'arrived')
+  await startTimePage.expect.toBeOnThePage()
+  await startTimePage.clickContinue()
+
+  const isAbleToWorkPage = new IsAbleToWorkPage(page)
+  await isAbleToWorkPage.expect.toBeOnThePage()
+  await isAbleToWorkPage.checkYes()
+  await isAbleToWorkPage.clickContinue()
 
   const endTimePage = new EndTimePage(page, 'completed')
   await endTimePage.expect.toBeOnThePage()
