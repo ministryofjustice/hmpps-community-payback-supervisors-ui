@@ -17,6 +17,7 @@ export default class UnableToWorkController {
   show(): RequestHandler {
     return async (_req: Request, res: Response) => {
       const { projectCode, appointmentId } = _req.params
+      const formId = _req.query.form?.toString()
 
       const appointment = await this.appointmentService.getAppointment({
         projectCode,
@@ -28,7 +29,7 @@ export default class UnableToWorkController {
         res.locals.user.username,
       )
 
-      const page = new UnableToWorkPage(_req.body, true)
+      const page = new UnableToWorkPage(formId, _req.body, true)
 
       res.render('appointments/update/unableToWork', page.viewData(appointment, contactOutcomes.contactOutcomes))
     }
@@ -37,13 +38,15 @@ export default class UnableToWorkController {
   review(): RequestHandler {
     return async (_req: Request, res: Response) => {
       const { projectCode, appointmentId } = _req.params
+      const formId = _req.query.form?.toString()
+
       const appointment = await this.appointmentService.getAppointment({
         projectCode,
         appointmentId,
         username: res.locals.user.username,
       })
 
-      const page = new UnableToWorkPage(_req.body, false)
+      const page = new UnableToWorkPage(formId, _req.body, false)
       page.validate(appointment)
 
       const contactOutcomes = await this.referenceDataService.getAttendedNonWorkingContactOutcomes(
@@ -85,6 +88,7 @@ export default class UnableToWorkController {
   submit(): RequestHandler {
     return async (_req: Request, res: Response) => {
       const { projectCode, appointmentId } = _req.params
+      const formId = _req.query.form?.toString()
 
       const appointment = await this.appointmentService.getAppointment({
         projectCode,
@@ -92,7 +96,7 @@ export default class UnableToWorkController {
         username: res.locals.user.username,
       })
 
-      const page = new UnableToWorkPage(_req.body)
+      const page = new UnableToWorkPage(formId, _req.body)
 
       const payload = page.requestBody(appointment)
 

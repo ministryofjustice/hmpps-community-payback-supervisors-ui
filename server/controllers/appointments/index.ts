@@ -15,10 +15,15 @@ const appointmentControllers = (services: Services) => {
     services.appointmentService,
     services.appointmentStatusService,
   )
-  const startTimeController = new StartTimeController(services.appointmentService, services.appointmentStatusService)
+  const startTimeController = new StartTimeController(
+    services.appointmentService,
+    services.appointmentStatusService,
+    services.appointmentFormService,
+  )
   const isAbleToWorkController = new IsAbleToWorkController(
     services.appointmentService,
     services.appointmentStatusService,
+    services.appointmentFormService,
   )
   const unableToWorkController = new UnableToWorkController(
     services.appointmentService,

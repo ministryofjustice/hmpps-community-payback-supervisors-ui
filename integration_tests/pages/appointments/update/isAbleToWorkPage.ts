@@ -2,6 +2,7 @@ import { AppointmentDto } from '../../../../server/@types/shared'
 import Page from '../../page'
 import Offender from '../../../../server/models/offender'
 import paths from '../../../../server/paths'
+import { pathWithQuery } from '../../../../server/utils/utils'
 
 export default class IsAbleToWorkPage extends Page {
   constructor(appointment: AppointmentDto) {
@@ -10,11 +11,14 @@ export default class IsAbleToWorkPage extends Page {
     super(title)
   }
 
-  static visit(appointment: AppointmentDto): IsAbleToWorkPage {
-    const path = paths.appointments.arrived.isAbleToWork({
-      appointmentId: appointment.id.toString(),
-      projectCode: appointment.projectCode,
-    })
+  static visit(appointment: AppointmentDto, formId: string = 'some-form'): IsAbleToWorkPage {
+    const path = pathWithQuery(
+      paths.appointments.arrived.isAbleToWork({
+        appointmentId: appointment.id.toString(),
+        projectCode: appointment.projectCode,
+      }),
+      { form: formId },
+    )
     cy.visit(path)
 
     return new IsAbleToWorkPage(appointment)

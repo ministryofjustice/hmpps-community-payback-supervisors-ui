@@ -51,23 +51,26 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
   }
 
   requestBody(appointment: AppointmentDto, formData: AppointmentOutcomeForm): UpdateAppointmentOutcomeDto {
-    const data = this.appointmentRequestBody(appointment)
-
     const contactOutcomeCode =
       this.action === 'completed' ? ReferenceDataService.attendedCompliedOutcomeCode : formData.contactOutcomeCode
     return {
-      ...data,
-      ...formData,
-      notes: this.query.notes,
+      deliusId: appointment.id,
+      deliusVersionToUpdate: formData.deliusVersion,
+      alertActive: appointment.alertActive,
+      sensitive: this.query.isSensitive === 'true',
+      startTime: formData.startTime,
+      endTime: formData.endTime,
+      contactOutcomeCode,
       attendanceData: {
-        ...data.attendanceData,
+        ...appointment.attendanceData,
         hiVisWorn: GovUkRadioGroup.valueFromYesOrNoItem(this.query.hiVis),
         workedIntensively: GovUkRadioGroup.valueFromYesOrNoItem(this.query.workedIntensively),
         workQuality: this.query.workQuality,
         behaviour: this.query.behaviour,
       },
-      contactOutcomeCode,
-      sensitive: this.query.isSensitive === 'true',
+      enforcementData: appointment.enforcementData,
+      supervisorOfficerCode: appointment.supervisorOfficerCode,
+      notes: this.query.notes,
     }
   }
 

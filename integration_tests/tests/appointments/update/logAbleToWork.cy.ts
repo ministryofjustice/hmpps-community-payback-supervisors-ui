@@ -13,7 +13,7 @@
 //      Given I am on the able to work page
 //      And I select yes
 //      When I submit the form
-//      Then I am taken to the confirmation page
+//      Then I am taken to the end time page
 //
 //    Scenario: Navigates from confirm working page to session page
 //      Given I am on the confirm working page
@@ -64,7 +64,9 @@ import { AppointmentDto } from '../../../../server/@types/shared'
 import { AppointmentStatus } from '../../../../server/services/appointmentStatusService'
 import sessionSummaryFactory from '../../../../server/testutils/factories/sessionSummaryFactory'
 import supervisorFactory from '../../../../server/testutils/factories/supervisorFactory'
+import appointmentOutcomeFormFactory from '../../../../server/testutils/factories/appointmentOutcomeFormFactory'
 import ReviewPage from '../../../pages/appointments/update/reviewPage'
+import EndTimePage from '../../../pages/appointments/update/endTimePage'
 
 context('Log able to work ', () => {
   let appointment: AppointmentDto
@@ -80,8 +82,11 @@ context('Log able to work ', () => {
 
     const supervisor = supervisorFactory.build()
     const allocations = [sessionSummaryFactory.build({ date: '2025-09-15' })]
+    const formId = 'some-form'
     cy.task('stubFindSupervisor', { supervisor })
     cy.task('stubNextSessions', { sessionSummaries: { allocations }, supervisorTeam: supervisor.unpaidWorkTeams[0] })
+    cy.task('stubSaveAppointmentForm', { formId })
+    cy.task('stubGetAppointmentForm', { form: appointmentOutcomeFormFactory.build(), formId })
 
     cy.signIn()
   })
@@ -113,8 +118,8 @@ context('Log able to work ', () => {
       cy.task('stubSaveStatusesForm', { sessionOrAppointment: appointment })
       page.clickSubmit()
 
-      // Then I am taken to the confirm working page
-      Page.verifyOnPage(ConfirmWorkingPage, appointment)
+      // Then I am taken to the end time page
+      Page.verifyOnPage(EndTimePage, appointment, 'completed')
     })
 
     //  Scenario: Navigates from confirm working page to session page

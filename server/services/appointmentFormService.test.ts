@@ -52,6 +52,7 @@ describe('AppointmentFormService', () => {
 
       const expectedForm = {
         deliusVersion: appointment.version,
+        startTime: appointment.startTime,
         endTime: appointment.endTime,
       }
 

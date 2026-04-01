@@ -33,6 +33,7 @@ import { AppointmentDto } from '../../../../server/@types/shared'
 import { AppointmentStatus } from '../../../../server/services/appointmentStatusService'
 import sessionSummaryFactory from '../../../../server/testutils/factories/sessionSummaryFactory'
 import supervisorFactory from '../../../../server/testutils/factories/supervisorFactory'
+import appointmentOutcomeFormFactory from '../../../../server/testutils/factories/appointmentOutcomeFormFactory'
 import ReviewPage from '../../../pages/appointments/update/reviewPage'
 
 context('Log start time ', () => {
@@ -50,6 +51,8 @@ context('Log start time ', () => {
     const allocations = [sessionSummaryFactory.build({ date: '2025-09-15' })]
     cy.task('stubFindSupervisor', { supervisor })
     cy.task('stubNextSessions', { sessionSummaries: { allocations }, supervisorTeam: supervisor.unpaidWorkTeams[0] })
+    cy.task('stubSaveAppointmentForm')
+    cy.task('stubGetAppointmentForm', { form: appointmentOutcomeFormFactory.build() })
 
     cy.signIn()
   })

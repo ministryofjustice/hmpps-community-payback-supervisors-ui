@@ -49,6 +49,7 @@ import EndTimePage from '../pages/appointments/update/endTimePage'
 import sessionSummaryFactory from '../../server/testutils/factories/sessionSummaryFactory'
 import { AppointmentStatusType } from '../../server/@types/user-defined'
 import supervisorFactory from '../../server/testutils/factories/supervisorFactory'
+import appointmentOutcomeFormFactory from '../../server/testutils/factories/appointmentOutcomeFormFactory'
 
 context('viewAnAppointment', () => {
   beforeEach(() => {
@@ -116,6 +117,8 @@ context('viewAnAppointment', () => {
       cy.signIn()
       cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
       cy.task('stubGetStatusesForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
+      cy.task('stubSaveAppointmentForm')
+      cy.task('stubGetAppointmentForm', { form: appointmentOutcomeFormFactory.build() })
 
       const appointmentPage = AppointmentPage.visit(appointment)
 
@@ -135,6 +138,8 @@ context('viewAnAppointment', () => {
       cy.signIn()
       cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
       cy.task('stubGetStatusesForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
+      cy.task('stubSaveAppointmentForm')
+      cy.task('stubGetAppointmentForm', { form: appointmentOutcomeFormFactory.build() })
 
       const appointmentPage = AppointmentPage.visit(appointment)
 

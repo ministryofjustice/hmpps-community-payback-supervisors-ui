@@ -32,6 +32,7 @@ export default class AppointmentFormService {
         // setting notes and contact outcome as undefined as these should be entered from scratch in the app
         // attendance data does not need to be saved as we will submit at the time of selection
         deliusVersion: appointment.version,
+        startTime: appointment.startTime,
         endTime: appointment.endTime,
       },
     }

@@ -6,6 +6,8 @@ import IsAbleToWorkPage from './isAbleToWorkPage'
 jest.mock('../../../models/offender')
 
 describe('IsAbleToWorkPage', () => {
+  const formId = 'test-form-id'
+
   beforeEach(() => {
     jest.resetAllMocks()
   })
@@ -28,13 +30,14 @@ describe('IsAbleToWorkPage', () => {
         return offender
       })
 
-      const page = new IsAbleToWorkPage()
+      const page = new IsAbleToWorkPage(formId)
       const result = page.viewData(appointment)
       expect(result).toEqual({
         offender,
-        backPath: paths.appointments.arrived.startTime({ appointmentId, projectCode }),
-        updatePath: paths.appointments.arrived.isAbleToWork({ appointmentId, projectCode }),
+        backPath: `${paths.appointments.arrived.startTime({ appointmentId, projectCode })}?form=${formId}`,
+        updatePath: `${paths.appointments.arrived.isAbleToWork({ appointmentId, projectCode })}?form=${formId}`,
         title: `Can Sam Smith work today?`,
+        ableToWork: undefined,
       })
     })
   })
@@ -44,10 +47,10 @@ describe('IsAbleToWorkPage', () => {
       it('should return path to the confirm working page with project code and appointment Id', () => {
         const appointmentId = '1'
         const projectCode = '2'
-        const page = new IsAbleToWorkPage({ ableToWork: 'yes' })
+        const page = new IsAbleToWorkPage(formId, { ableToWork: 'yes' })
         const result = page.nextPath(appointmentId, projectCode)
 
-        expect(result).toEqual(paths.appointments.confirm.working({ projectCode, appointmentId }))
+        expect(result).toEqual(`${paths.appointments.completed.endTime({ projectCode, appointmentId })}?form=${formId}`)
       })
     })
 
@@ -55,10 +58,12 @@ describe('IsAbleToWorkPage', () => {
       it('should return path to the unable to work page with project code and appointment Id', () => {
         const appointmentId = '1'
         const projectCode = '2'
-        const page = new IsAbleToWorkPage({ ableToWork: 'no' })
+        const page = new IsAbleToWorkPage(formId, { ableToWork: 'no' })
         const result = page.nextPath(appointmentId, projectCode)
 
-        expect(result).toEqual(paths.appointments.arrived.unableToWork({ projectCode, appointmentId }))
+        expect(result).toEqual(
+          `${paths.appointments.arrived.unableToWork({ projectCode, appointmentId })}?form=${formId}`,
+        )
       })
     })
   })
@@ -66,14 +71,14 @@ describe('IsAbleToWorkPage', () => {
   describe('validate', () => {
     describe('when ableToWork is not present', () => {
       it('should return true for page.hasError', () => {
-        const page = new IsAbleToWorkPage({})
+        const page = new IsAbleToWorkPage(formId, {})
         page.validate()
 
         expect(page.hasErrors).toEqual(true)
       })
 
       it('should return the correct error', () => {
-        const page = new IsAbleToWorkPage({})
+        const page = new IsAbleToWorkPage(formId, {})
         page.validate()
 
         expect(page.validationErrors.ableToWork).toEqual({
