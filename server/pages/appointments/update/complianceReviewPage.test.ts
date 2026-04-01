@@ -131,7 +131,7 @@ describe('ComplianceReviewPage', () => {
           showWillAlertPractitionerMessage: false,
           alertPractitionerItems: [
             {
-              checked: true,
+              checked: false,
               text: 'Yes',
               value: 'yes',
             },
@@ -258,7 +258,7 @@ describe('ComplianceReviewPage', () => {
           showWillAlertPractitionerMessage: false,
           alertPractitionerItems: [
             {
-              checked: true,
+              checked: false,
               text: 'Yes',
               value: 'yes',
             },

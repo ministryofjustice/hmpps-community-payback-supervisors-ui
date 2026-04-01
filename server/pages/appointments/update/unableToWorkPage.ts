@@ -4,7 +4,6 @@ import Offender from '../../../models/offender'
 import paths from '../../../paths'
 import ReferenceDataService from '../../../services/referenceDataService'
 import { pathWithQuery } from '../../../utils/utils'
-import GovUkRadioGroup from '../../../utils/GovUKFrontend/GovUkRadioGroup'
 import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './baseAppointmentUpdatePage'
 
 interface ViewData extends AppointmentUpdatePageViewData {

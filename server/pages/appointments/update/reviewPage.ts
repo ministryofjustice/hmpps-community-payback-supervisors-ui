@@ -35,9 +35,7 @@ export default class ReviewPage {
       rows: this.buildRows(),
       template: this.template,
       showWillAlertPractitionerMessage: this.showWillAlertPractitionerMessage,
-      alertPractitionerItems: this.showWillAlertPractitionerMessage
-        ? []
-        : GovUkRadioGroup.yesNoItems({ checkedValue: 'yes' }),
+      alertPractitionerItems: this.showWillAlertPractitionerMessage ? [] : GovUkRadioGroup.yesNoItems({}),
     }
   }
 
