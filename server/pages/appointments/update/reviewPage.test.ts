@@ -44,7 +44,7 @@ describe('ReviewPage', () => {
           showWillAlertPractitionerMessage: false,
           alertPractitionerItems: [
             {
-              checked: true,
+              checked: false,
               text: 'Yes',
               value: 'yes',
             },
