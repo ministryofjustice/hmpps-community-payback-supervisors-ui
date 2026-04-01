@@ -7,6 +7,11 @@ UI for Supervisors to track progress on Community Payback
 
 ## Running the application
 
+## Requirements
+
+Node version: [matches project version](./npmrc)
+Npm: ^11.10
+
 ### Using CP stack
 
 In order to spin up a full local stack with the API (integrating with dependent services) use (CP stack)[https://github.com/ministryofjustice/hmpps-community-payback-api/tree/main/tools/cp-stack].
