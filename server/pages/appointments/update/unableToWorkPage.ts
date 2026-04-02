@@ -1,5 +1,5 @@
 import { AppointmentDto, ContactOutcomeDto, UpdateAppointmentOutcomeDto } from '../../../@types/shared'
-import { GovUkRadioOption, ValidationErrors } from '../../../@types/user-defined'
+import { GovUkRadioOption, ValidationErrors, YesOrNo } from '../../../@types/user-defined'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
 import ReferenceDataService from '../../../services/referenceDataService'
@@ -17,6 +17,7 @@ interface Query {
   unableToWork?: string
   notes?: string
   isSensitive?: string
+  alertPractitioner?: YesOrNo
 }
 
 interface Body {

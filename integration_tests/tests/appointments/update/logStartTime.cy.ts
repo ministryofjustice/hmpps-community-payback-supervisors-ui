@@ -91,6 +91,41 @@ context('Log start time ', () => {
 
   //  Scenario: Absent
   describe('absent', () => {
+    //  Scenario: Validates time entered
+    it('validates the time entered on submit', () => {
+      // Given I am on the start time page for an absent form
+      const page = StartTimePage.visit(appointment, 'absent')
+
+      // When I submit an invalid time
+      page.clearTime()
+      page.clickSubmit()
+
+      // Then I see the same page with errors
+      Page.verifyOnPage(StartTimePage, appointment, 'absent')
+      page.shouldShowValidationErrors()
+      page.shouldHaveTimeValue('')
+    })
+
+    //  Scenario: Submitting a valid time
+    it('submits start time and navigates to next page', () => {
+      // Given I am on the start time page for an absent form
+      const page = StartTimePage.visit(appointment, 'absent')
+
+      // When I submit a valid time
+      cy.task('stubUpdateAppointmentOutcome', { appointment })
+      cy.task('stubSaveStatusesForm', { sessionOrAppointment: appointment })
+      page.enterTime('09:30')
+      page.clickSubmit()
+
+      // And I continue from the review page
+      const reviewPage = Page.verifyOnPage(ReviewPage)
+      reviewPage.shouldShowAlertPractitionerMessage()
+      reviewPage.clickSubmit()
+
+      // Then I see the next form page
+      Page.verifyOnPage(ConfirmAbsentPage, appointment)
+    })
+
     //  Scenario: Navigates from confirm absent page to session page
     it('navigates from confirm absent page to session page', () => {
       const appointmentSummaries = appointmentSummaryFactory.buildList(3)
