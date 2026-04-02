@@ -17,5 +17,7 @@ generic-service:
     AUDIT_ENABLED: 'false'
     CLEAR_SESSION_STATUSES_ENABLED: 'true'
 
+  allowlist: null
+
 generic-prometheus-alerts:
   alertSeverity: hmpps-community-payback-nonprod
