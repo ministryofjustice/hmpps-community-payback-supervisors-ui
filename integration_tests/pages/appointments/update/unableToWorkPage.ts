@@ -1,6 +1,7 @@
 import { AppointmentDto } from '../../../../server/@types/shared'
 import paths from '../../../../server/paths'
 import Offender from '../../../../server/models/offender'
+import { pathWithQuery } from '../../../../server/utils/utils'
 import PageWithNotes from './base/pageWithNotes'
 
 export default class UnableToWorkPage extends PageWithNotes {
@@ -10,11 +11,15 @@ export default class UnableToWorkPage extends PageWithNotes {
     super(title, 'Add notes')
   }
 
-  static visit(appointment: AppointmentDto): UnableToWorkPage {
-    const path = paths.appointments.arrived.unableToWork({
-      appointmentId: appointment.id.toString(),
-      projectCode: appointment.projectCode,
-    })
+  static visit(appointment: AppointmentDto, formId: string): UnableToWorkPage {
+    const path = pathWithQuery(
+      paths.appointments.arrived.unableToWork({
+        appointmentId: appointment.id.toString(),
+        projectCode: appointment.projectCode,
+      }),
+      { form: formId },
+    )
+
     cy.visit(path)
 
     return new UnableToWorkPage(appointment)

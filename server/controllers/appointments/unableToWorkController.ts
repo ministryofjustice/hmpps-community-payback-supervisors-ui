@@ -5,19 +5,26 @@ import paths from '../../paths'
 import UnableToWorkPage from '../../pages/appointments/update/unableToWorkPage'
 import ReferenceDataService from '../../services/referenceDataService'
 import AppointmentStatusService from '../../services/appointmentStatusService'
+import AppointmentFormService from '../../services/appointmentFormService'
 import ReviewPage from '../../pages/appointments/update/reviewPage'
+import { pathWithQuery } from '../../utils/utils'
 
 export default class UnableToWorkController {
   constructor(
     private readonly appointmentService: AppointmentService,
     private readonly appointmentStatusService: AppointmentStatusService,
     private readonly referenceDataService: ReferenceDataService,
+    private readonly appointmentFormService: AppointmentFormService,
   ) {}
 
   show(): RequestHandler {
     return async (_req: Request, res: Response) => {
       const { projectCode, appointmentId } = _req.params
       const formId = _req.query.form?.toString()
+
+      if (!formId) {
+        return res.redirect(paths.appointments.arrived.startTime({ projectCode, appointmentId }))
+      }
 
       const appointment = await this.appointmentService.getAppointment({
         projectCode,
@@ -31,7 +38,7 @@ export default class UnableToWorkController {
 
       const page = new UnableToWorkPage(formId, _req.body, true)
 
-      res.render('appointments/update/unableToWork', page.viewData(appointment, contactOutcomes.contactOutcomes))
+      return res.render('appointments/update/unableToWork', page.viewData(appointment, contactOutcomes.contactOutcomes))
     }
   }
 
@@ -39,6 +46,10 @@ export default class UnableToWorkController {
     return async (_req: Request, res: Response) => {
       const { projectCode, appointmentId } = _req.params
       const formId = _req.query.form?.toString()
+
+      if (!formId) {
+        return res.redirect(paths.appointments.arrived.startTime({ projectCode, appointmentId }))
+      }
 
       const appointment = await this.appointmentService.getAppointment({
         projectCode,
@@ -61,7 +72,23 @@ export default class UnableToWorkController {
         })
       }
 
+      const formData = await this.appointmentFormService.getForm(formId, res.locals.user.username)
+
+      const endTimeChangeUrl = pathWithQuery(paths.appointments.arrived.endTime({ projectCode, appointmentId }), {
+        form: formId,
+      })
+
+      const startTimeChangeUrl = pathWithQuery(paths.appointments.arrived.startTime({ projectCode, appointmentId }), {
+        form: formId,
+      })
+
+      const outcomeChangeUrl = pathWithQuery(paths.appointments.arrived.unableToWork({ projectCode, appointmentId }), {
+        form: formId,
+      })
+
       const reviewData = {
+        'Start time': { value: formData?.startTime, changeUrl: startTimeChangeUrl },
+        'End time': { value: formData?.endTime, changeUrl: endTimeChangeUrl },
         Attendance: contactOutcomes.contactOutcomes.find(outcome => {
           return outcome.code === _req.body.unableToWork
         }).name,
@@ -71,12 +98,7 @@ export default class UnableToWorkController {
           : 'Can be shared with person on probation',
       }
 
-      const reviewPage = new ReviewPage(
-        'unableToWork',
-        'Cannot work',
-        reviewData,
-        paths.appointments.arrived.unableToWork({ projectCode, appointmentId }),
-      )
+      const reviewPage = new ReviewPage('unableToWork', 'Cannot work', reviewData, outcomeChangeUrl)
 
       return res.render('appointments/update/review', {
         ...page.viewData(appointment, contactOutcomes.contactOutcomes),
@@ -90,6 +112,10 @@ export default class UnableToWorkController {
       const { projectCode, appointmentId } = _req.params
       const formId = _req.query.form?.toString()
 
+      if (!formId) {
+        return res.redirect(paths.appointments.arrived.startTime({ projectCode, appointmentId }))
+      }
+
       const appointment = await this.appointmentService.getAppointment({
         projectCode,
         appointmentId,
@@ -98,7 +124,8 @@ export default class UnableToWorkController {
 
       const page = new UnableToWorkPage(formId, _req.body)
 
-      const payload = page.requestBody(appointment)
+      const formData = await this.appointmentFormService.getForm(formId, res.locals.user.username)
+      const payload = page.requestBody(appointment, formData)
 
       await this.appointmentService.saveAppointment({
         username: res.locals.user.username,

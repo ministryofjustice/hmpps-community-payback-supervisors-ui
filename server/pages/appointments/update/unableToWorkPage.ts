@@ -1,5 +1,5 @@
 import { AppointmentDto, ContactOutcomeDto, UpdateAppointmentOutcomeDto } from '../../../@types/shared'
-import { GovUkRadioOption, ValidationErrors } from '../../../@types/user-defined'
+import { AppointmentOutcomeForm, GovUkRadioOption, ValidationErrors } from '../../../@types/user-defined'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
 import ReferenceDataService from '../../../services/referenceDataService'
@@ -40,7 +40,7 @@ export default class UnableToWorkPage extends BaseAppointmentUpdatePage<Body> {
 
   protected backPath(appointment: AppointmentDto): string {
     return pathWithQuery(
-      paths.appointments.arrived.isAbleToWork({
+      paths.appointments.arrived.endTime({
         projectCode: appointment.projectCode,
         appointmentId: appointment.id.toString(),
       }),
@@ -56,10 +56,13 @@ export default class UnableToWorkPage extends BaseAppointmentUpdatePage<Body> {
       path = paths.appointments.arrived.unableToWork
     }
 
-    return path({
-      projectCode: appointment.projectCode,
-      appointmentId: appointment.id.toString(),
-    })
+    return pathWithQuery(
+      path({
+        projectCode: appointment.projectCode,
+        appointmentId: appointment.id.toString(),
+      }),
+      { form: this.formId },
+    )
   }
 
   viewData(appointment: AppointmentDto, contactOutcomes: ContactOutcomeDto[]): ViewData {
@@ -87,11 +90,19 @@ export default class UnableToWorkPage extends BaseAppointmentUpdatePage<Body> {
     return errors
   }
 
-  requestBody(appointment: AppointmentDto): UpdateAppointmentOutcomeDto {
+  requestBody(appointment: AppointmentDto, formData?: AppointmentOutcomeForm): UpdateAppointmentOutcomeDto {
     const body: UpdateAppointmentOutcomeDto = {
       ...this.appointmentRequestBody(appointment),
       contactOutcomeCode: this.query.unableToWork,
       notes: this.query.notes || null,
+    }
+
+    if (formData?.endTime) {
+      body.endTime = formData.endTime
+    }
+
+    if (formData?.startTime) {
+      body.startTime = formData.startTime
     }
 
     if (this.query.isSensitive) {
