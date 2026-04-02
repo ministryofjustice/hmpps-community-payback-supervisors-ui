@@ -1,5 +1,5 @@
 import { AppointmentDto } from '../../../@types/shared'
-import { AppointmentCompletedAction, AppointmentOutcomeForm, ValidationErrors } from '../../../@types/user-defined'
+import { AppointmentEndTimeAction, AppointmentOutcomeForm, ValidationErrors } from '../../../@types/user-defined'
 import InvalidUpdateActionError from '../../../errors/invalidUpdateActionError'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
@@ -23,7 +23,7 @@ interface Body {
 
 export default class EndTimePage extends BaseAppointmentUpdatePage<Body> {
   constructor(
-    private readonly action: AppointmentCompletedAction,
+    private readonly action: AppointmentEndTimeAction,
     private formId: string,
     private readonly query: Query = {},
   ) {
@@ -33,6 +33,12 @@ export default class EndTimePage extends BaseAppointmentUpdatePage<Body> {
   nextPath(appointmentId: string, projectCode: string): string {
     if (this.action === 'leftEarly') {
       return pathWithQuery(paths.appointments.leftEarly.reason({ projectCode, appointmentId }), { form: this.formId })
+    }
+
+    if (this.action === 'arrived') {
+      return pathWithQuery(paths.appointments.arrived.unableToWork({ projectCode, appointmentId }), {
+        form: this.formId,
+      })
     }
 
     return pathWithQuery(
@@ -110,6 +116,10 @@ export default class EndTimePage extends BaseAppointmentUpdatePage<Body> {
 
     if (this.action === 'leftEarly') {
       return `You're logging out ${offender.name} early today at:`
+    }
+
+    if (this.action === 'arrived') {
+      return `You're logging ${offender.name} as having left at:`
     }
 
     throw new InvalidUpdateActionError(`Invalid update appointment action: ${this.action}`)

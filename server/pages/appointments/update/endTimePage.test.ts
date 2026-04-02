@@ -1,5 +1,5 @@
 import { AppointmentDto } from '../../../@types/shared'
-import { AppointmentCompletedAction, AppointmentOutcomeForm } from '../../../@types/user-defined'
+import { AppointmentEndTimeAction, AppointmentOutcomeForm } from '../../../@types/user-defined'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
 import appointmentFactory from '../../../testutils/factories/appointmentFactory'
@@ -88,6 +88,35 @@ describe('EndTimePage', () => {
       const result = page.viewData(appointment, form)
       expect(result.question).toBe("You're logging out Sam Smith early today at:")
     })
+
+    it('returns end time update path if action is arrived', () => {
+      const appointment = appointmentFactory.build()
+      const page = new EndTimePage('arrived', formId)
+      const result = page.viewData(appointment, form)
+      expect(result.updatePath).toBe(
+        `${paths.appointments.arrived.endTime({
+          projectCode: appointment.projectCode,
+          appointmentId: appointment.id.toString(),
+        })}?form=${formId}`,
+      )
+    })
+
+    it('returns the arrived title if action is arrived', () => {
+      const offender = {
+        name: 'Sam Smith',
+        crn: 'CRN123',
+        isLimited: false,
+      }
+
+      offenderMock.mockImplementation(() => {
+        return offender
+      })
+
+      const appointment = appointmentFactory.build()
+      const page = new EndTimePage('arrived', formId)
+      const result = page.viewData(appointment, form)
+      expect(result.question).toBe("You're logging Sam Smith as having left at:")
+    })
   })
 
   describe('next', () => {
@@ -115,6 +144,19 @@ describe('EndTimePage', () => {
         const result = page.nextPath(appointmentId, projectCode)
 
         expect(result).toEqual(`${paths.appointments.leftEarly.reason({ projectCode, appointmentId })}?form=${formId}`)
+      })
+    })
+
+    describe('arrived', () => {
+      it('should be arrived unable to work path with project code and appointment Id', () => {
+        const appointmentId = '1'
+        const projectCode = '2'
+        const page = new EndTimePage('arrived', formId)
+        const result = page.nextPath(appointmentId, projectCode)
+
+        expect(result).toEqual(
+          `${paths.appointments.arrived.unableToWork({ projectCode, appointmentId })}?form=${formId}`,
+        )
       })
     })
   })
@@ -231,13 +273,16 @@ describe('EndTimePage', () => {
   })
 
   describe('updatedFormData', () => {
-    it.each(['completed', 'leftEarly'])('returns endTime query value', (action: AppointmentCompletedAction) => {
-      const form = appointmentOutcomeFormFactory.build()
-      const page = new EndTimePage(action, formId, { time: '16:00' })
+    it.each(['completed', 'leftEarly', 'arrived'])(
+      'returns endTime query value',
+      (action: AppointmentEndTimeAction) => {
+        const form = appointmentOutcomeFormFactory.build()
+        const page = new EndTimePage(action, formId, { time: '16:00' })
 
-      const result = page.updatedFormData(form)
+        const result = page.updatedFormData(form)
 
-      expect(result).toEqual({ ...form, endTime: '16:00' })
-    })
+        expect(result).toEqual({ ...form, endTime: '16:00' })
+      },
+    )
   })
 })

@@ -11,7 +11,7 @@ export default class IsAbleToWorkPage extends Page {
     super(title)
   }
 
-  static visit(appointment: AppointmentDto, formId: string = 'some-form'): IsAbleToWorkPage {
+  static visit(appointment: AppointmentDto, formId: string): IsAbleToWorkPage {
     const path = pathWithQuery(
       paths.appointments.arrived.isAbleToWork({
         appointmentId: appointment.id.toString(),

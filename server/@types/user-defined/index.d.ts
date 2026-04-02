@@ -42,6 +42,8 @@ export type AppointmentArrivedAction = 'arrived' | 'absent'
 
 export type AppointmentCompletedAction = 'completed' | 'leftEarly'
 
+export type AppointmentEndTimeAction = AppointmentCompletedAction | 'arrived'
+
 export type AppointmentStatusType =
   | 'Scheduled'
   | 'Working'

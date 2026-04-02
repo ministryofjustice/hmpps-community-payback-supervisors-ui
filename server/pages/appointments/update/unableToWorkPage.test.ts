@@ -40,8 +40,8 @@ describe('UnableToWorkPage', () => {
         notes: undefined,
         isSensitive: undefined,
         offender,
-        backPath: `${paths.appointments.arrived.isAbleToWork({ appointmentId, projectCode })}?form=${formId}`,
-        updatePath: paths.appointments.arrived.unableToWork({ appointmentId, projectCode }),
+        backPath: `${paths.appointments.arrived.endTime({ appointmentId, projectCode })}?form=${formId}`,
+        updatePath: `${paths.appointments.arrived.unableToWork({ appointmentId, projectCode })}?form=${formId}`,
         title: `Why is Sam Smith unable to work today?`,
         items: [
           {
@@ -109,6 +109,55 @@ describe('UnableToWorkPage', () => {
       const result = page.requestBody(appointment)
 
       expect(result.contactOutcomeCode).toEqual('BBBB')
+    })
+
+    it('returns the endTime from formData when provided', () => {
+      const appointment = appointmentFactory.build({
+        endTime: '17:00',
+      })
+
+      const formData = { deliusVersion: '1', startTime: '09:00', endTime: '15:30' }
+
+      const page = new UnableToWorkPage(formId, { unableToWork: 'BBBB' })
+
+      const result = page.requestBody(appointment, formData)
+
+      expect(result.endTime).toEqual(formData.endTime)
+    })
+
+    it('returns the appointment endTime when formData is not provided', () => {
+      const appointment = appointmentFactory.build({
+        endTime: '17:00',
+      })
+      const page = new UnableToWorkPage(formId, { unableToWork: 'BBBB' })
+
+      const result = page.requestBody(appointment)
+
+      expect(result.endTime).toEqual('17:00')
+    })
+
+    it('returns the startTime from formData when provided', () => {
+      const appointment = appointmentFactory.build({
+        startTime: '09:00',
+      })
+
+      const formData = { deliusVersion: '1', startTime: '08:30', endTime: '17:00' }
+      const page = new UnableToWorkPage(formId, { unableToWork: 'BBBB' })
+
+      const result = page.requestBody(appointment, formData)
+
+      expect(result.startTime).toEqual(formData.startTime)
+    })
+
+    it('returns the appointment startTime when formData is not provided', () => {
+      const appointment = appointmentFactory.build({
+        startTime: '09:00',
+      })
+      const page = new UnableToWorkPage(formId, { unableToWork: 'BBBB' })
+
+      const result = page.requestBody(appointment)
+
+      expect(result.startTime).toEqual('09:00')
     })
 
     describe('notes', () => {

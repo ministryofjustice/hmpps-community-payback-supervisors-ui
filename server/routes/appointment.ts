@@ -90,6 +90,26 @@ export default function appointmentRoutes(
     await handler(req, res, next)
   })
 
+  router.get(paths.appointments.arrived.endTime.pattern, async (req, res, next) => {
+    await auditService.logPageView(Page.SHOW_APPOINTMENT_ARRIVED_END_TIME_PAGE, {
+      who: res.locals.user.username,
+      correlationId: req.id,
+    })
+
+    const handler = appointments.endTimeController.show('arrived')
+    await handler(req, res, next)
+  })
+
+  router.post(paths.appointments.arrived.endTime.pattern, async (req, res, next) => {
+    await auditService.logPageView(Page.SUBMIT_APPOINTMENT_ARRIVED_END_TIME_PAGE, {
+      who: res.locals.user.username,
+      correlationId: req.id,
+    })
+
+    const handler = appointments.endTimeController.submit('arrived')
+    await handler(req, res, next)
+  })
+
   router.get(paths.appointments.arrived.unableToWork.pattern, async (req, res, next) => {
     await auditService.logPageView(Page.SHOW_APPOINTMENT_UNABLE_TO_WORK_PAGE, {
       who: res.locals.user.username,

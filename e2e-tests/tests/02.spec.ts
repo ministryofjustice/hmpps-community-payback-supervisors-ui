@@ -9,6 +9,7 @@ import UnableToWorkPage from '../pages/appointments/update/unableToWorkPage'
 import ConfirmUnableToWorkPage from '../pages/appointments/update/confirm/confirmUnableToWorkPage'
 import clearSessionData from '../steps/clearSessionData'
 import ReviewPage from '../pages/appointments/update/reviewPage'
+import EndTimePage from '../pages/appointments/update/endTimePage'
 
 test('Record an arrival and log as unable to work', async ({ page, supervisorUser, testData, team }) => {
   const { person, project } = testData
@@ -35,6 +36,10 @@ test('Record an arrival and log as unable to work', async ({ page, supervisorUse
   await isAbleToWorkPage.expect.toBeOnThePage()
   await isAbleToWorkPage.checkNo()
   await isAbleToWorkPage.clickContinue()
+
+  const endTimePage = new EndTimePage(page, 'arrived')
+  await endTimePage.expect.toBeOnThePage()
+  await endTimePage.clickContinue()
 
   const unableToWorkPage = new UnableToWorkPage(page)
   await unableToWorkPage.expect.toBeOnThePage()

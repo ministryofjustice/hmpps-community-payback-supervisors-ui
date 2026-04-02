@@ -32,7 +32,7 @@ export default class IsAbleToWorkPage extends BaseAppointmentUpdatePage<Body> {
         form: this.formId,
       })
     }
-    return pathWithQuery(paths.appointments.arrived.unableToWork({ projectCode, appointmentId }), {
+    return pathWithQuery(paths.appointments.arrived.endTime({ projectCode, appointmentId }), {
       form: this.formId,
     })
   }
