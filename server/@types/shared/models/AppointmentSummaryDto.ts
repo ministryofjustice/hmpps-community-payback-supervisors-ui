@@ -7,6 +7,9 @@ import type { OffenderFullDto } from './OffenderFullDto';
 import type { OffenderLimitedDto } from './OffenderLimitedDto';
 import type { OffenderNotFoundDto } from './OffenderNotFoundDto';
 export type AppointmentSummaryDto = {
+    /**
+     * The NDelius Appointment ID
+     */
     id: number;
     /**
      * How many community payback minutes the offender is required to complete
@@ -25,9 +28,15 @@ export type AppointmentSummaryDto = {
      */
     completedMinutes: number;
     offender: (OffenderFullDto | OffenderLimitedDto | OffenderNotFoundDto);
-    date?: string;
-    startTime?: string;
-    endTime?: string;
+    date: string;
+    startTime: string;
+    endTime: string;
+    minutesCredited?: number;
     daysOverdue?: number;
+    projectName: string;
+    projectCode: string;
+    projectTypeName: string;
+    projectTypeCode: string;
+    notes?: string;
 };
 

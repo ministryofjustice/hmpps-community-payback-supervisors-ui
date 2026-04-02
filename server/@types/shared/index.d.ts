@@ -3,6 +3,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
+export type { AdjustmentReasonDto } from './models/AdjustmentReasonDto';
+export type { AdjustmentReasonsDto } from './models/AdjustmentReasonsDto';
 export type { AppointmentDto } from './models/AppointmentDto';
 export type { AppointmentSummaryDto } from './models/AppointmentSummaryDto';
 export type { AttendanceDataDto } from './models/AttendanceDataDto';
