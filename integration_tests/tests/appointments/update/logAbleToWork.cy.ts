@@ -25,8 +25,7 @@
 //      Given I am on the able to work page
 //      And I select no
 //      When I submit the form
-//      And I continue from the review page
-//      Then I am taken to the unable to work reason page
+//      Then I am taken to the end time page
 //
 //    Scenario: Validates the unable to work reason form
 //      Given I am on the unable to work reason page
@@ -71,6 +70,7 @@ import EndTimePage from '../../../pages/appointments/update/endTimePage'
 context('Log able to work ', () => {
   let appointment: AppointmentDto
   let appointmentStatus: AppointmentStatus
+  const formId = 'some-form'
 
   beforeEach(() => {
     appointment = appointmentFactory.build()
@@ -82,7 +82,7 @@ context('Log able to work ', () => {
 
     const supervisor = supervisorFactory.build()
     const allocations = [sessionSummaryFactory.build({ date: '2025-09-15' })]
-    const formId = 'some-form'
+
     cy.task('stubFindSupervisor', { supervisor })
     cy.task('stubNextSessions', { sessionSummaries: { allocations }, supervisorTeam: supervisor.unpaidWorkTeams[0] })
     cy.task('stubSaveAppointmentForm', { formId })
@@ -94,7 +94,7 @@ context('Log able to work ', () => {
   //  Scenario: validates form
   it('validates the form', () => {
     // Given I am on the able to work page
-    const page = IsAbleToWorkPage.visit(appointment)
+    const page = IsAbleToWorkPage.visit(appointment, formId)
 
     // When I submit without selecting an answer
     page.clickSubmit()
@@ -109,7 +109,7 @@ context('Log able to work ', () => {
     //  Scenario: Confirms the person can work
     it('submits form and navigates to confirmation page', () => {
       // Given I am on the able to work page
-      const page = IsAbleToWorkPage.visit(appointment)
+      const page = IsAbleToWorkPage.visit(appointment, formId)
 
       // And I select yes
       page.selectYes()
@@ -153,11 +153,11 @@ context('Log able to work ', () => {
   //  Context: when the person is not able to work
   describe('when the person is not able to work', () => {
     //  Scenario: Confirms the person cannot work
-    it('submits form and navigates to unable to work page', function test() {
+    it('submits form and navigates to end time page', function test() {
       // Given I am on the able to work page
       cy.task('stubGetContactOutcomes')
 
-      const page = IsAbleToWorkPage.visit(appointment)
+      const page = IsAbleToWorkPage.visit(appointment, formId)
 
       // And I select no
       page.selectNo()
@@ -165,8 +165,8 @@ context('Log able to work ', () => {
       // When I submit the form
       page.clickSubmit()
 
-      // Then I am taken to the unable to work reason page
-      Page.verifyOnPage(UnableToWorkPage, appointment)
+      // Then I am taken to the end time page
+      Page.verifyOnPage(EndTimePage, appointment, 'arrived')
     })
 
     //  Scenario: validates form
@@ -174,7 +174,7 @@ context('Log able to work ', () => {
       // Given I am on the unable to work page
       cy.task('stubGetContactOutcomes')
 
-      const page = UnableToWorkPage.visit(appointment)
+      const page = UnableToWorkPage.visit(appointment, formId)
 
       // And I do not select a reason
 
@@ -199,7 +199,7 @@ context('Log able to work ', () => {
       cy.task('stubGetContactOutcomes')
       cy.task('stubUpdateAppointmentOutcome', { appointment })
 
-      const page = UnableToWorkPage.visit(appointment)
+      const page = UnableToWorkPage.visit(appointment, formId)
 
       // And I select a reason
       page.selectSentHomeServiceIssues()
