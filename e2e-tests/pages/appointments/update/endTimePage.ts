@@ -2,7 +2,7 @@
 
 import { Page, expect } from '@playwright/test'
 import BasePage from '../../basePage'
-import { AppointmentCompletedAction } from '../../../../server/@types/user-defined'
+import { AppointmentEndTimeAction } from '../../../../server/@types/user-defined'
 
 export default class EndTimePage extends BasePage {
   readonly titleText = this.getExpectedTitlePattern()
@@ -11,16 +11,20 @@ export default class EndTimePage extends BasePage {
 
   constructor(
     readonly page: Page,
-    private readonly action: AppointmentCompletedAction,
+    private readonly action: AppointmentEndTimeAction,
   ) {
     super(page)
     this.expect = new EndTimePageAssertions(this)
   }
 
   getExpectedTitlePattern() {
-    return this.action === 'completed'
-      ? /You're logging (.*) as finishing today at:/
-      : /You're logging out (.*) early today at:/
+    if (this.action === 'completed') {
+      return /You're logging (.*) as finishing today at:/
+    }
+    if (this.action === 'leftEarly') {
+      return /You're logging out (.*) early today at:/
+    }
+    return /You're logging (.*) as having left at:/
   }
 }
 

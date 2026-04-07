@@ -55,15 +55,13 @@ describe('IsAbleToWorkPage', () => {
     })
 
     describe('when ableToWork is "no"', () => {
-      it('should return path to the unable to work page with project code and appointment Id', () => {
+      it('should return path to the end time page with project code and appointment Id', () => {
         const appointmentId = '1'
         const projectCode = '2'
         const page = new IsAbleToWorkPage(formId, { ableToWork: 'no' })
         const result = page.nextPath(appointmentId, projectCode)
 
-        expect(result).toEqual(
-          `${paths.appointments.arrived.unableToWork({ projectCode, appointmentId })}?form=${formId}`,
-        )
+        expect(result).toEqual(`${paths.appointments.arrived.endTime({ projectCode, appointmentId })}?form=${formId}`)
       })
     })
   })
