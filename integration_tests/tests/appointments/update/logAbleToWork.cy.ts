@@ -193,7 +193,7 @@ context('Log able to work ', () => {
       page.shouldShowSubmittedNotes()
     })
 
-    // Scenario: Confirms the reason the person cannot work
+    // Scenario: Confirms the reason the person cannot work (service issues)
     it('submits form and navigates to confirm unable to work page', function test() {
       // Given I am on the unable to work page
       cy.task('stubGetContactOutcomes')
@@ -216,6 +216,37 @@ context('Log able to work ', () => {
 
       // And I continue from the review page
       const reviewPage = Page.verifyOnPage(ReviewPage)
+      reviewPage.shouldNotShowAlertPractitionerMessage()
+      reviewPage.clickSubmit()
+
+      // Then I am taken to the confirm unable to work page
+      Page.verifyOnPage(ConfirmUnableToWorkPage, appointment)
+    })
+
+    // Scenario: Confirms the reason the person cannot work (behaviour)
+    it('submits form and navigates to confirm unable to work page', function test() {
+      // Given I am on the unable to work page
+      cy.task('stubGetContactOutcomes')
+      cy.task('stubUpdateAppointmentOutcome', { appointment })
+
+      const page = UnableToWorkPage.visit(appointment)
+
+      // And I select a reason
+      page.selectSentHomeBehaviour()
+
+      // And I enter a note 4000 characters long
+      page.enterNotesWithCharacterLength(4000)
+
+      // And I check "This information is not to be shared with the person on probation"
+      page.checkSensitiveInformation()
+
+      // When I submit the form
+      cy.task('stubSaveStatusesForm', { sessionOrAppointment: appointment })
+      page.clickSubmit()
+
+      // And I continue from the review page
+      const reviewPage = Page.verifyOnPage(ReviewPage)
+      reviewPage.shouldShowAlertPractitionerMessage()
       reviewPage.clickSubmit()
 
       // Then I am taken to the confirm unable to work page

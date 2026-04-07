@@ -61,10 +61,14 @@ export default class UnableToWorkController {
         })
       }
 
+      const outcome = contactOutcomes.contactOutcomes.find(_outcome => {
+        return _outcome.code === _req.body.unableToWork
+      })
+
+      const showWillAlertPractitionerMessage = outcome.willAlertEnforcementDiary
+
       const reviewData = {
-        Attendance: contactOutcomes.contactOutcomes.find(outcome => {
-          return outcome.code === _req.body.unableToWork
-        }).name,
+        Attendance: outcome.name,
         Notes: _req.body.notes,
         Sensitivity: _req.body.isSensitive
           ? 'Cannot be shared with person on probation'
@@ -75,6 +79,7 @@ export default class UnableToWorkController {
         'unableToWork',
         'Cannot work',
         reviewData,
+        showWillAlertPractitionerMessage,
         paths.appointments.arrived.unableToWork({ projectCode, appointmentId }),
       )
 

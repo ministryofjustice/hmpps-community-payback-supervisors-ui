@@ -1,5 +1,6 @@
-import { AppointmentStatusType } from '../../../@types/user-defined'
+import { AppointmentStatusType, GovUkRadioOption } from '../../../@types/user-defined'
 import AppointmentUtils from '../../../utils/appointmentUtils'
+import GovUkRadioGroup from '../../../utils/GovUKFrontend/GovUkRadioGroup'
 import StatusTagUtils from '../../../utils/GovUKFrontend/statusTagUtils'
 
 export type ReviewItem = Record<string, string | { value: string; changeUrl: string }>
@@ -14,6 +15,8 @@ type OutputItem = {
 interface ViewData {
   rows: OutputRow[]
   template: string
+  showWillAlertPractitionerMessage: boolean
+  alertPractitionerItems: GovUkRadioOption[]
 }
 
 export default class ReviewPage {
@@ -21,6 +24,7 @@ export default class ReviewPage {
     private readonly template: string,
     private readonly outcome: AppointmentStatusType,
     private readonly reviewFields: ReviewItem,
+    private readonly showWillAlertPractitionerMessage: boolean,
     protected changeUrl?: string,
   ) {
     this.template = `./${this.template}.njk`
@@ -30,6 +34,8 @@ export default class ReviewPage {
     return {
       rows: this.buildRows(),
       template: this.template,
+      showWillAlertPractitionerMessage: this.showWillAlertPractitionerMessage,
+      alertPractitionerItems: this.showWillAlertPractitionerMessage ? [] : GovUkRadioGroup.yesNoItems({}),
     }
   }
 

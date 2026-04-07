@@ -20,7 +20,7 @@ export default class ComplianceReviewPage extends ReviewPage {
     private formData: AppointmentOutcomeForm,
     private reqBody: ComplianceQuery,
   ) {
-    super('compliance', action === 'leftEarly' ? 'Left site' : 'Session complete', {})
+    super('compliance', action === 'leftEarly' ? 'Left site' : 'Session complete', {}, false)
 
     const path = this.action === 'leftEarly' ? paths.appointments.leftEarly : paths.appointments.completed
 
