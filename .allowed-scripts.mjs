@@ -9,7 +9,7 @@ export default configureAllowedScripts({
     // Provides native integration, supporting ability to write dtrace probes for bunyan
     'node_modules/dtrace-provider@0.8.8': 'ALLOW',
     // ESBuild is written in GoLang - this is needed to download prebuilt binaries for the specific platform
-    'node_modules/esbuild@0.27.3': 'ALLOW',
+    'node_modules/esbuild@0.28.0': 'ALLOW',
     // Needed by jest for running tests in watch mode
     'node_modules/fsevents@2.3.3': 'ALLOW',
     // Need by playwright for detecting file system changes during test runs
@@ -18,5 +18,7 @@ export default configureAllowedScripts({
     'node_modules/unrs-resolver@1.11.1': 'ALLOW',
     // verifies initial installation - https://github.com/naugtur/can-i-ignore-scripts/blob/f198a343f7cf194335ebb068d3f2c00eb065e54c/data.json#L100
     'node_modules/protobufjs@7.5.4': 'IGNORE',
+    // compiles native C/C++ code into a binary module that the Node.js environment can execute
+    'node_modules/@ministryofjustice/hmpps-probation-integration-e2e-tests/node_modules/fsevents@2.3.2': 'ALLOW',
   },
 })
