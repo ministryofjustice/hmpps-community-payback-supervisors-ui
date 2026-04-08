@@ -127,6 +127,7 @@
     "diff": "^8.0.4",
     "@aws-sdk/xml-builder": {
       "fast-xml-parser": "^5.5.10"
-    }
+    },
+     "playwright-core": "^1.59.1"
   }
 }
