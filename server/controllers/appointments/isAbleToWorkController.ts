@@ -64,10 +64,6 @@ export default class IsAbleToWorkController {
       const formData = await this.appointmentFormService.getForm(formId, res.locals.user.username)
       await this.appointmentFormService.saveForm(formId, res.locals.user.username, page.updatedFormData(formData))
 
-      if (page.isAbleToWork()) {
-        this.appointmentStatusService.updateStatus(appointment, 'Working', res.locals.user.username)
-      }
-
       return res.redirect(page.nextPath(appointmentId, projectCode))
     }
   }
