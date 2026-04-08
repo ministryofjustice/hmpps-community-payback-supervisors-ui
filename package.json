@@ -38,7 +38,7 @@
   "dependencies": {
     "@aws-sdk/client-sqs": "^3.1000.0",
     "@golevelup/ts-jest": "^3.0.0",
-    "@ministryofjustice/frontend": "^8.0.1",
+    "@ministryofjustice/frontend": "^9.0.0",
     "@ministryofjustice/hmpps-auth-clients": "^1.0.2",
     "@ministryofjustice/hmpps-monitoring": "^1.0.2",
     "@ministryofjustice/hmpps-probation-integration-e2e-tests": "^1.187.0",
@@ -58,7 +58,7 @@
     "encoding": "0.1.13",
     "express": "^5.2.1",
     "express-session": "^1.19.0",
-    "govuk-frontend": "^5.14.0",
+    "govuk-frontend": "^6.1.0",
     "helmet": "^8.1.0",
     "http-errors": "^2.0.1",
     "jwt-decode": "^4.0.0",
