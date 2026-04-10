@@ -17,7 +17,7 @@ export default class SessionsController {
 
   show(): RequestHandler {
     return async (_req: Request, res: Response) => {
-      const { projectCode, date } = _req.params
+      const { projectCode, date } = _req.params as { projectCode: string; date: string }
 
       const request = {
         username: res.locals.user.username,
@@ -68,7 +68,8 @@ export default class SessionsController {
   confirmClearSession(): RequestHandler {
     return async (_req: Request, res: Response) => {
       if (config.flags.enableClearSessionStatuses) {
-        const { projectCode, date } = _req.params
+        const projectCode = _req.params.projectCode.toString()
+        const date = _req.params.date.toString()
 
         const request = {
           username: res.locals.user.username,
@@ -96,7 +97,7 @@ export default class SessionsController {
   clearSessions(): RequestHandler {
     return async (_req: Request, res: Response) => {
       if (config.flags.enableClearSessionStatuses) {
-        const { projectCode, date } = _req.params
+        const { projectCode, date } = _req.params as { projectCode: string; date: string }
 
         await this.appointmentStatusService.clearStatusesForSession(projectCode, date, res.locals.user.username)
 

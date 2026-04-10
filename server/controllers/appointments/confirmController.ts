@@ -1,7 +1,7 @@
 import type { Request, RequestHandler, Response } from 'express'
 import AppointmentService from '../../services/appointmentService'
 import paths from '../../paths'
-import { GetAppointmentRequest } from '../../@types/user-defined'
+import { AppointmentParams, GetAppointmentRequest } from '../../@types/user-defined'
 import Offender from '../../models/offender'
 
 export default class ConfirmController {
@@ -9,7 +9,7 @@ export default class ConfirmController {
 
   working(): RequestHandler {
     return async (_req: Request, res: Response) => {
-      const { projectCode, appointmentId } = _req.params
+      const { projectCode, appointmentId } = _req.params as unknown as AppointmentParams
 
       const request: GetAppointmentRequest = {
         username: res.locals.user.username,
@@ -29,7 +29,7 @@ export default class ConfirmController {
 
   unableToWork(): RequestHandler {
     return async (_req: Request, res: Response) => {
-      const { projectCode, appointmentId } = _req.params
+      const { projectCode, appointmentId } = _req.params as unknown as AppointmentParams
 
       const request: GetAppointmentRequest = {
         username: res.locals.user.username,
@@ -51,7 +51,7 @@ export default class ConfirmController {
 
   absent(): RequestHandler {
     return async (_req: Request, res: Response) => {
-      const { projectCode, appointmentId } = _req.params
+      const { projectCode, appointmentId } = _req.params as unknown as AppointmentParams
 
       const request: GetAppointmentRequest = {
         username: res.locals.user.username,
@@ -73,7 +73,7 @@ export default class ConfirmController {
 
   completed(): RequestHandler {
     return async (_req: Request, res: Response) => {
-      const { projectCode, appointmentId } = _req.params
+      const { projectCode, appointmentId } = _req.params as unknown as AppointmentParams
 
       const request: GetAppointmentRequest = {
         username: res.locals.user.username,
@@ -93,7 +93,7 @@ export default class ConfirmController {
 
   leftEarly(): RequestHandler {
     return async (_req: Request, res: Response) => {
-      const { projectCode, appointmentId } = _req.params
+      const { projectCode, appointmentId } = _req.params as unknown as AppointmentParams
 
       const request: GetAppointmentRequest = {
         username: res.locals.user.username,

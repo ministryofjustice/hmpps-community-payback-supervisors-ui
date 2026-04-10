@@ -35,7 +35,7 @@ export default class ComplianceController {
 
   review(action: AppointmentCompletedAction): RequestHandler {
     return async (_req: Request, res: Response) => {
-      const { projectCode, appointmentId } = _req.params
+      const { projectCode, appointmentId } = _req.params as unknown as AppointmentParams
       const formId = _req.query.form?.toString()
 
       const appointment = await this.appointmentService.getAppointment({

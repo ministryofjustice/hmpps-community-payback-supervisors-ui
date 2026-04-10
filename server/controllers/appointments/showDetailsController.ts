@@ -1,6 +1,6 @@
 import type { Request, RequestHandler, Response } from 'express'
 import AppointmentService from '../../services/appointmentService'
-import { GetAppointmentRequest } from '../../@types/user-defined'
+import { AppointmentParams, GetAppointmentRequest } from '../../@types/user-defined'
 import AppointmentShowDetailsPage from '../../pages/appointments/appointmentShowDetailsPage'
 import AppointmentStatusService from '../../services/appointmentStatusService'
 
@@ -12,7 +12,7 @@ export default class ShowDetailsController {
 
   show(): RequestHandler {
     return async (_req: Request, res: Response) => {
-      const { appointmentId, projectCode } = _req.params
+      const { appointmentId, projectCode } = _req.params as unknown as AppointmentParams
 
       const request: GetAppointmentRequest = {
         username: res.locals.user.username,

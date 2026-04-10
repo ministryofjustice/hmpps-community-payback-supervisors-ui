@@ -3,7 +3,7 @@ import AppointmentService from '../../services/appointmentService'
 import StartTimePage from '../../pages/appointments/update/startTimePage'
 import { generateErrorSummary } from '../../utils/errorUtils'
 import { UpdateAppointmentOutcomeDto } from '../../@types/shared'
-import { AppointmentArrivedAction, AppointmentOutcomeForm } from '../../@types/user-defined'
+import { AppointmentArrivedAction, AppointmentOutcomeForm, AppointmentParams } from '../../@types/user-defined'
 import AppointmentStatusService from '../../services/appointmentStatusService'
 import paths from '../../paths'
 import ReviewPage from '../../pages/appointments/update/reviewPage'
@@ -18,7 +18,7 @@ export default class StartTimeController {
 
   show(action: AppointmentArrivedAction): RequestHandler {
     return async (_req: Request, res: Response) => {
-      const { projectCode, appointmentId } = _req.params
+      const { projectCode, appointmentId } = _req.params as unknown as AppointmentParams
       let formId = _req.query.form?.toString()
 
       const appointment = await this.appointmentService.getAppointment({
@@ -45,7 +45,7 @@ export default class StartTimeController {
 
   review(action: AppointmentArrivedAction): RequestHandler {
     return async (_req: Request, res: Response) => {
-      const { projectCode, appointmentId } = _req.params
+      const { projectCode, appointmentId } = _req.params as unknown as AppointmentParams
 
       const appointment = await this.appointmentService.getAppointment({
         projectCode,
@@ -71,7 +71,7 @@ export default class StartTimeController {
 
   submit(action: AppointmentArrivedAction): RequestHandler {
     return async (_req: Request, res: Response) => {
-      const { projectCode, appointmentId } = _req.params
+      const { projectCode, appointmentId } = _req.params as unknown as AppointmentParams
 
       const appointment = await this.appointmentService.getAppointment({
         projectCode,
