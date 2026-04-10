@@ -10,6 +10,9 @@ import type { OffenderNotFoundDto } from './OffenderNotFoundDto';
 import type { PickUpDataDto } from './PickUpDataDto';
 import type { ProjectTypeDto } from './ProjectTypeDto';
 export type AppointmentDto = {
+    /**
+     * The NDelius Appointment ID
+     */
     id: number;
     communityPaybackId?: string;
     version: string;
@@ -43,6 +46,7 @@ export type AppointmentDto = {
     date: string;
     startTime: string;
     endTime: string;
+    minutesCredited?: number;
     contactOutcomeCode?: string;
     attendanceData?: AttendanceDataDto;
     enforcementData?: EnforcementDto;

@@ -3,6 +3,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
+export type { AdjustmentReasonDto } from './models/AdjustmentReasonDto';
+export type { AdjustmentReasonsDto } from './models/AdjustmentReasonsDto';
 export type { AppointmentDto } from './models/AppointmentDto';
 export type { AppointmentSummaryDto } from './models/AppointmentSummaryDto';
 export type { AttendanceDataDto } from './models/AttendanceDataDto';
@@ -20,6 +22,7 @@ export type { OffenderFullDto } from './models/OffenderFullDto';
 export type { OffenderLimitedDto } from './models/OffenderLimitedDto';
 export type { OffenderNotFoundDto } from './models/OffenderNotFoundDto';
 export type { PickUpDataDto } from './models/PickUpDataDto';
+export type { PickUpLocationDto } from './models/PickUpLocationDto';
 export type { ProjectTypeDto } from './models/ProjectTypeDto';
 export type { ProjectTypesDto } from './models/ProjectTypesDto';
 export type { ProviderSummaryDto } from './models/ProviderSummaryDto';
