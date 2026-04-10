@@ -2,7 +2,6 @@ import type { Request, RequestHandler, Response } from 'express'
 import AppointmentService from '../../services/appointmentService'
 import IsAbleToWorkPage from '../../pages/appointments/update/isAbleToWorkPage'
 import { generateErrorSummary } from '../../utils/errorUtils'
-import AppointmentStatusService from '../../services/appointmentStatusService'
 import AppointmentFormService from '../../services/appointmentFormService'
 import paths from '../../paths'
 import { AppointmentParams } from '../../@types/user-defined'
@@ -10,7 +9,6 @@ import { AppointmentParams } from '../../@types/user-defined'
 export default class IsAbleToWorkController {
   constructor(
     private readonly appointmentService: AppointmentService,
-    private readonly appointmentStatusService: AppointmentStatusService,
     private readonly appointmentFormService: AppointmentFormService,
   ) {}
 

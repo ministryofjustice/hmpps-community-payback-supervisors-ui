@@ -22,7 +22,6 @@ const appointmentControllers = (services: Services) => {
   )
   const isAbleToWorkController = new IsAbleToWorkController(
     services.appointmentService,
-    services.appointmentStatusService,
     services.appointmentFormService,
   )
   const unableToWorkController = new UnableToWorkController(
