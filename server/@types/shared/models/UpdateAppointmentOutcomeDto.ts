@@ -14,6 +14,10 @@ export type UpdateAppointmentOutcomeDto = {
      */
     deliusVersionToUpdate: string;
     /**
+     * If not defined the date will not be modified. Optionality on this field will be removed in the future
+     */
+    date?: string;
+    /**
      * The start local time of the appointment
      */
     startTime: string;
