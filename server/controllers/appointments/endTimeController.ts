@@ -1,7 +1,7 @@
 import type { Request, RequestHandler, Response } from 'express'
 import AppointmentService from '../../services/appointmentService'
 import { generateErrorSummary } from '../../utils/errorUtils'
-import { AppointmentEndTimeAction, AppointmentOutcomeForm } from '../../@types/user-defined'
+import { AppointmentEndTimeAction, AppointmentOutcomeForm, AppointmentParams } from '../../@types/user-defined'
 import EndTimePage from '../../pages/appointments/update/endTimePage'
 import AppointmentFormService from '../../services/appointmentFormService'
 import paths from '../../paths'
@@ -14,7 +14,7 @@ export default class EndTimeController {
 
   show(action: AppointmentEndTimeAction): RequestHandler {
     return async (_req: Request, res: Response) => {
-      const { projectCode, appointmentId } = _req.params
+      const { projectCode, appointmentId } = _req.params as unknown as AppointmentParams
       let formId = _req.query.form?.toString()
 
       const appointment = await this.appointmentService.getAppointment({
@@ -44,7 +44,7 @@ export default class EndTimeController {
 
   submit(action: AppointmentEndTimeAction): RequestHandler {
     return async (_req: Request, res: Response) => {
-      const { projectCode, appointmentId } = _req.params
+      const { projectCode, appointmentId } = _req.params as unknown as AppointmentParams
       const formId = _req.query.form?.toString()
 
       const appointment = await this.appointmentService.getAppointment({

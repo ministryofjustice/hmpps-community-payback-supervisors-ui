@@ -8,6 +8,7 @@ import AppointmentStatusService from '../../services/appointmentStatusService'
 import AppointmentFormService from '../../services/appointmentFormService'
 import ReviewPage from '../../pages/appointments/update/reviewPage'
 import { pathWithQuery } from '../../utils/utils'
+import { AppointmentParams } from '../../@types/user-defined'
 
 export default class UnableToWorkController {
   constructor(
@@ -19,7 +20,7 @@ export default class UnableToWorkController {
 
   show(): RequestHandler {
     return async (_req: Request, res: Response) => {
-      const { projectCode, appointmentId } = _req.params
+      const { projectCode, appointmentId } = _req.params as unknown as AppointmentParams
       const formId = _req.query.form?.toString()
 
       if (!formId) {
@@ -44,7 +45,7 @@ export default class UnableToWorkController {
 
   review(): RequestHandler {
     return async (_req: Request, res: Response) => {
-      const { projectCode, appointmentId } = _req.params
+      const { projectCode, appointmentId } = _req.params as unknown as AppointmentParams
       const formId = _req.query.form?.toString()
 
       if (!formId) {
@@ -109,7 +110,7 @@ export default class UnableToWorkController {
 
   submit(): RequestHandler {
     return async (_req: Request, res: Response) => {
-      const { projectCode, appointmentId } = _req.params
+      const { projectCode, appointmentId } = _req.params as unknown as AppointmentParams
       const formId = _req.query.form?.toString()
 
       if (!formId) {
