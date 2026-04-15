@@ -3,7 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { AttendanceDataDto } from './AttendanceDataDto';
-export type UpdateAppointmentOutcomeDto = {
+export type UpdateAppointmentDto = {
     /**
      * Delius ID of the appointment to update
      */
@@ -12,10 +12,7 @@ export type UpdateAppointmentOutcomeDto = {
      * The version of the appointment retrieved from delius this update is being applied to
      */
     deliusVersionToUpdate: string;
-    /**
-     * If not defined the date will not be modified. Optionality on this field will be removed in the future
-     */
-    date?: string;
+    date: string;
     /**
      * The start local time of the appointment
      */
