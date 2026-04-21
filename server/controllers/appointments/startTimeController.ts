@@ -92,6 +92,7 @@ export default class StartTimeController {
           enforcementData: appointment.enforcementData,
           supervisorOfficerCode: appointment.supervisorOfficerCode,
           notes: null,
+          date: appointment.date,
         }
 
         await this.appointmentService.saveAppointment({

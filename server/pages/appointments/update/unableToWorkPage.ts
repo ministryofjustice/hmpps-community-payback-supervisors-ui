@@ -130,6 +130,8 @@ export default class UnableToWorkPage extends BaseAppointmentUpdatePage<Body> {
       }
     }
 
+    body.date = appointment.date
+
     return body
   }
 

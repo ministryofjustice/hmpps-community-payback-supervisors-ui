@@ -17,6 +17,6 @@ export default class AppointmentClient extends RestClient {
 
   async save({ username, projectCode, data }: SaveAppointmentRequest): Promise<void> {
     const path = paths.appointments.outcome({ appointmentId: data.deliusId.toString(), projectCode })
-    return this.post({ path, data }, asSystem(username))
+    return this.put({ path, data }, asSystem(username))
   }
 }

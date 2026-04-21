@@ -71,6 +71,7 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
       enforcementData: appointment.enforcementData,
       supervisorOfficerCode: appointment.supervisorOfficerCode,
       notes: this.query.notes,
+      date: appointment.date,
     }
   }
 

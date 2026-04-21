@@ -13,7 +13,7 @@ export default {
   },
   appointments: {
     singleAppointment: singleAppointmentPath,
-    outcome: singleAppointmentPath.path('outcome'),
+    outcome: singleAppointmentPath,
   },
   sessions: {
     next: supervisorUiPath
