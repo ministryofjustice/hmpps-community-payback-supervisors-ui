@@ -327,6 +327,7 @@ describe('UnableToWorkPage', () => {
         attendanceData: appointment.attendanceData,
         enforcementData: appointment.enforcementData,
         notes: null,
+        date: appointment.date,
       }
 
       expect(result).toEqual(expected)

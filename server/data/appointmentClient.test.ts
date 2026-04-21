@@ -48,7 +48,7 @@ describe('AppointmentClient', () => {
       const data = updateAppointmentOutcomeFactory.build({ deliusId: 1001 })
 
       nock(config.apis.communityPaybackApi.url)
-        .post(paths.appointments.outcome({ appointmentId: '1001', projectCode }))
+        .put(paths.appointments.outcome({ appointmentId: '1001', projectCode }))
         .matchHeader('authorization', 'Bearer test-system-token')
         .reply(200)
 
