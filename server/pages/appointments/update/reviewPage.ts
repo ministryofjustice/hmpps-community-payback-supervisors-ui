@@ -24,7 +24,7 @@ export default class ReviewPage {
     private readonly template: string,
     private readonly outcome: AppointmentStatusType,
     private readonly reviewFields: ReviewItem,
-    private readonly showWillAlertPractitionerMessage: boolean,
+    protected showWillAlertPractitionerMessage: boolean = false,
     protected changeUrl?: string,
   ) {
     this.template = `./${this.template}.njk`

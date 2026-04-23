@@ -23,7 +23,9 @@ describe('ComplianceReviewPage', () => {
         const attendanceOutcomeLabel = 'Left early - for reason'
 
         const contactOutcomes = contactOutcomesFactory.build({
-          contactOutcomes: [contactOutcomeFactory.build({ name: attendanceOutcomeLabel, code: '123' })],
+          contactOutcomes: [
+            contactOutcomeFactory.build({ name: attendanceOutcomeLabel, code: '123', enforceable: true }),
+          ],
         })
 
         const appointmentOutputForm = appointmentOutcomeFormFactory.build({
@@ -128,19 +130,8 @@ describe('ComplianceReviewPage', () => {
             [{ text: 'Outcome status' }, { html: 'Left early' }, { text: '' }],
           ],
           template: './compliance.njk',
-          showWillAlertPractitionerMessage: false,
-          alertPractitionerItems: [
-            {
-              checked: false,
-              text: 'Yes',
-              value: 'yes',
-            },
-            {
-              checked: false,
-              text: 'No',
-              value: 'no',
-            },
-          ],
+          showWillAlertPractitionerMessage: true,
+          alertPractitionerItems: [],
         })
       })
     })

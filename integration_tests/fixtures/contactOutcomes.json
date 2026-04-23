@@ -50,12 +50,14 @@
   {
     "name": "Attended - Sent Home (behaviour)",
     "code": "ATSH",
-    "willAlertEnforcementDiary": true
+    "enforceable": true,
+    "attended": true
   },
   {
     "name": "Attended - Sent Home (service issues)",
     "code": "ATSS",
-    "willAlertEnforcementDiary": false
+    "enforceable": false,
+    "attended": true
   },
   {
     "name": "Failed to Comply with other Instruction",

@@ -20,7 +20,8 @@ export default {
             contactOutcomeFactory.build({
               code: outcome.code,
               name: outcome.name,
-              willAlertEnforcementDiary: outcome.willAlertEnforcementDiary,
+              attended: outcome.attended,
+              enforceable: outcome.enforceable,
             }),
           ),
         },
