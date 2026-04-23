@@ -1,4 +1,4 @@
-import { AppointmentDto, ContactOutcomesDto } from '../../../@types/shared'
+import { AppointmentDto, ContactOutcomeDto, ContactOutcomesDto } from '../../../@types/shared'
 import { AppointmentCompletedAction, AppointmentOutcomeForm } from '../../../@types/user-defined'
 import paths from '../../../paths'
 import { pathWithQuery, properCase } from '../../../utils/utils'
@@ -65,6 +65,8 @@ export default class ComplianceReviewPage extends ReviewPage {
       }),
       { form: this.formId },
     )
+
+    this.showWillAlertPractitionerMessage = this.contactOutcome?.enforceable ?? false
   }
 
   protected mappedReviewFields(): ReviewItem {
@@ -72,9 +74,7 @@ export default class ComplianceReviewPage extends ReviewPage {
 
     if (this.action === 'leftEarly') {
       fields.Attendance = {
-        value: this.contactOutcomes.contactOutcomes.find(outcome => {
-          return outcome.code === this.formData.contactOutcomeCode
-        })?.name,
+        value: this.contactOutcome?.name,
         changeUrl: this.attendanceBackPath,
       }
     }
@@ -95,5 +95,11 @@ export default class ComplianceReviewPage extends ReviewPage {
         ? 'Cannot be shared with person on probation'
         : 'Can be shared with person on probation',
     }
+  }
+
+  private get contactOutcome(): ContactOutcomeDto {
+    return this.contactOutcomes.contactOutcomes.find(outcome => {
+      return outcome.code === this.formData.contactOutcomeCode
+    })
   }
 }

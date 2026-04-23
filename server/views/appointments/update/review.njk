@@ -1,5 +1,7 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{%- from "moj/components/alert/macro.njk" import mojAlert -%}
 
 {% extends "./layout.njk" %}
 
@@ -19,5 +21,30 @@
   firstCellIsHeader: true,
   rows: rows
 }) }}
+
+{% if showWillAlertPractitionerMessage %}
+  {{ mojAlert({
+    variant: 'information',
+    title: 'This outcome will result in alert',
+    dismissible: false,
+    html: 'This outcome will be shared with the practitioner as it requires enforcement action.'
+  }) }}
+{% endif %}
+
+{% if alertPractitionerItems | length %}
+  {{ govukRadios({
+    name: "alertPractitioner",
+    fieldset: {
+      legend: {
+        text: "Would you like to share this outcome with the probation practitioner?",
+        classes: "govuk-fieldset__legend--m"
+      }
+    },
+    hint: {
+      text: "Select yes to send an alert"
+    },
+    items: alertPractitionerItems
+  }) }}
+{% endif %}
 
 {% endblock %}

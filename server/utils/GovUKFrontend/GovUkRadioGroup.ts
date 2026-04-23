@@ -28,4 +28,16 @@ export default class GovUkRadioGroup {
   static valueFromYesOrNoItem(value?: YesOrNo): boolean {
     return value === 'yes'
   }
+
+  static nullableValueFromYesOrNoItem(value?: YesOrNo): boolean | null {
+    if (value === 'yes') {
+      return true
+    }
+
+    if (value === 'no') {
+      return false
+    }
+
+    return null
+  }
 }

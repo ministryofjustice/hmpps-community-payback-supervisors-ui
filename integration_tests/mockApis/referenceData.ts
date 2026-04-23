@@ -17,7 +17,12 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {
           contactOutcomes: contactOutcomesJson.map(outcome =>
-            contactOutcomeFactory.build({ code: outcome.code, name: outcome.name }),
+            contactOutcomeFactory.build({
+              code: outcome.code,
+              name: outcome.name,
+              attended: outcome.attended,
+              enforceable: outcome.enforceable,
+            }),
           ),
         },
       },
