@@ -22,7 +22,7 @@ interface Body {
 }
 
 export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
-  static UnacceptableAbsenceOutcomeCode = 'UAAB'
+  static UnacceptableAbsenceOutcomeCode = 'UACP'
 
   constructor(
     private readonly action: AppointmentArrivedAction,
