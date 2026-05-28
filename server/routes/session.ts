@@ -9,7 +9,7 @@ export default function sessionRoutes(
   auditService: AuditService,
 ): Router {
   router.get(paths.sessions.show.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.SHOW_NEXT_SESSIONS_PAGE, {
+    await auditService.logPageView(Page.VIEW_NEXT_SESSIONS, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -19,7 +19,7 @@ export default function sessionRoutes(
   })
 
   router.get(paths.sessions.clearSessionStatuses.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.SHOW_DEV_CLEAR_SESSION_STATUSES, {
+    await auditService.logPageView(Page.VIEW_DEV_CLEAR_SESSION_STATUSES, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -28,7 +28,7 @@ export default function sessionRoutes(
   })
 
   router.post(paths.sessions.clearSessionStatuses.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.SUBMIT_DEV_CLEAR_SESSION_STATUSES, {
+    await auditService.logPageView(Page.EDIT_DEV_CLEAR_SESSION_STATUSES, {
       who: res.locals.user.username,
       correlationId: req.id,
     })

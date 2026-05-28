@@ -11,7 +11,7 @@ export default function appointmentRoutes(
   const { appointments } = controllers
 
   router.get(paths.appointments.show.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.APPOINTMENT_SHOW_PAGE, {
+    await auditService.logPageView(Page.VIEW_APPOINTMENT, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -21,7 +21,7 @@ export default function appointmentRoutes(
   })
 
   router.get(paths.appointments.arrived.startTime.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.SHOW_APPOINTMENT_ARRIVED_START_TIME_PAGE, {
+    await auditService.logPageView(Page.VIEW_APPOINTMENT_ARRIVED_START_TIME, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -31,7 +31,7 @@ export default function appointmentRoutes(
   })
 
   router.post(paths.appointments.arrived.startTime.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.SUBMIT_APPOINTMENT_ARRIVED_START_TIME_PAGE, {
+    await auditService.logPageView(Page.EDIT_APPOINTMENT_ARRIVED_START_TIME, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -41,7 +41,7 @@ export default function appointmentRoutes(
   })
 
   router.get(paths.appointments.absent.startTime.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.SHOW_APPOINTMENT_ABSENT_START_TIME_PAGE, {
+    await auditService.logPageView(Page.VIEW_APPOINTMENT_ABSENT_START_TIME, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -51,7 +51,7 @@ export default function appointmentRoutes(
   })
 
   router.get(paths.appointments.review.absent.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.REVIEW_APPOINTMENT_ABSENT_PAGE, {
+    await auditService.logPageView(Page.VIEW_REVIEW_APPOINTMENT_ABSENT, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -61,7 +61,7 @@ export default function appointmentRoutes(
   })
 
   router.post(paths.appointments.absent.startTime.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.SUBMIT_APPOINTMENT_ABSENT_START_TIME_PAGE, {
+    await auditService.logPageView(Page.EDIT_APPOINTMENT_ABSENT_START_TIME, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -71,7 +71,7 @@ export default function appointmentRoutes(
   })
 
   router.get(paths.appointments.arrived.isAbleToWork.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.SHOW_APPOINTMENT_ABLE_TO_WORK_PAGE, {
+    await auditService.logPageView(Page.VIEW_APPOINTMENT_ABLE_TO_WORK, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -81,7 +81,7 @@ export default function appointmentRoutes(
   })
 
   router.post(paths.appointments.arrived.isAbleToWork.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.SUBMIT_APPOINTMENT_ABLE_TO_WORK_PAGE, {
+    await auditService.logPageView(Page.CREATE_APPOINTMENT_ABLE_TO_WORK, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -91,7 +91,7 @@ export default function appointmentRoutes(
   })
 
   router.get(paths.appointments.arrived.endTime.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.SHOW_APPOINTMENT_ARRIVED_END_TIME_PAGE, {
+    await auditService.logPageView(Page.VIEW_APPOINTMENT_ARRIVED_END_TIME, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -101,7 +101,7 @@ export default function appointmentRoutes(
   })
 
   router.post(paths.appointments.arrived.endTime.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.SUBMIT_APPOINTMENT_ARRIVED_END_TIME_PAGE, {
+    await auditService.logPageView(Page.EDIT_APPOINTMENT_ARRIVED_END_TIME, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -111,7 +111,7 @@ export default function appointmentRoutes(
   })
 
   router.get(paths.appointments.arrived.unableToWork.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.SHOW_APPOINTMENT_UNABLE_TO_WORK_PAGE, {
+    await auditService.logPageView(Page.VIEW_APPOINTMENT_UNABLE_TO_WORK, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -121,7 +121,7 @@ export default function appointmentRoutes(
   })
 
   router.post(paths.appointments.review.unableToWork.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.REVIEW_APPOINTMENT_UNABLE_TO_WORK_PAGE, {
+    await auditService.logPageView(Page.VIEW_REVIEW_APPOINTMENT_UNABLE_TO_WORK, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -131,7 +131,7 @@ export default function appointmentRoutes(
   })
 
   router.post(paths.appointments.arrived.unableToWork.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.SUBMIT_APPOINTMENT_UNABLE_TO_WORK_PAGE, {
+    await auditService.logPageView(Page.CREATE_APPOINTMENT_UNABLE_TO_WORK, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -141,7 +141,7 @@ export default function appointmentRoutes(
   })
 
   router.get(paths.appointments.completed.endTime.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.SHOW_APPOINTMENT_COMPLETED_END_TIME_PAGE, {
+    await auditService.logPageView(Page.VIEW_APPOINTMENT_COMPLETED_END_TIME, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -151,7 +151,7 @@ export default function appointmentRoutes(
   })
 
   router.post(paths.appointments.completed.endTime.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.SUBMIT_APPOINTMENT_COMPLETED_END_TIME_PAGE, {
+    await auditService.logPageView(Page.EDIT_APPOINTMENT_COMPLETED_END_TIME, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -161,7 +161,7 @@ export default function appointmentRoutes(
   })
 
   router.get(paths.appointments.completed.compliance.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.SHOW_APPOINTMENT_COMPLETED_COMPLIANCE_PAGE, {
+    await auditService.logPageView(Page.VIEW_APPOINTMENT_COMPLETED_COMPLIANCE, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -171,7 +171,7 @@ export default function appointmentRoutes(
   })
 
   router.post(paths.appointments.review.completed.compliance.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.REVIEW_APPOINTMENT_COMPLETED_COMPLIANCE_PAGE, {
+    await auditService.logPageView(Page.VIEW_REVIEW_APPOINTMENT_COMPLETED_COMPLIANCE, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -181,7 +181,7 @@ export default function appointmentRoutes(
   })
 
   router.post(paths.appointments.completed.compliance.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.SUBMIT_APPOINTMENT_COMPLETED_COMPLIANCE_PAGE, {
+    await auditService.logPageView(Page.EDIT_APPOINTMENT_COMPLETED_COMPLIANCE, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -191,7 +191,7 @@ export default function appointmentRoutes(
   })
 
   router.get(paths.appointments.leftEarly.endTime.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.SHOW_APPOINTMENT_LEFT_EARLY_END_TIME_PAGE, {
+    await auditService.logPageView(Page.VIEW_APPOINTMENT_LEFT_EARLY_END_TIME, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -201,7 +201,7 @@ export default function appointmentRoutes(
   })
 
   router.post(paths.appointments.leftEarly.endTime.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.SUBMIT_APPOINTMENT_LEFT_EARLY_END_TIME_PAGE, {
+    await auditService.logPageView(Page.EDIT_APPOINTMENT_LEFT_EARLY_END_TIME, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -211,7 +211,7 @@ export default function appointmentRoutes(
   })
 
   router.get(paths.appointments.leftEarly.compliance.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.SHOW_APPOINTMENT_LEFT_EARLY_COMPLIANCE_PAGE, {
+    await auditService.logPageView(Page.VIEW_APPOINTMENT_LEFT_EARLY_COMPLIANCE, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -221,7 +221,7 @@ export default function appointmentRoutes(
   })
 
   router.post(paths.appointments.leftEarly.compliance.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.SUBMIT_APPOINTMENT_LEFT_EARLY_COMPLIANCE_PAGE, {
+    await auditService.logPageView(Page.EDIT_APPOINTMENT_LEFT_EARLY_COMPLIANCE, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -231,7 +231,7 @@ export default function appointmentRoutes(
   })
 
   router.get(paths.appointments.leftEarly.reason.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.SHOW_APPOINTMENT_LEFT_EARLY_REASON_PAGE, {
+    await auditService.logPageView(Page.VIEW_APPOINTMENT_LEFT_EARLY_REASON, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -241,7 +241,7 @@ export default function appointmentRoutes(
   })
 
   router.post(paths.appointments.review.leftEarly.compliance.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.REVIEW_APPOINTMENT_LEFT_EARLY_COMPLIANCE_PAGE, {
+    await auditService.logPageView(Page.VIEW_REVIEW_APPOINTMENT_LEFT_EARLY_COMPLIANCE, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -251,7 +251,7 @@ export default function appointmentRoutes(
   })
 
   router.post(paths.appointments.leftEarly.reason.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.SUBMIT_APPOINTMENT_LEFT_EARLY_REASON_PAGE, {
+    await auditService.logPageView(Page.CREATE_APPOINTMENT_LEFT_EARLY_REASON, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -261,7 +261,7 @@ export default function appointmentRoutes(
   })
 
   router.get(paths.appointments.confirm.working.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.SHOW_CONFIRM_WORKING_PAGE, {
+    await auditService.logPageView(Page.VIEW_CONFIRM_WORKING, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -271,7 +271,7 @@ export default function appointmentRoutes(
   })
 
   router.get(paths.appointments.confirm.unableToWork.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.SHOW_CONFIRM_UNABLE_TO_WORK_PAGE, {
+    await auditService.logPageView(Page.VIEW_CONFIRM_UNABLE_TO_WORK, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -281,7 +281,7 @@ export default function appointmentRoutes(
   })
 
   router.get(paths.appointments.confirm.absent.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.SHOW_CONFIRM_ABSENT_PAGE, {
+    await auditService.logPageView(Page.VIEW_CONFIRM_ABSENT, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -291,7 +291,7 @@ export default function appointmentRoutes(
   })
 
   router.get(paths.appointments.confirm.completed.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.SHOW_CONFIRM_COMPLETED_PAGE, {
+    await auditService.logPageView(Page.VIEW_CONFIRM_COMPLETED, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -301,7 +301,7 @@ export default function appointmentRoutes(
   })
 
   router.get(paths.appointments.confirm.leftEarly.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.SHOW_CONFIRM_LEFT_EARLY_PAGE, {
+    await auditService.logPageView(Page.VIEW_CONFIRM_LEFT_EARLY, {
       who: res.locals.user.username,
       correlationId: req.id,
     })

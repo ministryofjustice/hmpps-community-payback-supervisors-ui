@@ -12,7 +12,7 @@ export default function staticRoutes(
   auditService: AuditService,
 ): Router {
   router.get(paths.static.cookiesPolicy.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.COOKIES_POLICY_PAGE, {
+    await auditService.logPageView(Page.VIEW_COOKIES_POLICY, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -22,7 +22,7 @@ export default function staticRoutes(
   })
 
   router.get(paths.static.privacyNotice.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.PRIVACY_NOTICE_PAGE, {
+    await auditService.logPageView(Page.VIEW_PRIVACY_NOTICE, {
       who: res.locals.user.username,
       correlationId: req.id,
     })
@@ -32,7 +32,7 @@ export default function staticRoutes(
   })
 
   router.get(paths.static.accessibilityStatement.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.ACCESSIBILITY_STATEMENT_PAGE, {
+    await auditService.logPageView(Page.VIEW_ACCESSIBILITY_STATEMENT, {
       who: res.locals.user.username,
       correlationId: req.id,
     })

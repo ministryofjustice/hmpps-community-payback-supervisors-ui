@@ -13,7 +13,7 @@ export default function routes(controllers: Controllers, { auditService }: Servi
   const { indexController, sessionsController, staticController } = controllers
 
   router.get('/', async (req, res, next) => {
-    await auditService.logPageView(Page.INDEX_PAGE, { who: res.locals.user.username, correlationId: req.id })
+    await auditService.logPageView(Page.VIEW_INDEX_PAGE, { who: res.locals.user.username, correlationId: req.id })
 
     const handler = indexController.index()
     await handler(req, res, next)

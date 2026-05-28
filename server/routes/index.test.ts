@@ -50,7 +50,7 @@ describe('GET /', () => {
       .expect(res => {
         expect(res.text).toContain('Next session')
         expect(sessionService.getNextSessions).toHaveBeenCalledWith('user1', supervisor)
-        expect(auditService.logPageView).toHaveBeenCalledWith(Page.INDEX_PAGE, {
+        expect(auditService.logPageView).toHaveBeenCalledWith(Page.VIEW_INDEX_PAGE, {
           who: user.username,
           correlationId: expect.any(String),
         })
