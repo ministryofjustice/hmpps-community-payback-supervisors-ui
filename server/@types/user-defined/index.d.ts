@@ -1,4 +1,4 @@
-import { UpdateAppointmentOutcomeDto } from '../shared'
+import { SessionSummaryDto, UpdateAppointmentOutcomeDto } from '../shared'
 
 export interface BaseRequest {
   username: string
@@ -36,6 +36,15 @@ export interface SaveAppointmentRequest extends BaseRequest {
 export interface LinkItem {
   text: string
   href: string
+}
+
+export interface AuditParams {
+  action: string
+  username: string
+  details: Record<string, string>
+  correlationId: string
+  subjectType?: string
+  subjectId?: string
 }
 
 export type AppointmentArrivedAction = 'arrived' | 'absent'

@@ -20,6 +20,7 @@ import AppointmentClient from './appointmentClient'
 import ReferenceDataClient from './referenceDataClient'
 import FormClient from './formClient'
 import SupervisorClient from './supervisorClient'
+import AuditClient from './auditClient'
 
 export const dataAccess = () => {
   const hmppsAuthClient = new AuthenticationClient(
@@ -31,6 +32,7 @@ export const dataAccess = () => {
   return {
     applicationInfo,
     hmppsAuthClient,
+    auditClient: new AuditClient(config.sqs.audit),
     hmppsAuditClient: new HmppsAuditClient(config.sqs.audit),
     sessionClient: new SessionClient(hmppsAuthClient),
     appointmentClient: new AppointmentClient(hmppsAuthClient),
@@ -42,4 +44,4 @@ export const dataAccess = () => {
 
 export type DataAccess = ReturnType<typeof dataAccess>
 
-export { AuthenticationClient, HmppsAuditClient, SessionClient, AppointmentClient, ReferenceDataClient }
+export { AuditClient, AuthenticationClient, HmppsAuditClient, SessionClient, AppointmentClient, ReferenceDataClient }
