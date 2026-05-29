@@ -1,4 +1,5 @@
-import HmppsAuditClient, { AuditEvent } from '../data/hmppsAuditClient'
+import { AuditParams } from '../@types/user-defined'
+import { AuditClient } from '../data'
 
 export enum Page {
   EXAMPLE_PAGE = 'EXAMPLE_PAGE',
@@ -41,26 +42,10 @@ export enum Page {
   VIEW_REVIEW_APPOINTMENT_LEFT_EARLY_COMPLIANCE = 'VIEW_REVIEW_APPOINTMENT_LEFT_EARLY_COMPLIANCE',
 }
 
-export interface PageViewEventDetails {
-  who: string
-  subjectId?: string
-  subjectType?: string
-  correlationId?: string
-  details?: object
-}
-
 export default class AuditService {
-  constructor(private readonly hmppsAuditClient: HmppsAuditClient) {}
+  constructor(private readonly auditClient: AuditClient) {}
 
-  async logAuditEvent(event: AuditEvent) {
-    await this.hmppsAuditClient.sendMessage(event)
-  }
-
-  async logPageView(page: Page, eventDetails: PageViewEventDetails) {
-    const event: AuditEvent = {
-      ...eventDetails,
-      what: page,
-    }
-    await this.hmppsAuditClient.sendMessage(event)
+  async sendAuditMessage(auditParams: AuditParams) {
+    await this.auditClient.sendAuditMessage(auditParams)
   }
 }

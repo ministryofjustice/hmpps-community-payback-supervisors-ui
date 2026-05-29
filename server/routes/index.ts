@@ -1,27 +1,25 @@
 import { Router } from 'express'
-
-import type { Services } from '../services'
 import { Page } from '../services/auditService'
 import sessionRoutes from './session'
 import appointmentRoutes from './appointment'
 import type { Controllers } from '../controllers'
 import staticRoutes from './static'
+import { actions } from './utils'
 
-export default function routes(controllers: Controllers, { auditService }: Services): Router {
+export default function routes(controllers: Controllers): Router {
   const router = Router()
+
+  const { get } = actions(router)
 
   const { indexController, sessionsController, staticController } = controllers
 
-  router.get('/', async (req, res, next) => {
-    await auditService.logPageView(Page.VIEW_INDEX_PAGE, { who: res.locals.user.username, correlationId: req.id })
-
-    const handler = indexController.index()
-    await handler(req, res, next)
+  get('/', indexController.index(), {
+    auditEvent: Page.VIEW_INDEX_PAGE,
   })
 
-  staticRoutes(staticController, router, auditService)
-  sessionRoutes(sessionsController, router, auditService)
-  appointmentRoutes(controllers, router, auditService)
+  staticRoutes(staticController, router)
+  sessionRoutes(sessionsController, router)
+  appointmentRoutes(controllers, router)
 
   return router
 }

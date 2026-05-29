@@ -1,39 +1,22 @@
 import { Router } from 'express'
 import paths from '../paths'
 import SessionsController from '../controllers/sessionsController'
-import AuditService, { Page } from '../services/auditService'
+import { Page } from '../services/auditService'
+import { actions } from './utils'
 
-export default function sessionRoutes(
-  sessionsController: SessionsController,
-  router: Router,
-  auditService: AuditService,
-): Router {
-  router.get(paths.sessions.show.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.VIEW_NEXT_SESSIONS, {
-      who: res.locals.user.username,
-      correlationId: req.id,
-    })
+export default function sessionRoutes(sessionsController: SessionsController, router: Router): Router {
+  const { get, post } = actions(router)
 
-    const handler = sessionsController.show()
-    await handler(req, res, next)
+  get(paths.sessions.show.pattern, sessionsController.show(), {
+    auditEvent: Page.VIEW_NEXT_SESSIONS,
   })
 
-  router.get(paths.sessions.clearSessionStatuses.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.VIEW_DEV_CLEAR_SESSION_STATUSES, {
-      who: res.locals.user.username,
-      correlationId: req.id,
-    })
-    const handler = sessionsController.confirmClearSession()
-    await handler(req, res, next)
+  get(paths.sessions.clearSessionStatuses.pattern, sessionsController.confirmClearSession(), {
+    auditEvent: Page.VIEW_DEV_CLEAR_SESSION_STATUSES,
   })
 
-  router.post(paths.sessions.clearSessionStatuses.pattern, async (req, res, next) => {
-    await auditService.logPageView(Page.EDIT_DEV_CLEAR_SESSION_STATUSES, {
-      who: res.locals.user.username,
-      correlationId: req.id,
-    })
-    const handler = sessionsController.clearSessions()
-    await handler(req, res, next)
+  post(paths.sessions.clearSessionStatuses.pattern, sessionsController.clearSessions(), {
+    auditEvent: Page.EDIT_DEV_CLEAR_SESSION_STATUSES,
   })
 
   return router
