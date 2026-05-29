@@ -67,6 +67,7 @@
     "nunjucks": "^3.2.4",
     "passport": "^0.7.0",
     "passport-oauth2": "^1.8.0",
+    "path-to-regexp": "8.4.2",
     "qs": "^6.15.0",
     "redis": "^5.11.0",
     "static-path": "^0.0.4",
