@@ -14,45 +14,42 @@ export type AppointmentDto = {
      * The NDelius Appointment ID
      */
     id: number;
-    communityPaybackId?: string;
+    communityPaybackId?: string | null;
     version: string;
     deliusEventNumber: number;
     /**
      * Retrieve project information from GET project instead. Whilst marked as optional to support deprecation, this will always be populated.
      * @deprecated
      */
-    projectName?: string;
+    projectName?: string | null;
     projectCode: string;
     /**
      * Retrieve project information from GET project instead. Whilst marked as optional to support deprecation, this will always be populated.
      * @deprecated
      */
-    projectTypeName?: string;
+    projectTypeName?: string | null;
     /**
      * Retrieve project information from GET project instead. Whilst marked as optional to support deprecation, this will always be populated.
      * @deprecated
      */
-    projectTypeCode?: string;
-    /**
-     * Retrieve project information from GET project instead. Whilst marked as optional to support deprecation, this will always be populated.
-     * @deprecated
-     */
-    projectType?: ProjectTypeDto;
+    projectTypeCode?: string | null;
+    projectType?: (ProjectTypeDto | null);
     offender: (OffenderFullDto | OffenderLimitedDto | OffenderNotFoundDto);
     supervisingTeam: string;
     supervisingTeamCode: string;
     providerCode: string;
-    pickUpData?: PickUpDataDto;
+    pickUpData?: (PickUpDataDto | null);
     date: string;
     startTime: string;
     endTime: string;
-    minutesCredited?: number;
-    contactOutcomeCode?: string;
-    attendanceData?: AttendanceDataDto;
-    enforcementData?: EnforcementDto;
+    minutesCredited?: number | null;
+    contactOutcomeCode?: string | null;
+    attendanceData?: (AttendanceDataDto | null);
+    enforcementData?: (EnforcementDto | null);
+    supervisorOfficerName: string;
     supervisorOfficerCode: string;
-    notes?: string;
-    sensitive?: boolean;
-    alertActive?: boolean;
+    notes?: string | null;
+    sensitive?: boolean | null;
+    alertActive?: boolean | null;
 };
 

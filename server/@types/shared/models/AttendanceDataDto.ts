@@ -9,8 +9,8 @@ export type AttendanceDataDto = {
      * Deprecated, use penaltyMinutes instead
      * @deprecated
      */
-    penaltyTime?: string;
-    penaltyMinutes?: number;
+    penaltyTime?: string | null;
+    penaltyMinutes?: number | null;
     workQuality: 'EXCELLENT' | 'GOOD' | 'NOT_APPLICABLE' | 'POOR' | 'SATISFACTORY' | 'UNSATISFACTORY';
     behaviour: 'EXCELLENT' | 'GOOD' | 'NOT_APPLICABLE' | 'POOR' | 'SATISFACTORY' | 'UNSATISFACTORY';
 };

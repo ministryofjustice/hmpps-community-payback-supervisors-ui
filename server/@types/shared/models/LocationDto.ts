@@ -3,11 +3,11 @@
 /* tslint:disable */
 /* eslint-disable */
 export type LocationDto = {
-    buildingName?: string;
-    buildingNumber?: string;
-    streetName?: string;
-    townCity?: string;
-    county?: string;
-    postCode?: string;
+    buildingName?: string | null;
+    buildingNumber?: string | null;
+    streetName?: string | null;
+    townCity?: string | null;
+    county?: string | null;
+    postCode?: string | null;
 };
 

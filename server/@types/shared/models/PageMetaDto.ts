@@ -2,9 +2,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type EnforcementDto = {
-    enforcementActionName: string;
-    enforcementActionId: string;
-    respondBy?: string | null;
+export type PageMetaDto = {
+    size: number;
+    number: number;
+    totalElements: number;
+    totalPages: number;
 };
 

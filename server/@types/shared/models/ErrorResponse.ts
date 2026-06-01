@@ -4,9 +4,9 @@
 /* eslint-disable */
 export type ErrorResponse = {
     status: number;
-    errorCode?: string;
-    userMessage?: string;
-    developerMessage?: string;
-    moreInfo?: string;
+    errorCode?: string | null;
+    userMessage?: string | null;
+    developerMessage?: string | null;
+    moreInfo?: string | null;
 };
 
