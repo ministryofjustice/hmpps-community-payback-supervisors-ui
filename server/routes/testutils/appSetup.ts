@@ -5,8 +5,6 @@ import { randomUUID } from 'crypto'
 import routes from '../index'
 import nunjucksSetup from '../../utils/nunjucksSetup'
 import errorHandler from '../../errorHandler'
-import type { Services } from '../../services'
-import AuditService from '../../services/auditService'
 import { HmppsUser } from '../../interfaces/hmppsUser'
 import setUpWebSession from '../../middleware/setUpWebSession'
 import { Controllers } from '../../controllers'
@@ -27,12 +25,7 @@ export const user: HmppsUser = {
 
 export const flashProvider = jest.fn()
 
-function appSetup(
-  controllers: Controllers,
-  services: Services,
-  production: boolean,
-  userSupplier: () => HmppsUser,
-): Express {
+function appSetup(controllers: Controllers, production: boolean, userSupplier: () => HmppsUser): Express {
   const app = express()
 
   app.set('view engine', 'njk')
@@ -53,7 +46,7 @@ function appSetup(
   })
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))
-  app.use(routes(controllers, services))
+  app.use(routes(controllers))
   app.use((req, res, next) => next(new NotFound()))
   app.use(errorHandler(production))
 
@@ -62,18 +55,14 @@ function appSetup(
 
 export function appWithAllRoutes({
   production = false,
-  services = {
-    auditService: new AuditService(null) as jest.Mocked<AuditService>,
-  },
   controllers = {
     staticController: new StaticController() as jest.Mocked<StaticController>,
   },
   userSupplier = () => user,
 }: {
   production?: boolean
-  services?: Partial<Services>
   controllers?: Partial<Controllers>
   userSupplier?: () => HmppsUser
 }): Express {
-  return appSetup(controllers as Controllers, services as Services, production, userSupplier)
+  return appSetup(controllers as Controllers, production, userSupplier)
 }

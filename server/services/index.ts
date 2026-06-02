@@ -10,7 +10,7 @@ import AppointmentFormService from './appointmentFormService'
 export const services = () => {
   const {
     applicationInfo,
-    hmppsAuditClient,
+    auditClient,
     sessionClient,
     appointmentClient,
     referenceDataClient,
@@ -20,7 +20,7 @@ export const services = () => {
 
   return {
     applicationInfo,
-    auditService: new AuditService(hmppsAuditClient),
+    auditService: new AuditService(auditClient),
     sessionService: new SessionService(sessionClient),
     appointmentService: new AppointmentService(appointmentClient),
     referenceDataService: new ReferenceDataService(referenceDataClient),

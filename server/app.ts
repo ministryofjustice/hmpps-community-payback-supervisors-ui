@@ -43,7 +43,7 @@ export default function createApp(controllers: Controllers, services: Services):
   app.use(setUpCsrf())
   app.use(setUpCurrentUser())
 
-  app.use(routes(controllers, services))
+  app.use(routes(controllers))
 
   Sentry.setupExpressErrorHandler(app)
 

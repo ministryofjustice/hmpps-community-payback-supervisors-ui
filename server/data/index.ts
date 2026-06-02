@@ -13,13 +13,13 @@ buildAppInsightsClient(applicationInfo)
 
 import { createRedisClient } from './redisClient'
 import config from '../config'
-import HmppsAuditClient from './hmppsAuditClient'
 import logger from '../../logger'
 import SessionClient from './sessionClient'
 import AppointmentClient from './appointmentClient'
 import ReferenceDataClient from './referenceDataClient'
 import FormClient from './formClient'
 import SupervisorClient from './supervisorClient'
+import AuditClient from './auditClient'
 
 export const dataAccess = () => {
   const hmppsAuthClient = new AuthenticationClient(
@@ -31,7 +31,7 @@ export const dataAccess = () => {
   return {
     applicationInfo,
     hmppsAuthClient,
-    hmppsAuditClient: new HmppsAuditClient(config.sqs.audit),
+    auditClient: new AuditClient(config.sqs.audit),
     sessionClient: new SessionClient(hmppsAuthClient),
     appointmentClient: new AppointmentClient(hmppsAuthClient),
     referenceDataClient: new ReferenceDataClient(hmppsAuthClient),
@@ -42,4 +42,4 @@ export const dataAccess = () => {
 
 export type DataAccess = ReturnType<typeof dataAccess>
 
-export { AuthenticationClient, HmppsAuditClient, SessionClient, AppointmentClient, ReferenceDataClient }
+export { AuditClient, AuthenticationClient, SessionClient, AppointmentClient, ReferenceDataClient }

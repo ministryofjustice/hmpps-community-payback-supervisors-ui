@@ -3,12 +3,24 @@ import type { HTTPError } from 'superagent'
 import { DeepMocked, createMock } from '@golevelup/ts-jest'
 import request from 'supertest'
 import createErrorHandler from './errorHandler'
+import { Controllers, controllers } from './controllers'
 import { appWithAllRoutes } from './routes/testutils/appSetup'
 
 let app: Express
 
+jest.mock('./controllers', () => ({
+  controllers: jest.fn(),
+}))
+
+const mockControllers = createMock<Controllers>() as DeepMocked<Controllers>
+;(controllers as jest.Mock).mockReturnValue(mockControllers)
+
 beforeEach(() => {
-  app = appWithAllRoutes({})
+  jest.resetModules()
+
+  app = appWithAllRoutes({
+    controllers: mockControllers,
+  })
 })
 
 afterEach(() => {
@@ -28,7 +40,7 @@ describe('GET 404', () => {
   })
 
   it('should render content without stack in production mode', () => {
-    return request(appWithAllRoutes({ production: true }))
+    return request(appWithAllRoutes({ production: true, controllers: mockControllers }))
       .get('/unknown')
       .expect(404)
       .expect('Content-Type', /html/)

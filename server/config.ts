@@ -39,6 +39,7 @@ const auditConfig = () => {
       auditEnabled && requiredInProduction,
     ),
     region: get('AUDIT_SQS_REGION', 'eu-west-2'),
+    logErrors: get('AUDIT_LOG_ERRORS', 'false') === 'true',
   }
 }
 
