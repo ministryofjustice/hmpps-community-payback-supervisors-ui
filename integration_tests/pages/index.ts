@@ -7,9 +7,9 @@ export default class IndexPage extends Page {
     super('Next session')
   }
 
-  headerUserName = (): PageElement => cy.get('[data-qa=header-user-name]')
+  headerUserName = (): PageElement => cy.get('[data-qa=probation-common-header-user-name]')
 
-  headerEnvironmentBanner = (): PageElement => cy.get('[data-qa=header-environment-banner]')
+  headerEnvironmentBanner = (): PageElement => cy.get('[data-qa=probation-common-environment-tag]')
 
   headerPhaseBanner = (): PageElement => cy.get('.govuk-phase-banner')
 

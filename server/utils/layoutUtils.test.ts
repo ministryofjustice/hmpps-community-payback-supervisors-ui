@@ -1,5 +1,5 @@
 import { LinkItem } from '../@types/user-defined'
-import LayoutUtils, { staticFooterLinks } from './layoutUtils'
+import LayoutUtils from './layoutUtils'
 
 describe('LayoutUtils', () => {
   it('prepends additional links to the static footer links', () => {
@@ -9,7 +9,10 @@ describe('LayoutUtils', () => {
     ]
     const result = LayoutUtils.getFooterItems(footerLinks)
 
-    expect(result).toEqual([{ href: '/1', text: 'first' }, { href: '/2', text: 'second' }, ...staticFooterLinks])
+    expect(result).toEqual([
+      { href: '/1', text: 'first' },
+      { href: '/2', text: 'second' },
+    ])
   })
 
   it.each([[undefined], [[]]])(
@@ -17,7 +20,7 @@ describe('LayoutUtils', () => {
     (links: LinkItem[] | undefined) => {
       const result = LayoutUtils.getFooterItems(links)
 
-      expect(result).toEqual(staticFooterLinks)
+      expect(result).toEqual([])
     },
   )
 })

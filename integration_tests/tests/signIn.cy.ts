@@ -57,7 +57,6 @@ context('Sign In', () => {
     cy.task('stubAuthManageDetails')
     const indexPage = Page.verifyOnPage(IndexPage)
 
-    indexPage.manageDetails().get('a').invoke('removeAttr', 'target')
     indexPage.manageDetails().click()
     Page.verifyOnPage(AuthManageDetailsPage)
   })
