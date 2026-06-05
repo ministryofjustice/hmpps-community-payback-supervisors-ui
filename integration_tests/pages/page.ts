@@ -21,9 +21,17 @@ export default abstract class Page {
     cy.get('a').contains('Back').click()
   }
 
-  signOut = (): PageElement => cy.get('[data-qa=signOut]')
+  signOut = (): PageElement => {
+    cy.get('.probation-common-header__menu-toggle-label').first().click()
 
-  manageDetails = (): PageElement => cy.get('[data-qa=manageDetails]')
+    return cy.get('[href="/sign-out"]')
+  }
+
+  manageDetails = (): PageElement => {
+    cy.get('.probation-common-header__menu-toggle-label').first().click()
+
+    return cy.get('[href="/account-details"]').first()
+  }
 
   getTextInputById(id: string): Cypress.Chainable<JQuery<HTMLElement>> {
     return cy.get(`#${id}`)

@@ -1,6 +1,7 @@
 {% extends "govuk/template.njk" %}
 
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+{%- from "moj/components/domain-specific/probation/footer/macro.njk" import pdsFooter -%}
 
 {% block head %}
   <link href="{{ '/assets/css/index.css' | assetMap }}" rel="stylesheet"/>
@@ -22,12 +23,14 @@
 {% endblock %}
 
 {% block footer %}
-  {{ govukFooter({
-    classes: 'govuk-footer',
-    meta: {
-      items: layoutUtils.getFooterItems(footerLinks)
-    }
+  {{ pdsFooter({
+    baseUrl: 'https://probation-frontend-components-dev.hmpps.service.justice.gov.uk'
   }) }}
+  {% if footerLinks %}
+    {% for link in footerLinks %}
+      <a href="{{link.href}}">{{link.text}}</a>
+    {% endfor %}
+  {% endif %}
 {% endblock %}
 
 {% block bodyEnd %}
