@@ -5,4 +5,5 @@ import { EnforcementDto } from '../../@types/shared'
 export default Factory.define<EnforcementDto>(() => ({
   enforcementActionId: faker.string.uuid(),
   respondBy: faker.date.soon().toISOString(),
+  enforcementActionName: faker.string.alpha(10),
 }))
