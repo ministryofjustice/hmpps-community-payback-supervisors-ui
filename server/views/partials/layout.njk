@@ -27,7 +27,7 @@
     baseUrl: 'https://probation-frontend-components-dev.hmpps.service.justice.gov.uk'
   }) }}
   {% if footerLinks %}
-    {% for link in layoutUtils.getFooterItems(footerLinks) %}
+    {% for link in footerLinks %}
       <a href="{{link.href}}">{{link.text}}</a>
     {% endfor %}
   {% endif %}
