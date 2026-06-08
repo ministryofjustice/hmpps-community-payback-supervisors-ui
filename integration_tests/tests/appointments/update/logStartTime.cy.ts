@@ -24,7 +24,6 @@ import appointmentFactory from '../../../../server/testutils/factories/appointme
 import appointmentStatusFactory from '../../../../server/testutils/factories/appointmentStatusFactory'
 import appointmentSummaryFactory from '../../../../server/testutils/factories/appointmentSummaryFactory'
 import sessionFactory from '../../../../server/testutils/factories/sessionFactory'
-import IsAbleToWorkPage from '../../../pages/appointments/update/isAbleToWorkPage'
 import ConfirmAbsentPage from '../../../pages/appointments/update/confirm/confirmAbsentPage'
 import StartTimePage from '../../../pages/appointments/update/startTimePage'
 import Page from '../../../pages/page'
@@ -35,6 +34,7 @@ import sessionSummaryFactory from '../../../../server/testutils/factories/sessio
 import supervisorFactory from '../../../../server/testutils/factories/supervisorFactory'
 import appointmentOutcomeFormFactory from '../../../../server/testutils/factories/appointmentOutcomeFormFactory'
 import ReviewPage from '../../../pages/appointments/update/reviewPage'
+import EndTimePage from '../../../pages/appointments/update/endTimePage'
 
 context('Log start time ', () => {
   let appointment: AppointmentDto
@@ -85,7 +85,7 @@ context('Log start time ', () => {
       page.clickSubmit()
 
       // Then I see the next form page
-      Page.verifyOnPage(IsAbleToWorkPage, appointment)
+      Page.verifyOnPage(EndTimePage, appointment, 'completed')
     })
   })
 

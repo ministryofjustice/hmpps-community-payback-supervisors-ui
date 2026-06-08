@@ -1,7 +1,6 @@
 /* istanbul ignore file */
 
 import type { Services } from '../../services'
-import IsAbleToWorkController from './isAbleToWorkController'
 import ConfirmController from './confirmController'
 import ShowDetailsController from './showDetailsController'
 import StartTimeController from './startTimeController'
@@ -18,10 +17,6 @@ const appointmentControllers = (services: Services) => {
   const startTimeController = new StartTimeController(
     services.appointmentService,
     services.appointmentStatusService,
-    services.appointmentFormService,
-  )
-  const isAbleToWorkController = new IsAbleToWorkController(
-    services.appointmentService,
     services.appointmentFormService,
   )
   const unableToWorkController = new UnableToWorkController(
@@ -47,7 +42,6 @@ const appointmentControllers = (services: Services) => {
   return {
     showDetailsController,
     startTimeController,
-    isAbleToWorkController,
     confirmController,
     unableToWorkController,
     endTimeController,
