@@ -52,7 +52,7 @@ export default class EndTimePage extends BaseAppointmentUpdatePage<Body> {
 
   protected backPath(appointment: AppointmentDto): string {
     return pathWithQuery(
-      paths.appointments.arrived.isAbleToWork({
+      paths.appointments.arrived.startTime({
         projectCode: appointment.projectCode,
         appointmentId: appointment.id.toString(),
       }),

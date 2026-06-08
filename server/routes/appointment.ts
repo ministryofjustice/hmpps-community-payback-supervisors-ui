@@ -32,14 +32,6 @@ export default function appointmentRoutes(controllers: Controllers, router: Rout
     auditEvent: Page.EDIT_APPOINTMENT_ABSENT_START_TIME,
   })
 
-  get(paths.appointments.arrived.isAbleToWork.pattern, appointments.isAbleToWorkController.show(), {
-    auditEvent: Page.VIEW_APPOINTMENT_ABLE_TO_WORK,
-  })
-
-  post(paths.appointments.arrived.isAbleToWork.pattern, appointments.isAbleToWorkController.submit(), {
-    auditEvent: Page.CREATE_APPOINTMENT_ABLE_TO_WORK,
-  })
-
   get(paths.appointments.arrived.endTime.pattern, appointments.endTimeController.show('arrived'), {
     auditEvent: Page.VIEW_APPOINTMENT_ARRIVED_END_TIME,
   })

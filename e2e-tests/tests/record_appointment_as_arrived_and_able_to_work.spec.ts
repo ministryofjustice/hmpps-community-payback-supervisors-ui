@@ -10,7 +10,6 @@ import ReviewPage from '../pages/appointments/update/reviewPage'
 import HomePage from '../pages/homePage'
 import SessionPage from '../pages/sessionPage'
 import StartTimePage from '../pages/appointments/update/startTimePage'
-import IsAbleToWorkPage from '../pages/appointments/update/isAbleToWorkPage'
 
 test('Record an appointment as arrived and able to work', async ({ page, supervisorUser, testData, team }) => {
   const { person, project } = testData
@@ -32,11 +31,6 @@ test('Record an appointment as arrived and able to work', async ({ page, supervi
   const startTimePage = new StartTimePage(page, 'arrived')
   await startTimePage.expect.toBeOnThePage()
   await startTimePage.clickContinue()
-
-  const isAbleToWorkPage = new IsAbleToWorkPage(page)
-  await isAbleToWorkPage.expect.toBeOnThePage()
-  await isAbleToWorkPage.checkYes()
-  await isAbleToWorkPage.clickContinue()
 
   const endTimePage = new EndTimePage(page, 'completed')
   await endTimePage.expect.toBeOnThePage()

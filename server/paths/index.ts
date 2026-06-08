@@ -18,7 +18,6 @@ const paths = {
     show: appointmentPath,
     arrived: {
       startTime: appointmentArrivedPath.path('start-time'),
-      isAbleToWork: appointmentArrivedPath.path('is-able-to-work'),
       endTime: appointmentArrivedPath.path('finish-time'),
       unableToWork: appointmentArrivedPath.path('unable-to-work'),
     },
