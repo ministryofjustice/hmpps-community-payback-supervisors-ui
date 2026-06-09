@@ -31,10 +31,6 @@ export default class EndTimePage extends BaseAppointmentUpdatePage<Body> {
   }
 
   nextPath(appointmentId: string, projectCode: string): string {
-    if (this.action === 'leftEarly') {
-      return pathWithQuery(paths.appointments.leftEarly.reason({ projectCode, appointmentId }), { form: this.formId })
-    }
-
     if (this.action === 'arrived') {
       return pathWithQuery(paths.appointments.arrived.unableToWork({ projectCode, appointmentId }), {
         form: this.formId,
@@ -112,10 +108,6 @@ export default class EndTimePage extends BaseAppointmentUpdatePage<Body> {
   private getPageTitle(offender: Offender): string {
     if (this.action === 'completed') {
       return `You're logging ${offender.name} as finishing today at:`
-    }
-
-    if (this.action === 'leftEarly') {
-      return `You're logging out ${offender.name} early today at:`
     }
 
     if (this.action === 'arrived') {
