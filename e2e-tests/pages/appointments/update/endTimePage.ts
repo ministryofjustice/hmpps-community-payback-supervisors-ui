@@ -21,9 +21,6 @@ export default class EndTimePage extends BasePage {
     if (this.action === 'completed') {
       return /You're logging (.*) as finishing today at:/
     }
-    if (this.action === 'leftEarly') {
-      return /You're logging out (.*) early today at:/
-    }
     return /You're logging (.*) as having left at:/
   }
 }

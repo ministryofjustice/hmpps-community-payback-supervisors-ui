@@ -6,7 +6,6 @@ const appointmentPath = projectPath.path('/appointments/:appointmentId')
 const appointmentArrivedPath = appointmentPath.path('arrived')
 const appointmentAbsentPath = appointmentPath.path('absent')
 const appointmentCompletedPath = appointmentPath.path('completed')
-const appointmentLeftEarlyPath = appointmentPath.path('left-early')
 const appointmentReviewPath = appointmentPath.path('review')
 
 const paths = {
@@ -25,11 +24,6 @@ const paths = {
       endTime: appointmentCompletedPath.path('finish-time'),
       compliance: appointmentCompletedPath.path('compliance'),
     },
-    leftEarly: {
-      endTime: appointmentLeftEarlyPath.path('finish-time'),
-      reason: appointmentLeftEarlyPath.path('reason'),
-      compliance: appointmentLeftEarlyPath.path('compliance'),
-    },
     absent: {
       startTime: appointmentAbsentPath.path('start-time'),
     },
@@ -38,14 +32,10 @@ const paths = {
       absent: appointmentPath.path('confirm-absent'),
       unableToWork: appointmentPath.path('confirm-unable-to-work'),
       completed: appointmentPath.path('confirm-completed'),
-      leftEarly: appointmentPath.path('confirm-left-early'),
     },
     review: {
       absent: appointmentReviewPath.path('absent'),
       unableToWork: appointmentReviewPath.path('unable-to-work'),
-      leftEarly: {
-        compliance: appointmentReviewPath.path('left-early').path('compliance'),
-      },
       completed: {
         compliance: appointmentReviewPath.path('completed').path('compliance'),
       },

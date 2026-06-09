@@ -9,10 +9,8 @@ import EndTimePage from '../../../pages/appointments/update/endTimePage'
 import CompliancePage from '../../../pages/appointments/update/compliancePage'
 import Page from '../../../pages/page'
 import sessionSummaryFactory from '../../../../server/testutils/factories/sessionSummaryFactory'
-import ConfirmLeftEarlyPage from '../../../pages/appointments/update/confirm/confirmLeftEarlyPage'
 import supervisorFactory from '../../../../server/testutils/factories/supervisorFactory'
 import appointmentOutcomeFormFactory from '../../../../server/testutils/factories/appointmentOutcomeFormFactory'
-import LeftEarlyReasonPage from '../../../pages/appointments/update/leftEarlyReasonPage'
 import ReviewPage from '../../../pages/appointments/update/reviewPage'
 
 //  Scenario: Validating the log compliance page
@@ -216,46 +214,6 @@ context('Log compliance', () => {
 
       // Then I see the log hours page
       Page.verifyOnPage(EndTimePage, this.appointment, 'completed')
-    })
-  })
-
-  describe('left early', function scenario() {
-    describe('submit', function describe() {
-      // Scenario: Completing the log compliance page
-      it('submits the form and navigates to the next page', function test() {
-        // Given I am on the log compliance page for an appointment
-        cy.task('stubFindAppointment', { appointment: this.appointment })
-        const page = CompliancePage.visit(this.appointment, 'leftEarly', formId)
-
-        // When I submit the form
-        cy.task('stubUpdateAppointmentOutcome', { appointment: this.appointment })
-        cy.task('stubSaveStatusesForm', { sessionOrAppointment: this.appointment })
-
-        page.completeForm()
-        page.clickSubmit()
-
-        // And I continue from the review page
-        const reviewPage = Page.verifyOnPage(ReviewPage)
-        reviewPage.shouldNotShowAlertPractitionerMessage()
-        reviewPage.clickSubmit()
-
-        // Then I see the confirm left early page
-        Page.verifyOnPage(ConfirmLeftEarlyPage, this.appointment)
-      })
-    })
-
-    //  Scenario: Returning to log hours page
-    it('navigates back to the previous page', function test() {
-      // Given I am on the log compliance page for an appointment
-      cy.task('stubFindAppointment', { appointment: this.appointment })
-      const page = CompliancePage.visit(this.appointment, 'leftEarly', formId)
-      cy.task('stubGetContactOutcomes')
-
-      // When I click back
-      page.clickBack()
-
-      // Then I see the log hours page
-      Page.verifyOnPage(LeftEarlyReasonPage, this.appointment)
     })
   })
 })

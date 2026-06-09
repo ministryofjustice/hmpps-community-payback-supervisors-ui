@@ -49,7 +49,7 @@ export interface AuditParams {
 
 export type AppointmentArrivedAction = 'arrived' | 'absent'
 
-export type AppointmentCompletedAction = 'completed' | 'leftEarly'
+export type AppointmentCompletedAction = 'completed'
 
 export type AppointmentEndTimeAction = AppointmentCompletedAction | 'arrived'
 

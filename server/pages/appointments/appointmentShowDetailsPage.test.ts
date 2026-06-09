@@ -93,13 +93,6 @@ describe('AppointmentShowDetailsPage', () => {
               projectCode: appointment.projectCode,
             }),
           },
-          {
-            text: 'Left site early',
-            href: paths.appointments.leftEarly.endTime({
-              appointmentId: appointment.id.toString(),
-              projectCode: appointment.projectCode,
-            }),
-          },
         ])
       })
 

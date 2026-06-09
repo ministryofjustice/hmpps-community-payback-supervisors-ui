@@ -10,8 +10,6 @@ export default class ComplianceReviewPage extends ReviewPage {
 
   private endTimeBackPath: string
 
-  private attendanceBackPath: string
-
   constructor(
     private action: AppointmentCompletedAction,
     private appointment: AppointmentDto,
@@ -20,9 +18,9 @@ export default class ComplianceReviewPage extends ReviewPage {
     private formData: AppointmentOutcomeForm,
     private reqBody: ComplianceQuery,
   ) {
-    super('compliance', action === 'leftEarly' ? 'Left site' : 'Session complete', {})
+    super('compliance', 'Session complete', {})
 
-    const path = this.action === 'leftEarly' ? paths.appointments.leftEarly : paths.appointments.completed
+    const path = paths.appointments.completed
 
     this.startTimeBackPath = pathWithQuery(
       paths.appointments.arrived.startTime({
@@ -40,24 +38,6 @@ export default class ComplianceReviewPage extends ReviewPage {
       { form: this.formId },
     )
 
-    if (action === 'completed') {
-      this.attendanceBackPath = pathWithQuery(
-        paths.appointments[action].endTime({
-          projectCode: this.appointment.projectCode,
-          appointmentId: this.appointment.id.toString(),
-        }),
-        { form: this.formId },
-      )
-    } else {
-      this.attendanceBackPath = pathWithQuery(
-        paths.appointments.leftEarly.reason({
-          projectCode: this.appointment.projectCode,
-          appointmentId: this.appointment.id.toString(),
-        }),
-        { form: this.formId },
-      )
-    }
-
     this.changeUrl = pathWithQuery(
       path.compliance({
         projectCode: this.appointment.projectCode,
@@ -71,13 +51,6 @@ export default class ComplianceReviewPage extends ReviewPage {
 
   protected mappedReviewFields(): ReviewItem {
     const fields: ReviewItem = {}
-
-    if (this.action === 'leftEarly') {
-      fields.Attendance = {
-        value: this.contactOutcome?.name,
-        changeUrl: this.attendanceBackPath,
-      }
-    }
 
     // Not_applicable -> Not applicable
     const fmtLabel = (str: string) => properCase(str).replace(/_/, ' ')

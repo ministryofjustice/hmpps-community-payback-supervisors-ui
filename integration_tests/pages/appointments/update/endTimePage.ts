@@ -36,10 +36,6 @@ export default class EndTimePage extends LogTimePage {
       title = `You're logging ${offender.name} as finishing today at:`
     }
 
-    if (action === 'leftEarly') {
-      title = `You're logging out ${offender.name} early today at:`
-    }
-
     if (action === 'arrived') {
       title = `You're logging ${offender.name} as having left at:`
     }

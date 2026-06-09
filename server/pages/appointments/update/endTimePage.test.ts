@@ -60,35 +60,6 @@ describe('EndTimePage', () => {
       expect(result.time).toEqual(updatedEndTime)
     })
 
-    it('returns leftEarly update path if action is leftEarly', () => {
-      const appointment = appointmentFactory.build()
-      const page = new EndTimePage('leftEarly', formId)
-      const result = page.viewData(appointment, form)
-      expect(result.updatePath).toBe(
-        `${paths.appointments.leftEarly.endTime({
-          projectCode: appointment.projectCode,
-          appointmentId: appointment.id.toString(),
-        })}?form=${formId}`,
-      )
-    })
-
-    it('returns the left early title if action is leftEarly', () => {
-      const offender = {
-        name: 'Sam Smith',
-        crn: 'CRN123',
-        isLimited: false,
-      }
-
-      offenderMock.mockImplementation(() => {
-        return offender
-      })
-
-      const appointment = appointmentFactory.build()
-      const page = new EndTimePage('leftEarly', formId)
-      const result = page.viewData(appointment, form)
-      expect(result.question).toBe("You're logging out Sam Smith early today at:")
-    })
-
     it('returns end time update path if action is arrived', () => {
       const appointment = appointmentFactory.build()
       const page = new EndTimePage('arrived', formId)
@@ -133,17 +104,6 @@ describe('EndTimePage', () => {
             appointmentId,
           })}?form=${formId}`,
         )
-      })
-    })
-
-    describe('leftEarly', () => {
-      it('should be left early reason path with project code and appointment Id', () => {
-        const appointmentId = '1'
-        const projectCode = '2'
-        const page = new EndTimePage('leftEarly', formId)
-        const result = page.nextPath(appointmentId, projectCode)
-
-        expect(result).toEqual(`${paths.appointments.leftEarly.reason({ projectCode, appointmentId })}?form=${formId}`)
       })
     })
 
@@ -273,16 +233,13 @@ describe('EndTimePage', () => {
   })
 
   describe('updatedFormData', () => {
-    it.each(['completed', 'leftEarly', 'arrived'])(
-      'returns endTime query value',
-      (action: AppointmentEndTimeAction) => {
-        const form = appointmentOutcomeFormFactory.build()
-        const page = new EndTimePage(action, formId, { time: '16:00' })
+    it.each(['completed', 'arrived'])('returns endTime query value', (action: AppointmentEndTimeAction) => {
+      const form = appointmentOutcomeFormFactory.build()
+      const page = new EndTimePage(action, formId, { time: '16:00' })
 
-        const result = page.updatedFormData(form)
+      const result = page.updatedFormData(form)
 
-        expect(result).toEqual({ ...form, endTime: '16:00' })
-      },
-    )
+      expect(result).toEqual({ ...form, endTime: '16:00' })
+    })
   })
 })

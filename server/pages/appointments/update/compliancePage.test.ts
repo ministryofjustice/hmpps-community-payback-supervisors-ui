@@ -62,32 +62,18 @@ describe('CompliancePage', () => {
           })}?form=${formId}`,
         )
       })
-
-      it('should be to reason page if action is "leftEarly"', () => {
-        page = new CompliancePage('leftEarly', formId, {})
-        const result = page.viewData(appointment, form)
-        expect(result.backPath).toBe(
-          `${paths.appointments.leftEarly.reason({
-            projectCode: appointment.projectCode,
-            appointmentId: appointment.id.toString(),
-          })}?form=${formId}`,
-        )
-      })
     })
 
-    it.each(['completed', 'leftEarly'])(
-      'should return an object containing an update link for the form',
-      async (action: AppointmentCompletedAction) => {
-        page = new CompliancePage(action, formId, {})
-        const result = page.viewData(appointment, form)
-        expect(result.updatePath).toBe(
-          `${paths.appointments[action].compliance({
-            projectCode: appointment.projectCode,
-            appointmentId: appointment.id.toString(),
-          })}?form=${formId}`,
-        )
-      },
-    )
+    it('should return an object containing an update link for the form', () => {
+      page = new CompliancePage('completed', formId, {})
+      const result = page.viewData(appointment, form)
+      expect(result.updatePath).toBe(
+        `${paths.appointments.completed.compliance({
+          projectCode: appointment.projectCode,
+          appointmentId: appointment.id.toString(),
+        })}?form=${formId}`,
+      )
+    })
 
     describe('items', () => {
       it('should return items for hiVis', async () => {
@@ -365,13 +351,13 @@ describe('CompliancePage', () => {
   })
 
   describe('next', () => {
-    it.each(['completed', 'leftEarly'])('should return confirm page link', (action: AppointmentCompletedAction) => {
+    it('should return confirm page link', () => {
       const appointmentId = '1'
       const projectCode = '2'
-      page = new CompliancePage(action, formId, {})
+      page = new CompliancePage('completed', formId, {})
 
       expect(page.nextPath(projectCode, appointmentId)).toBe(
-        paths.appointments.confirm[action]({ projectCode, appointmentId }),
+        paths.appointments.confirm.completed({ projectCode, appointmentId }),
       )
     })
   })
@@ -450,26 +436,16 @@ describe('CompliancePage', () => {
 
       expect(result.contactOutcomeCode).toEqual(ReferenceDataService.attendedCompliedOutcomeCode)
     })
-
-    it('saves the given contactOutcomeCode if action is not completed', () => {
-      page = new CompliancePage('leftEarly', formId, {})
-
-      form = appointmentOutcomeFormFactory.build({ contactOutcomeCode: 'code' })
-
-      const result = page.requestBody(appointment, form)
-
-      expect(result.contactOutcomeCode).toEqual('code')
-    })
   })
 
   describe('completedStatus', () => {
-    it.each([
-      ['Session complete', 'completed'],
-      ['Left site', 'leftEarly'],
-    ])('returns "%s" status if action is "%s"', (status: AppointmentStatusType, action: AppointmentCompletedAction) => {
-      page = new CompliancePage(action, formId, {})
+    it.each([['Session complete', 'completed']])(
+      'returns "%s" status if action is "%s"',
+      (status: AppointmentStatusType, action: AppointmentCompletedAction) => {
+        page = new CompliancePage(action, formId, {})
 
-      expect(page.completedStatus()).toEqual(status)
-    })
+        expect(page.completedStatus()).toEqual(status)
+      },
+    )
   })
 })

@@ -197,27 +197,4 @@ context('viewAnAppointment', () => {
       })
     })
   })
-
-  // Scenario: left early appointment
-  describe('left early appointment', () => {
-    // Scenario: starting a left early session form
-    it('I can navigate to the left early session form', () => {
-      // Given I am on the appointment page
-      const appointment = appointmentFactory.build()
-      const appointmentStatus = appointmentStatusFactory.build({ appointmentId: appointment.id, status: 'Working' })
-
-      cy.signIn()
-      cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
-      cy.task('stubGetStatusesForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
-      cy.task('stubSaveAppointmentForm')
-
-      const appointmentPage = AppointmentPage.visit(appointment)
-
-      // When I click on 'Left site early'
-      appointmentPage.clickLeftSiteEarly()
-
-      // Then I should be taken to the first page of the left early session form
-      Page.verifyOnPage(EndTimePage, appointment, 'leftEarly')
-    })
-  })
 })

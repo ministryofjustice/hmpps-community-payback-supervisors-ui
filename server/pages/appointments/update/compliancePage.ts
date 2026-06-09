@@ -125,18 +125,8 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
   }
 
   protected backPath(appointment: AppointmentDto): string {
-    if (this.action === 'completed') {
-      return pathWithQuery(
-        paths.appointments[this.action].endTime({
-          projectCode: appointment.projectCode,
-          appointmentId: appointment.id.toString(),
-        }),
-        { form: this.formId },
-      )
-    }
-
     return pathWithQuery(
-      paths.appointments.leftEarly.reason({
+      paths.appointments[this.action].endTime({
         projectCode: appointment.projectCode,
         appointmentId: appointment.id.toString(),
       }),
@@ -181,7 +171,6 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
 
   private completedStatusType: Record<AppointmentCompletedAction, AppointmentStatusType> = {
     completed: 'Session complete',
-    leftEarly: 'Left site',
   }
 
   private formValues(appointment: AppointmentDto, formData: AppointmentOutcomeForm): ComplianceQuery {

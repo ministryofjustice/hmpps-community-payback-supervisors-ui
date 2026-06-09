@@ -72,34 +72,6 @@ export default function appointmentRoutes(controllers: Controllers, router: Rout
     auditEvent: Page.EDIT_APPOINTMENT_COMPLETED_COMPLIANCE,
   })
 
-  get(paths.appointments.leftEarly.endTime.pattern, appointments.endTimeController.show('leftEarly'), {
-    auditEvent: Page.VIEW_APPOINTMENT_LEFT_EARLY_END_TIME,
-  })
-
-  post(paths.appointments.leftEarly.endTime.pattern, appointments.endTimeController.submit('leftEarly'), {
-    auditEvent: Page.EDIT_APPOINTMENT_LEFT_EARLY_END_TIME,
-  })
-
-  get(paths.appointments.leftEarly.compliance.pattern, appointments.complianceController.show('leftEarly'), {
-    auditEvent: Page.VIEW_APPOINTMENT_LEFT_EARLY_COMPLIANCE,
-  })
-
-  post(paths.appointments.leftEarly.compliance.pattern, appointments.complianceController.submit('leftEarly'), {
-    auditEvent: Page.EDIT_APPOINTMENT_LEFT_EARLY_COMPLIANCE,
-  })
-
-  get(paths.appointments.leftEarly.reason.pattern, appointments.leftEarlyReasonController.show(), {
-    auditEvent: Page.VIEW_APPOINTMENT_LEFT_EARLY_REASON,
-  })
-
-  post(paths.appointments.review.leftEarly.compliance.pattern, appointments.complianceController.review('leftEarly'), {
-    auditEvent: Page.VIEW_REVIEW_APPOINTMENT_LEFT_EARLY_COMPLIANCE,
-  })
-
-  post(paths.appointments.leftEarly.reason.pattern, appointments.leftEarlyReasonController.submit(), {
-    auditEvent: Page.CREATE_APPOINTMENT_LEFT_EARLY_REASON,
-  })
-
   get(paths.appointments.confirm.working.pattern, appointments.confirmController.working(), {
     auditEvent: Page.VIEW_CONFIRM_WORKING,
   })
@@ -114,10 +86,6 @@ export default function appointmentRoutes(controllers: Controllers, router: Rout
 
   get(paths.appointments.confirm.completed.pattern, appointments.confirmController.completed(), {
     auditEvent: Page.VIEW_CONFIRM_COMPLETED,
-  })
-
-  get(paths.appointments.confirm.leftEarly.pattern, appointments.confirmController.leftEarly(), {
-    auditEvent: Page.VIEW_CONFIRM_LEFT_EARLY,
   })
 
   return router
