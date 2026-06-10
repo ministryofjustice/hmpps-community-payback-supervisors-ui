@@ -31,12 +31,6 @@ export default class EndTimePage extends BaseAppointmentUpdatePage<Body> {
   }
 
   nextPath(appointmentId: string, projectCode: string): string {
-    if (this.action === 'arrived') {
-      return pathWithQuery(paths.appointments.arrived.unableToWork({ projectCode, appointmentId }), {
-        form: this.formId,
-      })
-    }
-
     return pathWithQuery(
       paths.appointments.completed.compliance({
         projectCode,

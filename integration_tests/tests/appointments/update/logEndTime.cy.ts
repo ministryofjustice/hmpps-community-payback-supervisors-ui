@@ -12,16 +12,6 @@
 //      Given I am on the end time page for a finish session form
 //      When I a submit a valid time
 //      Then I see the form next page
-//
-//  Scenario: Left early session
-//    Scenario: Validates time entered
-//      Given I am on the end time page for a left early session form
-//      When I submit an invalid time
-//      Then I see the same page with errors
-//    Scenario: Submitting a valid time
-//      Given I am on the end time page for a left early session form
-//      When I a submit a valid time
-//      Then I see the form next page
 
 import appointmentFactory from '../../../../server/testutils/factories/appointmentFactory'
 import appointmentStatusFactory from '../../../../server/testutils/factories/appointmentStatusFactory'

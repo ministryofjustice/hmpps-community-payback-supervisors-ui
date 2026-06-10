@@ -27,28 +27,6 @@ export default class ConfirmController {
     }
   }
 
-  unableToWork(): RequestHandler {
-    return async (_req: Request, res: Response) => {
-      const { projectCode, appointmentId } = _req.params as unknown as AppointmentParams
-
-      const request: GetAppointmentRequest = {
-        username: res.locals.user.username,
-        projectCode,
-        appointmentId,
-      }
-
-      const appointment = await this.appointmentService.getAppointment(request)
-      const offender = new Offender(appointment.offender)
-
-      res.render('appointments/update/confirm', {
-        offender,
-        title: `${offender.name} has been recorded as being unable to work`,
-        nextStepsText: `${offender.name}'s probation practioner will be informed about them being unable to work today.`,
-        sessionPath: paths.sessions.show({ projectCode: appointment.projectCode, date: appointment.date }),
-      })
-    }
-  }
-
   absent(): RequestHandler {
     return async (_req: Request, res: Response) => {
       const { projectCode, appointmentId } = _req.params as unknown as AppointmentParams
