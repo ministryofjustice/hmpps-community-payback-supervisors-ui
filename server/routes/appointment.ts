@@ -60,10 +60,6 @@ export default function appointmentRoutes(controllers: Controllers, router: Rout
     auditEvent: Page.EDIT_APPOINTMENT_COMPLETED_COMPLIANCE,
   })
 
-  get(paths.appointments.confirm.working.pattern, appointments.confirmController.working(), {
-    auditEvent: Page.VIEW_CONFIRM_WORKING,
-  })
-
   get(paths.appointments.confirm.absent.pattern, appointments.confirmController.absent(), {
     auditEvent: Page.VIEW_CONFIRM_ABSENT,
   })

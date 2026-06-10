@@ -14,7 +14,6 @@ describe('AppointmentUtils', () => {
   describe('getStatusTagColour', () => {
     it.each([
       ['Scheduled', 'grey'],
-      ['Working', 'green'],
       ['Session complete', 'blue'],
       ['Not expected', 'red'],
       ['Absent', 'yellow'],
@@ -35,13 +34,10 @@ describe('AppointmentUtils', () => {
       },
     )
 
-    it.each(['Scheduled', 'Not expected', 'Working'])(
-      'should be false if status is "%s"',
-      (status: AppointmentStatusType) => {
-        const result = AppointmentUtils.isSessionComplete(status)
+    it.each(['Scheduled', 'Not expected'])('should be false if status is "%s"', (status: AppointmentStatusType) => {
+      const result = AppointmentUtils.isSessionComplete(status)
 
-        expect(result).toBe(false)
-      },
-    )
+      expect(result).toBe(false)
+    })
   })
 })
