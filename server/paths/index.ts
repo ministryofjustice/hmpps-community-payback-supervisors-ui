@@ -18,7 +18,6 @@ const paths = {
     arrived: {
       startTime: appointmentArrivedPath.path('start-time'),
       endTime: appointmentArrivedPath.path('finish-time'),
-      unableToWork: appointmentArrivedPath.path('unable-to-work'),
     },
     completed: {
       endTime: appointmentCompletedPath.path('finish-time'),
@@ -30,12 +29,10 @@ const paths = {
     confirm: {
       working: appointmentPath.path('confirm-working'),
       absent: appointmentPath.path('confirm-absent'),
-      unableToWork: appointmentPath.path('confirm-unable-to-work'),
       completed: appointmentPath.path('confirm-completed'),
     },
     review: {
       absent: appointmentReviewPath.path('absent'),
-      unableToWork: appointmentReviewPath.path('unable-to-work'),
       completed: {
         compliance: appointmentReviewPath.path('completed').path('compliance'),
       },

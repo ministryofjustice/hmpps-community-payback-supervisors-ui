@@ -32,14 +32,4 @@ export default class ReferenceDataService {
   async getContactOutcomes(userName: string): Promise<ContactOutcomesDto> {
     return this.referenceDataClient.getContactOutcomes(userName)
   }
-
-  async getAttendedNonWorkingContactOutcomes(userName: string): Promise<ContactOutcomesDto> {
-    const contactOutcomes = await this.getContactOutcomes(userName)
-
-    return {
-      contactOutcomes: contactOutcomes.contactOutcomes.filter(outcome =>
-        ReferenceDataService.attendedNonWorkingOutcomeCodes.includes(outcome.code),
-      ),
-    }
-  }
 }

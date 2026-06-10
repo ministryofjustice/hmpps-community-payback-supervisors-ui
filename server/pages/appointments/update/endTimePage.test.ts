@@ -106,19 +106,6 @@ describe('EndTimePage', () => {
         )
       })
     })
-
-    describe('arrived', () => {
-      it('should be arrived unable to work path with project code and appointment Id', () => {
-        const appointmentId = '1'
-        const projectCode = '2'
-        const page = new EndTimePage('arrived', formId)
-        const result = page.nextPath(appointmentId, projectCode)
-
-        expect(result).toEqual(
-          `${paths.appointments.arrived.unableToWork({ projectCode, appointmentId })}?form=${formId}`,
-        )
-      })
-    })
   })
 
   describe('validate', () => {

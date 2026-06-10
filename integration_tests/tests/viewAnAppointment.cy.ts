@@ -30,12 +30,6 @@
 //  Scenario: Appointment with completed status
 //    Given I am on the appointment page
 //    Then I should not see any appointment update actions
-//
-//  Scenario: left early appointment
-//    Scenario: starting a left early session form
-//    Given I am on the appointment page
-//    When I click on 'Left site early'
-//    Then I should be taken to the first page of the left early session form
 
 import Page from '../pages/page'
 import SessionPage from '../pages/session'

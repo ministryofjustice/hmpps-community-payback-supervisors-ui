@@ -46,18 +46,6 @@ import ReviewPage from '../../../pages/appointments/update/reviewPage'
 //      When I click back
 //      Then I see the log hours page
 
-// Scenario: Left early
-//    Scenario: Completing the log compliance page
-//      Given I am on the log compliance page for an appointment
-//      And I complete the form
-//      When I submit the form
-//      And I continue from the review page
-//      Then I see the confirm left early page
-//    Scenario: Returning to the log hours page
-//      Given I am on the log compliance page for an appointment
-//      When I click back
-//      Then I see the log hours page
-
 context('Log compliance', () => {
   const formId = 'some-form'
   beforeEach(() => {

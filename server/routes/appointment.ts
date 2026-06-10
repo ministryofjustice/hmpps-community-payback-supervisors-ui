@@ -40,18 +40,6 @@ export default function appointmentRoutes(controllers: Controllers, router: Rout
     auditEvent: Page.EDIT_APPOINTMENT_ARRIVED_END_TIME,
   })
 
-  get(paths.appointments.arrived.unableToWork.pattern, appointments.unableToWorkController.show(), {
-    auditEvent: Page.VIEW_APPOINTMENT_UNABLE_TO_WORK,
-  })
-
-  post(paths.appointments.review.unableToWork.pattern, appointments.unableToWorkController.review(), {
-    auditEvent: Page.VIEW_REVIEW_APPOINTMENT_UNABLE_TO_WORK,
-  })
-
-  post(paths.appointments.arrived.unableToWork.pattern, appointments.unableToWorkController.submit(), {
-    auditEvent: Page.CREATE_APPOINTMENT_UNABLE_TO_WORK,
-  })
-
   get(paths.appointments.completed.endTime.pattern, appointments.endTimeController.show('completed'), {
     auditEvent: Page.VIEW_APPOINTMENT_COMPLETED_END_TIME,
   })
@@ -74,10 +62,6 @@ export default function appointmentRoutes(controllers: Controllers, router: Rout
 
   get(paths.appointments.confirm.working.pattern, appointments.confirmController.working(), {
     auditEvent: Page.VIEW_CONFIRM_WORKING,
-  })
-
-  get(paths.appointments.confirm.unableToWork.pattern, appointments.confirmController.unableToWork(), {
-    auditEvent: Page.VIEW_CONFIRM_UNABLE_TO_WORK,
   })
 
   get(paths.appointments.confirm.absent.pattern, appointments.confirmController.absent(), {

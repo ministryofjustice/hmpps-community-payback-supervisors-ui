@@ -1,5 +1,5 @@
 import ReferenceDataClient from '../data/referenceDataClient'
-import { contactOutcomeFactory, contactOutcomesFactory } from '../testutils/factories/contactOutcomeFactory'
+import { contactOutcomesFactory } from '../testutils/factories/contactOutcomeFactory'
 import ReferenceDataService from './referenceDataService'
 
 jest.mock('../data/referenceDataClient')
@@ -26,35 +26,6 @@ describe('ReferenceDataService', () => {
 
       expect(referenceDataClient.getContactOutcomes).toHaveBeenCalledTimes(1)
       expect(result).toEqual(contactOutcomes)
-    })
-  })
-
-  describe('getContactOutcomesForArrivedUnableToWork', () => {
-    it('should return filtered contact outcomes for arrived - unable to work', async () => {
-      const attendedSentHomeServiceIssuesContactOutcome = contactOutcomeFactory.build({ code: 'ATSS' })
-      const attendedSentHomeBehaviourContactOutcome = contactOutcomeFactory.build({ code: 'ATSH' })
-      const attendedFailedToComplyContactOutcome = contactOutcomeFactory.build({ code: 'AFTC' })
-
-      const contactOutcomes = {
-        contactOutcomes: [
-          attendedSentHomeServiceIssuesContactOutcome,
-          attendedSentHomeBehaviourContactOutcome,
-          contactOutcomeFactory.build({ code: 'RSOF' }),
-          attendedFailedToComplyContactOutcome,
-          contactOutcomeFactory.build({ code: 'ATTC' }),
-        ],
-      }
-
-      referenceDataClient.getContactOutcomes.mockResolvedValue(contactOutcomes)
-
-      const result = await referenceDataService.getAttendedNonWorkingContactOutcomes('some-username')
-
-      expect(referenceDataClient.getContactOutcomes).toHaveBeenCalledTimes(1)
-      expect(result.contactOutcomes).toEqual([
-        attendedSentHomeServiceIssuesContactOutcome,
-        attendedSentHomeBehaviourContactOutcome,
-        attendedFailedToComplyContactOutcome,
-      ])
     })
   })
 
