@@ -27,7 +27,6 @@ const paths = {
       startTime: appointmentAbsentPath.path('start-time'),
     },
     confirm: {
-      working: appointmentPath.path('confirm-working'),
       absent: appointmentPath.path('confirm-absent'),
       completed: appointmentPath.path('confirm-completed'),
     },

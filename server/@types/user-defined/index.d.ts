@@ -55,7 +55,6 @@ export type AppointmentEndTimeAction = AppointmentCompletedAction | 'arrived'
 
 export type AppointmentStatusType =
   | 'Scheduled'
-  | 'Working'
   | 'Session complete'
   | 'Not expected'
   | 'Absent'

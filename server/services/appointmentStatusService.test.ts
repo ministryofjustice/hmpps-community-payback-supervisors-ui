@@ -136,7 +136,7 @@ describe('AppointmentStatusService', () => {
 
       formClient.find.mockResolvedValue({ appointmentStatuses })
 
-      await appointmentStatusService.updateStatus(appointment, 'Working', userName)
+      await appointmentStatusService.updateStatus(appointment, 'Session complete', userName)
 
       const expectedFormKey: FormKey = {
         type: APPOINTMENT_STATUS_FORM_TYPE,
@@ -144,12 +144,12 @@ describe('AppointmentStatusService', () => {
       }
 
       expect(formClient.save).toHaveBeenCalledWith(expectedFormKey, userName, {
-        appointmentStatuses: [...otherStatuses, { appointmentId: appointment.id, status: 'Working' }],
+        appointmentStatuses: [...otherStatuses, { appointmentId: appointment.id, status: 'Session complete' }],
       })
     })
 
     it('saves new status if given appointment status does not exist on the session statuses list', async () => {
-      const status = 'Working'
+      const status = 'Session complete'
       const appointment = appointmentFactory.build()
       const appointmentStatuses = appointmentStatusFactory.buildList(2)
 
@@ -167,7 +167,7 @@ describe('AppointmentStatusService', () => {
     })
 
     it('saves new status if no status list exists for the session', async () => {
-      const status = 'Working'
+      const status = 'Session complete'
       const appointment = appointmentFactory.build()
 
       formClient.find.mockResolvedValue(null)

@@ -21,11 +21,6 @@
 //      Given I am on the appointment page
 //      When I click on 'Not arrived'
 //      Then I should be taken to the first page of the absent form
-//  Scenario: working appointment
-//    Scenario: starting a finish session form
-//    Given I am on the appointment page
-//    When I click on 'Finished'
-//    Then I should be taken to the first page of the finish session form
 //
 //  Scenario: Appointment with completed status
 //    Given I am on the appointment page
@@ -39,7 +34,6 @@ import AppointmentPage from '../pages/appointment'
 import appointmentFactory from '../../server/testutils/factories/appointmentFactory'
 import StartTimePage from '../pages/appointments/update/startTimePage'
 import appointmentStatusFactory from '../../server/testutils/factories/appointmentStatusFactory'
-import EndTimePage from '../pages/appointments/update/endTimePage'
 import sessionSummaryFactory from '../../server/testutils/factories/sessionSummaryFactory'
 import { AppointmentStatusType } from '../../server/@types/user-defined'
 import supervisorFactory from '../../server/testutils/factories/supervisorFactory'
@@ -142,31 +136,6 @@ context('viewAnAppointment', () => {
 
       // Then I should be taken to the first page of the absent form
       Page.verifyOnPage(StartTimePage, appointment, 'absent')
-    })
-  })
-
-  // Scenario: working appointment
-  describe('working appointment', () => {
-    // Scenario: starting a finish session form
-    it('I can navigate to the finish session form', () => {
-      // Given I am on the appointment page
-      const appointment = appointmentFactory.build()
-      const appointmentStatus = appointmentStatusFactory.build({ appointmentId: appointment.id, status: 'Working' })
-
-      cy.signIn()
-      cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
-      cy.task('stubGetStatusesForm', {
-        sessionOrAppointment: appointment,
-        appointmentStatuses: [appointmentStatus],
-      })
-      cy.task('stubSaveAppointmentForm')
-      const appointmentPage = AppointmentPage.visit(appointment)
-
-      // When I click on 'Finished'
-      appointmentPage.finishedButton().click()
-
-      // Then I should be taken to the first page of the finish session form
-      Page.verifyOnPage(EndTimePage, appointment, 'completed')
     })
   })
 

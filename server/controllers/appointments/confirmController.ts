@@ -7,26 +7,6 @@ import Offender from '../../models/offender'
 export default class ConfirmController {
   constructor(private readonly appointmentService: AppointmentService) {}
 
-  working(): RequestHandler {
-    return async (_req: Request, res: Response) => {
-      const { projectCode, appointmentId } = _req.params as unknown as AppointmentParams
-
-      const request: GetAppointmentRequest = {
-        username: res.locals.user.username,
-        projectCode,
-        appointmentId,
-      }
-
-      const appointment = await this.appointmentService.getAppointment(request)
-      const { name } = new Offender(appointment.offender)
-
-      res.render('appointments/update/confirm', {
-        title: `${name} has been recorded as starting work today`,
-        sessionPath: paths.sessions.show({ projectCode: appointment.projectCode, date: appointment.date }),
-      })
-    }
-  }
-
   absent(): RequestHandler {
     return async (_req: Request, res: Response) => {
       const { projectCode, appointmentId } = _req.params as unknown as AppointmentParams

@@ -79,23 +79,6 @@ describe('AppointmentShowDetailsPage', () => {
         },
       )
 
-      it('should include finish session links if status is "Working"', () => {
-        jest.spyOn(AppointmentUtils, 'isSessionComplete').mockReturnValue(false)
-        const appointment = appointmentFactory.build()
-        const page = new AppointmentShowDetailsPage()
-        const result = page.viewData(appointment, 'Working')
-
-        expect(result.actions).toEqual([
-          {
-            text: 'Finish session',
-            href: paths.appointments.completed.endTime({
-              appointmentId: appointment.id.toString(),
-              projectCode: appointment.projectCode,
-            }),
-          },
-        ])
-      })
-
       it('should be empty if status is complete', () => {
         jest.spyOn(AppointmentUtils, 'isSessionComplete').mockReturnValue(true)
         const appointment = appointmentFactory.build()
