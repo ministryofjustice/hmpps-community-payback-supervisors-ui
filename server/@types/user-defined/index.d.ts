@@ -47,6 +47,16 @@ export interface AuditParams {
   subjectId?: string
 }
 
+export type AppointmentUpdatePageViewData = {
+  offender: Offender
+  updatePath: string
+  form?: string
+}
+
+export type AppointmentUpdateQuery = {
+  form?: string
+}
+
 export type AppointmentArrivedAction = 'arrived' | 'absent'
 
 export type AppointmentCompletedAction = 'completed'

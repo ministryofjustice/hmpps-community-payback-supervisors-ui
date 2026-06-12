@@ -66,6 +66,7 @@ export default class StartTimeController {
       return res.render('appointments/update/review', {
         ...page.viewData(appointment, undefined),
         ...reviewPage.viewData(),
+        backPath: paths.appointments.show({ projectCode, appointmentId }),
       })
     }
   }

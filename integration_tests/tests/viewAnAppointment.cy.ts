@@ -38,6 +38,8 @@ import sessionSummaryFactory from '../../server/testutils/factories/sessionSumma
 import { AppointmentStatusType } from '../../server/@types/user-defined'
 import supervisorFactory from '../../server/testutils/factories/supervisorFactory'
 import appointmentOutcomeFormFactory from '../../server/testutils/factories/appointmentOutcomeFormFactory'
+import AttendanceOutcomePage from '../pages/appointments/update/attendanceOutcomePage'
+import { contactOutcomeFactory, contactOutcomesFactory } from '../../server/testutils/factories/contactOutcomeFactory'
 
 context('viewAnAppointment', () => {
   beforeEach(() => {
@@ -108,13 +110,18 @@ context('viewAnAppointment', () => {
       cy.task('stubSaveAppointmentForm')
       cy.task('stubGetAppointmentForm', { form: appointmentOutcomeFormFactory.build() })
 
+      const contactOutcomes = contactOutcomesFactory.build({
+        contactOutcomes: [contactOutcomeFactory.build({ enforceable: true }), contactOutcomeFactory.build()],
+      })
+      cy.task('stubGetContactOutcomes', { contactOutcomes })
+
       const appointmentPage = AppointmentPage.visit(appointment)
 
       // When I click on 'Arrived'
       appointmentPage.arrivedButton().click()
 
       // Then I should be taken to the first page of the arrival form
-      Page.verifyOnPage(StartTimePage, appointment, 'arrived')
+      Page.verifyOnPage(AttendanceOutcomePage, appointment)
     })
 
     // Scenario: starting an absent form

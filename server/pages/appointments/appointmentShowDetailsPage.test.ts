@@ -44,7 +44,7 @@ describe('AppointmentShowDetailsPage', () => {
         actions: [
           {
             text: 'Arrived',
-            href: paths.appointments.arrived.startTime({ projectCode, appointmentId: id.toString() }),
+            href: paths.appointments.attendanceOutcome({ projectCode, appointmentId: id.toString() }),
           },
           {
             text: 'Not arrived',
@@ -69,7 +69,7 @@ describe('AppointmentShowDetailsPage', () => {
           expect(result.actions).toEqual([
             {
               text: 'Arrived',
-              href: paths.appointments.arrived.startTime({ projectCode, appointmentId: id.toString() }),
+              href: paths.appointments.attendanceOutcome({ projectCode, appointmentId: id.toString() }),
             },
             {
               text: 'Not arrived',

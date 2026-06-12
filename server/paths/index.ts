@@ -15,6 +15,7 @@ const paths = {
   },
   appointments: {
     show: appointmentPath,
+    attendanceOutcome: appointmentPath.path('attendance-outcome'),
     arrived: {
       startTime: appointmentArrivedPath.path('start-time'),
       endTime: appointmentArrivedPath.path('finish-time'),

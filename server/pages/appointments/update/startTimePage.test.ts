@@ -43,7 +43,7 @@ describe('StartTimePage', () => {
       const result = page.viewData(appointment, form)
       expect(result).toEqual({
         offender,
-        backPath: paths.appointments.show({ appointmentId, projectCode }),
+        backPath: `${paths.appointments.attendanceOutcome({ appointmentId, projectCode })}?form=${formId}`,
         updatePath: `${paths.appointments.arrived.startTime({ appointmentId, projectCode })}?form=${formId}`,
         time: form.startTime,
         question: `You're logging Sam Smith as having arrived at:`,

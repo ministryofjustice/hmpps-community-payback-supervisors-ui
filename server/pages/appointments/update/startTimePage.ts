@@ -48,7 +48,13 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
   }
 
   protected backPath(appointment: AppointmentDto): string {
-    return paths.appointments.show({ projectCode: appointment.projectCode, appointmentId: appointment.id.toString() })
+    return pathWithQuery(
+      paths.appointments.attendanceOutcome({
+        projectCode: appointment.projectCode,
+        appointmentId: appointment.id.toString(),
+      }),
+      { form: this.formId },
+    )
   }
 
   protected updatePath(appointment: AppointmentDto): string {

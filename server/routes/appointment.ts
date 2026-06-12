@@ -68,5 +68,12 @@ export default function appointmentRoutes(controllers: Controllers, router: Rout
     auditEvent: Page.VIEW_CONFIRM_COMPLETED,
   })
 
+  get(paths.appointments.attendanceOutcome.pattern, appointments.attendanceOutcomeController.show(), {
+    auditEvent: Page.VIEW_APPOINTMENT_ATTENDANCE_OUTCOME_PAGE,
+  })
+  post(paths.appointments.attendanceOutcome.pattern, appointments.attendanceOutcomeController.submit(), {
+    auditEvent: Page.EDIT_APPOINTMENT_ATTENDANCE_OUTCOME_PAGE,
+  })
+
   return router
 }
