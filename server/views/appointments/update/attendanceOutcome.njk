@@ -1,0 +1,38 @@
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% extends "./layout.njk" %}
+
+{% set pageTitle = 'Log attendance outcome' %}
+
+{% block formHeader %}{% endblock %}
+
+{% block formContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l">
+        CRN: {{ offender.crn }}
+      </span>
+      <h1 class="govuk-heading-l">
+        {{ offender.name }}
+      </h1>
+    </div>
+
+    <div class="govuk-grid-column-full">
+      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+      <input type="hidden" name="form" value="{{ form }}">
+
+      {{ govukRadios({
+        name: "attendanceOutcome",
+        fieldset: {
+          legend: {
+            text: "Log attendance",
+            classes: "govuk-fieldset__legend--m"
+          }
+        },
+        items: items,
+        errorMessage: errors.attendanceOutcome
+      }) }}
+    </div>
+  </div>
+{% endblock %}

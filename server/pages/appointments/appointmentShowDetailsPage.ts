@@ -37,7 +37,7 @@ export default class AppointmentShowDetailsPage {
     }
 
     return [
-      { text: 'Arrived', href: paths.appointments.arrived.startTime(appointmentPathParams) },
+      { text: 'Arrived', href: paths.appointments.attendanceOutcome(appointmentPathParams) },
       { text: 'Not arrived', href: paths.appointments.review.absent(appointmentPathParams) },
     ]
   }

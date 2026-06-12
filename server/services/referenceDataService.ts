@@ -16,6 +16,8 @@ export default class ReferenceDataService {
     this.attendedFailedToComplyOutcomeCode,
   ]
 
+  static readonly attendedOutcomeCodes = [...this.attendedNonWorkingOutcomeCodes, this.attendedCompliedOutcomeCode]
+
   constructor(private readonly referenceDataClient: ReferenceDataClient) {}
 
   static validOutcomeCodeForRoute(code: string, route: string): boolean {
