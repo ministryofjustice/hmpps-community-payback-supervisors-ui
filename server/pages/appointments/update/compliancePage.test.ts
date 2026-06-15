@@ -8,7 +8,6 @@ import {
 } from '../../../@types/user-defined'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
-import ReferenceDataService from '../../../services/referenceDataService'
 import appointmentFactory from '../../../testutils/factories/appointmentFactory'
 import appointmentOutcomeFormFactory from '../../../testutils/factories/appointmentOutcomeFormFactory'
 import GovUkRadioGroup from '../../../utils/GovUKFrontend/GovUkRadioGroup'
@@ -429,12 +428,13 @@ describe('CompliancePage', () => {
       )
     })
 
-    it('saves the attented complied outcome code if the action is completed', () => {
+    it('saves the correct outcome code if the action is completed', () => {
       page = new CompliancePage('completed', formId, {})
+      form = appointmentOutcomeFormFactory.build({ contactOutcomeCode: 'ABCD' })
 
       const result = page.requestBody(appointment, form)
 
-      expect(result.contactOutcomeCode).toEqual(ReferenceDataService.attendedCompliedOutcomeCode)
+      expect(result.contactOutcomeCode).toEqual('ABCD')
     })
   })
 

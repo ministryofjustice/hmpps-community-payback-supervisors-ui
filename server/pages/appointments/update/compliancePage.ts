@@ -8,7 +8,6 @@ import {
   AppointmentOutcomeForm,
 } from '../../../@types/user-defined'
 import paths from '../../../paths'
-import ReferenceDataService from '../../../services/referenceDataService'
 import GovUkRadioGroup from '../../../utils/GovUKFrontend/GovUkRadioGroup'
 import { pathWithQuery } from '../../../utils/utils'
 import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './baseAppointmentUpdatePage'
@@ -52,15 +51,13 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
   }
 
   requestBody(appointment: AppointmentDto, formData: AppointmentOutcomeForm): UpdateAppointmentOutcomeDto {
-    const contactOutcomeCode =
-      this.action === 'completed' ? ReferenceDataService.attendedCompliedOutcomeCode : formData.contactOutcomeCode
     return {
       deliusId: appointment.id,
       deliusVersionToUpdate: formData.deliusVersion,
       sensitive: this.query.isSensitive === 'true',
       startTime: formData.startTime,
       endTime: formData.endTime,
-      contactOutcomeCode,
+      contactOutcomeCode: formData.contactOutcomeCode,
       attendanceData: {
         ...appointment.attendanceData,
         hiVisWorn: GovUkRadioGroup.valueFromYesOrNoItem(this.query.hiVis),
