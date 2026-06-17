@@ -1,0 +1,68 @@
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+
+{% extends "./layout.njk" %}
+
+{% set pageTitle = 'Log attendance outcome' %}
+
+{% block formHeader %}{% endblock %}
+
+{% block formContent %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l">
+        CRN: {{ offender.crn }}
+      </span>
+      <h1 class="govuk-heading-l">
+        {{ offender.name }}
+      </h1>
+    </div>
+
+    <div class="govuk-grid-column-full">
+      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+      <input type="hidden" name="form" value="{{ form }}">
+
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+          {{ govukTextarea({
+            name: "notes",
+            id: "notes",
+            errorMessage: errors.notes,
+            value: notes,
+            hint: {
+              text: "Write clearly and concisely. Include any practical
+                    details, positive progress, support needs,
+                    incidents, behaviour or work quality"
+            },
+            label: {
+              text: "Add notes",
+              classes: "govuk-label--m",
+              isPageHeading: false
+            }
+          }) }}
+        </div>
+      </div>
+
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+          <h3 class="govuk-heading-s">Do these notes include sensitive information?</h3>
+
+          {{ govukCheckboxes({
+            name: "isSensitive",
+            items: [
+              {
+                value: "true",
+                text: "This is information that you believe must be
+                      recorded but not shared with a person on
+                      probation.",
+                checked: isSensitive
+              }
+            ]
+          }) }}
+        </div>
+      </div>
+
+    </div>
+  </div>
+{% endblock %}
