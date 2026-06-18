@@ -34,6 +34,10 @@ export default class NotesPage extends PageWithNotes {
     this.enterNotesWithCharacterLength(4000)
   }
 
+  enterNote(text: string) {
+    this.notesField().invoke('val', text)
+  }
+
   shouldHaveEmptyNotes() {
     this.notesField().should('have.value', '')
   }

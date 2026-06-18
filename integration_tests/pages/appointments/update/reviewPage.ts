@@ -30,4 +30,16 @@ export default class ReviewPage extends Page {
       .contains('This outcome will be shared with the practitioner as it requires enforcement action.')
       .should('not.exist')
   }
+
+  shouldContainNote(note: string) {
+    cy.contains('th', 'Notes').next('td').should('contain.text', note)
+  }
+
+  canBeShared() {
+    cy.contains('th', 'Notes').next('td').should('contain.text', 'Can be shared')
+  }
+
+  cannotBeShared() {
+    cy.contains('th', 'Sensitive').next('td').should('contain.text', 'Cannot be shared')
+  }
 }
