@@ -1,8 +1,8 @@
 import { AppointmentDto, ContactOutcomeDto, ContactOutcomesDto } from '../../../@types/shared'
-import { AppointmentCompletedAction, AppointmentOutcomeForm } from '../../../@types/user-defined'
+import { AppointmentOutcomeForm } from '../../../@types/user-defined'
 import paths from '../../../paths'
 import { pathWithQuery, properCase } from '../../../utils/utils'
-import { ComplianceQuery } from './compliancePage'
+import { NotesQuery } from './notesPage'
 import ReviewPage, { ReviewItem } from './reviewPage'
 
 export default class ComplianceReviewPage extends ReviewPage {
@@ -10,13 +10,14 @@ export default class ComplianceReviewPage extends ReviewPage {
 
   private endTimeBackPath: string
 
+  private notesUrl: string
+
   constructor(
-    private action: AppointmentCompletedAction,
     private appointment: AppointmentDto,
     private contactOutcomes: ContactOutcomesDto,
     private formId: string,
     private formData: AppointmentOutcomeForm,
-    private reqBody: ComplianceQuery,
+    private reqBody: NotesQuery,
   ) {
     super('compliance', 'Session complete', {})
 
@@ -46,27 +47,35 @@ export default class ComplianceReviewPage extends ReviewPage {
       { form: this.formId },
     )
 
+    this.notesUrl = pathWithQuery(
+      paths.appointments.notes.completed({
+        projectCode: this.appointment.projectCode,
+        appointmentId: this.appointment.id.toString(),
+      }),
+      { form: this.formId },
+    )
+
     this.showWillAlertPractitionerMessage = this.contactOutcome?.enforceable ?? false
   }
 
   protected mappedReviewFields(): ReviewItem {
-    const fields: ReviewItem = {}
-
     // Not_applicable -> Not applicable
     const fmtLabel = (str: string) => properCase(str).replace(/_/, ' ')
 
     return {
-      ...fields,
       'Start time': { value: this.formData?.startTime, changeUrl: this.startTimeBackPath },
       'End time': { value: this.formData?.endTime, changeUrl: this.endTimeBackPath },
-      'Hi-vis': properCase(this.reqBody.hiVis),
-      'Worked intensively': properCase(this.reqBody.workedIntensively),
-      'Work quality': fmtLabel(this.reqBody.workQuality),
-      Behaviour: fmtLabel(this.reqBody.behaviour),
-      Notes: this.reqBody.notes,
-      Sensitivity: this.reqBody.isSensitive
-        ? 'Cannot be shared with person on probation'
-        : 'Can be shared with person on probation',
+      'Hi-vis': this.formData?.attendanceData.hiVisWorn ? 'Yes' : 'No',
+      'Worked intensively': this.formData?.attendanceData.workedIntensively ? 'Yes' : 'No',
+      'Work quality': fmtLabel(this.formData?.attendanceData.workQuality),
+      Behaviour: fmtLabel(this.formData?.attendanceData.behaviour),
+      Notes: { value: this.reqBody.notes, changeUrl: this.notesUrl },
+      Sensitivity: {
+        value: this.reqBody.isSensitive
+          ? 'Cannot be shared with person on probation'
+          : 'Can be shared with person on probation',
+        changeUrl: this.notesUrl,
+      },
     }
   }
 

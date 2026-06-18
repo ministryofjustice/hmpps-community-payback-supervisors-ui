@@ -1,4 +1,4 @@
-import { SessionSummaryDto, UpdateAppointmentOutcomeDto } from '../shared'
+import { AttendanceDataDto, SessionSummaryDto, UpdateAppointmentOutcomeDto } from '../shared'
 
 export interface BaseRequest {
   username: string
@@ -63,6 +63,8 @@ export type AppointmentCompletedAction = 'completed'
 
 export type AppointmentEndTimeAction = AppointmentCompletedAction | 'arrived'
 
+export type AppointmentNotesAction = 'absent' | 'completed'
+
 export type AppointmentStatusType =
   | 'Scheduled'
   | 'Session complete'
@@ -98,4 +100,6 @@ export type AppointmentOutcomeForm = {
   ableToWork?: YesOrNo
   contactOutcomeCode?: string
   notes?: string
+  sensitive?: boolean
+  attendanceData?: AttendanceDataDto
 }

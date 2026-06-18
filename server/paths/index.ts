@@ -27,15 +27,17 @@ const paths = {
     absent: {
       startTime: appointmentAbsentPath.path('start-time'),
     },
+    notes: {
+      absent: appointmentPath.path('notes-absent'),
+      completed: appointmentPath.path('notes-completed'),
+    },
+    review: {
+      absent: appointmentReviewPath.path('review-absent'),
+      completed: appointmentReviewPath.path('review-completed'),
+    },
     confirm: {
       absent: appointmentPath.path('confirm-absent'),
       completed: appointmentPath.path('confirm-completed'),
-    },
-    review: {
-      absent: appointmentReviewPath.path('absent'),
-      completed: {
-        compliance: appointmentReviewPath.path('completed').path('compliance'),
-      },
     },
   },
 }

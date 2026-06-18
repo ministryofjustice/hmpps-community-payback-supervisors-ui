@@ -1,4 +1,3 @@
-import { faker } from '@faker-js/faker'
 import { AppointmentDto } from '../../../@types/shared'
 import {
   AppointmentCompletedAction,
@@ -91,11 +90,6 @@ describe('CompliancePage', () => {
         expect(result.workedIntensivelyItems).toEqual(items)
       })
 
-      it('should return empty notes', async () => {
-        const result = page.viewData(appointment, form)
-        expect(result.notes).toEqual(null)
-      })
-
       it('should return items for workQuality', async () => {
         appointment = appointmentFactory.build({ attendanceData: { workQuality: null } })
 
@@ -133,7 +127,6 @@ describe('CompliancePage', () => {
             workedIntensively: 'no',
             workQuality: null,
             behaviour: 'GOOD',
-            notes: 'note',
           }
 
           appointment = appointmentFactory.build({
@@ -167,106 +160,9 @@ describe('CompliancePage', () => {
                 { text: 'Poor', value: 'POOR', checked: false },
                 { text: 'Not applicable', value: 'NOT_APPLICABLE', checked: false },
               ],
-              notes: 'note',
             }),
           )
         })
-
-        it('should populate with null values if the contact outcome has changed from the saved appointment', () => {
-          const radioItems = [{ text: 'yes', value: 'yes', checked: false }]
-          jest.spyOn(GovUkRadioGroup, 'yesNoItems').mockReturnValue(radioItems)
-
-          appointment = appointmentFactory.build({
-            attendanceData: { hiVisWorn: null, workedIntensively: true, workQuality: 'GOOD', behaviour: 'EXCELLENT' },
-            notes: 'some note',
-          })
-
-          page = new CompliancePage('completed', formId, {})
-          const result = page.viewData(appointment, form)
-
-          expect(GovUkRadioGroup.yesNoItems).toHaveBeenNthCalledWith(1, { checkedValue: null })
-          expect(GovUkRadioGroup.yesNoItems).toHaveBeenNthCalledWith(2, { checkedValue: null })
-
-          expect(result).toEqual(
-            expect.objectContaining({
-              hiVisItems: radioItems,
-              workedIntensivelyItems: radioItems,
-              workQualityItems: [
-                { text: 'Excellent', value: 'EXCELLENT', checked: false },
-                { text: 'Good', value: 'GOOD', checked: false },
-                { text: 'Satisfactory', value: 'SATISFACTORY', checked: false },
-                { text: 'Unsatisfactory', value: 'UNSATISFACTORY', checked: false },
-                { text: 'Poor', value: 'POOR', checked: false },
-                { text: 'Not applicable', value: 'NOT_APPLICABLE', checked: false },
-              ],
-              behaviourItems: [
-                { text: 'Excellent', value: 'EXCELLENT', checked: false },
-                { text: 'Good', value: 'GOOD', checked: false },
-                { text: 'Satisfactory', value: 'SATISFACTORY', checked: false },
-                { text: 'Unsatisfactory', value: 'UNSATISFACTORY', checked: false },
-                { text: 'Poor', value: 'POOR', checked: false },
-                { text: 'Not applicable', value: 'NOT_APPLICABLE', checked: false },
-              ],
-              notes: null,
-            }),
-          )
-        })
-
-        it('should populate with appointment values and null notes if query does not exist and contact outcome matches the saved appointment', () => {
-          const radioItems = [{ text: 'yes', value: 'yes', checked: true }]
-          jest.spyOn(GovUkRadioGroup, 'yesNoItems').mockReturnValue(radioItems)
-
-          appointment = appointmentFactory.build({
-            contactOutcomeCode: 'code',
-            attendanceData: { hiVisWorn: null, workedIntensively: true, workQuality: 'GOOD', behaviour: 'EXCELLENT' },
-            notes: 'some note',
-          })
-
-          form = appointmentOutcomeFormFactory.build({ contactOutcomeCode: 'code' })
-
-          page = new CompliancePage('completed', formId, {})
-          const result = page.viewData(appointment, form)
-
-          expect(GovUkRadioGroup.yesNoItems).toHaveBeenNthCalledWith(1, { checkedValue: null })
-          expect(GovUkRadioGroup.yesNoItems).toHaveBeenNthCalledWith(2, { checkedValue: 'yes' })
-
-          expect(result).toEqual(
-            expect.objectContaining({
-              hiVisItems: radioItems,
-              workedIntensivelyItems: radioItems,
-              workQualityItems: [
-                { text: 'Excellent', value: 'EXCELLENT', checked: false },
-                { text: 'Good', value: 'GOOD', checked: true },
-                { text: 'Satisfactory', value: 'SATISFACTORY', checked: false },
-                { text: 'Unsatisfactory', value: 'UNSATISFACTORY', checked: false },
-                { text: 'Poor', value: 'POOR', checked: false },
-                { text: 'Not applicable', value: 'NOT_APPLICABLE', checked: false },
-              ],
-              behaviourItems: [
-                { text: 'Excellent', value: 'EXCELLENT', checked: true },
-                { text: 'Good', value: 'GOOD', checked: false },
-                { text: 'Satisfactory', value: 'SATISFACTORY', checked: false },
-                { text: 'Unsatisfactory', value: 'UNSATISFACTORY', checked: false },
-                { text: 'Poor', value: 'POOR', checked: false },
-                { text: 'Not applicable', value: 'NOT_APPLICABLE', checked: false },
-              ],
-              notes: null,
-            }),
-          )
-        })
-      })
-    })
-    describe('when a value for isSensitive exists in the query', () => {
-      it('should return true for isSensitive if a value is present', () => {
-        page = new CompliancePage('completed', formId, { isSensitive: 'true' })
-        const result = page.viewData(appointment, form)
-        expect(result.isSensitive).toEqual(true)
-      })
-
-      it('should return false for isSensitive if a value is not present', () => {
-        page = new CompliancePage('completed', formId, { isSensitive: null })
-        const result = page.viewData(appointment, form)
-        expect(result.isSensitive).toEqual(false)
       })
     })
   })
@@ -320,121 +216,17 @@ describe('CompliancePage', () => {
         expect(page.hasErrors).toBe(true)
       })
     })
-
-    describe('notes', () => {
-      it('should not have any errors if no notes value', () => {
-        page = new CompliancePage(action, formId, { behaviour: null })
-        page.validate()
-
-        expect(page.validationErrors.notes).toBeFalsy()
-      })
-
-      it.each([4000, 3999, 0])('should not have any errors if notes count is less than 4000', (count: number) => {
-        const notes = faker.string.alpha(count)
-        page = new CompliancePage(action, formId, { notes })
-        page.validate()
-
-        expect(page.validationErrors.notes).toBeFalsy()
-      })
-
-      it('should have errors if the notes count is greater than 4000', () => {
-        const notes = faker.string.alpha(4001)
-        page = new CompliancePage(action, formId, { notes })
-        page.validate()
-
-        expect(page.validationErrors.notes).toEqual({
-          text: 'Notes must be 4000 characters or less',
-        })
-      })
-    })
   })
 
   describe('next', () => {
-    it('should return confirm page link', () => {
+    it('should return notes page link', () => {
       const appointmentId = '1'
       const projectCode = '2'
       page = new CompliancePage('completed', formId, {})
 
       expect(page.nextPath(projectCode, appointmentId)).toBe(
-        paths.appointments.confirm.completed({ projectCode, appointmentId }),
+        `${paths.appointments.notes.completed({ projectCode, appointmentId })}?form=${formId}`,
       )
-    })
-  })
-
-  describe('requestBody', () => {
-    const action = 'completed'
-    beforeEach(() => {
-      appointment = appointmentFactory.build()
-      jest.spyOn(GovUkRadioGroup, 'valueFromYesOrNoItem').mockReturnValue(false)
-    })
-
-    it('updates and returns data from query given empty object', () => {
-      const query: ComplianceQuery = {
-        hiVis: 'no',
-        workedIntensively: 'no',
-        workQuality: 'EXCELLENT',
-        behaviour: 'GOOD',
-        notes: 'good',
-        isSensitive: 'true',
-      }
-
-      page = new CompliancePage(action, formId, query)
-
-      const result = page.requestBody(appointment, form)
-
-      expect(result).toEqual(
-        expect.objectContaining({
-          attendanceData: expect.objectContaining({
-            hiVisWorn: false,
-            workedIntensively: false,
-            workQuality: 'EXCELLENT',
-            behaviour: 'GOOD',
-          }),
-          notes: 'good',
-          sensitive: true,
-        }),
-      )
-    })
-
-    it('updates and returns data from query given object with existing data', () => {
-      appointment = appointmentFactory.build({ startTime: '10:00', attendanceData: { penaltyTime: '01:00' } })
-      form = appointmentOutcomeFormFactory.build({ startTime: '10:00' })
-      const query: ComplianceQuery = {
-        hiVis: 'no',
-        workedIntensively: 'no',
-        workQuality: 'EXCELLENT',
-        behaviour: 'GOOD',
-        notes: 'good',
-        isSensitive: 'false',
-      }
-
-      page = new CompliancePage(action, formId, query)
-
-      const result = page.requestBody(appointment, form)
-
-      expect(result).toEqual(
-        expect.objectContaining({
-          startTime: '10:00',
-          attendanceData: expect.objectContaining({
-            penaltyTime: '01:00',
-            hiVisWorn: false,
-            workedIntensively: false,
-            workQuality: 'EXCELLENT',
-            behaviour: 'GOOD',
-          }),
-          notes: 'good',
-          sensitive: false,
-        }),
-      )
-    })
-
-    it('saves the correct outcome code if the action is completed', () => {
-      page = new CompliancePage('completed', formId, {})
-      form = appointmentOutcomeFormFactory.build({ contactOutcomeCode: 'ABCD' })
-
-      const result = page.requestBody(appointment, form)
-
-      expect(result.contactOutcomeCode).toEqual('ABCD')
     })
   })
 

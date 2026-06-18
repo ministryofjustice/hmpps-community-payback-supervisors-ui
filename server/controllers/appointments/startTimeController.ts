@@ -2,11 +2,9 @@ import type { Request, RequestHandler, Response } from 'express'
 import AppointmentService from '../../services/appointmentService'
 import StartTimePage from '../../pages/appointments/update/startTimePage'
 import { generateErrorSummary } from '../../utils/errorUtils'
-import { UpdateAppointmentOutcomeDto } from '../../@types/shared'
 import { AppointmentArrivedAction, AppointmentOutcomeForm, AppointmentParams } from '../../@types/user-defined'
 import AppointmentStatusService from '../../services/appointmentStatusService'
 import paths from '../../paths'
-import ReviewPage from '../../pages/appointments/update/reviewPage'
 import AppointmentFormService from '../../services/appointmentFormService'
 
 export default class StartTimeController {
@@ -43,34 +41,6 @@ export default class StartTimeController {
     }
   }
 
-  review(action: AppointmentArrivedAction): RequestHandler {
-    return async (_req: Request, res: Response) => {
-      const { projectCode, appointmentId } = _req.params as unknown as AppointmentParams
-
-      const appointment = await this.appointmentService.getAppointment({
-        projectCode,
-        appointmentId,
-        username: res.locals.user.username,
-      })
-
-      const page = new StartTimePage(action, undefined, {})
-
-      const reviewPage = new ReviewPage(
-        'time',
-        'Absent',
-        {},
-        true,
-        paths.appointments.absent.startTime({ projectCode, appointmentId }),
-      )
-
-      return res.render('appointments/update/review', {
-        ...page.viewData(appointment, undefined),
-        ...reviewPage.viewData(),
-        backPath: paths.appointments.show({ projectCode, appointmentId }),
-      })
-    }
-  }
-
   submit(action: AppointmentArrivedAction): RequestHandler {
     return async (_req: Request, res: Response) => {
       const { projectCode, appointmentId } = _req.params as unknown as AppointmentParams
@@ -80,33 +50,6 @@ export default class StartTimeController {
         appointmentId,
         username: res.locals.user.username,
       })
-
-      if (action === 'absent') {
-        const payload: UpdateAppointmentOutcomeDto = {
-          deliusId: appointment.id,
-          deliusVersionToUpdate: appointment.version,
-          alertActive: appointment.alertActive,
-          sensitive: appointment.sensitive,
-          startTime: appointment.startTime,
-          endTime: appointment.endTime,
-          contactOutcomeCode: StartTimePage.UnacceptableAbsenceOutcomeCode,
-          attendanceData: appointment.attendanceData,
-          enforcementData: appointment.enforcementData,
-          supervisorOfficerCode: appointment.supervisorOfficerCode,
-          notes: null,
-          date: appointment.date,
-        }
-
-        await this.appointmentService.saveAppointment({
-          username: res.locals.user.username,
-          projectCode,
-          data: payload,
-        })
-
-        this.appointmentStatusService.updateStatus(appointment, 'Absent', res.locals.user.username)
-
-        return res.redirect(paths.appointments.confirm.absent({ projectCode, appointmentId }))
-      }
 
       const formId = _req.query.form?.toString()
       if (!formId) {

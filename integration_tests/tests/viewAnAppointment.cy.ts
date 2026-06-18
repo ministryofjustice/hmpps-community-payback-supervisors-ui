@@ -32,7 +32,6 @@ import sessionFactory from '../../server/testutils/factories/sessionFactory'
 import appointmentSummaryFactory from '../../server/testutils/factories/appointmentSummaryFactory'
 import AppointmentPage from '../pages/appointment'
 import appointmentFactory from '../../server/testutils/factories/appointmentFactory'
-import StartTimePage from '../pages/appointments/update/startTimePage'
 import appointmentStatusFactory from '../../server/testutils/factories/appointmentStatusFactory'
 import sessionSummaryFactory from '../../server/testutils/factories/sessionSummaryFactory'
 import { AppointmentStatusType } from '../../server/@types/user-defined'
@@ -40,6 +39,7 @@ import supervisorFactory from '../../server/testutils/factories/supervisorFactor
 import appointmentOutcomeFormFactory from '../../server/testutils/factories/appointmentOutcomeFormFactory'
 import AttendanceOutcomePage from '../pages/appointments/update/attendanceOutcomePage'
 import { contactOutcomeFactory, contactOutcomesFactory } from '../../server/testutils/factories/contactOutcomeFactory'
+import NotesPage from '../pages/appointments/update/notesPage'
 
 context('viewAnAppointment', () => {
   beforeEach(() => {
@@ -142,7 +142,7 @@ context('viewAnAppointment', () => {
       appointmentPage.notArrivedButton().click()
 
       // Then I should be taken to the first page of the absent form
-      Page.verifyOnPage(StartTimePage, appointment, 'absent')
+      Page.verifyOnPage(NotesPage, appointment, 'absent')
     })
   })
 
