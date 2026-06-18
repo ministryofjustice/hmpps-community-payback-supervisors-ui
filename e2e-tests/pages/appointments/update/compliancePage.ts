@@ -12,10 +12,6 @@ export default class CompliancePage extends BasePage {
 
   behaviourFieldLocator: Locator
 
-  notesFieldLocator: Locator
-
-  isSensitiveLocator: Locator
-
   expect: CompliancePageAssertions
 
   constructor(page: Page) {
@@ -25,8 +21,6 @@ export default class CompliancePage extends BasePage {
     this.workedIntensivelyFieldLocator = page.getByRole('group', { name: 'Are they working intensively' })
     this.workedQualityFieldLocator = page.getByRole('group', { name: 'How was their work quality?' })
     this.behaviourFieldLocator = page.getByRole('group', { name: 'How was their behaviour?' })
-    this.notesFieldLocator = page.getByLabel('Notes')
-    this.isSensitiveLocator = page.getByLabel('This information is not to be shared with the person on probation')
   }
 
   async enterComplianceDetails() {
@@ -34,8 +28,6 @@ export default class CompliancePage extends BasePage {
     await this.workedIntensivelyFieldLocator.getByRole('radio', { name: 'Yes' }).check()
     await this.workedQualityFieldLocator.getByRole('radio', { name: 'Good' }).check()
     await this.behaviourFieldLocator.getByRole('radio', { name: 'Poor' }).check()
-    await this.notesFieldLocator.fill('They did a good job')
-    await this.isSensitiveLocator.check()
   }
 }
 

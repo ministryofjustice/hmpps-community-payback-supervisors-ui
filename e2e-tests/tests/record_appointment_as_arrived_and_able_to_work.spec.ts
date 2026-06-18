@@ -11,6 +11,7 @@ import HomePage from '../pages/homePage'
 import SessionPage from '../pages/sessionPage'
 import StartTimePage from '../pages/appointments/update/startTimePage'
 import AttendanceOutcomePage from '../pages/appointments/update/attendanceOutcomePage'
+import NotesPage from '../pages/appointments/update/notesPage'
 
 test('Record an appointment as arrived and able to work', async ({ page, supervisorUser, testData, team }) => {
   const { person, project } = testData
@@ -45,6 +46,11 @@ test('Record an appointment as arrived and able to work', async ({ page, supervi
   const compliancePage = new CompliancePage(page)
   await compliancePage.enterComplianceDetails()
   await compliancePage.clickContinue()
+
+  const notesPage = new NotesPage(page)
+  await notesPage.expect.toBeOnThePage()
+  await notesPage.completeForm()
+  await notesPage.clickContinue()
 
   const reviewPage = new ReviewPage(page)
   await reviewPage.expect.toBeOnThePage()

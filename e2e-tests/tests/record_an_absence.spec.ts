@@ -6,6 +6,7 @@ import AppointmentPage from '../pages/appointmentPage'
 import ConfirmAbsentPage from '../pages/appointments/update/confirm/confirmAbsentPage'
 import clearSessionData from '../steps/clearSessionData'
 import ReviewPage from '../pages/appointments/update/reviewPage'
+import NotesPage from '../pages/appointments/update/notesPage'
 
 test('Record an absence', async ({ page, supervisorUser, testData, team }) => {
   const { person, project } = testData
@@ -23,6 +24,11 @@ test('Record an absence', async ({ page, supervisorUser, testData, team }) => {
   await appointmentPage.expect.toBeOnThePage()
 
   await appointmentPage.clickNotArrived()
+
+  const notesPage = new NotesPage(page)
+  await notesPage.expect.toBeOnThePage()
+  await notesPage.completeForm()
+  await notesPage.clickContinue()
 
   const reviewPage = new ReviewPage(page)
   await reviewPage.expect.toBeOnThePage()
