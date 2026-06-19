@@ -3,11 +3,11 @@ import { AppointmentCompletedAction, YesOrNo } from '../../../../server/@types/u
 import paths from '../../../../server/paths'
 import GovUkRadioGroup from '../../../../server/utils/GovUKFrontend/GovUkRadioGroup'
 import { pathWithQuery } from '../../../../server/utils/utils'
-import PageWithNotes from './base/pageWithNotes'
+import Page from '../../page'
 
-export default class CompliancePage extends PageWithNotes {
+export default class CompliancePage extends Page {
   constructor(private readonly appointment: AppointmentDto) {
-    super('Log compliance', 'Notes')
+    super('Log compliance')
   }
 
   static visit(
@@ -33,8 +33,6 @@ export default class CompliancePage extends PageWithNotes {
     this.selectWorkedIntensivelyValue()
     this.selectWorkQualityValue()
     this.behaviourOption().check()
-    this.enterNotes()
-    this.checkSensitiveInformation()
   }
 
   shouldHaveFormWithAppointmentValues() {
@@ -67,8 +65,6 @@ export default class CompliancePage extends PageWithNotes {
     this.workQualityOption('POOR').should('not.be.checked')
     this.workQualityOption('SATISFACTORY').should('not.be.checked')
     this.workQualityOption('UNSATISFACTORY').should('not.be.checked')
-
-    this.shouldHaveEmptyNotes()
   }
 
   selectHiVisValue() {
@@ -97,18 +93,6 @@ export default class CompliancePage extends PageWithNotes {
 
   shouldHaveSelectedBehavourValue(value: AttendanceDataDto['behaviour'] = 'UNSATISFACTORY') {
     this.behaviourOption(value).should('be.checked')
-  }
-
-  enterNotes() {
-    this.enterNotesWithCharacterLength(4000)
-  }
-
-  shouldHaveEmptyNotes() {
-    this.notesField().should('have.value', '')
-  }
-
-  checkSensitiveInformation(): void {
-    this.getInputByLabel('This information is not to be shared with the person on probation').check()
   }
 
   private hiVisOption = (value: YesOrNo = 'yes') => this.getRadioByNameAndValue('hiVis', value)

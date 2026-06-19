@@ -1,4 +1,4 @@
-import { AttendanceDataDto, AppointmentDto, UpdateAppointmentOutcomeDto } from '../../../@types/shared'
+import { AttendanceDataDto, AppointmentDto } from '../../../@types/shared'
 import {
   GovUkRadioOption,
   YesOrNo,
@@ -35,8 +35,6 @@ export interface ComplianceQuery {
   workedIntensively?: YesOrNo
   workQuality?: AttendanceDataDto['workQuality']
   behaviour?: AttendanceDataDto['behaviour']
-  notes?: string
-  isSensitive?: string
   alertPractitioner?: YesOrNo
 }
 
@@ -45,19 +43,13 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
     private readonly action: AppointmentCompletedAction,
     private readonly formId: string,
     private readonly query: ComplianceQuery,
-    private readonly inReview: boolean = false,
   ) {
     super()
   }
 
-  requestBody(appointment: AppointmentDto, formData: AppointmentOutcomeForm): UpdateAppointmentOutcomeDto {
+  updateForm(appointment: AppointmentDto, form: AppointmentOutcomeForm): AppointmentOutcomeForm {
     return {
-      deliusId: appointment.id,
-      deliusVersionToUpdate: formData.deliusVersion,
-      sensitive: this.query.isSensitive === 'true',
-      startTime: formData.startTime,
-      endTime: formData.endTime,
-      contactOutcomeCode: formData.contactOutcomeCode,
+      ...form,
       attendanceData: {
         ...appointment.attendanceData,
         hiVisWorn: GovUkRadioGroup.valueFromYesOrNoItem(this.query.hiVis),
@@ -65,11 +57,6 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
         workQuality: this.query.workQuality,
         behaviour: this.query.behaviour,
       },
-      enforcementData: appointment.enforcementData,
-      supervisorOfficerCode: appointment.supervisorOfficerCode,
-      notes: this.query.notes,
-      date: appointment.date,
-      alertActive: GovUkRadioGroup.nullableValueFromYesOrNoItem(this.query.alertPractitioner),
     }
   }
 
@@ -86,8 +73,6 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
       }),
       workQualityItems: this.getItems(formValues.workQuality),
       behaviourItems: this.getItems(formValues.behaviour),
-      notes: formValues.notes,
-      isSensitive: formValues.isSensitive === 'true',
     }
   }
 
@@ -114,10 +99,6 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
       errors.behaviour = { text: 'Select a description of their behaviour ' }
     }
 
-    if (this.query.notes && this.query.notes.length > 4000) {
-      errors.notes = { text: 'Notes must be 4000 characters or less' }
-    }
-
     return errors
   }
 
@@ -132,14 +113,17 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
   }
 
   nextPath(projectCode: string, appointmentId: string): string {
-    return paths.appointments.confirm[this.action]({ projectCode, appointmentId })
+    return pathWithQuery(
+      paths.appointments.notes.completed({
+        projectCode,
+        appointmentId,
+      }),
+      { form: this.formId },
+    )
   }
 
   protected updatePath(appointment: AppointmentDto): string {
-    const path =
-      this.inReview || this.hasErrors
-        ? paths.appointments.review[this.action].compliance
-        : paths.appointments[this.action].compliance
+    const path = paths.appointments[this.action].compliance
 
     return pathWithQuery(
       path({
@@ -181,8 +165,15 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
         workedIntensively: null,
         workQuality: null,
         behaviour: null,
-        notes: null,
-        isSensitive: null,
+      }
+    }
+
+    if (formData.attendanceData) {
+      return {
+        hiVis: GovUkRadioGroup.determineCheckedValue(formData.attendanceData?.hiVisWorn),
+        workedIntensively: GovUkRadioGroup.determineCheckedValue(formData.attendanceData?.workedIntensively),
+        workQuality: formData.attendanceData?.workQuality,
+        behaviour: formData.attendanceData?.behaviour,
       }
     }
 
@@ -191,8 +182,6 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
       workedIntensively: GovUkRadioGroup.determineCheckedValue(appointment.attendanceData?.workedIntensively),
       workQuality: appointment.attendanceData?.workQuality,
       behaviour: appointment.attendanceData?.behaviour,
-      notes: null,
-      isSensitive: appointment.sensitive ? 'true' : null,
     }
   }
 

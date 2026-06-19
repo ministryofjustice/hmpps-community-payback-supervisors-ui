@@ -1,6 +1,7 @@
 import paths from '../../../paths'
 import appointmentFactory from '../../../testutils/factories/appointmentFactory'
 import appointmentOutcomeFormFactory from '../../../testutils/factories/appointmentOutcomeFormFactory'
+import attendanceDataFactory from '../../../testutils/factories/attendanceDataFactory'
 import { contactOutcomesFactory } from '../../../testutils/factories/contactOutcomeFactory'
 import StatusTagUtils from '../../../utils/GovUKFrontend/statusTagUtils'
 import ComplianceReviewPage from './complianceReviewPage'
@@ -24,23 +25,16 @@ describe('ComplianceReviewPage', () => {
 
         const appointmentOutputForm = appointmentOutcomeFormFactory.build({
           endTime,
+          attendanceData: attendanceDataFactory.build({
+            hiVisWorn: true,
+            workedIntensively: true,
+          }),
         })
 
-        const page = new ComplianceReviewPage(
-          'completed',
-          appointment,
-          contactOutcomes,
-          formId,
-          appointmentOutputForm,
-          {
-            hiVis: 'yes',
-            workedIntensively: 'yes',
-            workQuality: 'GOOD',
-            behaviour: 'GOOD',
-            notes: 'test note',
-            isSensitive: 'TRUE',
-          },
-        )
+        const page = new ComplianceReviewPage(appointment, contactOutcomes, formId, appointmentOutputForm, {
+          notes: 'test note',
+          isSensitive: 'TRUE',
+        })
 
         const link = (_str: TemplateStringsArray, url: string): string => {
           return `<a href=${url}?form=${formId} class="govuk-link govuk-link--no-visited-state">Change</a>`
@@ -53,6 +47,7 @@ describe('ComplianceReviewPage', () => {
         const startTimeChangeLink = link`${paths.appointments.arrived.startTime(params)}`
         const endTimeChangeLink = link`${paths.appointments.completed.endTime(params)}`
         const changeLink = link`${paths.appointments.completed.compliance(params)}`
+        const notesLink = link`${paths.appointments.notes.completed(params)}`
 
         expect(page.viewData()).toEqual({
           rows: [
@@ -93,7 +88,7 @@ describe('ComplianceReviewPage', () => {
             ],
             [
               { text: 'Behaviour' },
-              { html: 'Good' },
+              { html: 'Not applicable' },
               {
                 html: changeLink,
               },
@@ -102,14 +97,14 @@ describe('ComplianceReviewPage', () => {
               { text: 'Notes' },
               { html: 'test note' },
               {
-                html: changeLink,
+                html: notesLink,
               },
             ],
             [
               { text: 'Sensitivity' },
               { html: 'Cannot be shared with person on probation' },
               {
-                html: changeLink,
+                html: notesLink,
               },
             ],
             [{ text: 'Outcome status' }, { html: 'Session complete' }, { text: '' }],

@@ -14,8 +14,9 @@
 //      Then I see the form next page
 //  Scenario: Absent
 //    Scenario: Navigates from review page to confirm absent page to session page
-//      Given I am on the review page
-//      And I submit the form
+//      Given I am on the notes page
+//      And I navigate to the review page
+//      And I navigate through the review page
 //      When I am on the confirm page
 //      And I click the return to session link
 //      Then I am taken to the session page
@@ -35,6 +36,7 @@ import supervisorFactory from '../../../../server/testutils/factories/supervisor
 import appointmentOutcomeFormFactory from '../../../../server/testutils/factories/appointmentOutcomeFormFactory'
 import ReviewPage from '../../../pages/appointments/update/reviewPage'
 import EndTimePage from '../../../pages/appointments/update/endTimePage'
+import NotesPage from '../../../pages/appointments/update/notesPage'
 
 context('Log start time ', () => {
   let appointment: AppointmentDto
@@ -108,10 +110,19 @@ context('Log start time ', () => {
       cy.task('stubUpdateAppointmentOutcome', { appointment })
       cy.task('stubSaveStatusesForm', { sessionOrAppointment: appointment })
 
-      // Given I am on the review page
-      const reviewPage = ReviewPage.visit(appointment)
+      const form = appointmentOutcomeFormFactory.build()
+      cy.task('stubGetAppointmentForm', { form, formId: 'some-form' })
 
-      // And I submit the form
+      cy.task('stubSaveAppointmentForm', { formId: 'some-form' })
+
+      // Given I am on the notes page
+      const notesPage = NotesPage.visit(appointment, 'absent')
+
+      // And I navigate to the review page
+      notesPage.clickSubmit()
+
+      // And I navigate through the review page
+      const reviewPage = Page.verifyOnPage(ReviewPage, appointment, 'absent')
       reviewPage.clickSubmit()
 
       // When I am on the confirm page

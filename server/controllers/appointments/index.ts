@@ -7,6 +7,7 @@ import StartTimeController from './startTimeController'
 import EndTimeController from './endTimeController'
 import ComplianceController from './complianceController'
 import AttendanceOutcomeController from './attendanceOutcomeController'
+import NotesController from './notesController'
 
 const appointmentControllers = (services: Services) => {
   const showDetailsController = new ShowDetailsController(
@@ -19,18 +20,20 @@ const appointmentControllers = (services: Services) => {
     services.appointmentFormService,
   )
   const endTimeController = new EndTimeController(services.appointmentService, services.appointmentFormService)
-  const complianceController = new ComplianceController(
-    services.appointmentService,
-    services.referenceDataService,
-    services.appointmentFormService,
-    services.appointmentStatusService,
-  )
+  const complianceController = new ComplianceController(services.appointmentService, services.appointmentFormService)
   const confirmController = new ConfirmController(services.appointmentService)
 
   const attendanceOutcomeController = new AttendanceOutcomeController(
     services.appointmentService,
     services.referenceDataService,
     services.appointmentFormService,
+  )
+
+  const notesController = new NotesController(
+    services.appointmentService,
+    services.referenceDataService,
+    services.appointmentFormService,
+    services.appointmentStatusService,
   )
 
   return {
@@ -40,6 +43,7 @@ const appointmentControllers = (services: Services) => {
     endTimeController,
     complianceController,
     attendanceOutcomeController,
+    notesController,
   }
 }
 

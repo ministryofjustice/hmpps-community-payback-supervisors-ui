@@ -24,10 +24,6 @@ export default function appointmentRoutes(controllers: Controllers, router: Rout
     auditEvent: Page.VIEW_APPOINTMENT_ABSENT_START_TIME,
   })
 
-  get(paths.appointments.review.absent.pattern, appointments.startTimeController.review('absent'), {
-    auditEvent: Page.VIEW_REVIEW_APPOINTMENT_ABSENT,
-  })
-
   post(paths.appointments.absent.startTime.pattern, appointments.startTimeController.submit('absent'), {
     auditEvent: Page.EDIT_APPOINTMENT_ABSENT_START_TIME,
   })
@@ -52,10 +48,6 @@ export default function appointmentRoutes(controllers: Controllers, router: Rout
     auditEvent: Page.VIEW_APPOINTMENT_COMPLETED_COMPLIANCE,
   })
 
-  post(paths.appointments.review.completed.compliance.pattern, appointments.complianceController.review('completed'), {
-    auditEvent: Page.VIEW_REVIEW_APPOINTMENT_COMPLETED_COMPLIANCE,
-  })
-
   post(paths.appointments.completed.compliance.pattern, appointments.complianceController.submit('completed'), {
     auditEvent: Page.EDIT_APPOINTMENT_COMPLETED_COMPLIANCE,
   })
@@ -73,6 +65,30 @@ export default function appointmentRoutes(controllers: Controllers, router: Rout
   })
   post(paths.appointments.attendanceOutcome.pattern, appointments.attendanceOutcomeController.submit(), {
     auditEvent: Page.EDIT_APPOINTMENT_ATTENDANCE_OUTCOME_PAGE,
+  })
+
+  get(paths.appointments.notes.absent.pattern, appointments.notesController.show('absent'), {
+    auditEvent: Page.VIEW_APPOINTMENT_NOTES_PAGE,
+  })
+
+  post(paths.appointments.review.absent.pattern, appointments.notesController.review('absent'), {
+    auditEvent: Page.VIEW_REVIEW_APPOINTMENT_ABSENT,
+  })
+
+  post(paths.appointments.notes.absent.pattern, appointments.notesController.submit('absent'), {
+    auditEvent: Page.CREATE_APPOINTMENT_ABSENT_PAGE,
+  })
+
+  get(paths.appointments.notes.completed.pattern, appointments.notesController.show('completed'), {
+    auditEvent: Page.VIEW_APPOINTMENT_NOTES_PAGE,
+  })
+
+  post(paths.appointments.review.completed.pattern, appointments.notesController.review('completed'), {
+    auditEvent: Page.VIEW_REVIEW_APPOINTMENT_COMPLETED,
+  })
+
+  post(paths.appointments.notes.completed.pattern, appointments.notesController.submit('completed'), {
+    auditEvent: Page.CREATE_APPOINTMENT_COMPLETED_PAGE,
   })
 
   return router

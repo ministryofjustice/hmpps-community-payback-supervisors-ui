@@ -12,18 +12,15 @@ import sessionSummaryFactory from '../../../../server/testutils/factories/sessio
 import supervisorFactory from '../../../../server/testutils/factories/supervisorFactory'
 import appointmentOutcomeFormFactory from '../../../../server/testutils/factories/appointmentOutcomeFormFactory'
 import ReviewPage from '../../../pages/appointments/update/reviewPage'
+import NotesPage from '../../../pages/appointments/update/notesPage'
+import attendanceDataFactory from '../../../../server/testutils/factories/attendanceDataFactory'
 
 //  Scenario: Validating the log compliance page
 //    Given I am on the log compliance page for an appointment
 //    And I do not complete the form
-//    And I enter a note longer than 4000 characters
 //    When I submit the form
 //    Then I see the log compliance page with errors
-
-//  Scenario: viewing empty form if a new contact outcome is recorded
-//    Given I am on the log compliance page for an appointment
-//    Then I should see the form with empty values
-
+//
 //  Scenario: Viewing my submitted answers when there are errors
 //    Given I am on the log compliance page for an appointment
 //    And I complete some of the form
@@ -79,8 +76,8 @@ context('Log compliance', () => {
     const page = CompliancePage.visit(appointment, 'completed', formId)
 
     // And I do not complete the form
-    // And I enter a note longer than 4000 characters
-    page.enterNotesWithCharacterLength(4001)
+    page.shouldHaveFormWithEmptyValues()
+
     // When I submit the form
     page.clickSubmit()
 
@@ -89,7 +86,6 @@ context('Log compliance', () => {
     page.shouldShowErrorSummary('workedIntensively', 'Select yes if they are working intensively')
     page.shouldShowErrorSummary('workQuality', 'Select a description of the quality of their work ')
     page.shouldShowErrorSummary('behaviour', 'Select a description of their behaviour ')
-    page.shouldShowErrorSummary('notes', 'Notes must be 4000 characters or less')
   })
 
   describe('populating the form', function describe() {
@@ -111,7 +107,6 @@ context('Log compliance', () => {
       page.selectHiVisValue()
       page.selectWorkedIntensivelyValue()
       page.selectWorkQualityValue()
-      page.enterNotesWithCharacterLength(4001)
 
       // When I submit the form
       page.clickSubmit()
@@ -121,26 +116,6 @@ context('Log compliance', () => {
       page.shouldHaveSelectedHiVisValue()
       page.shouldHaveSelectedWorkedIntensivelyValue()
       page.shouldHaveSelectedWorkQualityValue()
-      page.shouldShowSubmittedNotes()
-    })
-
-    // Scenario: viewing empty form if a new contact outcome is recorded
-    it('shows empty form if contact outcome has changed', function test() {
-      const appointment = appointmentFactory.build({
-        contactOutcomeCode: 'X',
-        attendanceData: {
-          hiVisWorn: true,
-          workedIntensively: false,
-          workQuality: 'GOOD',
-          behaviour: 'UNSATISFACTORY',
-        },
-      })
-      // Given I am on the log compliance page for an appointment
-      cy.task('stubFindAppointment', { appointment })
-      const page = CompliancePage.visit(appointment, 'completed', formId)
-
-      // Then I should see the form with empty values
-      page.shouldHaveFormWithEmptyValues()
     })
 
     // Scenario: viewing saved answers on an appointment if a previously recorded contact outcome has not changed
@@ -163,7 +138,6 @@ context('Log compliance', () => {
 
       // Then I should see the form populated with appointment data
       page.shouldHaveFormWithAppointmentValues()
-      page.shouldHaveEmptyNotes()
     })
   })
 
@@ -173,16 +147,30 @@ context('Log compliance', () => {
       it('submits the form and navigates to the next page', function test() {
         // Given I am on the log compliance page for an appointment
         cy.task('stubFindAppointment', { appointment: this.appointment })
+        cy.task('stubGetAppointmentForm', {
+          form: appointmentOutcomeFormFactory.build({
+            attendanceData: attendanceDataFactory.build(),
+          }),
+          formId,
+        })
+
         const page = CompliancePage.visit(this.appointment, 'completed', formId)
 
         // When I submit the form
         cy.task('stubUpdateAppointmentOutcome', { appointment: this.appointment })
         cy.task('stubSaveStatusesForm', { sessionOrAppointment: this.appointment })
+        cy.task('stubSaveAppointmentForm', { formId })
+
         page.completeForm()
         page.clickSubmit()
 
-        // And I continue from the review page
-        const reviewPage = Page.verifyOnPage(ReviewPage)
+        // And I continue through the notes page
+        const notesPage = Page.verifyOnPage(NotesPage, this.appointment, 'completed', 'some-form')
+        notesPage.clickSubmit()
+
+        // And I continue through the review page
+        const reviewPage = Page.verifyOnPage(ReviewPage, this.appointment, 'completed')
+
         reviewPage.shouldNotShowAlertPractitionerMessage()
         reviewPage.clickSubmit()
 

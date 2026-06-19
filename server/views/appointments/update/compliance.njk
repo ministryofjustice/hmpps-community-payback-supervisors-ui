@@ -2,7 +2,6 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
-
 {% extends "./layout.njk" %}
 
 {% set pageTitle = 'Log compliance' %}
@@ -74,36 +73,6 @@
         }) }}
       </div>
     </div>
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-full">
-        {{ govukTextarea({
-          name: "notes",
-          id: "notes",
-          errorMessage: errors.notes,
-          value: notes,
-          label: {
-            text: "Notes",
-            classes: "govuk-label--m",
-            isPageHeading: false
-          }
-        }) }}
-      </div>
-    </div>
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-full">
-        {{ govukCheckboxes({
-          name: "isSensitive",
-          items: [
-            {
-              value: "true",
-              text: "This information is not to be shared with the person on probation",
-              checked: isSensitive
-            }
-          ]
-        }) }}
-      </div>
-    </div>
-
   {%endmacro %}
 
   {{ form() }}
