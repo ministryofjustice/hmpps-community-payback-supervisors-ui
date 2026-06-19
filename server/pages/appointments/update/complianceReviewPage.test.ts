@@ -25,7 +25,10 @@ describe('ComplianceReviewPage', () => {
 
         const appointmentOutputForm = appointmentOutcomeFormFactory.build({
           endTime,
-          attendanceData: attendanceDataFactory.build(),
+          attendanceData: attendanceDataFactory.build({
+            hiVisWorn: true,
+            workedIntensively: true,
+          }),
         })
 
         const page = new ComplianceReviewPage(appointment, contactOutcomes, formId, appointmentOutputForm, {
@@ -64,14 +67,14 @@ describe('ComplianceReviewPage', () => {
             ],
             [
               { text: 'Hi-vis' },
-              { html: appointmentOutputForm.attendanceData.hiVisWorn ? 'Yes' : 'No' },
+              { html: 'Yes' },
               {
                 html: changeLink,
               },
             ],
             [
               { text: 'Worked intensively' },
-              { html: appointmentOutputForm.attendanceData.workedIntensively ? 'Yes' : 'No' },
+              { html: 'Yes' },
               {
                 html: changeLink,
               },

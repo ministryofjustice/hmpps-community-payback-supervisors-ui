@@ -165,7 +165,7 @@ context('Log compliance', () => {
         page.clickSubmit()
 
         // And I continue through the notes page
-        const notesPage = Page.verifyOnPage(NotesPage, this.appointment, 'completed')
+        const notesPage = Page.verifyOnPage(NotesPage, this.appointment, 'completed', 'some-form')
         notesPage.clickSubmit()
 
         // And I continue through the review page

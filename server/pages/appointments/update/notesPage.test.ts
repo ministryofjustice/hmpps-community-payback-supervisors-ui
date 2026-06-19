@@ -109,6 +109,24 @@ describe('NotesPage', () => {
       })
     })
 
+    describe('notes in the form data', () => {
+      const action = 'completed'
+
+      it('should return notes if a value is present', () => {
+        page = new NotesPage({ action, query: {}, appointment })
+        form = appointmentOutcomeFormFactory.build({ notes: 'test note' })
+        const result = page.viewData(form)
+        expect(result.notes).toEqual('test note')
+      })
+
+      it('should return null for isSensitive if a value is not present', () => {
+        page = new NotesPage({ action, query: {}, appointment })
+        form = appointmentOutcomeFormFactory.build({ notes: undefined })
+        const result = page.viewData(form)
+        expect(result.notes).not.toBeDefined()
+      })
+    })
+
     describe('isSensitive in the query', () => {
       const action = 'completed'
 
@@ -123,6 +141,17 @@ describe('NotesPage', () => {
         form = appointmentOutcomeFormFactory.build({ sensitive: false })
         const result = page.viewData(form)
         expect(result.isSensitive).toEqual(false)
+      })
+    })
+
+    describe('isSensitive in the form data', () => {
+      const action = 'completed'
+
+      it('should return true for isSensitive if a value is present', () => {
+        page = new NotesPage({ action, query: {}, appointment })
+        form = appointmentOutcomeFormFactory.build({ sensitive: true })
+        const result = page.viewData(form)
+        expect(result.isSensitive).toEqual(true)
       })
     })
   })

@@ -51,7 +51,7 @@ export default class ComplianceController {
         })
       }
 
-      const toSave = page.updateForm(formData)
+      const toSave = page.updateForm(appointment, formData)
       await this.appointmentFormService.saveForm(formId, res.locals.user.username, toSave)
 
       return res.redirect(page.nextPath(appointmentParams.projectCode, appointmentParams.appointmentId))
