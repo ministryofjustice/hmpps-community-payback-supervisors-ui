@@ -1,4 +1,4 @@
-import { ContactOutcomesDto } from '../@types/shared'
+import { ContactOutcomeDto, ContactOutcomesDto } from '../@types/shared'
 import ReferenceDataClient from '../data/referenceDataClient'
 
 export default class ReferenceDataService {
@@ -33,5 +33,10 @@ export default class ReferenceDataService {
 
   async getContactOutcomes(userName: string): Promise<ContactOutcomesDto> {
     return this.referenceDataClient.getContactOutcomes(userName)
+  }
+
+  async getContactOutcome(username: string, contactOutcomeCode: string): Promise<ContactOutcomeDto | undefined> {
+    const contactOutcomes = await this.referenceDataClient.getContactOutcomes(username)
+    return contactOutcomes.contactOutcomes.find(contactOutcome => contactOutcome.code === contactOutcomeCode)
   }
 }
