@@ -1,10 +1,5 @@
 import { AppointmentDto } from '../../../@types/shared'
-import {
-  AppointmentCompletedAction,
-  AppointmentOutcomeForm,
-  AppointmentStatusType,
-  GovUkRadioOption,
-} from '../../../@types/user-defined'
+import { AppointmentOutcomeForm, GovUkRadioOption } from '../../../@types/user-defined'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
 import appointmentFactory from '../../../testutils/factories/appointmentFactory'
@@ -228,16 +223,5 @@ describe('CompliancePage', () => {
         `${paths.appointments.notes.completed({ projectCode, appointmentId })}?form=${formId}`,
       )
     })
-  })
-
-  describe('completedStatus', () => {
-    it.each([['Session complete', 'completed']])(
-      'returns "%s" status if action is "%s"',
-      (status: AppointmentStatusType, action: AppointmentCompletedAction) => {
-        page = new CompliancePage(action, formId, {})
-
-        expect(page.completedStatus()).toEqual(status)
-      },
-    )
   })
 })

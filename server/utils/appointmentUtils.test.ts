@@ -12,32 +12,11 @@ describe('AppointmentUtils', () => {
   })
 
   describe('getStatusTagColour', () => {
-    it.each([
-      ['Scheduled', 'grey'],
-      ['Session complete', 'blue'],
-      ['Not expected', 'red'],
-      ['Absent', 'yellow'],
-      ['Cannot work', 'purple'],
-      ['Left site', 'orange'],
-    ])('Maps status to a Gov.UK colour', (status: AppointmentStatusType, colour: GovUkStatusTagColour) => {
-      expect(AppointmentUtils.statusTagColour[status]).toEqual(colour)
-    })
-  })
-
-  describe('isSessionComplete', () => {
-    it.each(['Session complete', 'Absent', 'Cannot work', 'Left site'])(
-      'should be true if status is "%s"',
-      (status: AppointmentStatusType) => {
-        const result = AppointmentUtils.isSessionComplete(status)
-
-        expect(result).toBe(true)
+    it.each([['Scheduled', 'grey']])(
+      'Maps status to a Gov.UK colour',
+      (status: AppointmentStatusType, colour: GovUkStatusTagColour) => {
+        expect(AppointmentUtils.statusTagColour[status]).toEqual(colour)
       },
     )
-
-    it.each(['Scheduled', 'Not expected'])('should be false if status is "%s"', (status: AppointmentStatusType) => {
-      const result = AppointmentUtils.isSessionComplete(status)
-
-      expect(result).toBe(false)
-    })
   })
 })

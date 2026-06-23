@@ -3,14 +3,12 @@ import AppointmentService from '../../services/appointmentService'
 import StartTimePage from '../../pages/appointments/update/startTimePage'
 import { generateErrorSummary } from '../../utils/errorUtils'
 import { AppointmentArrivedAction, AppointmentOutcomeForm, AppointmentParams } from '../../@types/user-defined'
-import AppointmentStatusService from '../../services/appointmentStatusService'
 import paths from '../../paths'
 import AppointmentFormService from '../../services/appointmentFormService'
 
 export default class StartTimeController {
   constructor(
     private readonly appointmentService: AppointmentService,
-    private readonly appointmentStatusService: AppointmentStatusService,
     private readonly appointmentFormService: AppointmentFormService,
   ) {}
 

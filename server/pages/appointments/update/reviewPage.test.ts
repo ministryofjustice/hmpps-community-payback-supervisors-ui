@@ -1,3 +1,4 @@
+import { contactOutcomeFactory } from '../../../testutils/factories/contactOutcomeFactory'
 import StatusTagUtils from '../../../utils/GovUKFrontend/statusTagUtils'
 import ReviewPage from './reviewPage'
 
@@ -7,7 +8,9 @@ describe('ReviewPage', () => {
       it('should return an object with correct data', () => {
         const url = 'link?q=1'
 
-        const page = new ReviewPage('test', 'Absent', { 'Test key': 'Test value' }, true, url)
+        const outcome = contactOutcomeFactory.build()
+
+        const page = new ReviewPage('test', outcome, { 'Test key': 'Test value' }, true, url)
 
         const link = `<a href=${url} class="govuk-link govuk-link--no-visited-state">Change</a>`
 
@@ -16,7 +19,7 @@ describe('ReviewPage', () => {
         expect(page.viewData()).toEqual({
           rows: [
             [{ text: 'Test key' }, { html: 'Test value' }, { html: link }],
-            [{ text: 'Outcome status' }, { html: 'Absent' }, { text: '' }],
+            [{ text: 'Outcome status' }, { html: outcome.name }, { text: '' }],
           ],
           template: './test.njk',
           showWillAlertPractitionerMessage: true,
@@ -29,7 +32,9 @@ describe('ReviewPage', () => {
       it('should return an object with correct data', () => {
         const url = 'link?q=1'
 
-        const page = new ReviewPage('test', 'Absent', { 'Test key': 'Test value' }, false, url)
+        const outcome = contactOutcomeFactory.build()
+
+        const page = new ReviewPage('test', outcome, { 'Test key': 'Test value' }, false, url)
 
         const link = `<a href=${url} class="govuk-link govuk-link--no-visited-state">Change</a>`
 
@@ -38,7 +43,7 @@ describe('ReviewPage', () => {
         expect(page.viewData()).toEqual({
           rows: [
             [{ text: 'Test key' }, { html: 'Test value' }, { html: link }],
-            [{ text: 'Outcome status' }, { html: 'Absent' }, { text: '' }],
+            [{ text: 'Outcome status' }, { html: outcome.name }, { text: '' }],
           ],
           template: './test.njk',
           showWillAlertPractitionerMessage: false,

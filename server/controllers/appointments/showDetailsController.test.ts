@@ -4,7 +4,7 @@ import ShowDetailsController from './showDetailsController'
 import AppointmentService from '../../services/appointmentService'
 import appointmentFactory from '../../testutils/factories/appointmentFactory'
 import AppointmentShowDetailsPage from '../../pages/appointments/appointmentShowDetailsPage'
-import AppointmentStatusService from '../../services/appointmentStatusService'
+import ReferenceDataService from '../../services/referenceDataService'
 
 jest.mock('../../pages/appointments/appointmentShowDetailsPage')
 
@@ -18,10 +18,10 @@ describe('ShowDetailsController', () => {
 
   let showDetailsController: ShowDetailsController
   const appointmentService = createMock<AppointmentService>()
-  const appointmentStatusService = createMock<AppointmentStatusService>()
+  const referenceDataService = createMock<ReferenceDataService>()
 
   beforeEach(() => {
-    showDetailsController = new ShowDetailsController(appointmentService, appointmentStatusService)
+    showDetailsController = new ShowDetailsController(appointmentService, referenceDataService)
   })
 
   describe('show', () => {

@@ -22,7 +22,7 @@
 //      When I click on 'Not arrived'
 //      Then I should be taken to the first page of the absent form
 //
-//  Scenario: Appointment with completed status
+//  Scenario: Appointment already with an outcode code
 //    Given I am on the appointment page
 //    Then I should not see any appointment update actions
 
@@ -32,9 +32,7 @@ import sessionFactory from '../../server/testutils/factories/sessionFactory'
 import appointmentSummaryFactory from '../../server/testutils/factories/appointmentSummaryFactory'
 import AppointmentPage from '../pages/appointment'
 import appointmentFactory from '../../server/testutils/factories/appointmentFactory'
-import appointmentStatusFactory from '../../server/testutils/factories/appointmentStatusFactory'
 import sessionSummaryFactory from '../../server/testutils/factories/sessionSummaryFactory'
-import { AppointmentStatusType } from '../../server/@types/user-defined'
 import supervisorFactory from '../../server/testutils/factories/supervisorFactory'
 import appointmentOutcomeFormFactory from '../../server/testutils/factories/appointmentOutcomeFormFactory'
 import AttendanceOutcomePage from '../pages/appointments/update/attendanceOutcomePage'
@@ -50,6 +48,11 @@ context('viewAnAppointment', () => {
     const allocations = [sessionSummaryFactory.build({ date: '2025-09-15' })]
     cy.task('stubFindSupervisor', { supervisor })
     cy.task('stubNextSessions', { sessionSummaries: { allocations }, supervisorTeam: supervisor.unpaidWorkTeams[0] })
+
+    const contactOutcomes = contactOutcomesFactory.build({
+      contactOutcomes: [contactOutcomeFactory.build({ enforceable: true }), contactOutcomeFactory.build()],
+    })
+    cy.task('stubGetContactOutcomes', { contactOutcomes })
   })
 
   //  Scenario: viewing an appointment
@@ -59,8 +62,6 @@ context('viewAnAppointment', () => {
 
     //  When I visit an appointment page
     const appointment = appointmentFactory.build()
-    const appointmentStatus = appointmentStatusFactory.build({ appointmentId: appointment.id })
-    cy.task('stubGetStatusesForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
     cy.task('stubFindAppointment', { appointment })
 
     const appointmentPage = AppointmentPage.visit(appointment)
@@ -68,7 +69,7 @@ context('viewAnAppointment', () => {
     // Then I should see the appointment and offender details
     appointmentPage.shouldShowAppointmentDetails()
     appointmentPage.shouldShowOffenderDetails()
-    appointmentPage.shouldShowStatus(appointmentStatus.status)
+    appointmentPage.shouldShowStatus('Scheduled')
   })
 
   //  Scenario: navigating back to the session page
@@ -76,20 +77,14 @@ context('viewAnAppointment', () => {
     const appointmentSummaries = appointmentSummaryFactory.buildList(3)
     const session = sessionFactory.build({ appointmentSummaries })
     const appointment = appointmentFactory.build({ projectCode: session.projectCode, date: session.date })
-    const appointmentStatus = appointmentStatusFactory.build({ appointmentId: appointment.id })
-    const appointmentStatuses = appointmentSummaries.map(appointmentSummary =>
-      appointmentStatusFactory.build({ appointmentId: appointmentSummary.id }),
-    )
 
     // Given I am on an appointment page
     cy.signIn()
     cy.task('stubFindAppointment', { appointment })
-    cy.task('stubGetStatusesForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
     const appointmentPage = AppointmentPage.visit(appointment)
 
     // When I click the back link
     cy.task('stubFindSession', { session })
-    cy.task('stubGetStatusesForm', { sessionOrAppointment: session, appointmentStatuses })
     appointmentPage.clickBack()
 
     // Then I should be taken to the session page
@@ -101,19 +96,12 @@ context('viewAnAppointment', () => {
     // Scenario: starting an arrived form
     it('I can navigate to the arrived form', () => {
       // Given I am on the appointment page
-      const appointment = appointmentFactory.build()
-      const appointmentStatus = appointmentStatusFactory.build({ appointmentId: appointment.id, status: 'Scheduled' })
+      const appointment = appointmentFactory.build({ contactOutcomeCode: undefined })
 
       cy.signIn()
       cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
-      cy.task('stubGetStatusesForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
       cy.task('stubSaveAppointmentForm')
       cy.task('stubGetAppointmentForm', { form: appointmentOutcomeFormFactory.build() })
-
-      const contactOutcomes = contactOutcomesFactory.build({
-        contactOutcomes: [contactOutcomeFactory.build({ enforceable: true }), contactOutcomeFactory.build()],
-      })
-      cy.task('stubGetContactOutcomes', { contactOutcomes })
 
       const appointmentPage = AppointmentPage.visit(appointment)
 
@@ -127,12 +115,10 @@ context('viewAnAppointment', () => {
     // Scenario: starting an absent form
     it('I can navigate to the absent form', () => {
       // Given I am on the appointment page
-      const appointment = appointmentFactory.build()
-      const appointmentStatus = appointmentStatusFactory.build({ appointmentId: appointment.id, status: 'Scheduled' })
+      const appointment = appointmentFactory.build({ contactOutcomeCode: undefined })
 
       cy.signIn()
       cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
-      cy.task('stubGetStatusesForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
       cy.task('stubSaveAppointmentForm')
       cy.task('stubGetAppointmentForm', { form: appointmentOutcomeFormFactory.build() })
 
@@ -146,25 +132,19 @@ context('viewAnAppointment', () => {
     })
   })
 
-  describe('complete appointment should not have any actions', () => {
-    const completedStatuses: AppointmentStatusType[] = ['Absent', 'Cannot work', 'Session complete', 'Left site']
+  describe('A complete appointment', () => {
+    // Scenario: Appointment already with an outcode code
+    it('has no available actions', () => {
+      // Given I am on the appointment page
+      const appointment = appointmentFactory.build()
 
-    completedStatuses.forEach((action: AppointmentStatusType) => {
-      // Scenario: Appointment with completed status
-      it(`${action} status`, () => {
-        // Given I am on the appointment page
-        const appointment = appointmentFactory.build()
-        const appointmentStatus = appointmentStatusFactory.build({ appointmentId: appointment.id, status: action })
+      cy.signIn()
+      cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
 
-        cy.signIn()
-        cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
-        cy.task('stubGetStatusesForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
+      const appointmentPage = AppointmentPage.visit(appointment)
 
-        const appointmentPage = AppointmentPage.visit(appointment)
-
-        // Then I should not see any appointment update actions
-        appointmentPage.shouldNotHaveAnyActions()
-      })
+      // Then I should not see any appointment update actions
+      appointmentPage.shouldNotHaveAnyActions()
     })
   })
 })

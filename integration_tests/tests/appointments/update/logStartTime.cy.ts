@@ -22,7 +22,6 @@
 //      Then I am taken to the session page
 
 import appointmentFactory from '../../../../server/testutils/factories/appointmentFactory'
-import appointmentStatusFactory from '../../../../server/testutils/factories/appointmentStatusFactory'
 import appointmentSummaryFactory from '../../../../server/testutils/factories/appointmentSummaryFactory'
 import sessionFactory from '../../../../server/testutils/factories/sessionFactory'
 import ConfirmAbsentPage from '../../../pages/appointments/update/confirm/confirmAbsentPage'
@@ -30,24 +29,24 @@ import StartTimePage from '../../../pages/appointments/update/startTimePage'
 import Page from '../../../pages/page'
 import SessionPage from '../../../pages/session'
 import { AppointmentDto } from '../../../../server/@types/shared'
-import { AppointmentStatus } from '../../../../server/services/appointmentStatusService'
 import sessionSummaryFactory from '../../../../server/testutils/factories/sessionSummaryFactory'
 import supervisorFactory from '../../../../server/testutils/factories/supervisorFactory'
 import appointmentOutcomeFormFactory from '../../../../server/testutils/factories/appointmentOutcomeFormFactory'
 import ReviewPage from '../../../pages/appointments/update/reviewPage'
 import EndTimePage from '../../../pages/appointments/update/endTimePage'
 import NotesPage from '../../../pages/appointments/update/notesPage'
+import {
+  contactOutcomeFactory,
+  contactOutcomesFactory,
+} from '../../../../server/testutils/factories/contactOutcomeFactory'
 
 context('Log start time ', () => {
   let appointment: AppointmentDto
-  let appointmentStatus: AppointmentStatus
 
   beforeEach(() => {
     appointment = appointmentFactory.build()
-    appointmentStatus = appointmentStatusFactory.build({ appointmentId: appointment.id })
     cy.task('reset')
     cy.task('stubSignIn')
-    cy.task('stubGetStatusesForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
     cy.task('stubFindAppointment', { appointment })
     const supervisor = supervisorFactory.build()
     const allocations = [sessionSummaryFactory.build({ date: '2025-09-15' })]
@@ -55,6 +54,11 @@ context('Log start time ', () => {
     cy.task('stubNextSessions', { sessionSummaries: { allocations }, supervisorTeam: supervisor.unpaidWorkTeams[0] })
     cy.task('stubSaveAppointmentForm')
     cy.task('stubGetAppointmentForm', { form: appointmentOutcomeFormFactory.build() })
+
+    const contactOutcomes = contactOutcomesFactory.build({
+      contactOutcomes: [contactOutcomeFactory.build({ enforceable: true }), contactOutcomeFactory.build()],
+    })
+    cy.task('stubGetContactOutcomes', { contactOutcomes })
 
     cy.signIn()
   })
@@ -98,17 +102,9 @@ context('Log start time ', () => {
       const appointmentSummaries = appointmentSummaryFactory.buildList(3)
       const session = sessionFactory.build({ appointmentSummaries })
       appointment = appointmentFactory.build({ projectCode: session.projectCode, date: session.date })
-      const appointmentStatuses = appointmentSummaries.map(appointmentSummary =>
-        appointmentStatusFactory.build({ appointmentId: appointmentSummary.id }),
-      )
 
-      cy.task('stubGetStatusesForm', {
-        sessionOrAppointment: appointment,
-        appointmentStatuses: [appointmentStatuses[0]],
-      })
       cy.task('stubFindAppointment', { appointment })
       cy.task('stubUpdateAppointmentOutcome', { appointment })
-      cy.task('stubSaveStatusesForm', { sessionOrAppointment: appointment })
 
       const form = appointmentOutcomeFormFactory.build()
       cy.task('stubGetAppointmentForm', { form, formId: 'some-form' })
@@ -130,7 +126,6 @@ context('Log start time ', () => {
 
       // And I click the return to session link
       cy.task('stubFindSession', { session })
-      cy.task('stubGetStatusesForm', { sessionOrAppointment: session, appointmentStatuses })
       page.clickLinkToSessionPage()
 
       // Then I am taken to the session page

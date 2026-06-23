@@ -23,9 +23,6 @@
 //    Scenario: viewing a session's existing appointment statuses
 //      Given I am on a session page for an in progress session
 //      Then I see saved statuses for each offender
-//    Scenario: viewing an in progress session with new appointments
-//      Given I am on a session page for an in progress session
-//      Then I see saved statuses for each offender and statuses for new appointments
 
 import IndexPage from '../pages'
 import Page from '../pages/page'
@@ -35,8 +32,7 @@ import appointmentSummaryFactory from '../../server/testutils/factories/appointm
 import AppointmentPage from '../pages/appointment'
 import appointmentFactory from '../../server/testutils/factories/appointmentFactory'
 import sessionSummaryFactory from '../../server/testutils/factories/sessionSummaryFactory'
-import appointmentStatusFactory from '../../server/testutils/factories/appointmentStatusFactory'
-import { contactOutcomeFactory } from '../../server/testutils/factories/contactOutcomeFactory'
+import { contactOutcomeFactory, contactOutcomesFactory } from '../../server/testutils/factories/contactOutcomeFactory'
 import { SessionSummariesDto } from '../../server/@types/shared'
 import supervisorFactory from '../../server/testutils/factories/supervisorFactory'
 import supervisorTeamFactory from '../../server/testutils/factories/supervisorTeamFactory'
@@ -77,7 +73,6 @@ context('Home', () => {
     const appointmentSummaries = appointmentSummaryFactory.buildList(3)
     const session = sessionFactory.build({ appointmentSummaries, projectCode: 'N56123456', date: '2025-09-15' })
     cy.task('stubFindSession', { session })
-    cy.task('stubGetStatusesFormNotFound', { session })
     page.clickViewSession()
 
     //  Then I see the session details
@@ -122,6 +117,11 @@ context('Session', () => {
     cy.task('stubFindSupervisor', { supervisor })
     cy.task('stubNextSessions', { sessionSummaries: { allocations }, supervisorTeam: supervisor.unpaidWorkTeams[0] })
 
+    const contactOutcomes = contactOutcomesFactory.build({
+      contactOutcomes: [contactOutcomeFactory.build({ enforceable: true }), contactOutcomeFactory.build()],
+    })
+    cy.task('stubGetContactOutcomes', { contactOutcomes })
+
     cy.signIn()
   })
 
@@ -131,14 +131,11 @@ context('Session', () => {
     const appointmentSummaries = appointmentSummaryFactory.buildList(3)
     const session = sessionFactory.build({ appointmentSummaries })
     cy.task('stubFindSession', { session })
-    cy.task('stubGetStatusesFormNotFound', { session })
     const sessionPage = SessionPage.visit(session)
 
     const appointment = appointmentFactory.build({ id: appointmentSummaries[0].id, projectCode: session.projectCode })
-    const appointmentStatus = appointmentStatusFactory.build({ appointmentId: appointment.id })
     //  When I click on an appointment
     cy.task('stubFindAppointment', { appointment })
-    cy.task('stubGetStatusesForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
 
     sessionPage.clickOnAnAppointment()
     //  Then I am taken to the appointment page
@@ -149,62 +146,33 @@ context('Session', () => {
   describe('statuses', () => {
     //  Scenario: viewing a new session with no appointment statuses saved
     it('Viewing a new session with no statuses', () => {
+      const contactOutcome = contactOutcomeFactory.build()
       // Given I am on a session page for a new session
       const appointmentSummaries = [
         appointmentSummaryFactory.build({ contactOutcome: null }),
-        appointmentSummaryFactory.build({ contactOutcome: contactOutcomeFactory.build() }),
+        appointmentSummaryFactory.build({ contactOutcome }),
       ]
       const session = sessionFactory.build({ appointmentSummaries })
       cy.task('stubFindSession', { session })
-      cy.task('stubGetStatusesFormNotFound', { session })
       const sessionPage = SessionPage.visit(session)
 
       // Then I see scheduled statuses for each offender
-      sessionPage.shouldShowAppointmentsWithStatuses(['Scheduled', 'Not expected'])
+      sessionPage.shouldShowAppointmentsWithStatuses(['Scheduled', contactOutcome.name])
     })
 
     //  Scenario: viewing a session's existing appointment statuses
     it('shows existing statuses if they exist', () => {
       // Given I am on a session page for an in progress session
       const appointmentSummaries = appointmentSummaryFactory.buildList(3)
-      const appointmentStatuses = appointmentSummaries.map(appointment =>
-        appointmentStatusFactory.build({ appointmentId: appointment.id }),
-      )
       const session = sessionFactory.build({ appointmentSummaries })
       cy.task('stubFindSession', { session })
-      cy.task('stubGetStatusesForm', { sessionOrAppointment: session, appointmentStatuses })
 
       const sessionPage = SessionPage.visit(session)
 
       // Then I see saved statuses for each offender
-      sessionPage.shouldShowAppointmentsWithStatuses(appointmentStatuses.map(entry => entry.status))
-    })
-
-    //  Scenario: viewing an in progress session with new appointments
-    it('Shows a status for any new appointments', () => {
-      // Given I am on a session page for an in progress session
-      const appointmentSummaries = appointmentSummaryFactory.buildList(3)
-      const appointmentStatuses = appointmentSummaries.map(appointment =>
-        appointmentStatusFactory.build({ appointmentId: appointment.id }),
+      sessionPage.shouldShowAppointmentsWithStatuses(
+        appointmentSummaries.map(appointment => appointment.contactOutcome?.name),
       )
-
-      const newAppointments = [
-        appointmentSummaryFactory.build({ contactOutcome: null }),
-        appointmentSummaryFactory.build({ contactOutcome: contactOutcomeFactory.build() }),
-      ]
-      appointmentSummaries.push(...newAppointments)
-      const session = sessionFactory.build({ appointmentSummaries })
-      cy.task('stubFindSession', { session })
-      cy.task('stubGetStatusesForm', { sessionOrAppointment: session, appointmentStatuses })
-
-      const sessionPage = SessionPage.visit(session)
-
-      // Then I see saved statuses for each offender and statuses for new appointments
-      sessionPage.shouldShowAppointmentsWithStatuses([
-        ...appointmentStatuses.map(entry => entry.status),
-        'Scheduled',
-        'Not expected',
-      ])
     })
   })
 })

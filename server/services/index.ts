@@ -1,6 +1,5 @@
 import { dataAccess } from '../data'
 import AppointmentService from './appointmentService'
-import AppointmentStatusService from './appointmentStatusService'
 import AuditService from './auditService'
 import SessionService from './sessionService'
 import ReferenceDataService from './referenceDataService'
@@ -24,7 +23,6 @@ export const services = () => {
     sessionService: new SessionService(sessionClient),
     appointmentService: new AppointmentService(appointmentClient),
     referenceDataService: new ReferenceDataService(referenceDataClient),
-    appointmentStatusService: new AppointmentStatusService(formClient),
     supervisorService: new SupervisorService(supervisorClient),
     appointmentFormService: new AppointmentFormService(formClient),
   }

@@ -2,8 +2,7 @@ import paths from '../../../paths'
 import appointmentFactory from '../../../testutils/factories/appointmentFactory'
 import appointmentOutcomeFormFactory from '../../../testutils/factories/appointmentOutcomeFormFactory'
 import attendanceDataFactory from '../../../testutils/factories/attendanceDataFactory'
-import { contactOutcomesFactory } from '../../../testutils/factories/contactOutcomeFactory'
-import StatusTagUtils from '../../../utils/GovUKFrontend/statusTagUtils'
+import { contactOutcomeFactory } from '../../../testutils/factories/contactOutcomeFactory'
 import ComplianceReviewPage from './complianceReviewPage'
 
 describe('ComplianceReviewPage', () => {
@@ -21,7 +20,7 @@ describe('ComplianceReviewPage', () => {
 
         const formId = 'abcxyz456'
 
-        const contactOutcomes = contactOutcomesFactory.build()
+        const outcome = contactOutcomeFactory.build({ enforceable: false })
 
         const appointmentOutputForm = appointmentOutcomeFormFactory.build({
           endTime,
@@ -31,7 +30,7 @@ describe('ComplianceReviewPage', () => {
           }),
         })
 
-        const page = new ComplianceReviewPage(appointment, contactOutcomes, formId, appointmentOutputForm, {
+        const page = new ComplianceReviewPage(appointment, outcome, formId, appointmentOutputForm, {
           notes: 'test note',
           isSensitive: 'TRUE',
         })
@@ -39,8 +38,6 @@ describe('ComplianceReviewPage', () => {
         const link = (_str: TemplateStringsArray, url: string): string => {
           return `<a href=${url}?form=${formId} class="govuk-link govuk-link--no-visited-state">Change</a>`
         }
-
-        jest.spyOn(StatusTagUtils, 'getHtml').mockReturnValue('Session complete')
 
         const params = { projectCode, appointmentId: appointmentId.toString() }
 
@@ -107,7 +104,7 @@ describe('ComplianceReviewPage', () => {
                 html: notesLink,
               },
             ],
-            [{ text: 'Outcome status' }, { html: 'Session complete' }, { text: '' }],
+            [{ text: 'Outcome status' }, { html: outcome.name }, { text: '' }],
           ],
           template: './compliance.njk',
           showWillAlertPractitionerMessage: false,

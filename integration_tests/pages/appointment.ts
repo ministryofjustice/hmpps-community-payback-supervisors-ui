@@ -3,7 +3,6 @@ import Offender from '../../server/models/offender'
 import SummaryListComponent from './components/summaryListComponent'
 import Page from './page'
 import paths from '../../server/paths'
-import { AppointmentStatusType } from '../../server/@types/user-defined'
 
 export default class AppointmentPage extends Page {
   private readonly appointmentDetails: SummaryListComponent
@@ -46,7 +45,7 @@ export default class AppointmentPage extends Page {
     cy.get('span').contains(this.appointment.offender.crn)
   }
 
-  shouldShowStatus(status: AppointmentStatusType) {
+  shouldShowStatus(status: string) {
     this.appointmentDetails.getValueWithLabel('Session status').should('contain.text', status)
   }
 

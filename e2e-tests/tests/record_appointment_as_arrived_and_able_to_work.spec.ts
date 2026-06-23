@@ -1,7 +1,6 @@
 import { checkAppointmentOnDelius } from '../steps/delius'
 import test from '../fixtures/appointmentTest'
 import signIn from '../steps/signIn'
-import clearSessionData from '../steps/clearSessionData'
 import AppointmentPage from '../pages/appointmentPage'
 import EndTimePage from '../pages/appointments/update/endTimePage'
 import CompliancePage from '../pages/appointments/update/compliancePage'
@@ -14,9 +13,8 @@ import AttendanceOutcomePage from '../pages/appointments/update/attendanceOutcom
 import NotesPage from '../pages/appointments/update/notesPage'
 
 test('Record an appointment as arrived and able to work', async ({ page, supervisorUser, testData, team }) => {
-  const { person, project } = testData
+  const { person } = testData
   await signIn(page, supervisorUser)
-  await clearSessionData(page, project)
 
   const homePage = new HomePage(page)
   await homePage.clickViewDetailsForProject(testData.project.name)
@@ -62,7 +60,7 @@ test('Record an appointment as arrived and able to work', async ({ page, supervi
   await confirmCompletedPage.clickLinkToSessionPage()
   await sessionPage.expect.toBeOnThePage()
 
-  await sessionPage.expect.appointmentToHaveStatus(person.getFullName(), 'Session complete')
+  await sessionPage.expect.appointmentToHaveStatus(person.getFullName(), 'Attended - Complied')
 
   await checkAppointmentOnDelius(page, team, testData, { outcome: 'Attended - Complied' })
 })

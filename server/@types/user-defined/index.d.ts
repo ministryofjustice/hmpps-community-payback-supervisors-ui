@@ -65,13 +65,7 @@ export type AppointmentEndTimeAction = AppointmentCompletedAction | 'arrived'
 
 export type AppointmentNotesAction = 'absent' | 'completed'
 
-export type AppointmentStatusType =
-  | 'Scheduled'
-  | 'Session complete'
-  | 'Not expected'
-  | 'Absent'
-  | 'Cannot work'
-  | 'Left site'
+export type AppointmentStatusType = 'Scheduled'
 
 // Should be a known colour variation of the GOV.UK Design System Tag component: https://design-system.service.gov.uk/components/tag/
 export type GovUkStatusTagColour = 'grey' | 'green' | 'blue' | 'pink' | 'red' | 'orange' | 'yellow' | 'purple'

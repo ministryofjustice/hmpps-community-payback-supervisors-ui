@@ -1,6 +1,4 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
-{% from "govuk/components/tag/macro.njk" import govukTag %}
-
 {% extends "../partials/layout.njk" %}
 
 {% set pageTitle = project.projectName %}
@@ -44,7 +42,7 @@
     <h2>
       {{ session.appointmentSummaries.length }} people scheduled on this session
     </h2>
-    
+
     <ul class="govuk-list">
       {% for appointment in session.appointmentSummaries %}
         {% set offenderName = appointment.formattedOffender.name | default(appointment.formattedOffender.crn) %}
@@ -62,10 +60,7 @@
               </div>
             </div>
             <div class="govuk-summary-card__content govuk-!-padding-bottom-3">
-              {{govukTag({
-                text: appointment.statusTag.text,
-                classes: appointment.statusTag.classes
-              })}}
+              {{ appointment.statusTag | safe }}
             </div>
           </div>
         </li>

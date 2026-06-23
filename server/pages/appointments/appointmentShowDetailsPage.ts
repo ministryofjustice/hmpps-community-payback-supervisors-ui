@@ -1,10 +1,8 @@
-import { AppointmentDto } from '../../@types/shared'
-import { AppointmentStatusType, LinkItem } from '../../@types/user-defined'
+import { AppointmentDto, ContactOutcomeDto } from '../../@types/shared'
+import { LinkItem } from '../../@types/user-defined'
 import Offender from '../../models/offender'
 import paths from '../../paths'
-import AppointmentUtils from '../../utils/appointmentUtils'
 import DateTimeFormats from '../../utils/dateTimeUtils'
-import StatusTagUtils from '../../utils/GovUKFrontend/statusTagUtils'
 
 interface ViewData {
   offender: Offender
@@ -17,22 +15,22 @@ interface ViewData {
 }
 
 export default class AppointmentShowDetailsPage {
-  viewData(appointment: AppointmentDto, appointmentStatus: AppointmentStatusType): ViewData {
+  viewData(appointment: AppointmentDto, contactOutcome: ContactOutcomeDto): ViewData {
     return {
       offender: new Offender(appointment.offender),
       startTime: DateTimeFormats.stripTime(appointment.startTime),
       endTime: DateTimeFormats.stripTime(appointment.endTime),
       backPath: paths.sessions.show({ projectCode: appointment.projectCode, date: appointment.date }),
-      actions: this.appointmentActions(appointment, appointmentStatus),
-      statusTagHtml: StatusTagUtils.getHtml(appointmentStatus, AppointmentUtils.statusTagColour[appointmentStatus]),
+      actions: this.appointmentActions(appointment),
+      statusTagHtml: contactOutcome ? contactOutcome.name : 'Scheduled',
       canBeUpdated: this.appointmentIsInThePast(appointment),
     }
   }
 
-  private appointmentActions(appointment: AppointmentDto, appointmentStatus: AppointmentStatusType): LinkItem[] {
+  private appointmentActions(appointment: AppointmentDto): LinkItem[] {
     const appointmentPathParams = { projectCode: appointment.projectCode, appointmentId: appointment.id.toString() }
 
-    if (AppointmentUtils.isSessionComplete(appointmentStatus)) {
+    if (appointment.contactOutcomeCode) {
       return []
     }
 

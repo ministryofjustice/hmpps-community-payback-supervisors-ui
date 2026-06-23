@@ -2,12 +2,12 @@ import type { Request, RequestHandler, Response } from 'express'
 import AppointmentService from '../../services/appointmentService'
 import { AppointmentParams, GetAppointmentRequest } from '../../@types/user-defined'
 import AppointmentShowDetailsPage from '../../pages/appointments/appointmentShowDetailsPage'
-import AppointmentStatusService from '../../services/appointmentStatusService'
+import ReferenceDataService from '../../services/referenceDataService'
 
 export default class ShowDetailsController {
   constructor(
     private readonly appointmentService: AppointmentService,
-    private readonly appointmentStatusService: AppointmentStatusService,
+    private readonly referenceDataService: ReferenceDataService,
   ) {}
 
   show(): RequestHandler {
@@ -21,11 +21,14 @@ export default class ShowDetailsController {
       }
 
       const appointment = await this.appointmentService.getAppointment(request)
-      const appointmentStatus = await this.appointmentStatusService.getStatus(appointment, res.locals.user.username)
+
+      const contactOutcome = appointment.contactOutcomeCode
+        ? await this.referenceDataService.getContactOutcome(res.locals.user.username, appointment.contactOutcomeCode)
+        : undefined
 
       const page = new AppointmentShowDetailsPage()
 
-      res.render('appointments/show', page.viewData(appointment, appointmentStatus))
+      res.render('appointments/show', page.viewData(appointment, contactOutcome))
     }
   }
 }
