@@ -1,5 +1,5 @@
 import { contactOutcomeFactory } from '../../../testutils/factories/contactOutcomeFactory'
-import StatusTagUtils from '../../../utils/GovUKFrontend/statusTagUtils'
+import HtmlUtils from '../../../utils/htmlUtils'
 import ReviewPage from './reviewPage'
 
 describe('ReviewPage', () => {
@@ -14,12 +14,13 @@ describe('ReviewPage', () => {
 
         const link = `<a href=${url} class="govuk-link govuk-link--no-visited-state">Change</a>`
 
-        jest.spyOn(StatusTagUtils, 'getHtml').mockReturnValue('Absent')
+        const statusTagHtml = '<strong>Contact outcome name</strong>'
+        jest.spyOn(HtmlUtils, 'getStatusTag').mockReturnValue(statusTagHtml)
 
         expect(page.viewData()).toEqual({
           rows: [
             [{ text: 'Test key' }, { html: 'Test value' }, { html: link }],
-            [{ text: 'Outcome status' }, { html: outcome.name }, { text: '' }],
+            [{ text: 'Outcome status' }, { html: statusTagHtml }, { text: '' }],
           ],
           template: './test.njk',
           showWillAlertPractitionerMessage: true,
@@ -38,12 +39,13 @@ describe('ReviewPage', () => {
 
         const link = `<a href=${url} class="govuk-link govuk-link--no-visited-state">Change</a>`
 
-        jest.spyOn(StatusTagUtils, 'getHtml').mockReturnValue('Absent')
+        const statusTagHtml = '<strong>Contact outcome name</strong>'
+        jest.spyOn(HtmlUtils, 'getStatusTag').mockReturnValue(statusTagHtml)
 
         expect(page.viewData()).toEqual({
           rows: [
             [{ text: 'Test key' }, { html: 'Test value' }, { html: link }],
-            [{ text: 'Outcome status' }, { html: outcome.name }, { text: '' }],
+            [{ text: 'Outcome status' }, { html: statusTagHtml }, { text: '' }],
           ],
           template: './test.njk',
           showWillAlertPractitionerMessage: false,

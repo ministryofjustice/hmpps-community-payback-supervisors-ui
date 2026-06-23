@@ -1,6 +1,7 @@
 import Offender from '../../models/offender'
 import paths from '../../paths'
 import appointmentFactory from '../../testutils/factories/appointmentFactory'
+import HtmlUtils from '../../utils/htmlUtils'
 import AppointmentShowDetailsPage from './appointmentShowDetailsPage'
 
 jest.mock('../../models/offender')
@@ -27,7 +28,8 @@ describe('AppointmentShowDetailsPage', () => {
         return offender
       })
 
-      const statusTagHtml = 'Scheduled'
+      const statusTagHtml = '<strong>Scheduled</strong>'
+      jest.spyOn(HtmlUtils, 'getStatusTag').mockReturnValue(statusTagHtml)
 
       const page = new AppointmentShowDetailsPage()
       const result = page.viewData(appointment, null)

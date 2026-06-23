@@ -8,6 +8,7 @@ import LocationUtils from '../utils/locationUtils'
 import Offender from '../models/offender'
 import appointmentSummaryFactory from '../testutils/factories/appointmentSummaryFactory'
 import paths from '../paths'
+import HtmlUtils from '../utils/htmlUtils'
 
 jest.mock('../models/offender')
 
@@ -46,6 +47,9 @@ describe('SessionsController', () => {
       const location = '12 Hampton Road'
       jest.spyOn(LocationUtils, 'locationToParagraph').mockReturnValue(location)
 
+      const statusTagHtml = '<strong>Contact outcome name</strong>'
+      jest.spyOn(HtmlUtils, 'getStatusTag').mockReturnValue(statusTagHtml)
+
       await requestHandler(request, response, next)
 
       expect(response.render).toHaveBeenCalledWith('sessions/show', {
@@ -61,7 +65,7 @@ describe('SessionsController', () => {
                 projectCode: session.projectCode,
                 appointmentId: appointmentSummary.id.toString(),
               }),
-              statusTag: appointmentSummary.contactOutcome.name,
+              statusTagHtml,
             },
           ],
         },
@@ -91,6 +95,9 @@ describe('SessionsController', () => {
       const location = '12 Hampton Road'
       jest.spyOn(LocationUtils, 'locationToParagraph').mockReturnValue(location)
 
+      const statusTagHtml = '<strong>Scheduled</strong>'
+      jest.spyOn(HtmlUtils, 'getStatusTag').mockReturnValue(statusTagHtml)
+
       await requestHandler(request, response, next)
 
       expect(response.render).toHaveBeenCalledWith('sessions/show', {
@@ -106,7 +113,7 @@ describe('SessionsController', () => {
                 projectCode: session.projectCode,
                 appointmentId: appointmentSummary.id.toString(),
               }),
-              statusTag: 'Scheduled',
+              statusTagHtml,
             },
           ],
         },

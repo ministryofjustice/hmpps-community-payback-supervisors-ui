@@ -3,6 +3,7 @@ import appointmentFactory from '../../../testutils/factories/appointmentFactory'
 import appointmentOutcomeFormFactory from '../../../testutils/factories/appointmentOutcomeFormFactory'
 import attendanceDataFactory from '../../../testutils/factories/attendanceDataFactory'
 import { contactOutcomeFactory } from '../../../testutils/factories/contactOutcomeFactory'
+import HtmlUtils from '../../../utils/htmlUtils'
 import ComplianceReviewPage from './complianceReviewPage'
 
 describe('ComplianceReviewPage', () => {
@@ -45,6 +46,9 @@ describe('ComplianceReviewPage', () => {
         const endTimeChangeLink = link`${paths.appointments.completed.endTime(params)}`
         const changeLink = link`${paths.appointments.completed.compliance(params)}`
         const notesLink = link`${paths.appointments.notes.completed(params)}`
+
+        const statusTagHtml = '<strong>Contact outcome name</strong>'
+        jest.spyOn(HtmlUtils, 'getStatusTag').mockReturnValue(statusTagHtml)
 
         expect(page.viewData()).toEqual({
           rows: [
@@ -104,7 +108,7 @@ describe('ComplianceReviewPage', () => {
                 html: notesLink,
               },
             ],
-            [{ text: 'Outcome status' }, { html: outcome.name }, { text: '' }],
+            [{ text: 'Outcome status' }, { html: statusTagHtml }, { text: '' }],
           ],
           template: './compliance.njk',
           showWillAlertPractitionerMessage: false,

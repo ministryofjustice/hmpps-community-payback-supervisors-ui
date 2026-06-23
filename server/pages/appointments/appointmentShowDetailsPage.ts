@@ -2,7 +2,9 @@ import { AppointmentDto, ContactOutcomeDto } from '../../@types/shared'
 import { LinkItem } from '../../@types/user-defined'
 import Offender from '../../models/offender'
 import paths from '../../paths'
+import AppointmentUtils from '../../utils/appointmentUtils'
 import DateTimeFormats from '../../utils/dateTimeUtils'
+import HtmlUtils from '../../utils/htmlUtils'
 
 interface ViewData {
   offender: Offender
@@ -16,13 +18,20 @@ interface ViewData {
 
 export default class AppointmentShowDetailsPage {
   viewData(appointment: AppointmentDto, contactOutcome: ContactOutcomeDto): ViewData {
+    let statusTagHtml
+    if (contactOutcome) {
+      statusTagHtml = HtmlUtils.getStatusTag(contactOutcome.name, AppointmentUtils.getStatusColour(contactOutcome))
+    } else {
+      statusTagHtml = HtmlUtils.getStatusTag('Scheduled', AppointmentUtils.getStatusColour())
+    }
+
     return {
       offender: new Offender(appointment.offender),
       startTime: DateTimeFormats.stripTime(appointment.startTime),
       endTime: DateTimeFormats.stripTime(appointment.endTime),
       backPath: paths.sessions.show({ projectCode: appointment.projectCode, date: appointment.date }),
       actions: this.appointmentActions(appointment),
-      statusTagHtml: contactOutcome ? contactOutcome.name : 'Scheduled',
+      statusTagHtml,
       canBeUpdated: this.appointmentIsInThePast(appointment),
     }
   }

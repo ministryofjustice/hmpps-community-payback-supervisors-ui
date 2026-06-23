@@ -1,14 +1,23 @@
-import { AppointmentStatusType, GovUkStatusTagColour } from '../@types/user-defined'
+import { ContactOutcomeDto } from '../@types/shared'
+import { GovUkStatusTagColour } from '../@types/user-defined'
 
 export default class AppointmentUtils {
-  static getStatusTagViewData(status: AppointmentStatusType) {
-    return {
-      text: status,
-      classes: `govuk-tag--${AppointmentUtils.statusTagColour[status]}`,
+  static getStatusColour(contactOutcome?: ContactOutcomeDto): GovUkStatusTagColour {
+    if (!contactOutcome) {
+      return 'grey'
     }
-  }
 
-  static statusTagColour: Record<AppointmentStatusType, GovUkStatusTagColour> = {
-    Scheduled: 'grey',
+    // Attended & complied or acceptable absence
+    if (!contactOutcome.enforceable) {
+      return 'teal'
+    }
+
+    // Attended & did not comply
+    if (contactOutcome.attended) {
+      return 'yellow'
+    }
+
+    // Unexpected absence
+    return 'red'
   }
 }
