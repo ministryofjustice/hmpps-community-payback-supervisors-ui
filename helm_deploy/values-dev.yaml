@@ -15,7 +15,6 @@ generic-service:
     COMMUNITY_PAYBACK_API_URL: 'https://community-payback-api-dev.hmpps.service.justice.gov.uk'
     ENVIRONMENT_NAME: DEV
     AUDIT_ENABLED: 'true'
-    CLEAR_SESSION_STATUSES_ENABLED: 'true'
 
 generic-prometheus-alerts:
   alertSeverity: hmpps-community-payback-nonprod

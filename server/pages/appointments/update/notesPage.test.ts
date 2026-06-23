@@ -7,7 +7,7 @@ import appointmentFactory from '../../../testutils/factories/appointmentFactory'
 import appointmentOutcomeFormFactory from '../../../testutils/factories/appointmentOutcomeFormFactory'
 import GovUkRadioGroup from '../../../utils/GovUKFrontend/GovUkRadioGroup'
 import NotesPage from './notesPage'
-import StartTimePage from './startTimePage'
+import ReferenceDataService from '../../../services/referenceDataService'
 
 jest.mock('../../../models/offender')
 
@@ -220,7 +220,7 @@ describe('NotesPage', () => {
         form = appointmentOutcomeFormFactory.build({
           notes: 'testnote',
           sensitive: true,
-          contactOutcomeCode: StartTimePage.UnacceptableAbsenceOutcomeCode,
+          contactOutcomeCode: ReferenceDataService.UnacceptableAbsenceOutcomeCode,
         })
 
         page = new NotesPage({ action: 'absent', query: {}, appointment })
@@ -240,7 +240,7 @@ describe('NotesPage', () => {
             date: appointment.date,
             notes: 'testnote',
             sensitive: true,
-            contactOutcomeCode: StartTimePage.UnacceptableAbsenceOutcomeCode,
+            contactOutcomeCode: ReferenceDataService.UnacceptableAbsenceOutcomeCode,
           }),
         )
       })

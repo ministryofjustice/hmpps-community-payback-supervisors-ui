@@ -8,10 +8,7 @@ import LocationUtils from '../utils/locationUtils'
 import Offender from '../models/offender'
 import appointmentSummaryFactory from '../testutils/factories/appointmentSummaryFactory'
 import paths from '../paths'
-import AppointmentStatusService from '../services/appointmentStatusService'
 import AppointmentUtils from '../utils/appointmentUtils'
-import { AppointmentStatusType } from '../@types/user-defined'
-import appointmentStatusFactory from '../testutils/factories/appointmentStatusFactory'
 
 jest.mock('../models/offender')
 
@@ -21,10 +18,9 @@ describe('SessionsController', () => {
 
   let sessionsController: SessionsController
   const sessionService = createMock<SessionService>()
-  const appointmentStatusService = createMock<AppointmentStatusService>()
 
   beforeEach(() => {
-    sessionsController = new SessionsController(sessionService, appointmentStatusService)
+    sessionsController = new SessionsController(sessionService)
   })
 
   describe('show', () => {
@@ -41,9 +37,6 @@ describe('SessionsController', () => {
       const session = sessionFactory.build({ appointmentSummaries: [appointmentSummary] })
 
       sessionService.getSession.mockResolvedValue(session)
-      appointmentStatusService.getStatusesForSession.mockResolvedValue([
-        { appointmentId: appointmentSummary.id, status: 'Scheduled' },
-      ])
 
       const requestHandler = sessionsController.show()
       const response = createMock<Response>()
@@ -54,8 +47,8 @@ describe('SessionsController', () => {
       const location = '12 Hampton Road'
       jest.spyOn(LocationUtils, 'locationToParagraph').mockReturnValue(location)
 
-      const statusTag = { text: 'Session complete' as AppointmentStatusType, classes: 'govuk-tag--blue' }
-      jest.spyOn(AppointmentUtils, 'getStatusTagViewData').mockReturnValue(statusTag)
+      const statusTagHtml = '<strong>Contact outcome name</strong>'
+      jest.spyOn(AppointmentUtils, 'buildStatusTag').mockReturnValue(statusTagHtml)
 
       await requestHandler(request, response, next)
 
@@ -72,34 +65,59 @@ describe('SessionsController', () => {
                 projectCode: session.projectCode,
                 appointmentId: appointmentSummary.id.toString(),
               }),
-              statusTag,
+              statusTagHtml,
             },
           ],
         },
-        footerLinks: [],
       })
     })
 
-    it('maps the appointments with the matching appointment status', async () => {
-      const appointmentSummary = appointmentSummaryFactory.build()
+    it('should render the session page with "Scheduled" as appointment outcome if there is no contact outcome', async () => {
+      const offenderMock: jest.Mock = Offender as unknown as jest.Mock<Offender>
+      const offender = {
+        name: 'Sam Smith',
+        crn: 'CRN123',
+        isLimited: false,
+      }
+      offenderMock.mockImplementation(() => offender)
+
+      const appointmentSummary = appointmentSummaryFactory.build({ contactOutcome: null })
       const session = sessionFactory.build({ appointmentSummaries: [appointmentSummary] })
 
       sessionService.getSession.mockResolvedValue(session)
 
-      const matchingAppointmentStatus = appointmentStatusFactory.build({ appointmentId: appointmentSummary.id })
-      appointmentStatusService.getStatusesForSession.mockResolvedValue([
-        appointmentStatusFactory.build(),
-        matchingAppointmentStatus,
-      ])
-
       const requestHandler = sessionsController.show()
       const response = createMock<Response>()
 
-      jest.spyOn(AppointmentUtils, 'getStatusTagViewData')
+      const date = '12 February 2025'
+      jest.spyOn(DateTimeFormats, 'isoDateToUIDate').mockReturnValue(date)
+
+      const location = '12 Hampton Road'
+      jest.spyOn(LocationUtils, 'locationToParagraph').mockReturnValue(location)
+
+      const statusTagHtml = '<strong>Scheduled</strong>'
+      jest.spyOn(AppointmentUtils, 'buildStatusTag').mockReturnValue(statusTagHtml)
 
       await requestHandler(request, response, next)
 
-      expect(AppointmentUtils.getStatusTagViewData).toHaveBeenCalledWith(matchingAppointmentStatus.status)
+      expect(response.render).toHaveBeenCalledWith('sessions/show', {
+        session: {
+          ...session,
+          formattedDate: date,
+          formattedLocation: location,
+          appointmentSummaries: [
+            {
+              ...appointmentSummary,
+              formattedOffender: offender,
+              path: paths.appointments.show({
+                projectCode: session.projectCode,
+                appointmentId: appointmentSummary.id.toString(),
+              }),
+              statusTagHtml,
+            },
+          ],
+        },
+      })
     })
   })
 })

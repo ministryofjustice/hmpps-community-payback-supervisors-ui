@@ -1,4 +1,4 @@
-import { AppointmentDto, ContactOutcomeDto, ContactOutcomesDto } from '../../../@types/shared'
+import { AppointmentDto, ContactOutcomeDto } from '../../../@types/shared'
 import { AppointmentOutcomeForm } from '../../../@types/user-defined'
 import paths from '../../../paths'
 import { pathWithQuery, properCase } from '../../../utils/utils'
@@ -14,12 +14,12 @@ export default class ComplianceReviewPage extends ReviewPage {
 
   constructor(
     private appointment: AppointmentDto,
-    private contactOutcomes: ContactOutcomesDto,
+    private contactOutcome: ContactOutcomeDto,
     private formId: string,
     private formData: AppointmentOutcomeForm,
     private reqBody: NotesQuery,
   ) {
-    super('compliance', 'Session complete', {})
+    super('compliance', contactOutcome, {})
 
     const path = paths.appointments.completed
 
@@ -77,11 +77,5 @@ export default class ComplianceReviewPage extends ReviewPage {
         changeUrl: this.notesUrl,
       },
     }
-  }
-
-  private get contactOutcome(): ContactOutcomeDto {
-    return this.contactOutcomes.contactOutcomes.find(outcome => {
-      return outcome.code === this.formData.contactOutcomeCode
-    })
   }
 }

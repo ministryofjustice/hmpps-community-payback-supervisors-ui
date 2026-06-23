@@ -10,7 +10,6 @@ import CompliancePage from '../../pages/appointments/update/compliancePage'
 import ReviewPage from '../../pages/appointments/update/reviewPage'
 import paths from '../../paths'
 import { pathWithQuery } from '../../utils/utils'
-import AppointmentStatusService from '../../services/appointmentStatusService'
 import { UpdateAppointmentOutcomeDto } from '../../@types/shared/models/UpdateAppointmentOutcomeDto'
 
 export default class NotesController {
@@ -18,7 +17,6 @@ export default class NotesController {
     private readonly appointmentService: AppointmentService,
     private readonly referenceDataService: ReferenceDataService,
     private readonly appointmentFormService: AppointmentFormService,
-    private readonly appointmentStatusService: AppointmentStatusService,
   ) {}
 
   show(action: AppointmentNotesAction): RequestHandler {
@@ -77,6 +75,11 @@ export default class NotesController {
       const toSave = notesPage.updateForm(formData)
       await this.appointmentFormService.saveForm(formId, res.locals.user.username, toSave)
 
+      const contactOutcome = await this.referenceDataService.getContactOutcome(
+        res.locals.user.username,
+        action === 'absent' ? ReferenceDataService.UnacceptableAbsenceOutcomeCode : formData.contactOutcomeCode,
+      )
+
       if (action === 'absent') {
         const editPath = pathWithQuery(paths.appointments.notes.absent({ projectCode, appointmentId }), {
           form: formId,
@@ -84,7 +87,7 @@ export default class NotesController {
 
         const reviewPage = new ReviewPage(
           'time',
-          'Absent',
+          contactOutcome,
           {
             Notes: _req.body.notes,
             Sensitive: _req.body.isSensitive
@@ -108,8 +111,7 @@ export default class NotesController {
 
       const page = new CompliancePage('completed', formId, _req.body)
 
-      const contactOutcomes = await this.referenceDataService.getContactOutcomes(res.locals.user.username)
-      const reviewPage = new ComplianceReviewPage(appointment, contactOutcomes, formId, formData, _req.body)
+      const reviewPage = new ComplianceReviewPage(appointment, contactOutcome, formId, formData, _req.body)
 
       return res.render('appointments/update/review', {
         ...page.viewData(appointment, formData),
@@ -139,12 +141,6 @@ export default class NotesController {
       })
 
       const payload: UpdateAppointmentOutcomeDto = page.buildPayload(appointment, formData)
-
-      this.appointmentStatusService.updateStatus(
-        appointment,
-        action === 'absent' ? 'Absent' : 'Session complete',
-        res.locals.user.username,
-      )
 
       await this.appointmentService.saveAppointment({
         username: res.locals.user.username,

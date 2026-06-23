@@ -28,26 +28,25 @@
 //   And I can see that the sensitive info should not be shared
 
 import appointmentFactory from '../../../../server/testutils/factories/appointmentFactory'
-import appointmentStatusFactory from '../../../../server/testutils/factories/appointmentStatusFactory'
 import Page from '../../../pages/page'
 import { AppointmentDto } from '../../../../server/@types/shared'
-import { AppointmentStatus } from '../../../../server/services/appointmentStatusService'
 import sessionSummaryFactory from '../../../../server/testutils/factories/sessionSummaryFactory'
 import supervisorFactory from '../../../../server/testutils/factories/supervisorFactory'
 import appointmentOutcomeFormFactory from '../../../../server/testutils/factories/appointmentOutcomeFormFactory'
 import ReviewPage from '../../../pages/appointments/update/reviewPage'
 import NotesPage from '../../../pages/appointments/update/notesPage'
+import {
+  contactOutcomeFactory,
+  contactOutcomesFactory,
+} from '../../../../server/testutils/factories/contactOutcomeFactory'
 
 context('Notes', () => {
   let appointment: AppointmentDto
-  let appointmentStatus: AppointmentStatus
 
   beforeEach(() => {
     appointment = appointmentFactory.build()
-    appointmentStatus = appointmentStatusFactory.build({ appointmentId: appointment.id })
     cy.task('reset')
     cy.task('stubSignIn')
-    cy.task('stubGetStatusesForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
     cy.task('stubFindAppointment', { appointment })
     const supervisor = supervisorFactory.build()
     const allocations = [sessionSummaryFactory.build({ date: '2025-09-15' })]
@@ -55,6 +54,11 @@ context('Notes', () => {
     cy.task('stubNextSessions', { sessionSummaries: { allocations }, supervisorTeam: supervisor.unpaidWorkTeams[0] })
     cy.task('stubSaveAppointmentForm')
     cy.task('stubGetAppointmentForm', { form: appointmentOutcomeFormFactory.build() })
+
+    const contactOutcomes = contactOutcomesFactory.build({
+      contactOutcomes: [contactOutcomeFactory.build({ enforceable: true }), contactOutcomeFactory.build()],
+    })
+    cy.task('stubGetContactOutcomes', { contactOutcomes })
 
     cy.signIn()
   })

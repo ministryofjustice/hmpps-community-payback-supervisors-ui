@@ -4,14 +4,12 @@ import signIn from '../steps/signIn'
 import SessionPage from '../pages/sessionPage'
 import AppointmentPage from '../pages/appointmentPage'
 import ConfirmAbsentPage from '../pages/appointments/update/confirm/confirmAbsentPage'
-import clearSessionData from '../steps/clearSessionData'
 import ReviewPage from '../pages/appointments/update/reviewPage'
 import NotesPage from '../pages/appointments/update/notesPage'
 
 test('Record an absence', async ({ page, supervisorUser, testData, team }) => {
   const { person, project } = testData
   const homePage = await signIn(page, supervisorUser)
-  await clearSessionData(page, project)
 
   await homePage.clickViewDetailsForProject(project.name)
 
@@ -41,7 +39,7 @@ test('Record an absence', async ({ page, supervisorUser, testData, team }) => {
 
   await sessionPage.expect.toBeOnThePage()
 
-  await sessionPage.expect.appointmentToHaveStatus(person.getFullName(), 'Absent')
+  await sessionPage.expect.appointmentToHaveStatus(person.getFullName(), 'Unacceptable Absence')
 
   await checkAppointmentOnDelius(page, team, testData, { outcome: 'Unacceptable Absence (CP Only)' })
 })

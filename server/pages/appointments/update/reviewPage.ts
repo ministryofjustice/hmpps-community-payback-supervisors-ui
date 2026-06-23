@@ -1,7 +1,7 @@
-import { AppointmentStatusType, GovUkRadioOption } from '../../../@types/user-defined'
+import { ContactOutcomeDto } from '../../../@types/shared'
+import { GovUkRadioOption } from '../../../@types/user-defined'
 import AppointmentUtils from '../../../utils/appointmentUtils'
 import GovUkRadioGroup from '../../../utils/GovUKFrontend/GovUkRadioGroup'
-import StatusTagUtils from '../../../utils/GovUKFrontend/statusTagUtils'
 
 export type ReviewItem = Record<string, string | { value: string; changeUrl: string }>
 
@@ -22,7 +22,7 @@ interface ViewData {
 export default class ReviewPage {
   constructor(
     private readonly template: string,
-    private readonly outcome: AppointmentStatusType,
+    private readonly outcome: ContactOutcomeDto,
     private readonly reviewFields: ReviewItem,
     protected showWillAlertPractitionerMessage: boolean = false,
     protected changeUrl?: string,
@@ -44,6 +44,8 @@ export default class ReviewPage {
   }
 
   private buildRows(): OutputRow[] {
+    const statusTagHtml = AppointmentUtils.buildStatusTag(this.outcome)
+
     const fields = Object.entries(this.mappedReviewFields()).map(([key, v]) => {
       const { value, changeUrl } = typeof v === 'string' ? { value: v, changeUrl: undefined } : v
 
@@ -59,10 +61,7 @@ export default class ReviewPage {
     fields.push([
       { text: 'Outcome status' },
       {
-        html: StatusTagUtils.getHtml(
-          this.outcome,
-          AppointmentUtils.statusTagColour[this.outcome as AppointmentStatusType],
-        ),
+        html: statusTagHtml,
       },
       { text: '' },
     ])

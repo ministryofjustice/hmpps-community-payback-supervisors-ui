@@ -1,24 +1,29 @@
-import { AppointmentStatusType, GovUkStatusTagColour } from '../@types/user-defined'
+import { ContactOutcomeDto } from '../@types/shared'
+import { GovUkStatusTagColour } from '../@types/user-defined'
+import HtmlUtils from './htmlUtils'
 
 export default class AppointmentUtils {
-  static getStatusTagViewData(status: AppointmentStatusType) {
-    return {
-      text: status,
-      classes: `govuk-tag--${AppointmentUtils.statusTagColour[status]}`,
+  static getStatusColour(contactOutcome?: ContactOutcomeDto): GovUkStatusTagColour {
+    if (!contactOutcome) {
+      return 'grey'
     }
+
+    // Attended & complied or acceptable absence
+    if (!contactOutcome.enforceable) {
+      return 'teal'
+    }
+
+    // Attended & did not comply
+    if (contactOutcome.attended) {
+      return 'yellow'
+    }
+
+    // Unexpected absence
+    return 'red'
   }
 
-  static statusTagColour: Record<AppointmentStatusType, GovUkStatusTagColour> = {
-    Absent: 'yellow',
-    Scheduled: 'grey',
-    'Session complete': 'blue',
-    'Not expected': 'red',
-    'Cannot work': 'purple',
-    'Left site': 'orange',
-  }
-
-  static isSessionComplete(status: AppointmentStatusType): boolean {
-    const sessionCompleteStatuses: AppointmentStatusType[] = ['Absent', 'Cannot work', 'Session complete', 'Left site']
-    return sessionCompleteStatuses.includes(status)
+  static buildStatusTag(outcome: ContactOutcomeDto): string {
+    const statusText = outcome ? outcome.name : 'Scheduled'
+    return HtmlUtils.getStatusTag(statusText, AppointmentUtils.getStatusColour(outcome))
   }
 }

@@ -2,8 +2,8 @@ import paths from '../../../paths'
 import appointmentFactory from '../../../testutils/factories/appointmentFactory'
 import appointmentOutcomeFormFactory from '../../../testutils/factories/appointmentOutcomeFormFactory'
 import attendanceDataFactory from '../../../testutils/factories/attendanceDataFactory'
-import { contactOutcomesFactory } from '../../../testutils/factories/contactOutcomeFactory'
-import StatusTagUtils from '../../../utils/GovUKFrontend/statusTagUtils'
+import { contactOutcomeFactory } from '../../../testutils/factories/contactOutcomeFactory'
+import HtmlUtils from '../../../utils/htmlUtils'
 import ComplianceReviewPage from './complianceReviewPage'
 
 describe('ComplianceReviewPage', () => {
@@ -21,7 +21,7 @@ describe('ComplianceReviewPage', () => {
 
         const formId = 'abcxyz456'
 
-        const contactOutcomes = contactOutcomesFactory.build()
+        const outcome = contactOutcomeFactory.build({ enforceable: false })
 
         const appointmentOutputForm = appointmentOutcomeFormFactory.build({
           endTime,
@@ -31,7 +31,7 @@ describe('ComplianceReviewPage', () => {
           }),
         })
 
-        const page = new ComplianceReviewPage(appointment, contactOutcomes, formId, appointmentOutputForm, {
+        const page = new ComplianceReviewPage(appointment, outcome, formId, appointmentOutputForm, {
           notes: 'test note',
           isSensitive: 'TRUE',
         })
@@ -40,14 +40,15 @@ describe('ComplianceReviewPage', () => {
           return `<a href=${url}?form=${formId} class="govuk-link govuk-link--no-visited-state">Change</a>`
         }
 
-        jest.spyOn(StatusTagUtils, 'getHtml').mockReturnValue('Session complete')
-
         const params = { projectCode, appointmentId: appointmentId.toString() }
 
         const startTimeChangeLink = link`${paths.appointments.arrived.startTime(params)}`
         const endTimeChangeLink = link`${paths.appointments.completed.endTime(params)}`
         const changeLink = link`${paths.appointments.completed.compliance(params)}`
         const notesLink = link`${paths.appointments.notes.completed(params)}`
+
+        const statusTagHtml = '<strong>Contact outcome name</strong>'
+        jest.spyOn(HtmlUtils, 'getStatusTag').mockReturnValue(statusTagHtml)
 
         expect(page.viewData()).toEqual({
           rows: [
@@ -107,7 +108,7 @@ describe('ComplianceReviewPage', () => {
                 html: notesLink,
               },
             ],
-            [{ text: 'Outcome status' }, { html: 'Session complete' }, { text: '' }],
+            [{ text: 'Outcome status' }, { html: statusTagHtml }, { text: '' }],
           ],
           template: './compliance.njk',
           showWillAlertPractitionerMessage: false,

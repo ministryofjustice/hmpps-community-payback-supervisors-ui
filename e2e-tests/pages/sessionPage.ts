@@ -3,7 +3,6 @@
 import { expect, Locator, Page } from '@playwright/test'
 import BasePage from './basePage'
 import { AppointmentTestData } from '../delius/deliusTestData'
-import { AppointmentStatusType } from '../../server/@types/user-defined'
 
 export default class SessionPage extends BasePage {
   readonly expect: SessionPageAssertions
@@ -66,7 +65,7 @@ class SessionPageAssertions {
     return formattedDate.replace(/,/g, '')
   }
 
-  async appointmentToHaveStatus(personName: string, status: AppointmentStatusType) {
+  async appointmentToHaveStatus(personName: string, status: string) {
     const appointment = await this.page.appointment(personName)
     await expect(appointment).toContainText(status)
   }

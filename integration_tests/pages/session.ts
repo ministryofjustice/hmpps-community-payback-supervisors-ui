@@ -44,7 +44,7 @@ export default class SessionPage extends Page {
     })
   }
 
-  shouldShowAppointmentsWithStatuses(appointmentStatuses: AppointmentStatusType[]) {
+  shouldShowAppointmentsWithStatuses(appointmentStatuses: (AppointmentStatusType | string)[]) {
     this.offenders.forEach((offender, i) => {
       cy.contains('li', `${offender.forename} ${offender.surname}`).should('contain.text', appointmentStatuses[i])
     })

@@ -4,16 +4,10 @@ import DateTimeFormats from '../utils/dateTimeUtils'
 import LocationUtils from '../utils/locationUtils'
 import Offender from '../models/offender'
 import paths from '../paths'
-import AppointmentStatusService from '../services/appointmentStatusService'
 import AppointmentUtils from '../utils/appointmentUtils'
-import config from '../config'
-import { notFound } from '../utils/utils'
 
 export default class SessionsController {
-  constructor(
-    private readonly sessionService: SessionService,
-    private readonly appointmentStatusService: AppointmentStatusService,
-  ) {}
+  constructor(private readonly sessionService: SessionService) {}
 
   show(): RequestHandler {
     return async (_req: Request, res: Response) => {
@@ -26,14 +20,8 @@ export default class SessionsController {
       }
 
       const session = await this.sessionService.getSession(request)
-      const sesssionStatuses = await this.appointmentStatusService.getStatusesForSession(
-        session,
-        res.locals.user.username,
-      )
 
       const appointmentSummaries = session.appointmentSummaries.map(appointment => {
-        const appointmentStatus = sesssionStatuses.find(status => status.appointmentId === appointment.id)
-
         return {
           ...appointment,
           formattedOffender: new Offender(appointment.offender),
@@ -41,17 +29,9 @@ export default class SessionsController {
             projectCode: session.projectCode,
             appointmentId: appointment.id.toString(),
           }),
-          statusTag: AppointmentUtils.getStatusTagViewData(appointmentStatus.status),
+          statusTagHtml: AppointmentUtils.buildStatusTag(appointment.contactOutcome),
         }
       })
-
-      const footerLinks = []
-      if (config.flags.enableClearSessionStatuses) {
-        footerLinks.push({
-          text: 'Clear session data',
-          href: paths.sessions.clearSessionStatuses({ projectCode: session.projectCode, date: session.date }),
-        })
-      }
 
       res.render('sessions/show', {
         session: {
@@ -60,51 +40,7 @@ export default class SessionsController {
           formattedDate: DateTimeFormats.isoDateToUIDate(session.date),
           formattedLocation: LocationUtils.locationToParagraph(session.location),
         },
-        footerLinks,
       })
-    }
-  }
-
-  confirmClearSession(): RequestHandler {
-    return async (_req: Request, res: Response) => {
-      if (config.flags.enableClearSessionStatuses) {
-        const projectCode = _req.params.projectCode.toString()
-        const date = _req.params.date.toString()
-
-        const request = {
-          username: res.locals.user.username,
-          projectCode,
-          date: date.toString(),
-        }
-
-        const session = await this.sessionService.getSession(request)
-        const formattedDate = DateTimeFormats.isoDateToUIDate(session.date)
-        const title = `Are you sure you want to clear data for this session?`
-        const detail = `This will clear all of the appointment statuses saved for the ${session.projectName} session on ${formattedDate}`
-
-        return res.render('development/clearData', {
-          backLink: paths.sessions.show({ projectCode, date }),
-          confirmLink: paths.sessions.clearSessionStatuses({ projectCode, date }),
-          title,
-          detail,
-        })
-      }
-
-      return notFound(res)
-    }
-  }
-
-  clearSessions(): RequestHandler {
-    return async (_req: Request, res: Response) => {
-      if (config.flags.enableClearSessionStatuses) {
-        const { projectCode, date } = _req.params as { projectCode: string; date: string }
-
-        await this.appointmentStatusService.clearStatusesForSession(projectCode, date, res.locals.user.username)
-
-        return res.redirect(paths.sessions.show({ projectCode, date }))
-      }
-
-      return notFound(res)
     }
   }
 }

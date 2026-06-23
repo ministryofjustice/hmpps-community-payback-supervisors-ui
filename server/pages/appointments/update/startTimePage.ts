@@ -22,8 +22,6 @@ interface Body {
 }
 
 export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
-  static UnacceptableAbsenceOutcomeCode = 'UACP'
-
   constructor(
     private readonly action: AppointmentArrivedAction,
     private formId: string,
@@ -78,10 +76,6 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
     const updated = {
       ...formData,
       startTime: this.query.time,
-    }
-
-    if (this.action === 'absent') {
-      updated.contactOutcomeCode = StartTimePage.UnacceptableAbsenceOutcomeCode
     }
 
     return updated

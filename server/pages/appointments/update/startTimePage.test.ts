@@ -215,21 +215,5 @@ describe('StartTimePage', () => {
         expect(result).toEqual({ ...form, startTime: '10:00' })
       })
     })
-
-    describe('absent', () => {
-      const action: AppointmentArrivedAction = 'absent'
-      it('returns form data with updated startTime and contact outcome code', () => {
-        const form = appointmentOutcomeFormFactory.build()
-        const page = new StartTimePage(action, formId, { time: '10:00' })
-
-        const result = page.updatedFormData(form)
-
-        expect(result).toEqual({
-          ...form,
-          startTime: '10:00',
-          contactOutcomeCode: StartTimePage.UnacceptableAbsenceOutcomeCode,
-        })
-      })
-    })
   })
 })

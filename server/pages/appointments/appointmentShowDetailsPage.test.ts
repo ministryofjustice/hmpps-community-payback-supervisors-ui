@@ -1,9 +1,7 @@
-import { AppointmentStatusType } from '../../@types/user-defined'
 import Offender from '../../models/offender'
 import paths from '../../paths'
 import appointmentFactory from '../../testutils/factories/appointmentFactory'
 import AppointmentUtils from '../../utils/appointmentUtils'
-import StatusTagUtils from '../../utils/GovUKFrontend/statusTagUtils'
 import AppointmentShowDetailsPage from './appointmentShowDetailsPage'
 
 jest.mock('../../models/offender')
@@ -19,7 +17,7 @@ describe('AppointmentShowDetailsPage', () => {
     it('should return an object with correct data', () => {
       const startTime = '09:00:00'
       const endTime = '17:00:00'
-      const appointment = appointmentFactory.build({ startTime, endTime })
+      const appointment = appointmentFactory.build({ startTime, endTime, contactOutcomeCode: null })
       const offender = {
         name: 'Sam Smith',
         crn: 'CRN123',
@@ -31,10 +29,10 @@ describe('AppointmentShowDetailsPage', () => {
       })
 
       const statusTagHtml = '<strong>Scheduled</strong>'
-      jest.spyOn(StatusTagUtils, 'getHtml').mockReturnValue(statusTagHtml)
+      jest.spyOn(AppointmentUtils, 'buildStatusTag').mockReturnValue(statusTagHtml)
 
       const page = new AppointmentShowDetailsPage()
-      const result = page.viewData(appointment, 'Scheduled')
+      const result = page.viewData(appointment, null)
       const { projectCode, date, id } = appointment
       expect(result).toEqual({
         offender,
@@ -57,35 +55,22 @@ describe('AppointmentShowDetailsPage', () => {
     })
 
     describe('actions', () => {
-      it.each(['Scheduled', 'Not expected'])(
-        'should include arrived links if status is "%s"',
-        (status: AppointmentStatusType) => {
-          jest.spyOn(AppointmentUtils, 'isSessionComplete').mockReturnValue(false)
-          const appointment = appointmentFactory.build()
-          const page = new AppointmentShowDetailsPage()
-          const result = page.viewData(appointment, status)
-          const { projectCode, id } = appointment
-
-          expect(result.actions).toEqual([
-            {
-              text: 'Arrived',
-              href: paths.appointments.attendanceOutcome({ projectCode, appointmentId: id.toString() }),
-            },
-            {
-              text: 'Not arrived',
-              href: paths.appointments.notes.absent({ projectCode, appointmentId: id.toString() }),
-            },
-          ])
-        },
-      )
-
-      it('should be empty if status is complete', () => {
-        jest.spyOn(AppointmentUtils, 'isSessionComplete').mockReturnValue(true)
-        const appointment = appointmentFactory.build()
+      it('should include arrived links if status is scheduled', () => {
+        const appointment = appointmentFactory.build({ contactOutcomeCode: null })
         const page = new AppointmentShowDetailsPage()
-        const result = page.viewData(appointment, 'Session complete')
+        const result = page.viewData(appointment, null)
+        const { projectCode, id } = appointment
 
-        expect(result.actions).toEqual([])
+        expect(result.actions).toEqual([
+          {
+            text: 'Arrived',
+            href: paths.appointments.attendanceOutcome({ projectCode, appointmentId: id.toString() }),
+          },
+          {
+            text: 'Not arrived',
+            href: paths.appointments.notes.absent({ projectCode, appointmentId: id.toString() }),
+          },
+        ])
       })
     })
 
@@ -97,7 +82,7 @@ describe('AppointmentShowDetailsPage', () => {
 
         const appointment = appointmentFactory.build({ date: yesterday.toISOString() })
         const page = new AppointmentShowDetailsPage()
-        const result = page.viewData(appointment, 'Scheduled')
+        const result = page.viewData(appointment, null)
 
         expect(result.canBeUpdated).toBe(true)
       })
@@ -111,7 +96,7 @@ describe('AppointmentShowDetailsPage', () => {
 
         const appointment = appointmentFactory.build({ date: new Date().toISOString(), startTime })
         const page = new AppointmentShowDetailsPage()
-        const result = page.viewData(appointment, 'Scheduled')
+        const result = page.viewData(appointment, null)
 
         expect(result.canBeUpdated).toBe(true)
       })
@@ -123,7 +108,7 @@ describe('AppointmentShowDetailsPage', () => {
 
         const appointment = appointmentFactory.build({ date: tomorrow.toISOString() })
         const page = new AppointmentShowDetailsPage()
-        const result = page.viewData(appointment, 'Scheduled')
+        const result = page.viewData(appointment, null)
 
         expect(result.canBeUpdated).toBe(false)
       })
@@ -137,7 +122,7 @@ describe('AppointmentShowDetailsPage', () => {
 
         const appointment = appointmentFactory.build({ date: new Date().toISOString(), startTime })
         const page = new AppointmentShowDetailsPage()
-        const result = page.viewData(appointment, 'Scheduled')
+        const result = page.viewData(appointment, null)
 
         expect(result.canBeUpdated).toBe(false)
       })

@@ -14,11 +14,9 @@
 //      Then I see the form next page
 
 import appointmentFactory from '../../../../server/testutils/factories/appointmentFactory'
-import appointmentStatusFactory from '../../../../server/testutils/factories/appointmentStatusFactory'
 
 import Page from '../../../pages/page'
 import { AppointmentDto } from '../../../../server/@types/shared'
-import { AppointmentStatus } from '../../../../server/services/appointmentStatusService'
 import EndTimePage from '../../../pages/appointments/update/endTimePage'
 import CompliancePage from '../../../pages/appointments/update/compliancePage'
 import sessionSummaryFactory from '../../../../server/testutils/factories/sessionSummaryFactory'
@@ -27,14 +25,11 @@ import appointmentOutcomeFormFactory from '../../../../server/testutils/factorie
 
 context('Log finish time ', () => {
   let appointment: AppointmentDto
-  let appointmentStatus: AppointmentStatus
 
   beforeEach(() => {
     appointment = appointmentFactory.build()
-    appointmentStatus = appointmentStatusFactory.build({ appointmentId: appointment.id })
     cy.task('reset')
     cy.task('stubSignIn')
-    cy.task('stubGetStatusesForm', { sessionOrAppointment: appointment, appointmentStatuses: [appointmentStatus] })
     cy.task('stubFindAppointment', { appointment })
     const supervisor = supervisorFactory.build()
     const allocations = [sessionSummaryFactory.build({ date: '2025-09-15' })]
