@@ -80,10 +80,6 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
       startTime: this.query.time,
     }
 
-    if (this.action === 'absent') {
-      updated.contactOutcomeCode = StartTimePage.UnacceptableAbsenceOutcomeCode
-    }
-
     return updated
   }
 
