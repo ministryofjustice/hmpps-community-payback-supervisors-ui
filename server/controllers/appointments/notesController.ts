@@ -11,7 +11,6 @@ import ReviewPage from '../../pages/appointments/update/reviewPage'
 import paths from '../../paths'
 import { pathWithQuery } from '../../utils/utils'
 import { UpdateAppointmentOutcomeDto } from '../../@types/shared/models/UpdateAppointmentOutcomeDto'
-import StartTimePage from '../../pages/appointments/update/startTimePage'
 
 export default class NotesController {
   constructor(
@@ -78,7 +77,7 @@ export default class NotesController {
 
       const contactOutcome = await this.referenceDataService.getContactOutcome(
         res.locals.user.username,
-        action === 'absent' ? StartTimePage.UnacceptableAbsenceOutcomeCode : formData.contactOutcomeCode,
+        action === 'absent' ? ReferenceDataService.UnacceptableAbsenceOutcomeCode : formData.contactOutcomeCode,
       )
 
       if (action === 'absent') {

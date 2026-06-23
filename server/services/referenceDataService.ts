@@ -18,6 +18,8 @@ export default class ReferenceDataService {
 
   static readonly attendedOutcomeCodes = [...this.attendedNonWorkingOutcomeCodes, this.attendedCompliedOutcomeCode]
 
+  static UnacceptableAbsenceOutcomeCode = 'UACP'
+
   constructor(private readonly referenceDataClient: ReferenceDataClient) {}
 
   static validOutcomeCodeForRoute(code: string, route: string): boolean {

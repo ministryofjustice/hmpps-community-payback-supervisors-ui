@@ -9,8 +9,8 @@ import { AppointmentDto, UpdateAppointmentOutcomeDto } from '../../../@types/sha
 import paths from '../../../paths'
 import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './baseAppointmentUpdatePage'
 import { pathWithQuery } from '../../../utils/utils'
-import StartTimePage from './startTimePage'
 import GovUkRadioGroup from '../../../utils/GovUKFrontend/GovUkRadioGroup'
+import ReferenceDataService from '../../../services/referenceDataService'
 
 export type AttendanceOutcomeBody = {
   attendanceOutcome: string
@@ -96,7 +96,7 @@ export default class NotesPage extends BaseAppointmentUpdatePage<Body> {
         alertActive: appointment.alertActive,
         startTime: appointment.startTime,
         endTime: appointment.endTime,
-        contactOutcomeCode: StartTimePage.UnacceptableAbsenceOutcomeCode,
+        contactOutcomeCode: ReferenceDataService.UnacceptableAbsenceOutcomeCode,
         attendanceData: appointment.attendanceData,
         enforcementData: appointment.enforcementData,
         supervisorOfficerCode: appointment.supervisorOfficerCode,
