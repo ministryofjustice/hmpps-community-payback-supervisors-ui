@@ -12,16 +12,6 @@ function get<T>(name: string, fallback: T, options = { requireInProduction: fals
   throw new Error(`Missing env var ${name}`)
 }
 
-function getAsBoolean(name: string, fallback: boolean, options = { requireInProduction: false }): boolean {
-  if (process.env[name]) {
-    return process.env[name] && process.env[name] === 'true'
-  }
-  if (fallback !== undefined && (!production || !options.requireInProduction)) {
-    return fallback
-  }
-  throw new Error(`Missing env var ${name}`)
-}
-
 const requiredInProduction = { requireInProduction: true }
 
 const auditConfig = () => {
@@ -106,8 +96,5 @@ export default {
   },
   ingressUrl: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   environmentName: get('ENVIRONMENT_NAME', ''),
-  flags: {
-    enableClearSessionStatuses: getAsBoolean('CLEAR_SESSION_STATUSES_ENABLED', false),
-  },
   requiredSupervisorRole: 'ROLE_CP_SUPERVISE_SESSION',
 }
