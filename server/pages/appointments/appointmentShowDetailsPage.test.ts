@@ -1,7 +1,7 @@
 import Offender from '../../models/offender'
 import paths from '../../paths'
 import appointmentFactory from '../../testutils/factories/appointmentFactory'
-import HtmlUtils from '../../utils/htmlUtils'
+import AppointmentUtils from '../../utils/appointmentUtils'
 import AppointmentShowDetailsPage from './appointmentShowDetailsPage'
 
 jest.mock('../../models/offender')
@@ -29,7 +29,7 @@ describe('AppointmentShowDetailsPage', () => {
       })
 
       const statusTagHtml = '<strong>Scheduled</strong>'
-      jest.spyOn(HtmlUtils, 'getStatusTag').mockReturnValue(statusTagHtml)
+      jest.spyOn(AppointmentUtils, 'buildStatusTag').mockReturnValue(statusTagHtml)
 
       const page = new AppointmentShowDetailsPage()
       const result = page.viewData(appointment, null)
@@ -55,7 +55,7 @@ describe('AppointmentShowDetailsPage', () => {
     })
 
     describe('actions', () => {
-      it.each(['Scheduled', 'Not expected'])('should include arrived links if status is "%s"', () => {
+      it('should include arrived links if status is scheduled', () => {
         const appointment = appointmentFactory.build({ contactOutcomeCode: null })
         const page = new AppointmentShowDetailsPage()
         const result = page.viewData(appointment, null)

@@ -5,7 +5,6 @@ import LocationUtils from '../utils/locationUtils'
 import Offender from '../models/offender'
 import paths from '../paths'
 import AppointmentUtils from '../utils/appointmentUtils'
-import HtmlUtils from '../utils/htmlUtils'
 
 export default class SessionsController {
   constructor(private readonly sessionService: SessionService) {}
@@ -23,16 +22,6 @@ export default class SessionsController {
       const session = await this.sessionService.getSession(request)
 
       const appointmentSummaries = session.appointmentSummaries.map(appointment => {
-        let statusTagHtml
-        if (appointment.contactOutcome) {
-          statusTagHtml = HtmlUtils.getStatusTag(
-            appointment.contactOutcome.name,
-            AppointmentUtils.getStatusColour(appointment.contactOutcome),
-          )
-        } else {
-          statusTagHtml = HtmlUtils.getStatusTag('Scheduled', AppointmentUtils.getStatusColour())
-        }
-
         return {
           ...appointment,
           formattedOffender: new Offender(appointment.offender),
@@ -40,7 +29,7 @@ export default class SessionsController {
             projectCode: session.projectCode,
             appointmentId: appointment.id.toString(),
           }),
-          statusTagHtml,
+          statusTagHtml: AppointmentUtils.buildStatusTag(appointment.contactOutcome),
         }
       })
 

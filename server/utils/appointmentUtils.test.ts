@@ -1,3 +1,4 @@
+import { ContactOutcomeDto } from '../@types/shared'
 import { contactOutcomeFactory } from '../testutils/factories/contactOutcomeFactory'
 import AppointmentUtils from './appointmentUtils'
 
@@ -32,5 +33,36 @@ describe('AppointmentUtils', () => {
 
       expect(result).toBe('grey')
     })
+  })
+
+  describe('buildStatusTag', () => {
+    const states: [ContactOutcomeDto, ((outcome: ContactOutcomeDto) => string) | string, string][] = [
+      [
+        contactOutcomeFactory.build({ attended: true, enforceable: true }),
+        (outcome: ContactOutcomeDto) => outcome.name,
+        'yellow',
+      ],
+      [
+        contactOutcomeFactory.build({ enforceable: true, attended: false }),
+        (outcome: ContactOutcomeDto) => outcome.name,
+        'red',
+      ],
+      [
+        contactOutcomeFactory.build({ enforceable: false, attended: true }),
+        (outcome: ContactOutcomeDto) => outcome.name,
+        'teal',
+      ],
+      [null, 'Scheduled', 'grey'],
+    ]
+
+    it.each(states)(
+      'returns a GOV.UK Frontend status tag component with the given colour and label',
+      (outcome, functionOrLabel, colour) => {
+        const result = AppointmentUtils.buildStatusTag(outcome)
+        const label = typeof functionOrLabel === 'function' ? functionOrLabel(outcome) : functionOrLabel
+
+        expect(result).toEqual(`<strong class="govuk-tag govuk-tag--${colour} cpb-unset-max-width">${label}</strong>`)
+      },
+    )
   })
 })

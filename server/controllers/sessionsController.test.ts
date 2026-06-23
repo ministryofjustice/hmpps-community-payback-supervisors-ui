@@ -8,7 +8,7 @@ import LocationUtils from '../utils/locationUtils'
 import Offender from '../models/offender'
 import appointmentSummaryFactory from '../testutils/factories/appointmentSummaryFactory'
 import paths from '../paths'
-import HtmlUtils from '../utils/htmlUtils'
+import AppointmentUtils from '../utils/appointmentUtils'
 
 jest.mock('../models/offender')
 
@@ -48,7 +48,7 @@ describe('SessionsController', () => {
       jest.spyOn(LocationUtils, 'locationToParagraph').mockReturnValue(location)
 
       const statusTagHtml = '<strong>Contact outcome name</strong>'
-      jest.spyOn(HtmlUtils, 'getStatusTag').mockReturnValue(statusTagHtml)
+      jest.spyOn(AppointmentUtils, 'buildStatusTag').mockReturnValue(statusTagHtml)
 
       await requestHandler(request, response, next)
 
@@ -96,7 +96,7 @@ describe('SessionsController', () => {
       jest.spyOn(LocationUtils, 'locationToParagraph').mockReturnValue(location)
 
       const statusTagHtml = '<strong>Scheduled</strong>'
-      jest.spyOn(HtmlUtils, 'getStatusTag').mockReturnValue(statusTagHtml)
+      jest.spyOn(AppointmentUtils, 'buildStatusTag').mockReturnValue(statusTagHtml)
 
       await requestHandler(request, response, next)
 

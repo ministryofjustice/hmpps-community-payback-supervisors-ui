@@ -2,7 +2,6 @@ import { ContactOutcomeDto } from '../../../@types/shared'
 import { GovUkRadioOption } from '../../../@types/user-defined'
 import AppointmentUtils from '../../../utils/appointmentUtils'
 import GovUkRadioGroup from '../../../utils/GovUKFrontend/GovUkRadioGroup'
-import HtmlUtils from '../../../utils/htmlUtils'
 
 export type ReviewItem = Record<string, string | { value: string; changeUrl: string }>
 
@@ -45,12 +44,7 @@ export default class ReviewPage {
   }
 
   private buildRows(): OutputRow[] {
-    let statusTagHtml
-    if (this.outcome) {
-      statusTagHtml = HtmlUtils.getStatusTag(this.outcome.name, AppointmentUtils.getStatusColour(this.outcome))
-    } else {
-      statusTagHtml = HtmlUtils.getStatusTag('Scheduled', AppointmentUtils.getStatusColour())
-    }
+    const statusTagHtml = AppointmentUtils.buildStatusTag(this.outcome)
 
     const fields = Object.entries(this.mappedReviewFields()).map(([key, v]) => {
       const { value, changeUrl } = typeof v === 'string' ? { value: v, changeUrl: undefined } : v

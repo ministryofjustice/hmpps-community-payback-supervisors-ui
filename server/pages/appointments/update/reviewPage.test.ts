@@ -1,5 +1,5 @@
 import { contactOutcomeFactory } from '../../../testutils/factories/contactOutcomeFactory'
-import HtmlUtils from '../../../utils/htmlUtils'
+import AppointmentUtils from '../../../utils/appointmentUtils'
 import ReviewPage from './reviewPage'
 
 describe('ReviewPage', () => {
@@ -15,7 +15,7 @@ describe('ReviewPage', () => {
         const link = `<a href=${url} class="govuk-link govuk-link--no-visited-state">Change</a>`
 
         const statusTagHtml = '<strong>Contact outcome name</strong>'
-        jest.spyOn(HtmlUtils, 'getStatusTag').mockReturnValue(statusTagHtml)
+        jest.spyOn(AppointmentUtils, 'buildStatusTag').mockReturnValue(statusTagHtml)
 
         expect(page.viewData()).toEqual({
           rows: [
@@ -40,7 +40,7 @@ describe('ReviewPage', () => {
         const link = `<a href=${url} class="govuk-link govuk-link--no-visited-state">Change</a>`
 
         const statusTagHtml = '<strong>Contact outcome name</strong>'
-        jest.spyOn(HtmlUtils, 'getStatusTag').mockReturnValue(statusTagHtml)
+        jest.spyOn(AppointmentUtils, 'buildStatusTag').mockReturnValue(statusTagHtml)
 
         expect(page.viewData()).toEqual({
           rows: [
