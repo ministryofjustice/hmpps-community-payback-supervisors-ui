@@ -1,11 +1,16 @@
 import { AppointmentDto } from '../../../../server/@types/shared'
 import { AppointmentNotesAction } from '../../../../server/@types/user-defined'
 import paths from '../../../../server/paths'
+import RadioGroupComponent from '../../components/radioGroupComponent'
 import Page from '../../page'
 
 export default class ReviewPage extends Page {
+  readonly alertPractitionerQuestion: RadioGroupComponent
+
   constructor() {
     super('Check your answers')
+
+    this.alertPractitionerQuestion = new RadioGroupComponent('alertPractitioner')
   }
 
   static visit(appointment: AppointmentDto, action: AppointmentNotesAction): ReviewPage {

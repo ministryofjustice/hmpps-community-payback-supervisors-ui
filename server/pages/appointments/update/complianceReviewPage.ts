@@ -2,8 +2,7 @@ import { AppointmentDto, ContactOutcomeDto } from '../../../@types/shared'
 import { AppointmentOutcomeForm } from '../../../@types/user-defined'
 import paths from '../../../paths'
 import { pathWithQuery, properCase } from '../../../utils/utils'
-import { NotesQuery } from './notesPage'
-import ReviewPage, { ReviewItem } from './reviewPage'
+import ReviewPage, { ReviewItem, ReviewQuery } from './reviewPage'
 
 export default class ComplianceReviewPage extends ReviewPage {
   private startTimeBackPath: string
@@ -12,14 +11,17 @@ export default class ComplianceReviewPage extends ReviewPage {
 
   private notesUrl: string
 
+  private formId: string
+
   constructor(
     private appointment: AppointmentDto,
+    protected query: ReviewQuery,
     private contactOutcome: ContactOutcomeDto,
-    private formId: string,
     private formData: AppointmentOutcomeForm,
-    private reqBody: NotesQuery,
   ) {
-    super('compliance', contactOutcome, {})
+    super('compliance', query, contactOutcome, {})
+
+    this.formId = this.query.form
 
     const path = paths.appointments.completed
 
@@ -58,6 +60,18 @@ export default class ComplianceReviewPage extends ReviewPage {
     this.showWillAlertPractitionerMessage = this.contactOutcome?.willAlertEnforcementDiary
   }
 
+  protected updatePath(appointment: AppointmentDto): string {
+    return pathWithQuery(
+      paths.appointments.notes.completed({
+        appointmentId: appointment.id.toString(),
+        projectCode: appointment.projectCode,
+      }),
+      {
+        form: this.formId,
+      },
+    )
+  }
+
   protected mappedReviewFields(): ReviewItem {
     // Not_applicable -> Not applicable
     const fmtLabel = (str: string) => properCase(str).replace(/_/, ' ')
@@ -69,9 +83,9 @@ export default class ComplianceReviewPage extends ReviewPage {
       'Worked intensively': this.formData?.attendanceData.workedIntensively ? 'Yes' : 'No',
       'Work quality': fmtLabel(this.formData?.attendanceData.workQuality),
       Behaviour: fmtLabel(this.formData?.attendanceData.behaviour),
-      Notes: { value: this.reqBody.notes, changeUrl: this.notesUrl },
+      Notes: { value: this.formData.notes, changeUrl: this.notesUrl },
       Sensitivity: {
-        value: this.reqBody.isSensitive
+        value: this.formData.sensitive
           ? 'Cannot be shared with person on probation'
           : 'Can be shared with person on probation',
         changeUrl: this.notesUrl,
