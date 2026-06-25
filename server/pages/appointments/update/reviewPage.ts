@@ -17,6 +17,7 @@ interface ViewData {
   template: string
   showWillAlertPractitionerMessage: boolean
   alertPractitionerItems: GovUkRadioOption[]
+  alertDiaryText: string
 }
 
 export default class ReviewPage {
@@ -36,6 +37,7 @@ export default class ReviewPage {
       template: this.template,
       showWillAlertPractitionerMessage: this.showWillAlertPractitionerMessage,
       alertPractitionerItems: this.showWillAlertPractitionerMessage ? [] : GovUkRadioGroup.yesNoItems({}),
+      alertDiaryText: `Would you${this.showWillAlertPractitionerMessage ? ' also' : ''} like this to be sent to the alert diary?`,
     }
   }
 

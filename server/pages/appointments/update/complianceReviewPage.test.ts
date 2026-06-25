@@ -51,6 +51,7 @@ describe('ComplianceReviewPage', () => {
         jest.spyOn(HtmlUtils, 'getStatusTag').mockReturnValue(statusTagHtml)
 
         expect(page.viewData()).toEqual({
+          alertDiaryText: 'Would you like this to be sent to the alert diary?',
           rows: [
             [
               { text: 'Start time' },
