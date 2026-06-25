@@ -24,8 +24,19 @@ describe('ReviewPage', () => {
           ],
           template: './test.njk',
           showWillAlertPractitionerMessage: true,
-          alertPractitionerItems: [],
           alertDiaryText: 'Would you also like this to be sent to the alert diary?',
+          alertPractitionerItems: [
+            {
+              checked: false,
+              text: 'Yes',
+              value: 'yes',
+            },
+            {
+              checked: false,
+              text: 'No',
+              value: 'no',
+            },
+          ],
         })
       })
     })

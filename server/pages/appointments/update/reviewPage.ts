@@ -36,7 +36,7 @@ export default class ReviewPage {
       rows: this.buildRows(),
       template: this.template,
       showWillAlertPractitionerMessage: this.showWillAlertPractitionerMessage,
-      alertPractitionerItems: this.showWillAlertPractitionerMessage ? [] : GovUkRadioGroup.yesNoItems({}),
+      alertPractitionerItems: GovUkRadioGroup.yesNoItems({}),
       alertDiaryText: `Would you${this.showWillAlertPractitionerMessage ? ' also' : ''} like this to be sent to the alert diary?`,
     }
   }
