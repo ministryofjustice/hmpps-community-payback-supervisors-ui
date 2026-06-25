@@ -45,7 +45,9 @@ describe('ReviewPage', () => {
       it('should return an object with correct data', () => {
         const url = 'link?q=1'
 
-        const outcome = contactOutcomeFactory.build()
+        const outcome = contactOutcomeFactory.build({
+          willAlertEnforcementDiary: false,
+        })
 
         const page = new ReviewPage('test', outcome, { 'Test key': 'Test value' }, false, url)
 

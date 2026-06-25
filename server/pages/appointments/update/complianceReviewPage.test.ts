@@ -21,7 +21,7 @@ describe('ComplianceReviewPage', () => {
 
         const formId = 'abcxyz456'
 
-        const outcome = contactOutcomeFactory.build({ enforceable: false })
+        const outcome = contactOutcomeFactory.build({ willAlertEnforcementDiary: true })
 
         const appointmentOutputForm = appointmentOutcomeFormFactory.build({
           endTime,
@@ -51,7 +51,7 @@ describe('ComplianceReviewPage', () => {
         jest.spyOn(HtmlUtils, 'getStatusTag').mockReturnValue(statusTagHtml)
 
         expect(page.viewData()).toEqual({
-          alertDiaryText: 'Would you like this to be sent to the alert diary?',
+          alertDiaryText: 'Would you also like this to be sent to the alert diary?',
           rows: [
             [
               { text: 'Start time' },
@@ -112,7 +112,7 @@ describe('ComplianceReviewPage', () => {
             [{ text: 'Outcome status' }, { html: statusTagHtml }, { text: '' }],
           ],
           template: './compliance.njk',
-          showWillAlertPractitionerMessage: false,
+          showWillAlertPractitionerMessage: true,
           alertPractitionerItems: [
             {
               checked: false,

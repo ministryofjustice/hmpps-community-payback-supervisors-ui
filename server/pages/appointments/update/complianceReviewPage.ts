@@ -55,7 +55,7 @@ export default class ComplianceReviewPage extends ReviewPage {
       { form: this.formId },
     )
 
-    this.showWillAlertPractitionerMessage = this.contactOutcome?.enforceable ?? false
+    this.showWillAlertPractitionerMessage = this.contactOutcome?.willAlertEnforcementDiary
   }
 
   protected mappedReviewFields(): ReviewItem {
