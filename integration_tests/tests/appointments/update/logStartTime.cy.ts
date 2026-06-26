@@ -119,6 +119,7 @@ context('Log start time ', () => {
 
       // And I navigate through the review page
       const reviewPage = Page.verifyOnPage(ReviewPage, appointment, 'absent')
+      reviewPage.alertPractitionerQuestion.checkOptionWithValue('yes')
       reviewPage.clickSubmit()
 
       // When I am on the confirm page

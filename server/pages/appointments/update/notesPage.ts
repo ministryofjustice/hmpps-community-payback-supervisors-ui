@@ -11,6 +11,7 @@ import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './base
 import { pathWithQuery } from '../../../utils/utils'
 import GovUkRadioGroup from '../../../utils/GovUKFrontend/GovUkRadioGroup'
 import ReferenceDataService from '../../../services/referenceDataService'
+import { ReviewQuery } from './reviewPage'
 
 export type AttendanceOutcomeBody = {
   attendanceOutcome: string
@@ -20,8 +21,8 @@ export type AttendanceOutcomeBody = {
 export type NotesQuery = {
   notes?: string
   isSensitive?: string
-  alertPractitioner?: string
-} & AppointmentUpdateQuery
+} & ReviewQuery &
+  AppointmentUpdateQuery
 
 type ViewData = {
   notes?: string
@@ -93,7 +94,7 @@ export default class NotesPage extends BaseAppointmentUpdatePage<Body> {
       payload = {
         deliusId: appointment.id,
         deliusVersionToUpdate: appointment.version,
-        alertActive: appointment.alertActive,
+        alertActive: GovUkRadioGroup.nullableValueFromYesOrNoItem(this.query.alertPractitioner as YesOrNo),
         startTime: appointment.startTime,
         endTime: appointment.endTime,
         contactOutcomeCode: ReferenceDataService.UnacceptableAbsenceOutcomeCode,

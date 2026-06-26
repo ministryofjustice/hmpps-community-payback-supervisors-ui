@@ -171,6 +171,9 @@ context('Log compliance', () => {
         const reviewPage = Page.verifyOnPage(ReviewPage, this.appointment, 'completed')
 
         reviewPage.shouldNotShowAlertPractitionerMessage()
+
+        reviewPage.alertPractitionerQuestion.checkOptionWithValue('yes')
+
         reviewPage.clickSubmit()
 
         // Then I see the confirm details page

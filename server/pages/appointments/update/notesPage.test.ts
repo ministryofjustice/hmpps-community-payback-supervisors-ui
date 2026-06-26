@@ -223,7 +223,7 @@ describe('NotesPage', () => {
           contactOutcomeCode: ReferenceDataService.UnacceptableAbsenceOutcomeCode,
         })
 
-        page = new NotesPage({ action: 'absent', query: {}, appointment })
+        page = new NotesPage({ action: 'absent', query: { alertPractitioner: 'no' }, appointment })
 
         const result = page.buildPayload(appointment, form)
 
@@ -231,7 +231,7 @@ describe('NotesPage', () => {
           expect.objectContaining({
             deliusId: appointment.id,
             deliusVersionToUpdate: appointment.version,
-            alertActive: appointment.alertActive,
+            alertActive: false,
             startTime: appointment.startTime,
             endTime: appointment.endTime,
             attendanceData: appointment.attendanceData,

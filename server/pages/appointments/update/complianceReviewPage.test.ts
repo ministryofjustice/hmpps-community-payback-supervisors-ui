@@ -1,3 +1,4 @@
+import Offender from '../../../models/offender'
 import paths from '../../../paths'
 import appointmentFactory from '../../../testutils/factories/appointmentFactory'
 import appointmentOutcomeFormFactory from '../../../testutils/factories/appointmentOutcomeFormFactory'
@@ -6,10 +7,22 @@ import { contactOutcomeFactory } from '../../../testutils/factories/contactOutco
 import HtmlUtils from '../../../utils/htmlUtils'
 import ComplianceReviewPage from './complianceReviewPage'
 
+jest.mock('../../../models/offender')
+
 describe('ComplianceReviewPage', () => {
   describe('when completed', () => {
     describe('viewData', () => {
       it('should return an object with correct data', () => {
+        const offenderMock: jest.Mock = Offender as unknown as jest.Mock<Offender>
+        const offender = {
+          name: 'Sam Smith',
+          crn: 'CRN123',
+          isLimited: false,
+        }
+        offenderMock.mockImplementation(() => {
+          return offender
+        })
+
         const projectCode = 'abc123'
         const appointmentId = 789
         const endTime = '13:00'
@@ -21,7 +34,7 @@ describe('ComplianceReviewPage', () => {
 
         const formId = 'abcxyz456'
 
-        const outcome = contactOutcomeFactory.build({ enforceable: false })
+        const outcome = contactOutcomeFactory.build({ willAlertEnforcementDiary: true })
 
         const appointmentOutputForm = appointmentOutcomeFormFactory.build({
           endTime,
@@ -29,12 +42,11 @@ describe('ComplianceReviewPage', () => {
             hiVisWorn: true,
             workedIntensively: true,
           }),
+          notes: 'test note',
+          sensitive: true,
         })
 
-        const page = new ComplianceReviewPage(appointment, outcome, formId, appointmentOutputForm, {
-          notes: 'test note',
-          isSensitive: 'TRUE',
-        })
+        const page = new ComplianceReviewPage(appointment, { form: formId }, outcome, appointmentOutputForm)
 
         const link = (_str: TemplateStringsArray, url: string): string => {
           return `<a href=${url}?form=${formId} class="govuk-link govuk-link--no-visited-state">Change</a>`
@@ -50,7 +62,11 @@ describe('ComplianceReviewPage', () => {
         const statusTagHtml = '<strong>Contact outcome name</strong>'
         jest.spyOn(HtmlUtils, 'getStatusTag').mockReturnValue(statusTagHtml)
 
-        expect(page.viewData()).toEqual({
+        expect(page.viewData(appointment)).toEqual({
+          offender,
+          backPath: `${paths.appointments.notes.completed(params)}?form=${formId}`,
+          updatePath: `${paths.appointments.notes.completed(params)}?form=${formId}`,
+          alertDiaryText: 'Would you also like this to be sent to the alert diary?',
           rows: [
             [
               { text: 'Start time' },
@@ -111,7 +127,7 @@ describe('ComplianceReviewPage', () => {
             [{ text: 'Outcome status' }, { html: statusTagHtml }, { text: '' }],
           ],
           template: './compliance.njk',
-          showWillAlertPractitionerMessage: false,
+          showWillAlertPractitionerMessage: true,
           alertPractitionerItems: [
             {
               checked: false,

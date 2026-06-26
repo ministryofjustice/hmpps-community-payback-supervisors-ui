@@ -1,16 +1,15 @@
 import type { Request, RequestHandler, Response } from 'express'
 import AppointmentService from '../../services/appointmentService'
 import { generateErrorSummary } from '../../utils/errorUtils'
-import { AppointmentNotesAction, AppointmentParams } from '../../@types/user-defined'
+import { AppointmentNotesAction, AppointmentOutcomeForm, AppointmentParams } from '../../@types/user-defined'
 import AppointmentFormService from '../../services/appointmentFormService'
-import NotesPage from '../../pages/appointments/update/notesPage'
+import NotesPage, { NotesQuery } from '../../pages/appointments/update/notesPage'
 import ComplianceReviewPage from '../../pages/appointments/update/complianceReviewPage'
 import ReferenceDataService from '../../services/referenceDataService'
 import CompliancePage from '../../pages/appointments/update/compliancePage'
 import ReviewPage from '../../pages/appointments/update/reviewPage'
-import paths from '../../paths'
-import { pathWithQuery } from '../../utils/utils'
 import { UpdateAppointmentOutcomeDto } from '../../@types/shared/models/UpdateAppointmentOutcomeDto'
+import { AppointmentDto, ContactOutcomeDto } from '../../@types/shared'
 
 export default class NotesController {
   constructor(
@@ -80,45 +79,16 @@ export default class NotesController {
         action === 'absent' ? ReferenceDataService.UnacceptableAbsenceOutcomeCode : formData.contactOutcomeCode,
       )
 
-      if (action === 'absent') {
-        const editPath = pathWithQuery(paths.appointments.notes.absent({ projectCode, appointmentId }), {
-          form: formId,
-        })
+      const { reviewPageData } = this.getReviewPageAndViewData(
+        action,
+        contactOutcome,
+        { ..._req.body, form: formId },
+        appointment,
+        formId,
+        toSave,
+      )
 
-        const reviewPage = new ReviewPage(
-          'time',
-          contactOutcome,
-          {
-            Notes: _req.body.notes,
-            Sensitive: _req.body.isSensitive
-              ? 'Cannot be shared with person on probation'
-              : 'Can be shared with person on probation',
-          },
-          true,
-          editPath,
-        )
-
-        return res.render('appointments/update/review', {
-          ...reviewPage.viewData(),
-          backPath: editPath,
-          updatePath: editPath,
-        })
-      }
-
-      const editPath = pathWithQuery(paths.appointments.notes.completed({ projectCode, appointmentId }), {
-        form: formId,
-      })
-
-      const page = new CompliancePage('completed', formId, _req.body)
-
-      const reviewPage = new ComplianceReviewPage(appointment, contactOutcome, formId, formData, _req.body)
-
-      return res.render('appointments/update/review', {
-        ...page.viewData(appointment, formData),
-        ...reviewPage.viewData(),
-        backPath: editPath,
-        updatePath: editPath,
-      })
+      return res.render('appointments/update/review', reviewPageData)
     }
   }
 
@@ -134,13 +104,37 @@ export default class NotesController {
 
       const formData = await this.appointmentFormService.getForm(formId, res.locals.user.username)
 
-      const page = new NotesPage({
+      const contactOutcome = await this.referenceDataService.getContactOutcome(
+        res.locals.user.username,
+        action === 'absent' ? ReferenceDataService.UnacceptableAbsenceOutcomeCode : formData.contactOutcomeCode,
+      )
+
+      const { reviewPage, reviewPageData } = this.getReviewPageAndViewData(
+        action,
+        contactOutcome,
+        { ..._req.body, form: formId },
+        appointment,
+        formId,
+        formData,
+      )
+
+      reviewPage.validate()
+
+      if (reviewPage.hasErrors) {
+        return res.render('appointments/update/review', {
+          ...reviewPageData,
+          errors: reviewPage.validationErrors,
+          errorSummary: generateErrorSummary(reviewPage.validationErrors),
+        })
+      }
+
+      const notesPage = new NotesPage({
         action,
         query: _req.body,
         appointment,
       })
 
-      const payload: UpdateAppointmentOutcomeDto = page.buildPayload(appointment, formData)
+      const payload: UpdateAppointmentOutcomeDto = notesPage.buildPayload(appointment, formData)
 
       await this.appointmentService.saveAppointment({
         username: res.locals.user.username,
@@ -148,7 +142,48 @@ export default class NotesController {
         data: payload,
       })
 
-      return res.redirect(page.nextPath(appointmentParams.projectCode, appointmentParams.appointmentId))
+      return res.redirect(notesPage.nextPath(appointmentParams.projectCode, appointmentParams.appointmentId))
+    }
+  }
+
+  private getReviewPageAndViewData(
+    action: AppointmentNotesAction,
+    contactOutcome: ContactOutcomeDto,
+    query: NotesQuery,
+    appointment: AppointmentDto,
+    formId: string,
+    formData: AppointmentOutcomeForm,
+  ): { reviewPage: ReviewPage; reviewPageData: object } {
+    let reviewPage
+    let reviewPageData
+
+    if (action === 'absent') {
+      reviewPage = new ReviewPage(
+        'time',
+        query,
+        contactOutcome,
+        {
+          Notes: formData.notes || '',
+          Sensitive: formData.sensitive
+            ? 'Cannot be shared with person on probation'
+            : 'Can be shared with person on probation',
+        },
+        true,
+      )
+
+      reviewPageData = reviewPage.viewData(appointment)
+    } else {
+      reviewPage = new ComplianceReviewPage(appointment, query, contactOutcome, formData)
+
+      reviewPageData = {
+        ...new CompliancePage('completed', formId, {}),
+        ...reviewPage.viewData(appointment),
+      }
+    }
+
+    return {
+      reviewPage,
+      reviewPageData,
     }
   }
 }

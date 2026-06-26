@@ -30,6 +30,7 @@ test('Record an absence', async ({ page, supervisorUser, testData, team }) => {
 
   const reviewPage = new ReviewPage(page)
   await reviewPage.expect.toBeOnThePage()
+  await reviewPage.selectAlertPractitioner()
   await reviewPage.clickContinue()
 
   const confirmAbsentPage = new ConfirmAbsentPage(page)
