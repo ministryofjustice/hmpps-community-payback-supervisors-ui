@@ -15,7 +15,7 @@ export default class AttendanceOutcomePage extends BasePage {
 
     this.formHeadingLocator = page.getByText('Log attendance').first()
     this.expect = new AttendanceOutcomePageAssertions(this)
-    this.attendedCompliedOutcomeLocator = page.getByLabel('Attended - complied')
+    this.attendedCompliedOutcomeLocator = page.getByLabel('Attended \u2013 complied')
   }
 
   async chooseAttendedCompliedOutcome() {
