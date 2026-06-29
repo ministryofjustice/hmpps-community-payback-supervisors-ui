@@ -40,7 +40,7 @@ test('Record an absence', async ({ page, supervisorUser, testData, team }) => {
 
   await sessionPage.expect.toBeOnThePage()
 
-  await sessionPage.expect.appointmentToHaveStatus(person.getFullName(), 'Unacceptable Absence')
+  await sessionPage.expect.appointmentToHaveStatus(person.getFullName(), 'Unacceptable absence')
 
   await checkAppointmentOnDelius(page, team, testData, { outcome: 'Unacceptable Absence (CP Only)' })
 })

@@ -61,7 +61,7 @@ test('Record an appointment as arrived and able to work', async ({ page, supervi
   await confirmCompletedPage.clickLinkToSessionPage()
   await sessionPage.expect.toBeOnThePage()
 
-  await sessionPage.expect.appointmentToHaveStatus(person.getFullName(), 'Attended - Complied')
+  await sessionPage.expect.appointmentToHaveStatus(person.getFullName(), 'Attended \u2013 complied')
 
   await checkAppointmentOnDelius(page, team, testData, { outcome: 'Attended - Complied' })
 })
