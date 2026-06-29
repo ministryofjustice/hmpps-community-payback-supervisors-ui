@@ -49,7 +49,7 @@ export default class NotesPage extends PageWithNotes {
   }
 
   shouldNotShowSensitiveInformationCheckBox(): void {
-    cy.contains('label', 'Do these notes contain sensitive information?').should('not.exist')
+    cy.contains('legend', 'Do these notes contain sensitive information?').should('not.exist')
     cy.contains('p', 'This note will be automatically marked sensitive as an earlier note was already flagged.').should(
       'exist',
     )

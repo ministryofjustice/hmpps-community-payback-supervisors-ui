@@ -47,9 +47,6 @@
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
           {% if showIsSensitiveQuestion %}
-
-            <h3 class="govuk-heading-s">Do these notes include sensitive information?</h3>
-
             {{ govukCheckboxes({
               name: "isSensitive",
               items: [
@@ -62,7 +59,14 @@
                         whether the information can be shared.",
                   checked: isSensitive
                 }
-              ]
+              ],
+              fieldset: {
+                legend: {
+                  text: 'Do these notes include sensitive information?',
+                  isPageHeading: false,
+                  classes: 'govuk-fieldset__legend--s'
+                }
+              }
             }) }}
 
           {% else %}
