@@ -20,7 +20,7 @@ export default class NotesPage extends BasePage {
 
     this.notesFieldLocator = page.getByLabel('Add notes')
     this.isSensitiveLocator = page.getByLabel(
-      'This is information that you believe must be recorded but not shared with a person on probation.',
+      'This is information that you believe must be recorded but not shared with a person on probation. If they make a request for their record, the Data Protection Team will decide whether the information can be shared.',
     )
   }
 

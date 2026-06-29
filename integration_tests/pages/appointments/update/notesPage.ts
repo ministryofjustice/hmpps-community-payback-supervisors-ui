@@ -44,7 +44,7 @@ export default class NotesPage extends PageWithNotes {
 
   checkSensitiveInformation(): void {
     this.getInputByLabel(
-      'This is information that you believe must be recorded but not shared with a person on probation.',
+      'This is information that you believe must be recorded but not shared with a person on probation. If they make a request for their record, the Data Protection Team will decide whether the information can be shared.',
     ).check()
   }
 }
