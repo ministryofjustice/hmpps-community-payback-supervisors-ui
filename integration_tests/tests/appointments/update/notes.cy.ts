@@ -27,6 +27,13 @@
 //   Then I am taken to the review page
 //   And I can see that the sensitive info should not be shared
 
+// Scenario: already sensitive appointments are flagged as sensitive
+//   Given I am on the notes page
+//   And I cannot see the sensitive info checkbox
+//   And I submit the form
+//   Then I am taken to the review page
+//   And I can see that the sensitive info should not be shared
+
 import appointmentFactory from '../../../../server/testutils/factories/appointmentFactory'
 import Page from '../../../pages/page'
 import { AppointmentDto } from '../../../../server/@types/shared'
@@ -44,7 +51,7 @@ context('Notes', () => {
   let appointment: AppointmentDto
 
   beforeEach(() => {
-    appointment = appointmentFactory.build()
+    appointment = appointmentFactory.build({ sensitive: false })
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubFindAppointment', { appointment })
@@ -133,6 +140,32 @@ context('Notes', () => {
     notesPage.enterNote('note')
     // And I check the sensitive info checkbox
     notesPage.checkSensitiveInformation()
+    // And I submit the form
+    notesPage.clickSubmit()
+
+    // Then I am taken to the review page
+    const reviewPage = Page.verifyOnPage(ReviewPage, appointment, 'absent')
+    reviewPage.shouldContainNote('note')
+
+    // And I can see that the sensitive info should not be shared
+    reviewPage.cannotBeShared()
+  })
+
+  // Scenario: already sensitive appointments are flagged as sensitive
+  it('submits the form and navigates to the next page with sensitive set to true', function test() {
+    appointment = appointmentFactory.build({ sensitive: true })
+    cy.task('stubFindAppointment', { appointment })
+
+    const form = appointmentOutcomeFormFactory.build()
+    cy.task('stubGetAppointmentForm', { form, formId: 'some-form' })
+
+    cy.task('stubSaveAppointmentForm', { formId: 'some-form' })
+
+    // Given I am on the notes page
+    const notesPage = NotesPage.visit(appointment, 'absent')
+    notesPage.enterNote('note')
+    // And I cannot see the sensitive info checkbox
+    notesPage.shouldNotShowSensitiveInformationCheckBox()
     // And I submit the form
     notesPage.clickSubmit()
 

@@ -47,4 +47,11 @@ export default class NotesPage extends PageWithNotes {
       'This is information that you believe must be recorded but not shared with a person on probation. If they make a request for their record, the Data Protection Team will decide whether the information can be shared.',
     ).check()
   }
+
+  shouldNotShowSensitiveInformationCheckBox(): void {
+    cy.contains('label', 'Do these notes contain sensitive information?').should('not.exist')
+    cy.contains('p', 'This note will be automatically marked sensitive as an earlier note was already flagged.').should(
+      'exist',
+    )
+  }
 }

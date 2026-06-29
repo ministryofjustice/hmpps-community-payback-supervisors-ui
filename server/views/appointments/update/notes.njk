@@ -46,22 +46,32 @@
 
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-          <h3 class="govuk-heading-s">Do these notes include sensitive information?</h3>
+          {% if showIsSensitiveQuestion %}
 
-          {{ govukCheckboxes({
-            name: "isSensitive",
-            items: [
-              {
-                value: "true",
-                text: "This is information that you believe must be
-                      recorded but not shared with a person on
-                      probation. If they make a request for their
-                      record, the Data Protection Team will decide
-                      whether the information can be shared.",
-                checked: isSensitive
-              }
-            ]
-          }) }}
+            <h3 class="govuk-heading-s">Do these notes include sensitive information?</h3>
+
+            {{ govukCheckboxes({
+              name: "isSensitive",
+              items: [
+                {
+                  value: "true",
+                  text: "This is information that you believe must be
+                        recorded but not shared with a person on
+                        probation. If they make a request for their
+                        record, the Data Protection Team will decide
+                        whether the information can be shared.",
+                  checked: isSensitive
+                }
+              ]
+            }) }}
+
+          {% else %}
+
+            <p class="govuk-hint govuk-!-margin-bottom-6">
+              This note will be automatically marked sensitive as an earlier note was already flagged.
+            </p>
+
+          {% endif %}
         </div>
       </div>
 
