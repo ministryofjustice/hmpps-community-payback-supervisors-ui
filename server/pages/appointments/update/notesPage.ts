@@ -27,6 +27,7 @@ export type NotesQuery = {
 type ViewData = {
   notes?: string
   isSensitive: boolean
+  showIsSensitiveQuestion: boolean
 } & AppointmentUpdatePageViewData
 
 interface Body {
@@ -64,7 +65,7 @@ export default class NotesPage extends BaseAppointmentUpdatePage<Body> {
     return {
       ...form,
       notes: this.query.notes,
-      sensitive: this.query.isSensitive === 'true',
+      sensitive: this.appointment.sensitive === true || this.query.isSensitive === 'true',
     }
   }
 
@@ -84,6 +85,7 @@ export default class NotesPage extends BaseAppointmentUpdatePage<Body> {
       form: this.formId,
       notes: this.query.notes || form.notes,
       isSensitive: this.query.isSensitive === 'true' || form.sensitive,
+      showIsSensitiveQuestion: this.appointment.sensitive !== true,
     }
   }
 

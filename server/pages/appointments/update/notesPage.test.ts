@@ -127,6 +127,31 @@ describe('NotesPage', () => {
       })
     })
 
+    describe('showIsSensitiveQuestion', () => {
+      const action = 'completed'
+
+      it("should return true if the appointment's sensitivity is false", () => {
+        appointment = appointmentFactory.build({ sensitive: false })
+        page = new NotesPage({ action, query: {}, appointment })
+        const result = page.viewData(form)
+        expect(result.showIsSensitiveQuestion).toEqual(true)
+      })
+
+      it("should return true if the appointment's sensitivity is unset", () => {
+        appointment = appointmentFactory.build({ sensitive: undefined })
+        page = new NotesPage({ action, query: {}, appointment })
+        const result = page.viewData(form)
+        expect(result.showIsSensitiveQuestion).toEqual(true)
+      })
+
+      it("should return false if the appointment's sensitivity is true", () => {
+        appointment = appointmentFactory.build({ sensitive: true })
+        page = new NotesPage({ action, query: {}, appointment })
+        const result = page.viewData(form)
+        expect(result.showIsSensitiveQuestion).toEqual(false)
+      })
+    })
+
     describe('isSensitive in the query', () => {
       const action = 'completed'
 
@@ -184,6 +209,34 @@ describe('NotesPage', () => {
           text: 'Notes must be 4000 characters or less',
         })
       })
+    })
+  })
+
+  describe('updateForm', () => {
+    const action = 'completed'
+
+    describe('sensitive', () => {
+      it.each([{}, { isSensitive: 'false' }])(
+        "will always be true if the appointment's sensitivity is set to true",
+        query => {
+          appointment = appointmentFactory.build({ sensitive: true })
+
+          page = new NotesPage({ action, query, appointment })
+          form = appointmentOutcomeFormFactory.build({ sensitive: true })
+          expect(page.updateForm(form).sensitive).toEqual(true)
+        },
+      )
+
+      it.each([false, undefined])(
+        "will match the query if the appointment's sensitivity is false or undefined",
+        sensitive => {
+          appointment = appointmentFactory.build({ sensitive })
+
+          page = new NotesPage({ action, query: { isSensitive: 'true' }, appointment })
+          form = appointmentOutcomeFormFactory.build({ sensitive: true })
+          expect(page.updateForm(form).sensitive).toEqual(true)
+        },
+      )
     })
   })
 
