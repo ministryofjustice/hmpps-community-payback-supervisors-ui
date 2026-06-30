@@ -4,6 +4,7 @@
 /* eslint-disable */
 export type UpdateAppointmentOutcomeResultDto = {
     deliusId: number;
-    result: 'SUCCESS' | 'NOT_FOUND' | 'VERSION_CONFLICT' | 'SERVER_ERROR';
+    result: 'SUCCESS' | 'NOT_FOUND' | 'VERSION_CONFLICT' | 'SERVER_ERROR' | 'VALIDATION_ERROR';
+    errorMessage?: string | null;
 };
 

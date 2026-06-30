@@ -16,6 +16,10 @@ export type ContactOutcomeDto = {
      */
     code: string;
     /**
+     * Hint text to be displayed to the user
+     */
+    hintText?: string | null;
+    /**
      * If this outcome requires an enforcement action to take place
      */
     enforceable: boolean;
