@@ -112,6 +112,7 @@ export default class AttendanceOutcomePage extends BaseAppointmentUpdatePage<Bod
       text: outcome.name,
       value: outcome.code,
       checked: outcome.code === code,
+      hint: outcome.hintText ? { text: outcome.hintText } : undefined,
     }))
   }
 
