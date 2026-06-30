@@ -10,6 +10,8 @@ export const contactOutcomeFactory = Factory.define<ContactOutcomeDto>(() => ({
   attended: faker.datatype.boolean(),
   availableToSupervisors: faker.datatype.boolean(),
   willAlertEnforcementDiary: faker.datatype.boolean(),
+  // hintText is not required for most test cases
+  hintText: undefined,
 }))
 
 export const contactOutcomesFactory = Factory.define<ContactOutcomesDto>(() => ({

@@ -128,6 +128,44 @@ describe('AttendanceOutcomePage', () => {
         expect(result.items).toEqual(expectedItems)
       })
 
+      it('should include hint text when a contact outcome defines it', () => {
+        const outcomes = contactOutcomesFactory.build({
+          contactOutcomes: [
+            contactOutcomeFactory.build({ code: 'ATTC', hintText: 'foo' }),
+            contactOutcomeFactory.build({ code: 'ATSH' }),
+            contactOutcomeFactory.build({ code: 'ATSS' }),
+          ],
+        })
+
+        const hintedOutcome = outcomes.contactOutcomes[0]
+        const nonHintedOutcome = outcomes.contactOutcomes[1]
+
+        const form = appointmentOutcomeFormFactory.build({
+          contactOutcomeCode: hintedOutcome.code,
+        })
+        const page = new AttendanceOutcomePage({
+          query: {},
+          appointment,
+          contactOutcomes: outcomes.contactOutcomes,
+        })
+
+        const result = page.viewData(form)
+
+        expect(result.items[0]).toEqual({
+          text: hintedOutcome.name,
+          value: hintedOutcome.code,
+          hint: { text: hintedOutcome.hintText },
+          checked: true,
+        })
+
+        expect(result.items[1]).toEqual({
+          text: nonHintedOutcome.name,
+          value: nonHintedOutcome.code,
+          hint: undefined,
+          checked: false,
+        })
+      })
+
       it('should return query values if there are errors', () => {
         const page = new AttendanceOutcomePage({
           query: { attendanceOutcome: null },
