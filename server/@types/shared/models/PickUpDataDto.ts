@@ -5,22 +5,18 @@
 import type { LocationDto } from './LocationDto';
 import type { PickUpLocationDto } from './PickUpLocationDto';
 export type PickUpDataDto = {
-    /**
-     * Use pickupLocation instead
-     * @deprecated
-     */
-    location?: LocationDto;
+    location?: (LocationDto | null);
     /**
      * Use pickupLocation.deliusCode instead
      * @deprecated
      */
-    locationCode?: string;
+    locationCode?: string | null;
     /**
      * Use pickupLocation.description instead
      * @deprecated
      */
-    locationDescription?: string;
-    pickupLocation?: PickUpLocationDto;
-    time?: string;
+    locationDescription?: string | null;
+    pickupLocation?: (PickUpLocationDto | null);
+    time?: string | null;
 };
 
