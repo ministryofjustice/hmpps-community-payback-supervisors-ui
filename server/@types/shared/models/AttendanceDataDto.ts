@@ -3,8 +3,16 @@
 /* tslint:disable */
 /* eslint-disable */
 export type AttendanceDataDto = {
-    hiVisWorn: boolean;
-    workedIntensively: boolean;
+    /**
+     * This property is no longer used as this is derived from the outcome.
+     * @deprecated
+     */
+    hiVisWorn?: boolean | null;
+    /**
+     * This property is no longer used as this is derived from the outcome.
+     * @deprecated
+     */
+    workedIntensively?: boolean | null;
     /**
      * Deprecated, use penaltyMinutes instead
      * @deprecated

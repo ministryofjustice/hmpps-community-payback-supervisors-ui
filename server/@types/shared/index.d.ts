@@ -21,6 +21,8 @@ export type { OffenderDto } from './models/OffenderDto';
 export type { OffenderFullDto } from './models/OffenderFullDto';
 export type { OffenderLimitedDto } from './models/OffenderLimitedDto';
 export type { OffenderNotFoundDto } from './models/OffenderNotFoundDto';
+export type { PagedModelSessionSummaryDto } from './models/PagedModelSessionSummaryDto';
+export type { PageMetadata } from './models/PageMetadata';
 export type { PageMetaDto } from './models/PageMetaDto';
 export type { PickUpDataDto } from './models/PickUpDataDto';
 export type { PickUpLocationDto } from './models/PickUpLocationDto';
