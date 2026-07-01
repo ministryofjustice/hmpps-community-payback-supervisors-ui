@@ -28,7 +28,7 @@ export default class AppointmentPage extends BasePage {
     this.notArrivedButtonLocator = page.getByRole('button', { name: 'Not arrived' })
     this.finishButtonLocator = page.getByRole('button', { name: 'Finish session' })
     this.leftSiteEarlyButtonLocator = page.getByRole('button', { name: 'Left site early' })
-    this.personDetailsHeading = this.page.getByRole('heading', { name: 'Person details' })
+    this.personDetailsHeading = this.page.getByRole('heading', { name: 'Session details' })
   }
 
   async clickArrived() {
