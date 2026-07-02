@@ -1,7 +1,9 @@
 import Offender from '../../models/offender'
 import paths from '../../paths'
 import appointmentFactory from '../../testutils/factories/appointmentFactory'
+import pickupDataFactory from '../../testutils/factories/pickupDataFactory'
 import AppointmentUtils from '../../utils/appointmentUtils'
+import LocationUtils from '../../utils/locationUtils'
 import AppointmentShowDetailsPage from './appointmentShowDetailsPage'
 
 jest.mock('../../models/offender')
@@ -12,45 +14,105 @@ describe('AppointmentShowDetailsPage', () => {
   })
 
   describe('viewData', () => {
-    const offenderMock: jest.Mock = Offender as unknown as jest.Mock<Offender>
+    describe('where no pickup data exists', () => {
+      const offenderMock: jest.Mock = Offender as unknown as jest.Mock<Offender>
 
-    it('should return an object with correct data', () => {
-      const startTime = '09:00:00'
-      const endTime = '17:00:00'
-      const appointment = appointmentFactory.build({ startTime, endTime, contactOutcomeCode: null })
-      const offender = {
-        name: 'Sam Smith',
-        crn: 'CRN123',
-        isLimited: false,
-      }
+      it('should return an object with correct data', () => {
+        const startTime = '09:00:00'
+        const endTime = '17:00:00'
+        const appointment = appointmentFactory.build({ startTime, endTime, contactOutcomeCode: null })
+        const offender = {
+          name: 'Sam Smith',
+          crn: 'CRN123',
+          isLimited: false,
+        }
 
-      offenderMock.mockImplementation(() => {
-        return offender
+        offenderMock.mockImplementation(() => {
+          return offender
+        })
+
+        const statusTagHtml = '<strong>Scheduled</strong>'
+        jest.spyOn(AppointmentUtils, 'buildStatusTag').mockReturnValue(statusTagHtml)
+
+        const page = new AppointmentShowDetailsPage()
+        const result = page.viewData(appointment, null)
+        const { projectCode, date, id } = appointment
+        expect(result).toEqual({
+          pickupDetails: [],
+          offender,
+          startTime: '09:00',
+          endTime: '17:00',
+          backPath: paths.sessions.show({ projectCode, date }),
+          actions: [
+            {
+              text: 'Arrived',
+              href: paths.appointments.attendanceOutcome({ projectCode, appointmentId: id.toString() }),
+            },
+            {
+              text: 'Not arrived',
+              href: paths.appointments.notes.absent({ projectCode, appointmentId: id.toString() }),
+            },
+          ],
+          statusTagHtml,
+          canBeUpdated: true,
+        })
       })
+    })
 
-      const statusTagHtml = '<strong>Scheduled</strong>'
-      jest.spyOn(AppointmentUtils, 'buildStatusTag').mockReturnValue(statusTagHtml)
+    describe('where pickup data exists', () => {
+      const offenderMock: jest.Mock = Offender as unknown as jest.Mock<Offender>
 
-      const page = new AppointmentShowDetailsPage()
-      const result = page.viewData(appointment, null)
-      const { projectCode, date, id } = appointment
-      expect(result).toEqual({
-        offender,
-        startTime: '09:00',
-        endTime: '17:00',
-        backPath: paths.sessions.show({ projectCode, date }),
-        actions: [
-          {
-            text: 'Arrived',
-            href: paths.appointments.attendanceOutcome({ projectCode, appointmentId: id.toString() }),
-          },
-          {
-            text: 'Not arrived',
-            href: paths.appointments.notes.absent({ projectCode, appointmentId: id.toString() }),
-          },
-        ],
-        statusTagHtml,
-        canBeUpdated: true,
+      it('should return an object with correct data', () => {
+        const startTime = '09:00'
+        const endTime = '17:00'
+        const appointment = appointmentFactory.build({
+          startTime,
+          endTime,
+          contactOutcomeCode: null,
+          pickUpData: pickupDataFactory.build(),
+        })
+        const offender = {
+          name: 'Sam Smith',
+          crn: 'CRN123',
+          isLimited: false,
+        }
+        const location = '1001, 14B Office Street, City, Shireshire, ZY98XW'
+        const pickUpTime = '09:00'
+
+        offenderMock.mockImplementation(() => {
+          return offender
+        })
+
+        const statusTagHtml = '<strong>Scheduled</strong>'
+        jest.spyOn(AppointmentUtils, 'buildStatusTag').mockReturnValue(statusTagHtml)
+
+        jest.spyOn(LocationUtils, 'locationToString').mockReturnValue(location)
+
+        const page = new AppointmentShowDetailsPage()
+        const result = page.viewData(appointment, null)
+        const { projectCode, date, id } = appointment
+        expect(result).toEqual({
+          pickupDetails: [
+            { key: { text: 'Location' }, value: { text: location } },
+            { key: { text: 'Time' }, value: { text: pickUpTime } },
+          ],
+          offender,
+          startTime: '09:00',
+          endTime: '17:00',
+          backPath: paths.sessions.show({ projectCode, date }),
+          actions: [
+            {
+              text: 'Arrived',
+              href: paths.appointments.attendanceOutcome({ projectCode, appointmentId: id.toString() }),
+            },
+            {
+              text: 'Not arrived',
+              href: paths.appointments.notes.absent({ projectCode, appointmentId: id.toString() }),
+            },
+          ],
+          statusTagHtml,
+          canBeUpdated: true,
+        })
       })
     })
 
