@@ -7,13 +7,10 @@ import {
   AppointmentOutcomeForm,
 } from '../../../@types/user-defined'
 import paths from '../../../paths'
-import GovUkRadioGroup from '../../../utils/GovUKFrontend/GovUkRadioGroup'
 import { pathWithQuery } from '../../../utils/utils'
 import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './baseAppointmentUpdatePage'
 
 interface ViewData extends AppointmentUpdatePageViewData {
-  hiVisItems: GovUkRadioOption[]
-  workedIntensivelyItems: GovUkRadioOption[]
   workQualityItems: GovUkRadioOption[]
   behaviourItems: GovUkRadioOption[]
   notes?: string
@@ -21,8 +18,6 @@ interface ViewData extends AppointmentUpdatePageViewData {
 }
 
 interface Body {
-  hiVis: YesOrNo
-  workedIntensively: YesOrNo
   workQuality: NonNullable<AttendanceDataDto['workQuality']>
   behaviour: NonNullable<AttendanceDataDto['behaviour']>
   notes?: string
@@ -30,8 +25,6 @@ interface Body {
 }
 
 export interface ComplianceQuery {
-  hiVis?: YesOrNo
-  workedIntensively?: YesOrNo
   workQuality?: AttendanceDataDto['workQuality']
   behaviour?: AttendanceDataDto['behaviour']
   alertPractitioner?: YesOrNo
@@ -51,8 +44,6 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
       ...form,
       attendanceData: {
         ...appointment.attendanceData,
-        hiVisWorn: GovUkRadioGroup.valueFromYesOrNoItem(this.query.hiVis),
-        workedIntensively: GovUkRadioGroup.valueFromYesOrNoItem(this.query.workedIntensively),
         workQuality: this.query.workQuality,
         behaviour: this.query.behaviour,
       },
@@ -64,12 +55,6 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
 
     return {
       ...this.commonViewData(appointment),
-      hiVisItems: GovUkRadioGroup.yesNoItems({
-        checkedValue: formValues.hiVis,
-      }),
-      workedIntensivelyItems: GovUkRadioGroup.yesNoItems({
-        checkedValue: formValues.workedIntensively,
-      }),
       workQualityItems: this.getItems(formValues.workQuality),
       behaviourItems: this.getItems(formValues.behaviour),
     }
@@ -77,14 +62,6 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
 
   protected getValidationErrors(): ValidationErrors<Body> {
     const errors: ValidationErrors<Body> = {}
-
-    if (!this.query.hiVis) {
-      errors.hiVis = { text: 'Select yes if they wore hi-vis' }
-    }
-
-    if (!this.query.workedIntensively) {
-      errors.workedIntensively = { text: 'Select yes if they are working intensively' }
-    }
 
     if (!this.query.workQuality) {
       errors.workQuality = { text: 'Select a description of the quality of their work ' }
@@ -152,8 +129,6 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
 
     if (formData.contactOutcomeCode !== appointment.contactOutcomeCode) {
       return {
-        hiVis: null,
-        workedIntensively: null,
         workQuality: null,
         behaviour: null,
       }
@@ -161,16 +136,12 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
 
     if (formData.attendanceData) {
       return {
-        hiVis: GovUkRadioGroup.determineCheckedValue(formData.attendanceData?.hiVisWorn),
-        workedIntensively: GovUkRadioGroup.determineCheckedValue(formData.attendanceData?.workedIntensively),
         workQuality: formData.attendanceData?.workQuality,
         behaviour: formData.attendanceData?.behaviour,
       }
     }
 
     return {
-      hiVis: GovUkRadioGroup.determineCheckedValue(appointment.attendanceData?.hiVisWorn),
-      workedIntensively: GovUkRadioGroup.determineCheckedValue(appointment.attendanceData?.workedIntensively),
       workQuality: appointment.attendanceData?.workQuality,
       behaviour: appointment.attendanceData?.behaviour,
     }

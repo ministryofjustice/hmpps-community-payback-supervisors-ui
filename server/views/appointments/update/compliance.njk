@@ -12,37 +12,6 @@
 
 {% block formContent %}
   {% macro form() %}
-
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-full">
-        {{ govukRadios({
-          name: "hiVis",
-          fieldset: {
-            legend: {
-              text: "Did they wear hi-vis?",
-              classes: "govuk-fieldset__legend--m"
-            }
-          },
-          items: hiVisItems,
-          errorMessage: errors.hiVis
-        }) }}
-      </div>
-    </div>
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-full">
-        {{ govukRadios({
-          name: "workedIntensively",
-          fieldset: {
-            legend: {
-              text: "Are they working intensively (28 hours of unpaid work over a 4-day week)?",
-              classes: "govuk-fieldset__legend--m"
-            }
-          },
-          items: workedIntensivelyItems,
-          errorMessage: errors.workedIntensively
-        }) }}
-      </div>
-    </div>
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
         {{ govukRadios({

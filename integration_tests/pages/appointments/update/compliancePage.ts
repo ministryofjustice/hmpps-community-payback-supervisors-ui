@@ -1,7 +1,6 @@
 import { AppointmentDto, AttendanceDataDto } from '../../../../server/@types/shared'
-import { AppointmentCompletedAction, YesOrNo } from '../../../../server/@types/user-defined'
+import { AppointmentCompletedAction } from '../../../../server/@types/user-defined'
 import paths from '../../../../server/paths'
-import GovUkRadioGroup from '../../../../server/utils/GovUKFrontend/GovUkRadioGroup'
 import { pathWithQuery } from '../../../../server/utils/utils'
 import Page from '../../page'
 
@@ -29,29 +28,17 @@ export default class CompliancePage extends Page {
   }
 
   completeForm(): void {
-    this.selectHiVisValue()
-    this.selectWorkedIntensivelyValue()
     this.selectWorkQualityValue()
     this.behaviourOption().check()
   }
 
   shouldHaveFormWithAppointmentValues() {
     const { attendanceData } = this.appointment
-    this.shouldHaveSelectedHiVisValue(GovUkRadioGroup.determineCheckedValue(attendanceData.hiVisWorn))
-    this.shouldHaveSelectedWorkedIntensivelyValue(
-      GovUkRadioGroup.determineCheckedValue(attendanceData.workedIntensively),
-    )
     this.shouldHaveSelectedWorkQualityValue(attendanceData.workQuality)
     this.shouldHaveSelectedBehavourValue(attendanceData.behaviour)
   }
 
   shouldHaveFormWithEmptyValues() {
-    this.hiVisOption('yes').should('not.be.checked')
-    this.hiVisOption('no').should('not.be.checked')
-
-    this.workedIntensivelyOption('yes').should('not.be.checked')
-    this.workedIntensivelyOption('no').should('not.be.checked')
-
     this.behaviourOption('EXCELLENT').should('not.be.checked')
     this.behaviourOption('GOOD').should('not.be.checked')
     this.behaviourOption('NOT_APPLICABLE').should('not.be.checked')
@@ -67,22 +54,6 @@ export default class CompliancePage extends Page {
     this.workQualityOption('UNSATISFACTORY').should('not.be.checked')
   }
 
-  selectHiVisValue() {
-    this.hiVisOption().check()
-  }
-
-  shouldHaveSelectedHiVisValue(value: YesOrNo = 'yes') {
-    this.hiVisOption(value).should('be.checked')
-  }
-
-  selectWorkedIntensivelyValue() {
-    this.workedIntensivelyOption().check()
-  }
-
-  shouldHaveSelectedWorkedIntensivelyValue(value: YesOrNo = 'yes') {
-    this.workedIntensivelyOption(value).check()
-  }
-
   selectWorkQualityValue() {
     this.workQualityOption().check()
   }
@@ -94,10 +65,6 @@ export default class CompliancePage extends Page {
   shouldHaveSelectedBehavourValue(value: AttendanceDataDto['behaviour'] = 'UNSATISFACTORY') {
     this.behaviourOption(value).should('be.checked')
   }
-
-  private hiVisOption = (value: YesOrNo = 'yes') => this.getRadioByNameAndValue('hiVis', value)
-
-  private workedIntensivelyOption = (value: YesOrNo = 'no') => this.getRadioByNameAndValue('workedIntensively', value)
 
   private workQualityOption = (value: AttendanceDataDto['workQuality'] = 'GOOD') =>
     this.getRadioByNameAndValue('workQuality', value)
