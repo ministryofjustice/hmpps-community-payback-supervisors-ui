@@ -1,9 +1,11 @@
 import { AppointmentDto, ContactOutcomeDto } from '../../@types/shared'
-import { LinkItem } from '../../@types/user-defined'
+import { GovUkSummaryListItem, LinkItem } from '../../@types/user-defined'
 import Offender from '../../models/offender'
 import paths from '../../paths'
 import AppointmentUtils from '../../utils/appointmentUtils'
 import DateTimeFormats from '../../utils/dateTimeUtils'
+import GovUKComponentUtils from '../../utils/govUkComponentUtils'
+import LocationUtils from '../../utils/locationUtils'
 
 interface ViewData {
   offender: Offender
@@ -12,6 +14,7 @@ interface ViewData {
   backPath: string
   actions: LinkItem[]
   statusTagHtml: string
+  pickupDetails: Array<GovUkSummaryListItem>
   canBeUpdated: boolean
 }
 
@@ -24,6 +27,7 @@ export default class AppointmentShowDetailsPage {
       backPath: paths.sessions.show({ projectCode: appointment.projectCode, date: appointment.date }),
       actions: this.appointmentActions(appointment),
       statusTagHtml: AppointmentUtils.buildStatusTag(contactOutcome),
+      pickupDetails: this.pickupDetails(appointment),
       canBeUpdated: this.appointmentIsInThePast(appointment),
     }
   }
@@ -39,6 +43,23 @@ export default class AppointmentShowDetailsPage {
       { text: 'Arrived', href: paths.appointments.attendanceOutcome(appointmentPathParams) },
       { text: 'Not arrived', href: paths.appointments.notes.absent(appointmentPathParams) },
     ]
+  }
+
+  private pickupDetails(appointment: AppointmentDto): Array<GovUkSummaryListItem> {
+    const items = [
+      {
+        label: 'Location',
+        content: appointment.pickUpData?.pickupLocation
+          ? LocationUtils.locationToString(appointment.pickUpData?.pickupLocation, { withLineBreaks: false })
+          : undefined,
+      },
+      {
+        label: 'Time',
+        content: appointment.pickUpData?.time ? DateTimeFormats.stripTime(appointment.pickUpData?.time) : undefined,
+      },
+    ]
+
+    return GovUKComponentUtils.buildSummaryListItems(items, true)
   }
 
   private appointmentIsInThePast(appointment: AppointmentDto): boolean {

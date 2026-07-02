@@ -5,7 +5,9 @@ import Page from './page'
 import paths from '../../server/paths'
 
 export default class AppointmentPage extends Page {
-  private readonly appointmentDetails: SummaryListComponent
+  private readonly sessionDetails: SummaryListComponent
+
+  private readonly pickUpDetails: SummaryListComponent
 
   private readonly appointment: AppointmentDto
 
@@ -14,7 +16,8 @@ export default class AppointmentPage extends Page {
     super(offender.name)
 
     this.appointment = appointment
-    this.appointmentDetails = new SummaryListComponent()
+    this.sessionDetails = new SummaryListComponent('Session details')
+    this.pickUpDetails = new SummaryListComponent('Pick-up details')
   }
 
   static visit(appointment: AppointmentDto): AppointmentPage {
@@ -46,12 +49,19 @@ export default class AppointmentPage extends Page {
   }
 
   shouldShowStatus(status: string) {
-    this.appointmentDetails.getValueWithLabel('Session status').should('contain.text', status)
+    this.sessionDetails.getValueWithLabel('Session status').should('contain.text', status)
   }
 
   shouldShowAppointmentDetails(): void {
-    this.appointmentDetails.getValueWithLabel('Start time').should('contain.text', this.appointment.startTime)
-    this.appointmentDetails.getValueWithLabel('Finish time').should('contain.text', this.appointment.endTime)
+    this.sessionDetails.getValueWithLabel('Start time').should('contain.text', this.appointment.startTime)
+    this.sessionDetails.getValueWithLabel('Finish time').should('contain.text', this.appointment.endTime)
+  }
+
+  shouldShowPickUpDetails(): void {
+    this.pickUpDetails
+      .getValueWithLabel('Location')
+      .should('contain.text', this.appointment.pickUpData?.pickupLocation?.buildingName)
+    this.pickUpDetails.getValueWithLabel('Time').should('contain.text', this.appointment.pickUpData?.time)
   }
 
   shouldNotHaveAnyActions() {

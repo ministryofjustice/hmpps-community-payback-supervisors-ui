@@ -5,7 +5,7 @@
 //
 //  Scenario: viewing an appointment
 //    Given I am on an appointment page
-//    Then I should see the appointment and offender details
+//    Then I should see the appointment, offender, and pick-up details
 //
 //  Scenario: navigating back to the session page
 //    Given I am on an appointment page
@@ -37,6 +37,7 @@ import supervisorFactory from '../../server/testutils/factories/supervisorFactor
 import appointmentOutcomeFormFactory from '../../server/testutils/factories/appointmentOutcomeFormFactory'
 import AttendanceOutcomePage from '../pages/appointments/update/attendanceOutcomePage'
 import { contactOutcomeFactory, contactOutcomesFactory } from '../../server/testutils/factories/contactOutcomeFactory'
+import pickupDataFactory from '../../server/testutils/factories/pickupDataFactory'
 import NotesPage from '../pages/appointments/update/notesPage'
 
 context('viewAnAppointment', () => {
@@ -61,13 +62,14 @@ context('viewAnAppointment', () => {
     cy.signIn()
 
     //  When I visit an appointment page
-    const appointment = appointmentFactory.build()
+    const appointment = appointmentFactory.build({ pickUpData: pickupDataFactory.build({ time: '09:00' }) })
     cy.task('stubFindAppointment', { appointment })
 
     const appointmentPage = AppointmentPage.visit(appointment)
 
-    // Then I should see the appointment and offender details
+    // Then I should see the appointment, offender, and pick-up details
     appointmentPage.shouldShowAppointmentDetails()
+    appointmentPage.shouldShowPickUpDetails()
     appointmentPage.shouldShowOffenderDetails()
     appointmentPage.shouldShowStatus('Scheduled')
   })
