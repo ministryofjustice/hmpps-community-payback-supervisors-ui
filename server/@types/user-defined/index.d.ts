@@ -97,3 +97,10 @@ export type AppointmentOutcomeForm = {
   sensitive?: boolean
   attendanceData?: AttendanceDataDto
 }
+
+export type GovUkSummaryListItem = {
+  key: GovUKValue
+  value: GovUKValue
+  actions?: { items: Array<GovUKActionItem> }
+  classes?: string
+}
