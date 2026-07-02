@@ -1,10 +1,9 @@
 import { AppointmentDto } from '../../../@types/shared'
-import { AppointmentOutcomeForm, GovUkRadioOption } from '../../../@types/user-defined'
+import { AppointmentOutcomeForm } from '../../../@types/user-defined'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
 import appointmentFactory from '../../../testutils/factories/appointmentFactory'
 import appointmentOutcomeFormFactory from '../../../testutils/factories/appointmentOutcomeFormFactory'
-import GovUkRadioGroup from '../../../utils/GovUKFrontend/GovUkRadioGroup'
 import CompliancePage, { ComplianceQuery } from './compliancePage'
 
 jest.mock('../../../models/offender')
@@ -69,22 +68,6 @@ describe('CompliancePage', () => {
     })
 
     describe('items', () => {
-      it('should return items for hiVis', async () => {
-        const items = ['items'] as unknown as GovUkRadioOption[]
-        jest.spyOn(GovUkRadioGroup, 'yesNoItems').mockReturnValue(items)
-
-        const result = page.viewData(appointment, form)
-        expect(result.hiVisItems).toEqual(items)
-      })
-
-      it('should return items for workedIntensively', async () => {
-        const items = ['items'] as unknown as GovUkRadioOption[]
-        jest.spyOn(GovUkRadioGroup, 'yesNoItems').mockReturnValue(items)
-
-        const result = page.viewData(appointment, form)
-        expect(result.workedIntensivelyItems).toEqual(items)
-      })
-
       it('should return items for workQuality', async () => {
         appointment = appointmentFactory.build({ attendanceData: { workQuality: null } })
 
@@ -115,30 +98,21 @@ describe('CompliancePage', () => {
 
       describe('populated form data', () => {
         it('should populate with query values if query exists', () => {
-          const radioItems = [{ text: 'yes', value: 'yes', checked: true }]
-          jest.spyOn(GovUkRadioGroup, 'yesNoItems').mockReturnValue(radioItems)
           const query: ComplianceQuery = {
-            hiVis: 'yes',
-            workedIntensively: 'no',
             workQuality: null,
             behaviour: 'GOOD',
           }
 
           appointment = appointmentFactory.build({
-            attendanceData: { hiVisWorn: null, workedIntensively: true, workQuality: 'GOOD', behaviour: 'EXCELLENT' },
+            attendanceData: { workQuality: 'GOOD', behaviour: 'EXCELLENT' },
             notes: 'some note',
           })
 
           page = new CompliancePage('completed', formId, query)
           const result = page.viewData(appointment, form)
 
-          expect(GovUkRadioGroup.yesNoItems).toHaveBeenNthCalledWith(1, { checkedValue: 'yes' })
-          expect(GovUkRadioGroup.yesNoItems).toHaveBeenNthCalledWith(2, { checkedValue: 'no' })
-
           expect(result).toEqual(
             expect.objectContaining({
-              hiVisItems: radioItems,
-              workedIntensivelyItems: radioItems,
               workQualityItems: [
                 { text: 'Excellent', value: 'EXCELLENT', checked: false },
                 { text: 'Good', value: 'GOOD', checked: false },
@@ -164,30 +138,6 @@ describe('CompliancePage', () => {
 
   describe('validate', () => {
     const action = 'completed'
-    describe('when hiVis is not present', () => {
-      it('should return the correct error', () => {
-        page = new CompliancePage(action, formId, { hiVis: null })
-        page.validate()
-
-        expect(page.validationErrors.hiVis).toEqual({
-          text: 'Select yes if they wore hi-vis',
-        })
-        expect(page.hasErrors).toBe(true)
-      })
-    })
-
-    describe('when workedIntensively is not present', () => {
-      it('should return the correct error', () => {
-        page = new CompliancePage(action, formId, { workedIntensively: null })
-        page.validate()
-
-        expect(page.validationErrors.workedIntensively).toEqual({
-          text: 'Select yes if they are working intensively',
-        })
-        expect(page.hasErrors).toBe(true)
-      })
-    })
-
     describe('when workQuality is not present', () => {
       it('should return the correct error', () => {
         page = new CompliancePage(action, formId, { workQuality: null })

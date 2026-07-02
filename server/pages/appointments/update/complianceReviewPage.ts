@@ -79,8 +79,6 @@ export default class ComplianceReviewPage extends ReviewPage {
     return {
       'Start time': { value: this.formData?.startTime, changeUrl: this.startTimeBackPath },
       'End time': { value: this.formData?.endTime, changeUrl: this.endTimeBackPath },
-      'Hi-vis': this.formData?.attendanceData.hiVisWorn ? 'Yes' : 'No',
-      'Worked intensively': this.formData?.attendanceData.workedIntensively ? 'Yes' : 'No',
       'Work quality': fmtLabel(this.formData?.attendanceData.workQuality),
       Behaviour: fmtLabel(this.formData?.attendanceData.behaviour),
       Notes: { value: this.formData.notes, changeUrl: this.notesUrl },

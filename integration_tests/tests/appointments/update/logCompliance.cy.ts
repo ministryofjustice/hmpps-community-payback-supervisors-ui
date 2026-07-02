@@ -65,8 +65,6 @@ context('Log compliance', () => {
   it('validates form data', () => {
     const appointment = appointmentFactory.build({
       attendanceData: {
-        hiVisWorn: null,
-        workedIntensively: null,
         workQuality: null,
         behaviour: null,
       },
@@ -82,8 +80,6 @@ context('Log compliance', () => {
     page.clickSubmit()
 
     // Then I see the log compliance page with errors
-    page.shouldShowErrorSummary('hiVis', 'Select yes if they wore hi-vis')
-    page.shouldShowErrorSummary('workedIntensively', 'Select yes if they are working intensively')
     page.shouldShowErrorSummary('workQuality', 'Select a description of the quality of their work ')
     page.shouldShowErrorSummary('behaviour', 'Select a description of their behaviour ')
   })
@@ -93,8 +89,6 @@ context('Log compliance', () => {
     it('should show user submitted values when showing validation errors', () => {
       const appointment = appointmentFactory.build({
         attendanceData: {
-          hiVisWorn: null,
-          workedIntensively: null,
           workQuality: null,
           behaviour: null,
         },
@@ -104,8 +98,6 @@ context('Log compliance', () => {
       const page = CompliancePage.visit(appointment, 'completed', formId)
 
       // And I complete some of the form
-      page.selectHiVisValue()
-      page.selectWorkedIntensivelyValue()
       page.selectWorkQualityValue()
 
       // When I submit the form
@@ -113,8 +105,6 @@ context('Log compliance', () => {
 
       // Then I see the log compliance page with errors and my entered answers
       page.shouldShowErrorSummary('behaviour', 'Select a description of their behaviour ')
-      page.shouldHaveSelectedHiVisValue()
-      page.shouldHaveSelectedWorkedIntensivelyValue()
       page.shouldHaveSelectedWorkQualityValue()
     })
 
@@ -123,8 +113,6 @@ context('Log compliance', () => {
       const appointment = appointmentFactory.build({
         contactOutcomeCode: 'ATTC',
         attendanceData: {
-          hiVisWorn: true,
-          workedIntensively: false,
           workQuality: 'GOOD',
           behaviour: 'UNSATISFACTORY',
         },
