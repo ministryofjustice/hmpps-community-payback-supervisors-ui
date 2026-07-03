@@ -25,7 +25,7 @@ export default class AppointmentPage extends BasePage {
     this.expect = new AppointmentPageAssertions(this)
     this.details = new SummaryListComponent(page)
     this.arrivedButtonLocator = page.getByRole('button', { name: 'Arrived', exact: true })
-    this.notArrivedButtonLocator = page.getByRole('button', { name: 'Not arrived' })
+    this.notArrivedButtonLocator = page.getByRole('button', { name: 'Did not attend' })
     this.finishButtonLocator = page.getByRole('button', { name: 'Finish session' })
     this.leftSiteEarlyButtonLocator = page.getByRole('button', { name: 'Left site early' })
     this.personDetailsHeading = this.page.getByRole('heading', { name: 'Session details' })

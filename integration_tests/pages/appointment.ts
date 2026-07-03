@@ -33,7 +33,7 @@ export default class AppointmentPage extends Page {
   }
 
   notArrivedButton() {
-    return cy.get('a').contains('Not arrived')
+    return cy.get('a').contains('Did not attend')
   }
 
   finishedButton() {

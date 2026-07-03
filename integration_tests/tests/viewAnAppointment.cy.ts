@@ -19,7 +19,7 @@
 //      Then I should be taken to the first page of the arrival form
 //    Scenario: starting an absent form
 //      Given I am on the appointment page
-//      When I click on 'Not arrived'
+//      When I click on 'Did not attend'
 //      Then I should be taken to the first page of the absent form
 //
 //  Scenario: Appointment already with an outcode code
@@ -126,7 +126,7 @@ context('viewAnAppointment', () => {
 
       const appointmentPage = AppointmentPage.visit(appointment)
 
-      // When I click on 'Not arrived'
+      // When I click on 'Did not attend'
       appointmentPage.notArrivedButton().click()
 
       // Then I should be taken to the first page of the absent form
