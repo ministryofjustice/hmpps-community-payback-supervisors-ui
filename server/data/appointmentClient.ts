@@ -4,6 +4,7 @@ import logger from '../../logger'
 import paths from '../paths/api'
 import { AppointmentDto } from '../@types/shared/models/AppointmentDto'
 import { GetAppointmentRequest, SaveAppointmentRequest } from '../@types/user-defined'
+import idempotencyKey from '../utils/restClientUtils'
 
 export default class AppointmentClient extends RestClient {
   constructor(authenticationClient: AuthenticationClient) {
@@ -17,6 +18,9 @@ export default class AppointmentClient extends RestClient {
 
   async save({ username, projectCode, data }: SaveAppointmentRequest): Promise<void> {
     const path = paths.appointments.outcome({ appointmentId: data.deliusId.toString(), projectCode })
-    return this.put({ path, data }, asSystem(username))
+    return this.put(
+      { path, data, retry: true, headers: idempotencyKey('put-appointment', data.deliusId.toString()) },
+      asSystem(username),
+    )
   }
 }
