@@ -41,7 +41,7 @@ export default class AppointmentShowDetailsPage {
 
     return [
       { text: 'Arrived', href: paths.appointments.attendanceOutcome(appointmentPathParams) },
-      { text: 'Not arrived', href: paths.appointments.notes.absent(appointmentPathParams) },
+      { text: 'Did not attend', href: paths.appointments.notes.absent(appointmentPathParams) },
     ]
   }
 

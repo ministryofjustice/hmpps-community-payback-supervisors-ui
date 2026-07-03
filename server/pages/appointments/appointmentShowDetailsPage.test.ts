@@ -49,7 +49,7 @@ describe('AppointmentShowDetailsPage', () => {
               href: paths.appointments.attendanceOutcome({ projectCode, appointmentId: id.toString() }),
             },
             {
-              text: 'Not arrived',
+              text: 'Did not attend',
               href: paths.appointments.notes.absent({ projectCode, appointmentId: id.toString() }),
             },
           ],
@@ -106,7 +106,7 @@ describe('AppointmentShowDetailsPage', () => {
               href: paths.appointments.attendanceOutcome({ projectCode, appointmentId: id.toString() }),
             },
             {
-              text: 'Not arrived',
+              text: 'Did not attend',
               href: paths.appointments.notes.absent({ projectCode, appointmentId: id.toString() }),
             },
           ],
@@ -129,7 +129,7 @@ describe('AppointmentShowDetailsPage', () => {
             href: paths.appointments.attendanceOutcome({ projectCode, appointmentId: id.toString() }),
           },
           {
-            text: 'Not arrived',
+            text: 'Did not attend',
             href: paths.appointments.notes.absent({ projectCode, appointmentId: id.toString() }),
           },
         ])
