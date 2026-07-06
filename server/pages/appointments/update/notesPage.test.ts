@@ -8,6 +8,7 @@ import appointmentOutcomeFormFactory from '../../../testutils/factories/appointm
 import GovUkRadioGroup from '../../../utils/GovUKFrontend/GovUkRadioGroup'
 import NotesPage from './notesPage'
 import ReferenceDataService from '../../../services/referenceDataService'
+import supervisorFactory from '../../../testutils/factories/supervisorFactory'
 
 jest.mock('../../../models/offender')
 
@@ -269,7 +270,7 @@ describe('NotesPage', () => {
     })
 
     describe('absent', () => {
-      it('returns data from the appointment except for notes, sensitive, and the outcome code', () => {
+      it('returns data from the appointment except for notes, sensitive, supervisor code, and the outcome code', () => {
         form = appointmentOutcomeFormFactory.build({
           notes: 'testnote',
           sensitive: true,
@@ -278,7 +279,9 @@ describe('NotesPage', () => {
 
         page = new NotesPage({ action: 'absent', query: { alertPractitioner: 'no' }, appointment })
 
-        const result = page.buildPayload(appointment, form)
+        const supervisor = supervisorFactory.build()
+
+        const result = page.buildPayload(appointment, form, supervisor)
 
         expect(result).toEqual(
           expect.objectContaining({
@@ -288,7 +291,7 @@ describe('NotesPage', () => {
             startTime: appointment.startTime,
             endTime: appointment.endTime,
             attendanceData: appointment.attendanceData,
-            supervisorOfficerCode: appointment.supervisorOfficerCode,
+            supervisorOfficerCode: supervisor.code,
             date: appointment.date,
             notes: 'testnote',
             sensitive: true,
@@ -308,7 +311,9 @@ describe('NotesPage', () => {
 
         page = new NotesPage({ action: 'completed', query: { alertPractitioner: 'yes' }, appointment })
 
-        const result = page.buildPayload(appointment, form)
+        const supervisor = supervisorFactory.build()
+
+        const result = page.buildPayload(appointment, form, supervisor)
 
         expect(result).toEqual(
           expect.objectContaining({
@@ -320,7 +325,7 @@ describe('NotesPage', () => {
               ...appointment.attendanceData,
               ...form.attendanceData,
             },
-            supervisorOfficerCode: appointment.supervisorOfficerCode,
+            supervisorOfficerCode: supervisor.code,
             date: appointment.date,
             alertActive: true,
             sensitive: form.sensitive,
@@ -337,7 +342,9 @@ describe('NotesPage', () => {
         contactOutcomeCode: 'ABCD',
       })
 
-      const result = page.buildPayload(appointment, form)
+      const supervisor = supervisorFactory.build()
+
+      const result = page.buildPayload(appointment, form, supervisor)
 
       expect(result.contactOutcomeCode).toEqual('ABCD')
     })

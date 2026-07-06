@@ -10,12 +10,14 @@ import CompliancePage from '../../pages/appointments/update/compliancePage'
 import ReviewPage from '../../pages/appointments/update/reviewPage'
 import { UpdateAppointmentOutcomeDto } from '../../@types/shared/models/UpdateAppointmentOutcomeDto'
 import { AppointmentDto, ContactOutcomeDto } from '../../@types/shared'
+import SupervisorService from '../../services/supervisorService'
 
 export default class NotesController {
   constructor(
     private readonly appointmentService: AppointmentService,
     private readonly referenceDataService: ReferenceDataService,
     private readonly appointmentFormService: AppointmentFormService,
+    private readonly supervisorService: SupervisorService,
   ) {}
 
   show(action: AppointmentNotesAction): RequestHandler {
@@ -118,6 +120,9 @@ export default class NotesController {
         formData,
       )
 
+      const { username } = res.locals.user
+      const supervisor = await this.supervisorService.getSupervisor(username)
+
       reviewPage.validate()
 
       if (reviewPage.hasErrors) {
@@ -134,7 +139,7 @@ export default class NotesController {
         appointment,
       })
 
-      const payload: UpdateAppointmentOutcomeDto = notesPage.buildPayload(appointment, formData)
+      const payload: UpdateAppointmentOutcomeDto = notesPage.buildPayload(appointment, formData, supervisor)
 
       await this.appointmentService.saveAppointment({
         username: res.locals.user.username,
