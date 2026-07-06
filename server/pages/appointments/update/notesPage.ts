@@ -5,7 +5,7 @@ import {
   ValidationErrors,
   YesOrNo,
 } from '../../../@types/user-defined'
-import { AppointmentDto, UpdateAppointmentOutcomeDto } from '../../../@types/shared'
+import { AppointmentDto, SupervisorDto, UpdateAppointmentOutcomeDto } from '../../../@types/shared'
 import paths from '../../../paths'
 import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './baseAppointmentUpdatePage'
 import { pathWithQuery } from '../../../utils/utils'
@@ -89,7 +89,11 @@ export default class NotesPage extends BaseAppointmentUpdatePage<Body> {
     }
   }
 
-  buildPayload(appointment: AppointmentDto, formData: AppointmentOutcomeForm): UpdateAppointmentOutcomeDto {
+  buildPayload(
+    appointment: AppointmentDto,
+    formData: AppointmentOutcomeForm,
+    supervisor: SupervisorDto,
+  ): UpdateAppointmentOutcomeDto {
     let payload: UpdateAppointmentOutcomeDto
 
     if (this.action === 'absent') {
@@ -101,7 +105,7 @@ export default class NotesPage extends BaseAppointmentUpdatePage<Body> {
         endTime: appointment.endTime,
         contactOutcomeCode: ReferenceDataService.UnacceptableAbsenceOutcomeCode,
         attendanceData: appointment.attendanceData,
-        supervisorOfficerCode: appointment.supervisorOfficerCode,
+        supervisorOfficerCode: supervisor.code,
         notes: formData.notes,
         sensitive: formData.sensitive,
         date: appointment.date,
@@ -117,7 +121,7 @@ export default class NotesPage extends BaseAppointmentUpdatePage<Body> {
           ...appointment.attendanceData,
           ...formData.attendanceData,
         },
-        supervisorOfficerCode: appointment.supervisorOfficerCode,
+        supervisorOfficerCode: supervisor.code,
         alertActive: GovUkRadioGroup.nullableValueFromYesOrNoItem(this.query.alertPractitioner as YesOrNo),
         notes: formData.notes,
         sensitive: formData.sensitive,

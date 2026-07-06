@@ -26,6 +26,7 @@ const appointmentControllers = (services: Services) => {
     services.appointmentService,
     services.referenceDataService,
     services.appointmentFormService,
+    services.supervisorService,
   )
 
   return {
