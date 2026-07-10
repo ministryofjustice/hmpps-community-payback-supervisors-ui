@@ -2,6 +2,7 @@ import { DeepMocked, createMock } from '@golevelup/ts-jest'
 import type { NextFunction, Request, Response } from 'express'
 import SessionsController from './sessionsController'
 import SessionService from '../services/sessionService'
+import AuditService, { Page } from '../services/auditService'
 import sessionFactory from '../testutils/factories/sessionFactory'
 import DateTimeFormats from '../utils/dateTimeUtils'
 import LocationUtils from '../utils/locationUtils'
@@ -18,9 +19,11 @@ describe('SessionsController', () => {
 
   let sessionsController: SessionsController
   const sessionService = createMock<SessionService>()
+  const auditService = createMock<AuditService>()
 
   beforeEach(() => {
-    sessionsController = new SessionsController(sessionService)
+    jest.clearAllMocks()
+    sessionsController = new SessionsController(auditService, sessionService)
   })
 
   describe('show', () => {
@@ -69,6 +72,29 @@ describe('SessionsController', () => {
             },
           ],
         },
+      })
+    })
+
+    it('should audit each appointment in the session against the offender CRN', async () => {
+      const appointmentSummary = appointmentSummaryFactory.build()
+      const session = sessionFactory.build({ appointmentSummaries: [appointmentSummary] })
+      const params = { projectCode: session.projectCode, date: session.date }
+      const requestWithParams = createMock<Request>({ id: 'request-id', params })
+      const response = createMock<Response>({ locals: { user: { username: 'test-user' } } })
+
+      sessionService.getSession.mockResolvedValue(session)
+
+      const requestHandler = sessionsController.show()
+
+      await requestHandler(requestWithParams, response, next)
+
+      expect(auditService.sendAuditMessage).toHaveBeenCalledWith({
+        action: Page.VIEW_SESSION_APPOINTMENTS,
+        username: 'test-user',
+        details: params,
+        correlationId: 'request-id',
+        subjectType: 'CRN',
+        subjectId: appointmentSummary.offender.crn,
       })
     })
 

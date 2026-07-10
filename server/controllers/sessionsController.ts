@@ -5,9 +5,13 @@ import LocationUtils from '../utils/locationUtils'
 import Offender from '../models/offender'
 import paths from '../paths'
 import AppointmentUtils from '../utils/appointmentUtils'
+import AuditService, { Page } from '../services/auditService'
 
 export default class SessionsController {
-  constructor(private readonly sessionService: SessionService) {}
+  constructor(
+    private readonly auditService: AuditService,
+    private readonly sessionService: SessionService,
+  ) {}
 
   show(): RequestHandler {
     return async (_req: Request, res: Response) => {
@@ -20,6 +24,21 @@ export default class SessionsController {
       }
 
       const session = await this.sessionService.getSession(request)
+
+      await Promise.all(
+        session.appointmentSummaries
+          .filter(appointment => appointment.offender.crn)
+          .map(appointment =>
+            this.auditService.sendAuditMessage({
+              action: Page.VIEW_SESSION_APPOINTMENTS,
+              username: res.locals.user.username,
+              details: _req.params,
+              correlationId: _req.id,
+              subjectType: 'CRN',
+              subjectId: appointment.offender.crn,
+            }),
+          ),
+      )
 
       const appointmentSummaries = session.appointmentSummaries.map(appointment => {
         return {

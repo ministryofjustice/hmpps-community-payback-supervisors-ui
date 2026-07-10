@@ -5,6 +5,7 @@ import { generateErrorSummary } from '../../utils/errorUtils'
 import { AppointmentArrivedAction, AppointmentOutcomeForm, AppointmentParams } from '../../@types/user-defined'
 import paths from '../../paths'
 import AppointmentFormService from '../../services/appointmentFormService'
+import setCrnAuditSubject from '../../utils/auditUtils'
 
 export default class StartTimeController {
   constructor(
@@ -22,6 +23,8 @@ export default class StartTimeController {
         appointmentId,
         username: res.locals.user.username,
       })
+
+      setCrnAuditSubject(res, appointment.offender.crn)
 
       let formData: AppointmentOutcomeForm
       if (formId) {
@@ -48,6 +51,8 @@ export default class StartTimeController {
         appointmentId,
         username: res.locals.user.username,
       })
+
+      setCrnAuditSubject(res, appointment.offender.crn)
 
       const formId = _req.query.form?.toString()
       if (!formId) {

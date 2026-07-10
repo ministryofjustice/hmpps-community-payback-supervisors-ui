@@ -5,6 +5,7 @@ import { AppointmentEndTimeAction, AppointmentOutcomeForm, AppointmentParams } f
 import EndTimePage from '../../pages/appointments/update/endTimePage'
 import AppointmentFormService from '../../services/appointmentFormService'
 import paths from '../../paths'
+import setCrnAuditSubject from '../../utils/auditUtils'
 
 export default class EndTimeController {
   constructor(
@@ -22,6 +23,8 @@ export default class EndTimeController {
         appointmentId,
         username: res.locals.user.username,
       })
+
+      setCrnAuditSubject(res, appointment.offender.crn)
 
       let formData: AppointmentOutcomeForm
       if (formId) {
@@ -52,6 +55,8 @@ export default class EndTimeController {
         appointmentId,
         username: res.locals.user.username,
       })
+
+      setCrnAuditSubject(res, appointment.offender.crn)
 
       const page = new EndTimePage(action, formId, _req.body)
       const formData = await this.appointmentFormService.getForm(formId, res.locals.user.username)

@@ -5,6 +5,7 @@ import { generateErrorSummary } from '../../utils/errorUtils'
 import { AppointmentParams } from '../../@types/user-defined'
 import AttendanceOutcomePage from '../../pages/appointments/update/attendanceOutcomePage'
 import AppointmentFormService from '../../services/appointmentFormService'
+import setCrnAuditSubject from '../../utils/auditUtils'
 
 export default class AttendanceOutcomeController {
   constructor(
@@ -19,6 +20,8 @@ export default class AttendanceOutcomeController {
         ...(_req.params as unknown as AppointmentParams),
         username: res.locals.user.username,
       })
+      setCrnAuditSubject(res, appointment.offender.crn)
+
       const outcomes = await this.referenceDataService.getContactOutcomes(res.locals.user.username)
 
       const page = new AttendanceOutcomePage({
@@ -46,6 +49,8 @@ export default class AttendanceOutcomeController {
         ...appointmentParams,
         username: res.locals.user.username,
       })
+
+      setCrnAuditSubject(res, appointment.offender.crn)
 
       const outcomes = await this.referenceDataService.getContactOutcomes(res.locals.user.username)
 

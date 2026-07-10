@@ -3,6 +3,7 @@ import AppointmentService from '../../services/appointmentService'
 import { AppointmentParams, GetAppointmentRequest } from '../../@types/user-defined'
 import AppointmentShowDetailsPage from '../../pages/appointments/appointmentShowDetailsPage'
 import ReferenceDataService from '../../services/referenceDataService'
+import setCrnAuditSubject from '../../utils/auditUtils'
 
 export default class ShowDetailsController {
   constructor(
@@ -21,6 +22,8 @@ export default class ShowDetailsController {
       }
 
       const appointment = await this.appointmentService.getAppointment(request)
+
+      setCrnAuditSubject(res, appointment.offender.crn)
 
       const contactOutcome = appointment.contactOutcomeCode
         ? await this.referenceDataService.getContactOutcome(res.locals.user.username, appointment.contactOutcomeCode)

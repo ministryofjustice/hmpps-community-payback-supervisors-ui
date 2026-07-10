@@ -11,6 +11,7 @@ import ReviewPage from '../../pages/appointments/update/reviewPage'
 import { UpdateAppointmentOutcomeDto } from '../../@types/shared/models/UpdateAppointmentOutcomeDto'
 import { AppointmentDto, ContactOutcomeDto } from '../../@types/shared'
 import SupervisorService from '../../services/supervisorService'
+import setCrnAuditSubject from '../../utils/auditUtils'
 
 export default class NotesController {
   constructor(
@@ -26,6 +27,8 @@ export default class NotesController {
         ...(_req.params as unknown as AppointmentParams),
         username: res.locals.user.username,
       })
+
+      setCrnAuditSubject(res, appointment.offender.crn)
 
       const page = new NotesPage({
         action,
@@ -55,6 +58,8 @@ export default class NotesController {
         appointmentId,
         username: res.locals.user.username,
       })
+
+      setCrnAuditSubject(res, appointment.offender.crn)
 
       const formData = await this.appointmentFormService.getForm(formId, res.locals.user.username)
       const notesPage = new NotesPage({
@@ -103,6 +108,8 @@ export default class NotesController {
         ...appointmentParams,
         username: res.locals.user.username,
       })
+
+      setCrnAuditSubject(res, appointment.offender.crn)
 
       const formData = await this.appointmentFormService.getForm(formId, res.locals.user.username)
 

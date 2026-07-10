@@ -7,7 +7,7 @@ import IndexController from './indexController'
 import StaticController from './staticController'
 
 export const controllers = (services: Services) => {
-  const sessionsController = new SessionsController(services.sessionService)
+  const sessionsController = new SessionsController(services.auditService, services.sessionService)
   const indexController = new IndexController(services.sessionService, services.supervisorService)
   const staticController = new StaticController()
 
