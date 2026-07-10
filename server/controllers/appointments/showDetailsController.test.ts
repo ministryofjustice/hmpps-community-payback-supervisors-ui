@@ -43,6 +43,10 @@ describe('ShowDetailsController', () => {
 
       await requestHandler(request, response, next)
 
+      expect(response.locals.audit).toEqual({
+        subjectType: 'CRN',
+        subjectId: appointment.offender.crn,
+      })
       expect(response.render).toHaveBeenCalledWith('appointments/show', viewData)
     })
   })

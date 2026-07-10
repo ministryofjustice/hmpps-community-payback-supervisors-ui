@@ -4,6 +4,7 @@ import { generateErrorSummary } from '../../utils/errorUtils'
 import { AppointmentCompletedAction, AppointmentParams } from '../../@types/user-defined'
 import CompliancePage from '../../pages/appointments/update/compliancePage'
 import AppointmentFormService from '../../services/appointmentFormService'
+import setCrnAuditSubject from '../../utils/auditUtils'
 
 export default class ComplianceController {
   constructor(
@@ -21,6 +22,8 @@ export default class ComplianceController {
         username: res.locals.user.username,
       })
 
+      setCrnAuditSubject(res, appointment.offender.crn)
+
       const page = new CompliancePage(action, formId, {})
       const formData = await this.appointmentFormService.getForm(formId, res.locals.user.username)
 
@@ -37,6 +40,8 @@ export default class ComplianceController {
         ...appointmentParams,
         username: res.locals.user.username,
       })
+
+      setCrnAuditSubject(res, appointment.offender.crn)
 
       const page = new CompliancePage(action, formId, _req.body)
       const formData = await this.appointmentFormService.getForm(formId, res.locals.user.username)

@@ -3,6 +3,7 @@ import AppointmentService from '../../services/appointmentService'
 import paths from '../../paths'
 import { AppointmentParams, GetAppointmentRequest } from '../../@types/user-defined'
 import Offender from '../../models/offender'
+import setCrnAuditSubject from '../../utils/auditUtils'
 
 export default class ConfirmController {
   constructor(private readonly appointmentService: AppointmentService) {}
@@ -18,6 +19,8 @@ export default class ConfirmController {
       }
 
       const appointment = await this.appointmentService.getAppointment(request)
+      setCrnAuditSubject(res, appointment.offender.crn)
+
       const offender = new Offender(appointment.offender)
 
       res.render('appointments/update/confirm', {
@@ -40,6 +43,8 @@ export default class ConfirmController {
       }
 
       const appointment = await this.appointmentService.getAppointment(request)
+      setCrnAuditSubject(res, appointment.offender.crn)
+
       const { name } = new Offender(appointment.offender)
 
       res.render('appointments/update/confirm', {
