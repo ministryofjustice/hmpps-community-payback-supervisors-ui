@@ -24,6 +24,8 @@ export type UpdateAppointmentDto = {
     contactOutcomeCode?: string | null;
     attendanceData?: (AttendanceDataDto | null);
     supervisorOfficerCode: string;
+    supervisorTeamCode?: string | null;
+    projectCode?: string | null;
     notes?: string | null;
     alertActive?: boolean | null;
     /**
