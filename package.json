@@ -126,7 +126,7 @@
     "nunjucks": {
       "chokidar": "$chokidar"
     },
-    "diff": "^8.0.4",
+    "diff": "^9.0.0",
     "@aws-sdk/xml-builder": {
       "fast-xml-parser": "^5.9.3"
     }
