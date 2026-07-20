@@ -4,10 +4,10 @@ on:
   workflow_call:
     inputs:
       node_version_file:
-        description: "Passed to setup-node action to specify where to source the version of node from"
+        description: 'Passed to setup-node action to specify where to source the version of node from'
         required: false
         type: string
-        default: ".nvmrc"
+        default: '.nvmrc'
 
 permissions:
   contents: read
@@ -28,7 +28,7 @@ jobs:
           name: npm_build_artifacts
       - name: restore cache
         id: restore-cache
-        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         env:
           cache-name: node-modules
         with:
