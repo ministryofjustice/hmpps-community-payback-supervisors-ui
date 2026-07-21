@@ -2,8 +2,9 @@ import { RestClient, AuthenticationClient, asSystem } from '@ministryofjustice/h
 import config from '../config'
 import logger from '../../logger'
 import paths from '../paths/api'
-import { SessionDto } from '../@types/shared'
-import { GetNextSessionsRequest, GetSessionRequest, SessionSummariesDto } from '../@types/user-defined'
+import { PagedModelSessionSummaryDto, SessionDto } from '../@types/shared'
+import { GetNextSessionsRequest, GetSessionRequest } from '../@types/user-defined'
+import { createQueryString } from '../utils/utils'
 
 export default class SessionClient extends RestClient {
   constructor(authenticationClient: AuthenticationClient) {
@@ -15,8 +16,9 @@ export default class SessionClient extends RestClient {
     return (await this.get({ path }, asSystem(username))) as SessionDto
   }
 
-  async nextSessions({ username, teamCode, providerCode }: GetNextSessionsRequest): Promise<SessionSummariesDto> {
-    const path = paths.sessions.next({ providerCode, teamCode })
-    return (await this.get({ path }, asSystem(username))) as SessionSummariesDto
+  async nextSessions({ username, teamCodes, page }: GetNextSessionsRequest): Promise<PagedModelSessionSummaryDto> {
+    const path = paths.sessions.next({})
+    const query = createQueryString({ teamCodes, page })
+    return (await this.get({ path, query }, asSystem(username))) as PagedModelSessionSummaryDto
   }
 }

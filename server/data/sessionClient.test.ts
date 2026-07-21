@@ -43,18 +43,18 @@ describe('SessionClient', () => {
 
   describe('nextSession', () => {
     it('should make a GET request to the nextSession path using user token and return the response body', async () => {
-      const providerCode = '1234'
-      const teamCode = '5678'
+      const teamCodes = ['5678']
       const username = 'some-username'
+      const page = 1
 
       const sessionSummary = sessionSummaryFactory.build()
 
       nock(config.apis.communityPaybackApi.url)
-        .get(paths.sessions.next({ providerCode, teamCode }))
+        .get(`${paths.sessions.next.pattern}?teamCodes=${teamCodes[0]}&page=${page}`)
         .matchHeader('authorization', 'Bearer test-system-token')
         .reply(200, sessionSummary)
 
-      const response = await sessionClient.nextSessions({ username, providerCode, teamCode })
+      const response = await sessionClient.nextSessions({ username, teamCodes, page })
 
       expect(response).toEqual(sessionSummary)
     })

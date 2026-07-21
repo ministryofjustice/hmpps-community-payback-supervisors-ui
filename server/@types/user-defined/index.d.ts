@@ -10,8 +10,8 @@ export interface GetSessionRequest extends BaseRequest {
 }
 
 export interface GetNextSessionsRequest extends BaseRequest {
-  teamCode: string
-  providerCode: string
+  teamCodes: Array<string>
+  page: number
 }
 
 export type SessionSummariesDto = {

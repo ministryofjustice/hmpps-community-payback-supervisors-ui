@@ -20,19 +20,14 @@ export default class indexController {
         return res.render('pages/index')
       }
 
-      const sessions = sessionResponse
-        .filter(session => session !== null)
-        .sort((a, b) => {
-          return +DateTimeFormats.isoToDateObj(a.date) - +DateTimeFormats.isoToDateObj(b.date)
-        })
-        .map(session => {
-          return {
-            ...session,
-            date: DateTimeFormats.isoDateToUIDate(session.date, { format: 'dashed' }),
-            formattedDate: DateTimeFormats.isoDateToUIDate(session.date, { format: 'medium' }),
-            path: paths.sessions.show({ ...session }),
-          }
-        })
+      const sessions = sessionResponse.map(session => {
+        return {
+          ...session,
+          date: DateTimeFormats.isoDateToUIDate(session.date, { format: 'dashed' }),
+          formattedDate: DateTimeFormats.isoDateToUIDate(session.date, { format: 'medium' }),
+          path: paths.sessions.show({ ...session }),
+        }
+      })
 
       return res.render('pages/index', {
         sessions,

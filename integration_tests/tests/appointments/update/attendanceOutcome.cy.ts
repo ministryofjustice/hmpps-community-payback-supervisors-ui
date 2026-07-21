@@ -41,7 +41,7 @@ context('Attendance outcome', () => {
     const supervisor = supervisorFactory.build()
     const allocations = [sessionSummaryFactory.build({ date: '2025-09-15' })]
     cy.task('stubFindSupervisor', { supervisor })
-    cy.task('stubNextSessions', { sessionSummaries: { allocations }, supervisorTeam: supervisor.unpaidWorkTeams[0] })
+    cy.task('stubNextSessions', { sessionSummaries: { allocations }, teamCodes: [supervisor.unpaidWorkTeams[0].code] })
 
     const attendedOutcome = contactOutcomeFactory.build({ code: 'ATTC' })
     const contactOutcomes = contactOutcomesFactory.build({ contactOutcomes: [attendedOutcome] })
