@@ -32,28 +32,28 @@ describe('ProviderService', () => {
   })
 
   it('should call nextSession on the client and return its result', async () => {
-    const team = supervisorTeamFactory.build()
-    const supervisor = supervisorFactory.build({ unpaidWorkTeams: [team] })
+    const unpaidWorkTeams = supervisorTeamFactory.buildList(2)
+    const supervisor = supervisorFactory.build({ unpaidWorkTeams })
     const allocations = sessionSummaryFactory.buildList(2)
 
-    sessionClient.nextSessions.mockResolvedValue({ allocations })
+    sessionClient.nextSessions.mockResolvedValue({ content: allocations, page: { totalPages: 1 } })
     const result = await sessionService.getNextSessions('some-username', supervisor)
 
     expect(sessionClient.nextSessions).toHaveBeenCalledTimes(1)
     expect(result).toEqual(allocations)
   })
 
-  it('should make a call to nextSession for each unpaid work team and return one list', async () => {
+  it('should call nextSession multiple times on the client for multiple pages and return its result', async () => {
     const unpaidWorkTeams = supervisorTeamFactory.buildList(2)
     const supervisor = supervisorFactory.build({ unpaidWorkTeams })
-    const firstTeamAllocations = sessionSummaryFactory.buildList(2)
-    const secondTeamAllocations = sessionSummaryFactory.buildList(1)
+    const firstAllocations = sessionSummaryFactory.buildList(2)
+    const secondAllocations = sessionSummaryFactory.buildList(1)
 
-    sessionClient.nextSessions.mockResolvedValueOnce({ allocations: firstTeamAllocations })
-    sessionClient.nextSessions.mockResolvedValueOnce({ allocations: secondTeamAllocations })
-
+    sessionClient.nextSessions.mockResolvedValueOnce({ content: firstAllocations, page: { totalPages: 2 } })
+    sessionClient.nextSessions.mockResolvedValueOnce({ content: secondAllocations, page: { totalPages: 2 } })
     const result = await sessionService.getNextSessions('some-username', supervisor)
+
     expect(sessionClient.nextSessions).toHaveBeenCalledTimes(2)
-    expect(result).toEqual([...firstTeamAllocations, ...secondTeamAllocations])
+    expect(result).toEqual([...firstAllocations, ...secondAllocations])
   })
 })

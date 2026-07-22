@@ -1,7 +1,7 @@
 import type { SuperAgentRequest } from 'superagent'
-import { stubFor } from './wiremock'
+import { stubFor, arrayToQueryStubMappings } from './wiremock'
 import paths from '../../server/paths/api'
-import type { SessionDto, SupervisorTeamDto } from '../../server/@types/shared'
+import type { SessionDto } from '../../server/@types/shared'
 import { SessionSummariesDto } from '../../server/@types/user-defined'
 
 export default {
@@ -21,24 +21,27 @@ export default {
   },
   stubNextSessions: ({
     sessionSummaries,
-    supervisorTeam,
+    teamCodes,
   }: {
     sessionSummaries: SessionSummariesDto
-    supervisorTeam: SupervisorTeamDto
+    teamCodes: string[]
   }): SuperAgentRequest => {
+    const query = {
+      teamCodes: {
+        includes: arrayToQueryStubMappings(teamCodes),
+      },
+    }
     return stubFor({
       request: {
         method: 'GET',
-        urlPathPattern: paths.sessions.next({
-          providerCode: supervisorTeam.provider.code,
-          teamCode: supervisorTeam.code,
-        }),
+        urlPath: paths.sessions.next.pattern,
+        queryParameters: query,
       },
 
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: sessionSummaries,
+        jsonBody: { content: sessionSummaries.allocations, page: { totalPages: 1 } },
       },
     })
   },

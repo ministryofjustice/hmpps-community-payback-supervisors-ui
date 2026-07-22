@@ -59,7 +59,7 @@ context('Home', () => {
     const sessionSummaries = { allocations: [sessionSummary, sessionSummary2] } as SessionSummariesDto
 
     cy.task('stubFindSupervisor', { supervisor })
-    cy.task('stubNextSessions', { sessionSummaries, supervisorTeam: supervisor.unpaidWorkTeams[0] })
+    cy.task('stubNextSessions', { sessionSummaries, teamCodes: [supervisor.unpaidWorkTeams[0].code] })
 
     // Given I am logged in
     cy.signIn()
@@ -85,24 +85,19 @@ context('Home', () => {
   it('shows a list of next sessions for a supervisor on two teams', () => {
     const unpaidWorkTeams = supervisorTeamFactory.buildList(2)
     const supervisor = supervisorFactory.build({ unpaidWorkTeams })
-    const firstTeamAllocations = sessionSummaryFactory.buildList(2)
-    const secondTeamAllocations = sessionSummaryFactory.buildList(1)
+    const allocations = sessionSummaryFactory.buildList(4)
 
     cy.task('stubFindSupervisor', { supervisor })
     cy.task('stubNextSessions', {
-      sessionSummaries: { allocations: firstTeamAllocations },
-      supervisorTeam: supervisor.unpaidWorkTeams[0],
-    })
-    cy.task('stubNextSessions', {
-      sessionSummaries: { allocations: secondTeamAllocations },
-      supervisorTeam: supervisor.unpaidWorkTeams[1],
+      sessionSummaries: { allocations },
+      teamCodes: unpaidWorkTeams.map(team => team.code),
     })
 
     // Given I am logged in
     cy.signIn()
 
     //  Then I see session details for all of the sessions for my teams
-    const page = Page.verifyOnPage(IndexPage, [...firstTeamAllocations, ...secondTeamAllocations])
+    const page = Page.verifyOnPage(IndexPage, allocations)
     page.shouldShowSessionSummaryDetails()
   })
 })
@@ -115,7 +110,7 @@ context('Session', () => {
     const supervisor = supervisorFactory.build()
     const allocations = [sessionSummaryFactory.build({ date: '2025-09-15' })]
     cy.task('stubFindSupervisor', { supervisor })
-    cy.task('stubNextSessions', { sessionSummaries: { allocations }, supervisorTeam: supervisor.unpaidWorkTeams[0] })
+    cy.task('stubNextSessions', { sessionSummaries: { allocations }, teamCodes: [supervisor.unpaidWorkTeams[0].code] })
 
     const contactOutcomes = contactOutcomesFactory.build({
       contactOutcomes: [contactOutcomeFactory.build({ enforceable: true }), contactOutcomeFactory.build()],

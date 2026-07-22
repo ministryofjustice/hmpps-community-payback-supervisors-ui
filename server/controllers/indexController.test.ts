@@ -33,18 +33,14 @@ describe('IndexController', () => {
 
       await requestHandler(request, response, next)
 
-      const sessions = sessionResult
-        .sort((a, b) => {
-          return +DateTimeFormats.isoToDateObj(a.date) - +DateTimeFormats.isoToDateObj(b.date)
-        })
-        .map(session => {
-          return {
-            ...session,
-            date: DateTimeFormats.isoDateToUIDate(session.date, { format: 'dashed' }),
-            formattedDate: DateTimeFormats.isoDateToUIDate(session.date, { format: 'medium' }),
-            path: paths.sessions.show({ ...session }),
-          }
-        })
+      const sessions = sessionResult.map(session => {
+        return {
+          ...session,
+          date: DateTimeFormats.isoDateToUIDate(session.date, { format: 'dashed' }),
+          formattedDate: DateTimeFormats.isoDateToUIDate(session.date, { format: 'medium' }),
+          path: paths.sessions.show({ ...session }),
+        }
+      })
 
       expect(response.render).toHaveBeenCalledWith('pages/index', {
         sessions,

@@ -10,18 +10,23 @@ export default class SessionService {
   }
 
   async getNextSessions(username: string, supervisor: SupervisorDto): Promise<SessionSummaryDto[]> {
-    const nextSessions: SessionSummaryDto[] = []
-    const { unpaidWorkTeams } = supervisor
+    const teamCodes = supervisor.unpaidWorkTeams.map(team => team.code)
+
+    const nextSessions = []
+
+    let page = 0
+    let total = Number.MAX_VALUE
 
     /* eslint-disable no-await-in-loop */
-    for (let i = 0; i < unpaidWorkTeams.length; i += 1) {
-      const team = unpaidWorkTeams[i]
+    while (page < total) {
       const result = await this.sessionClient.nextSessions({
         username,
-        providerCode: team.provider.code,
-        teamCode: team.code,
+        teamCodes,
+        page,
       })
-      nextSessions.push(...result.allocations)
+      total = result.page.totalPages
+      nextSessions.push(...result.content)
+      page += 1
     }
     /* eslint-enable no-await-in-loop */
 

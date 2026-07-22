@@ -16,22 +16,18 @@ export default class IndexPage extends Page {
   clickViewSession = () => cy.get('a').contains('View details').click()
 
   shouldShowSessionSummaryDetails() {
-    this.sessionSummaries
-      .sort((a, b) => {
-        return +DateTimeFormats.isoToDateObj(a.date) - +DateTimeFormats.isoToDateObj(b.date)
-      })
-      .forEach((sessionSummary, i) => {
-        cy.get('[data-cy=session-details]')
-          .eq(i)
-          .within(() => {
-            cy.get('h2').should(
-              'contain.text',
-              DateTimeFormats.isoDateToUIDate(sessionSummary.date, { format: 'medium' }),
-            )
-            cy.get('h3').should('contain.text', sessionSummary.projectName)
-            cy.get('p').should('contain.text', sessionSummary.numberOfOffendersAllocated)
-          })
-      })
+    this.sessionSummaries.forEach((sessionSummary, i) => {
+      cy.get('[data-cy=session-details]')
+        .eq(i)
+        .within(() => {
+          cy.get('h2').should(
+            'contain.text',
+            DateTimeFormats.isoDateToUIDate(sessionSummary.date, { format: 'medium' }),
+          )
+          cy.get('h3').should('contain.text', sessionSummary.projectName)
+          cy.get('p').should('contain.text', sessionSummary.numberOfOffendersAllocated)
+        })
+    })
   }
 
   shouldContainPersonTextForSession(i: number) {
