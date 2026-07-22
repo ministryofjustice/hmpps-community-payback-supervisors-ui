@@ -70,6 +70,7 @@ describe('AppointmentShowDetailsPage', () => {
           endTime,
           contactOutcomeCode: null,
           pickUpData: pickupDataFactory.build(),
+          date: '2026-01-01',
         })
         const offender = {
           name: 'Sam Smith',
