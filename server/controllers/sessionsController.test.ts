@@ -10,6 +10,7 @@ import Offender from '../models/offender'
 import appointmentSummaryFactory from '../testutils/factories/appointmentSummaryFactory'
 import paths from '../paths'
 import AppointmentUtils from '../utils/appointmentUtils'
+import * as ErrorUtils from '../utils/errorUtils'
 
 jest.mock('../models/offender')
 
@@ -23,6 +24,7 @@ describe('SessionsController', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
+    jest.resetAllMocks()
     sessionsController = new SessionsController(auditService, sessionService)
   })
 
@@ -73,6 +75,35 @@ describe('SessionsController', () => {
           ],
         },
       })
+    })
+
+    it('should render error messages if any were present', async () => {
+      const appointmentSummary = appointmentSummaryFactory.build()
+
+      const session = sessionFactory.build({ appointmentSummaries: [appointmentSummary] })
+
+      const params = { projectCode: session.projectCode, date: session.date }
+
+      const requestWithParams = createMock<Request>({ id: 'request-id', params })
+      const response = createMock<Response>({
+        locals: { user: { username: 'test-user' }, errorMessages: ['Some error'] },
+      })
+
+      sessionService.getSession.mockResolvedValue(session)
+
+      const requestHandler = sessionsController.show()
+
+      await requestHandler(requestWithParams, response, next)
+
+      const errorList = [{ text: 'Some error' }]
+      jest.spyOn(ErrorUtils, 'generateErrorTextList').mockReturnValue(errorList)
+
+      expect(response.render).toHaveBeenCalledWith(
+        'sessions/show',
+        expect.objectContaining({
+          errorList,
+        }),
+      )
     })
 
     it('should audit each appointment in the session against the offender CRN', async () => {

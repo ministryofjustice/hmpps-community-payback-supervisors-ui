@@ -1,6 +1,6 @@
 import type { Request, RequestHandler, Response } from 'express'
 import AppointmentService from '../../services/appointmentService'
-import { generateErrorSummary } from '../../utils/errorUtils'
+import { catchApiValidationErrorOrPropagate, generateErrorSummary } from '../../utils/errorUtils'
 import { AppointmentNotesAction, AppointmentOutcomeForm, AppointmentParams } from '../../@types/user-defined'
 import AppointmentFormService from '../../services/appointmentFormService'
 import NotesPage, { NotesQuery } from '../../pages/appointments/update/notesPage'
@@ -12,6 +12,7 @@ import { UpdateAppointmentOutcomeDto } from '../../@types/shared/models/UpdateAp
 import { AppointmentDto, ContactOutcomeDto } from '../../@types/shared'
 import SupervisorService from '../../services/supervisorService'
 import setCrnAuditSubject from '../../utils/auditUtils'
+import paths from '../../paths'
 
 export default class NotesController {
   constructor(
@@ -148,13 +149,22 @@ export default class NotesController {
 
       const payload: UpdateAppointmentOutcomeDto = notesPage.buildPayload(appointment, formData, supervisor)
 
-      await this.appointmentService.saveAppointment({
-        username: res.locals.user.username,
-        projectCode: appointmentParams.projectCode,
-        data: payload,
-      })
+      try {
+        await this.appointmentService.saveAppointment({
+          username: res.locals.user.username,
+          projectCode: appointmentParams.projectCode,
+          data: payload,
+        })
 
-      return res.redirect(notesPage.nextPath(appointmentParams.projectCode, appointmentParams.appointmentId))
+        return res.redirect(notesPage.nextPath(appointmentParams.projectCode, appointmentParams.appointmentId))
+      } catch (error) {
+        return catchApiValidationErrorOrPropagate(
+          _req,
+          res,
+          error,
+          paths.sessions.show({ projectCode: appointment.projectCode, date: appointment.date }),
+        )
+      }
     }
   }
 
