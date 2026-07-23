@@ -49,4 +49,10 @@ export default class SessionPage extends Page {
       cy.contains('li', `${offender.forename} ${offender.surname}`).should('contain.text', appointmentStatuses[i])
     })
   }
+
+  override shouldShowErrorSummary(message: string) {
+    cy.get('[data-testid="error-summary"]').within(() => {
+      cy.get('li').contains(message)
+    })
+  }
 }

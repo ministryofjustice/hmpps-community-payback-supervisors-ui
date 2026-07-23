@@ -20,6 +20,12 @@
 //      When I am on the confirm page
 //      And I click the return to session link
 //      Then I am taken to the session page
+//
+//  Scenario: 400 error from the API
+//    Given I am on the notes page
+//    And I navigate to the review page
+//    And the API returns an error on submit
+//    Then I am taken to the show session page with an error showing
 
 import appointmentFactory from '../../../../server/testutils/factories/appointmentFactory'
 import appointmentSummaryFactory from '../../../../server/testutils/factories/appointmentSummaryFactory'
@@ -39,6 +45,7 @@ import {
   contactOutcomeFactory,
   contactOutcomesFactory,
 } from '../../../../server/testutils/factories/contactOutcomeFactory'
+import { SessionSummariesDto } from '../../../../server/@types/user-defined'
 
 context('Log start time ', () => {
   let appointment: AppointmentDto
@@ -131,6 +138,49 @@ context('Log start time ', () => {
 
       // Then I am taken to the session page
       Page.verifyOnPage(SessionPage, session)
+    })
+  })
+
+  // Scenario: 400 error from the API
+  describe('absent with error', () => {
+    it('navigates from confirm absent page to session page', () => {
+      const sessionSummary = sessionSummaryFactory.build({
+        date: '2025-09-15',
+        projectCode: 'N56123456',
+        numberOfOffendersAllocated: 1,
+      })
+      const supervisor = supervisorFactory.build()
+      const sessionSummaries = { allocations: [sessionSummary] } as SessionSummariesDto
+
+      cy.task('stubFindSupervisor', { supervisor })
+      cy.task('stubNextSessions', { sessionSummaries, teamCodes: [supervisor.unpaidWorkTeams[0].code] })
+
+      const appointmentSummaries = appointmentSummaryFactory.buildList(3)
+      const session = sessionFactory.build({ appointmentSummaries })
+      cy.task('stubFindSession', { session })
+      appointment = appointmentFactory.build({ projectCode: session.projectCode, date: session.date })
+
+      cy.task('stubFindAppointment', { appointment })
+      cy.task('stubUpdateAppointmentOutcomeWithError', { appointment, userMessage: 'Unable to update appointment' })
+
+      const form = appointmentOutcomeFormFactory.build()
+      cy.task('stubGetAppointmentForm', { form, formId: 'some-form' })
+      cy.task('stubSaveAppointmentForm', { formId: 'some-form' })
+
+      // Given I am on the notes page
+      const notesPage = NotesPage.visit(appointment, 'absent')
+
+      // And I navigate to the review page
+      notesPage.clickSubmit()
+
+      // And the API returns an error on submit
+      const reviewPage = Page.verifyOnPage(ReviewPage, appointment, 'absent')
+      reviewPage.alertPractitionerQuestion.checkOptionWithValue('yes')
+      reviewPage.clickSubmit()
+
+      // Then I am taken to the show session page with an error showing
+      const sessionPage = Page.verifyOnPage(SessionPage, session)
+      sessionPage.shouldShowErrorSummary('Unable to update appointment')
     })
   })
 })

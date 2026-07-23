@@ -40,4 +40,32 @@ export default {
       },
     })
   },
+
+  stubUpdateAppointmentOutcomeWithError: ({
+    appointment,
+    userMessage,
+  }: {
+    appointment: AppointmentDto
+    userMessage: string
+  }): SuperAgentRequest => {
+    const pattern = paths.appointments.outcome({
+      projectCode: appointment.projectCode,
+      appointmentId: appointment.id.toString(),
+    })
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPathPattern: pattern,
+      },
+      response: {
+        status: 400,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          status: 400,
+          userMessage,
+          developerMessage: 'Bad request',
+        },
+      },
+    })
+  },
 }
