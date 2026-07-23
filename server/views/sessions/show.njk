@@ -1,5 +1,6 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% extends "../partials/layout.njk" %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% set pageTitle = project.projectName %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -36,6 +37,16 @@
     </div>
   </div>
 </div>
+
+{% if errorList | length %}
+  {{ govukErrorSummary({
+    attributes: {
+      "data-testid": "error-summary"
+    },
+    titleText: "There is a problem",
+    errorList: errorList
+  }) }}
+{% endif %}
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
