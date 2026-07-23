@@ -6,6 +6,7 @@ import Offender from '../models/offender'
 import paths from '../paths'
 import AppointmentUtils from '../utils/appointmentUtils'
 import AuditService, { Page } from '../services/auditService'
+import { generateErrorTextList } from '../utils/errorUtils'
 
 export default class SessionsController {
   constructor(
@@ -22,6 +23,8 @@ export default class SessionsController {
         projectCode,
         date: date.toString(),
       }
+
+      const errorList = generateErrorTextList(res.locals.errorMessages)
 
       const session = await this.sessionService.getSession(request)
 
@@ -59,6 +62,7 @@ export default class SessionsController {
           formattedDate: DateTimeFormats.isoDateToUIDate(session.date),
           formattedLocation: LocationUtils.locationToParagraph(session.location),
         },
+        errorList,
       })
     }
   }
