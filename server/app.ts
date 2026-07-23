@@ -1,5 +1,6 @@
 import express from 'express'
 import * as Sentry from '@sentry/node'
+import flash from 'connect-flash'
 
 import createError from 'http-errors'
 
@@ -42,6 +43,13 @@ export default function createApp(controllers: Controllers, services: Services):
   app.use(authorisationMiddleware([config.requiredSupervisorRole]))
   app.use(setUpCsrf())
   app.use(setUpCurrentUser())
+
+  app.use((req, res, next) => {
+    res.locals.successMessages = req.flash('success')
+    res.locals.errorMessages = req.flash('error')
+    return next()
+  })
+  app.use(flash())
 
   app.use(routes(controllers))
 
