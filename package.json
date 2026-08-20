@@ -46,7 +46,7 @@
     "@ministryofjustice/hmpps-rest-client": "^2.2.0",
     "@playwright/test": "1.62.1",
     "@sentry/node": "^10.69.0",
-    "applicationinsights": "^2.9.8",
+    "applicationinsights": "^3.16.0",
     "body-parser": "^2.3.0",
     "bunyan": "^1.8.15",
     "bunyan-format": "^0.2.1",
