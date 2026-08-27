@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { AdjustmentDto } from './AdjustmentDto';
 import type { AttendanceDataDto } from './AttendanceDataDto';
 import type { EnforcementDto } from './EnforcementDto';
 import type { OffenderFullDto } from './OffenderFullDto';
@@ -51,5 +52,6 @@ export type AppointmentDto = {
     notes?: string | null;
     sensitive?: boolean | null;
     alertActive?: boolean | null;
+    adjustments: Array<AdjustmentDto>;
 };
 

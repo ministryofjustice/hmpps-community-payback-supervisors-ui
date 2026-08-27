@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
+export type { AdjustmentDto } from './models/AdjustmentDto';
 export type { AdjustmentReasonDto } from './models/AdjustmentReasonDto';
 export type { AdjustmentReasonsDto } from './models/AdjustmentReasonsDto';
 export type { AppointmentDto } from './models/AppointmentDto';
@@ -23,19 +24,16 @@ export type { OffenderLimitedDto } from './models/OffenderLimitedDto';
 export type { OffenderNotFoundDto } from './models/OffenderNotFoundDto';
 export type { PagedModelSessionSummaryDto } from './models/PagedModelSessionSummaryDto';
 export type { PageMetadata } from './models/PageMetadata';
-export type { PageMetaDto } from './models/PageMetaDto';
 export type { PickUpDataDto } from './models/PickUpDataDto';
 export type { PickUpLocationDto } from './models/PickUpLocationDto';
 export type { ProjectTypeDto } from './models/ProjectTypeDto';
 export type { ProjectTypesDto } from './models/ProjectTypesDto';
 export type { ProviderSummaryDto } from './models/ProviderSummaryDto';
 export type { SessionDto } from './models/SessionDto';
-export type { SessionSummariesDto } from './models/SessionSummariesDto';
 export type { SessionSummaryDto } from './models/SessionSummaryDto';
 export type { SupervisorDto } from './models/SupervisorDto';
 export type { SupervisorTeamDto } from './models/SupervisorTeamDto';
 export type { UpdateAppointmentDto } from './models/UpdateAppointmentDto';
-export type { UpdateAppointmentOutcomeDto } from './models/UpdateAppointmentOutcomeDto';
 export type { UpdateAppointmentOutcomeResultDto } from './models/UpdateAppointmentOutcomeResultDto';
 export type { UpdateAppointmentsDto } from './models/UpdateAppointmentsDto';
 export type { UpdateAppointmentsOutcomesResultDto } from './models/UpdateAppointmentsOutcomesResultDto';
