@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { AdjustmentDto } from './AdjustmentDto';
 import type { ContactOutcomeDto } from './ContactOutcomeDto';
 import type { OffenderFullDto } from './OffenderFullDto';
 import type { OffenderLimitedDto } from './OffenderLimitedDto';
@@ -35,5 +36,6 @@ export type AppointmentSummaryDto = {
     projectTypeName: string;
     projectTypeCode: string;
     notes?: string | null;
+    adjustments: Array<AdjustmentDto>;
 };
 

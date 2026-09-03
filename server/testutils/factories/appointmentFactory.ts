@@ -4,6 +4,7 @@ import { AppointmentDto } from '../../@types/shared'
 import offenderFullFactory from './offenderFullFactory'
 import attendanceDataFactory from './attendanceDataFactory'
 import enforcementDataFactory from './enforcementDataFactory'
+import adjustmentFactory from './adjustmentFactory'
 
 export default Factory.define<AppointmentDto>(() => ({
   id: faker.number.int(),
@@ -28,4 +29,5 @@ export default Factory.define<AppointmentDto>(() => ({
   notes: faker.string.alpha(30),
   sensitive: faker.datatype.boolean(),
   alertActive: faker.datatype.boolean(),
+  adjustments: adjustmentFactory.buildList(3),
 }))

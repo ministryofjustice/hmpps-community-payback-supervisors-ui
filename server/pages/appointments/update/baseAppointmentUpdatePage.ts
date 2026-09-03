@@ -1,4 +1,4 @@
-import { AppointmentDto, UpdateAppointmentOutcomeDto } from '../../../@types/shared'
+import { AppointmentDto, UpdateAppointmentDto } from '../../../@types/shared'
 import { ValidationErrors } from '../../../@types/user-defined'
 import Offender from '../../../models/offender'
 
@@ -28,7 +28,7 @@ export default abstract class BaseAppointmentUpdatePage<TBody> {
 
   protected abstract getValidationErrors(...args: Array<unknown>): ValidationErrors<TBody> | undefined
 
-  protected appointmentRequestBody(appointment: AppointmentDto): UpdateAppointmentOutcomeDto {
+  protected appointmentRequestBody(appointment: AppointmentDto): UpdateAppointmentDto {
     return {
       deliusId: appointment.id,
       deliusVersionToUpdate: appointment.version,
@@ -40,6 +40,7 @@ export default abstract class BaseAppointmentUpdatePage<TBody> {
       attendanceData: appointment.attendanceData,
       notes: null,
       supervisorOfficerCode: appointment.supervisorOfficerCode,
+      date: appointment.date,
     }
   }
 

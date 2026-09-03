@@ -5,7 +5,7 @@ import {
   ValidationErrors,
   YesOrNo,
 } from '../../../@types/user-defined'
-import { AppointmentDto, SupervisorDto, UpdateAppointmentOutcomeDto } from '../../../@types/shared'
+import { AppointmentDto, SupervisorDto, UpdateAppointmentDto } from '../../../@types/shared'
 import paths from '../../../paths'
 import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './baseAppointmentUpdatePage'
 import { pathWithQuery } from '../../../utils/utils'
@@ -93,8 +93,8 @@ export default class NotesPage extends BaseAppointmentUpdatePage<Body> {
     appointment: AppointmentDto,
     formData: AppointmentOutcomeForm,
     supervisor: SupervisorDto,
-  ): UpdateAppointmentOutcomeDto {
-    let payload: UpdateAppointmentOutcomeDto
+  ): UpdateAppointmentDto {
+    let payload: UpdateAppointmentDto
 
     if (this.action === 'absent') {
       payload = {
