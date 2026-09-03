@@ -33,7 +33,6 @@ import AppointmentPage from '../pages/appointment'
 import appointmentFactory from '../../server/testutils/factories/appointmentFactory'
 import sessionSummaryFactory from '../../server/testutils/factories/sessionSummaryFactory'
 import { contactOutcomeFactory, contactOutcomesFactory } from '../../server/testutils/factories/contactOutcomeFactory'
-import { SessionSummariesDto } from '../../server/@types/shared'
 import supervisorFactory from '../../server/testutils/factories/supervisorFactory'
 import supervisorTeamFactory from '../../server/testutils/factories/supervisorTeamFactory'
 
@@ -56,7 +55,7 @@ context('Home', () => {
     })
 
     const supervisor = supervisorFactory.build()
-    const sessionSummaries = { allocations: [sessionSummary, sessionSummary2] } as SessionSummariesDto
+    const sessionSummaries = { allocations: [sessionSummary, sessionSummary2] }
 
     cy.task('stubFindSupervisor', { supervisor })
     cy.task('stubNextSessions', { sessionSummaries, teamCodes: [supervisor.unpaidWorkTeams[0].code] })

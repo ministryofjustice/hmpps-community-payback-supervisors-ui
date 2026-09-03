@@ -8,7 +8,6 @@ import ComplianceReviewPage from '../../pages/appointments/update/complianceRevi
 import ReferenceDataService from '../../services/referenceDataService'
 import CompliancePage from '../../pages/appointments/update/compliancePage'
 import ReviewPage from '../../pages/appointments/update/reviewPage'
-import { UpdateAppointmentOutcomeDto } from '../../@types/shared/models/UpdateAppointmentOutcomeDto'
 import { AppointmentDto, ContactOutcomeDto } from '../../@types/shared'
 import SupervisorService from '../../services/supervisorService'
 import setCrnAuditSubject from '../../utils/auditUtils'
@@ -147,7 +146,7 @@ export default class NotesController {
         appointment,
       })
 
-      const payload: UpdateAppointmentOutcomeDto = notesPage.buildPayload(appointment, formData, supervisor)
+      const payload = notesPage.buildPayload(appointment, formData, supervisor)
 
       try {
         await this.appointmentService.saveAppointment({
