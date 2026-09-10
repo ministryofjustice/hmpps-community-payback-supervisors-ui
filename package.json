@@ -100,7 +100,7 @@
     "babel-jest": "^30.5.1",
     "chokidar": "^5.0.0",
     "concurrently": "^10.0.5",
-    "cypress": "15.21.1",
+    "cypress": "16.0.0",
     "esbuild": "^0.28.2",
     "esbuild-plugin-clean": "^1.0.1",
     "esbuild-plugin-copy": "^2.1.1",
