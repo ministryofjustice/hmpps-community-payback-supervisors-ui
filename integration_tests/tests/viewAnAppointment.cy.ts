@@ -70,7 +70,7 @@ context('viewAnAppointment', () => {
     // Then I should see the appointment, offender, and pick-up details
     appointmentPage.shouldShowAppointmentDetails()
     appointmentPage.shouldShowPickUpDetails()
-    appointmentPage.shouldShowOffenderDetails()
+    appointmentPage.shouldShowOffenderDetails(appointment.offender.crn)
     appointmentPage.shouldShowStatus('Scheduled')
   })
 

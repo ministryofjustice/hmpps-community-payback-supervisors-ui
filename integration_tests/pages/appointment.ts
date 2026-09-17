@@ -44,10 +44,6 @@ export default class AppointmentPage extends Page {
     cy.get('a').contains('Left site early').click()
   }
 
-  shouldShowOffenderDetails(): void {
-    cy.get('span').contains(this.appointment.offender.crn)
-  }
-
   shouldShowStatus(status: string) {
     this.sessionDetails.getValueWithLabel('Session status').should('contain.text', status)
   }

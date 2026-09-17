@@ -64,4 +64,8 @@ export default abstract class Page {
   shouldShowErrorSummary(field: string, errorMessage: string) {
     cy.get(`[data-cy-error-${field}]`).should('contain', errorMessage)
   }
+
+  shouldShowOffenderDetails(crn: string): void {
+    cy.get('.govuk-caption-l').should('contain.text', crn)
+  }
 }
