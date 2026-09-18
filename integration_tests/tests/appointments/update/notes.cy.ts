@@ -3,6 +3,10 @@
 //   I want to update the notes on for an offender
 //   So that I can track progress for an unpaid work order
 //
+//  Scenario: Showing the offender details
+//    Given I am on the notes page
+//    I can see the offender's CRN on the page
+//
 // Scenario: Validating the notes page
 //   Given I am on the notes page
 //   And I enter a note which is too long
@@ -51,6 +55,7 @@ context('Notes', () => {
   let appointment: AppointmentDto
 
   beforeEach(() => {
+    const formId = 'some-form'
     appointment = appointmentFactory.build({ sensitive: false })
     cy.task('reset')
     cy.task('stubSignIn')
@@ -60,7 +65,7 @@ context('Notes', () => {
     cy.task('stubFindSupervisor', { supervisor })
     cy.task('stubNextSessions', { sessionSummaries: { allocations }, teamCodes: [supervisor.unpaidWorkTeams[0].code] })
     cy.task('stubSaveAppointmentForm')
-    cy.task('stubGetAppointmentForm', { form: appointmentOutcomeFormFactory.build() })
+    cy.task('stubGetAppointmentForm', { form: appointmentOutcomeFormFactory.build(), formId })
 
     const contactOutcomes = contactOutcomesFactory.build({
       contactOutcomes: [contactOutcomeFactory.build({ enforceable: true }), contactOutcomeFactory.build()],
@@ -68,6 +73,15 @@ context('Notes', () => {
     cy.task('stubGetContactOutcomes', { contactOutcomes })
 
     cy.signIn()
+  })
+
+  //  Scenario: Showing the offender details
+  it('shows the offender details on the page', () => {
+    // Given I am on the notes page for an appointment
+    cy.task('stubFindAppointment', { appointment })
+    const page = NotesPage.visit(appointment, 'absent')
+    // I should see the offender CRN on the page
+    page.shouldShowOffenderDetails(appointment.offender.crn)
   })
 
   // Scenario: Validating the notes page
