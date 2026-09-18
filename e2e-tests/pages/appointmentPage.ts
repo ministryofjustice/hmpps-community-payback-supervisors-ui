@@ -70,6 +70,6 @@ class AppointmentPageAssertions {
   }
 
   async toShowOffenderDetails() {
-    await this.page.page.locator('span', { hasText: 'CRN:' }).textContent()
+    await expect(this.page.page.locator('span.govuk-caption-l')).toBeVisible()
   }
 }

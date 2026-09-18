@@ -32,6 +32,6 @@ class ReviewPageAssertions {
   constructor(private readonly page: ReviewPage) {}
 
   async toBeOnThePage() {
-    await expect(this.page.headingLocator).toContainText(this.page.titleText)
+    await expect(this.page.pageHeadingLocator).toContainText(this.page.titleText)
   }
 }
