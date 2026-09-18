@@ -3,11 +3,8 @@ import Page from '../../../page'
 export default class PageWithNotes extends Page {
   private userInput: string
 
-  constructor(
-    title: string,
-    private readonly notesLabel: string,
-  ) {
-    super(title)
+  constructor(private readonly notesLabel: string) {
+    super(notesLabel)
   }
 
   enterNotesWithCharacterLength(characterLength: number): void {
