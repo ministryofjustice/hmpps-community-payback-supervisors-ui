@@ -1,14 +1,12 @@
 import paths from '../../../../server/paths'
-import Offender from '../../../../server/models/offender'
 import { AppointmentDto } from '../../../../server/@types/shared'
 import { pathWithQuery } from '../../../../server/utils/utils'
 import PageWithNotes from './base/pageWithNotes'
 import { AppointmentNotesAction } from '../../../../server/@types/user-defined'
 
 export default class NotesPage extends PageWithNotes {
-  constructor(appointment: AppointmentDto) {
-    const offender = new Offender(appointment.offender)
-    super(offender.name, 'Add notes')
+  constructor() {
+    super('Add notes')
   }
 
   static visit(appointment: AppointmentDto, action: AppointmentNotesAction, formId: string = 'some-form'): NotesPage {
@@ -22,7 +20,7 @@ export default class NotesPage extends PageWithNotes {
 
     cy.visit(path)
 
-    return new NotesPage(appointment)
+    return new NotesPage()
   }
 
   completeForm() {
