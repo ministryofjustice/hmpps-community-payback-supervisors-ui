@@ -29,6 +29,6 @@ class EndTimePageAssertions {
   constructor(private readonly page: EndTimePage) {}
 
   async toBeOnThePage() {
-    await expect(this.page.headingLocator).toContainText(this.page.getExpectedTitlePattern())
+    await expect(this.page.labelLocator).toContainText(this.page.getExpectedTitlePattern())
   }
 }

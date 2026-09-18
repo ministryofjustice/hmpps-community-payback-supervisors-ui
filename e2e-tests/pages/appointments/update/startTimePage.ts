@@ -17,7 +17,7 @@ export default class StartTimePage extends BasePage {
   ) {
     super(page)
     this.expect = new StartTimePageAssertions(this)
-    this.question = this.headingLocator.getByText("You're logging")
+    this.question = this.labelLocator.getByText("You're logging")
   }
 
   getExpectedTitlePattern() {
