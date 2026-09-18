@@ -3,6 +3,10 @@
 //    I want to update the attendance outcome on for an offender
 //    So that I can track progress for an unpaid work order
 
+//  Scenario: Showing the offender details
+//    Given I am on the attendance outcome page for an appointment
+//    I can see the offender's CRN on the page
+
 //  Scenario: Validating the attendance outcome page
 //    Given I am on the attendance outcome page for an appointment
 //    And I do not select an outcome
@@ -53,6 +57,15 @@ context('Attendance outcome', () => {
   beforeEach(function test() {
     cy.task('stubGetContactOutcomes', { contactOutcomes: this.contactOutcomes })
     cy.task('stubGetAppointmentForm', appointmentOutcomeFormFactory.build())
+  })
+
+  //  Scenario: Showing the offender details
+  it('shows the offender details on the page', () => {
+    // Given I am on the attendance outcome page for an appointment
+    cy.task('stubFindAppointment', { appointment })
+    const page = AttendanceOutcomePage.visit(appointment)
+    // I should see the offender CRN on the page
+    page.shouldShowOffenderDetails(appointment.offender.crn)
   })
 
   // Scenario: Validating the attendance outcome page

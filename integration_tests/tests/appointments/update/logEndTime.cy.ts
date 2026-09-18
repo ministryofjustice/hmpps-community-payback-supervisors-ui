@@ -3,6 +3,9 @@
 //    As a supervisor
 //    I want to confirm finish time for an appointment
 //
+//  Scenario: Showing the offender details
+//    Given I am on the end time page for a finish session form
+//    I can see the offender's CRN on the page
 //  Scenario: Finish session
 //    Scenario: Validates time entered
 //      Given I am on the end time page for a finish session form
@@ -39,6 +42,15 @@ context('Log finish time ', () => {
     cy.task('stubGetAppointmentForm', { form: appointmentOutcomeFormFactory.build() })
 
     cy.signIn()
+  })
+
+  //  Scenario: Showing the offender details
+  it('shows the offender details on the page', () => {
+    // Given I am on the log end time page for an appointment
+    cy.task('stubFindAppointment', { appointment })
+    const page = EndTimePage.visit(appointment, 'completed')
+    // I should see the offender CRN on the page
+    page.shouldShowOffenderDetails(appointment.offender.crn)
   })
 
   //  Scenario: Finish session

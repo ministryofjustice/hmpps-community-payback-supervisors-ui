@@ -15,6 +15,9 @@ import ReviewPage from '../../../pages/appointments/update/reviewPage'
 import NotesPage from '../../../pages/appointments/update/notesPage'
 import attendanceDataFactory from '../../../../server/testutils/factories/attendanceDataFactory'
 
+//  Scenario: Showing the offender details
+//    Given I am on the log compliance page for an appointment
+//    I can see the offender's CRN on the page
 //  Scenario: Validating the log compliance page
 //    Given I am on the log compliance page for an appointment
 //    And I do not complete the form
@@ -59,6 +62,16 @@ context('Log compliance', () => {
 
     const appointment = appointmentFactory.build({})
     cy.wrap(appointment).as('appointment')
+  })
+
+  //  Scenario: Showing the offender details
+  it('shows the offender details on the page', () => {
+    const appointment = appointmentFactory.build({})
+    // Given I am on the log compliance page for an appointment
+    cy.task('stubFindAppointment', { appointment })
+    const page = CompliancePage.visit(appointment, 'completed', formId)
+    // I should see the offender CRN on the page
+    page.shouldShowOffenderDetails(appointment.offender.crn)
   })
 
   // Scenario: Validating the log compliance page

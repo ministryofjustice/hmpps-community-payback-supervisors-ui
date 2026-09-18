@@ -3,6 +3,9 @@
 //    As a supervisor
 //    I want to confirm start time for an appointment
 //
+//  Scenario: Showing the offender details
+//    Given I am on the start time page for an arrival form
+//    I can see the offender's CRN on the page
 //  Scenario: Arrived
 //    Scenario: Validates time entered
 //      Given I am on the start time page for an arrival form
@@ -68,6 +71,15 @@ context('Log start time ', () => {
     cy.task('stubGetContactOutcomes', { contactOutcomes })
 
     cy.signIn()
+  })
+
+  //  Scenario: Showing the offender details
+  it('shows the offender details on the page', () => {
+    // Given I am on the log start time for an appointment
+    cy.task('stubFindAppointment', { appointment })
+    const page = StartTimePage.visit(appointment, 'arrived')
+    // I should see the offender CRN on the page
+    page.shouldShowOffenderDetails(appointment.offender.crn)
   })
 
   //  Scenario: Arrived
