@@ -65,6 +65,7 @@ describe('ComplianceReviewPage', () => {
           updatePath: `${paths.appointments.notes.completed(params)}?form=${formId}`,
           alertDiaryText: 'Would you also like this to be sent to the alert diary?',
           rows: [
+            [{ text: 'Outcome status' }, { html: statusTagHtml }, { text: '' }],
             [
               { text: 'Start time' },
               { html: '09:00' },
@@ -107,7 +108,6 @@ describe('ComplianceReviewPage', () => {
                 html: notesLink,
               },
             ],
-            [{ text: 'Outcome status' }, { html: statusTagHtml }, { text: '' }],
           ],
           template: './compliance.njk',
           showWillAlertPractitionerMessage: true,

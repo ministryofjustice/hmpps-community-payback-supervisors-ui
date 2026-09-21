@@ -108,7 +108,7 @@ export default class ReviewPage extends BaseAppointmentUpdatePage<Body> {
       ]
     })
 
-    fields.push([
+    fields.unshift([
       { text: 'Outcome status' },
       {
         html: statusTagHtml,
