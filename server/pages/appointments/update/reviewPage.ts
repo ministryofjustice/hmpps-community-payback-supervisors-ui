@@ -94,6 +94,14 @@ export default class ReviewPage extends BaseAppointmentUpdatePage<Body> {
   private buildRows(appointment: AppointmentDto): OutputRow[] {
     this.changeUrl = this.changeUrl ?? this.backPath(appointment)
 
+    const outcomeLink = pathWithQuery(
+      paths.appointments.attendanceOutcome({
+        projectCode: appointment.projectCode,
+        appointmentId: appointment.id.toString(),
+      }),
+      { form: this.query.form },
+    )
+
     const statusTagHtml = AppointmentUtils.buildStatusTag(this.outcome)
 
     const fields = Object.entries(this.mappedReviewFields()).map(([key, v]) => {
@@ -108,13 +116,22 @@ export default class ReviewPage extends BaseAppointmentUpdatePage<Body> {
       ]
     })
 
-    fields.unshift([
+    const outcomeField = [
       { text: 'Outcome status' },
       {
         html: statusTagHtml,
       },
-      { text: '' },
-    ])
+    ].concat(
+      this.outcome?.attended
+        ? [
+            {
+              html: `<a href='${outcomeLink}' class="govuk-link govuk-link--no-visited-state">Change</a>`,
+            },
+          ]
+        : [{ text: '' }],
+    )
+
+    fields.unshift(outcomeField)
 
     return fields
   }
