@@ -1,5 +1,5 @@
 import paths from '../../../paths'
-import { AppointmentDto } from '../../../@types/shared'
+import { AppointmentDto, ContactOutcomeDto } from '../../../@types/shared'
 import appointmentFactory from '../../../testutils/factories/appointmentFactory'
 import { contactOutcomeFactory } from '../../../testutils/factories/contactOutcomeFactory'
 import AppointmentUtils from '../../../utils/appointmentUtils'
@@ -31,11 +31,16 @@ describe('ReviewPage', () => {
         const formId = 'form1234'
         const url = `${paths.appointments.notes.absent({ appointmentId: appointment.id.toString(), projectCode: appointment.projectCode })}?form=${formId}`
 
-        const outcome = contactOutcomeFactory.build()
+        const outcome = contactOutcomeFactory.build({ attended: true })
 
         const page = new ReviewPage('test', { form: formId }, outcome, { 'Test key': 'Test value' }, true)
 
         const link = `<a href=${url} class="govuk-link govuk-link--no-visited-state">Change</a>`
+
+        const outcomeLink = `${paths.appointments.attendanceOutcome({
+          projectCode: appointment.projectCode,
+          appointmentId: appointment.id.toString(),
+        })}?form=${formId}`
 
         const statusTagHtml = '<strong>Contact outcome name</strong>'
         jest.spyOn(AppointmentUtils, 'buildStatusTag').mockReturnValue(statusTagHtml)
@@ -45,7 +50,13 @@ describe('ReviewPage', () => {
           backPath: url,
           updatePath: url,
           rows: [
-            [{ text: 'Outcome status' }, { html: statusTagHtml }, { text: '' }],
+            [
+              { text: 'Outcome status' },
+              { html: statusTagHtml },
+              {
+                html: `<a href='${outcomeLink}' class="govuk-link govuk-link--no-visited-state">Change</a>`,
+              },
+            ],
             [{ text: 'Test key' }, { html: 'Test value' }, { html: link }],
           ],
           template: './test.njk',
@@ -74,7 +85,13 @@ describe('ReviewPage', () => {
 
         const outcome = contactOutcomeFactory.build({
           willAlertEnforcementDiary: false,
+          attended: true,
         })
+
+        const outcomeLink = `${paths.appointments.attendanceOutcome({
+          projectCode: appointment.projectCode,
+          appointmentId: appointment.id.toString(),
+        })}?form=${formId}`
 
         const page = new ReviewPage('test', { form: formId }, outcome, { 'Test key': 'Test value' }, false)
 
@@ -88,12 +105,116 @@ describe('ReviewPage', () => {
           backPath: url,
           updatePath: url,
           rows: [
-            [{ text: 'Outcome status' }, { html: statusTagHtml }, { text: '' }],
+            [
+              { text: 'Outcome status' },
+              { html: statusTagHtml },
+              {
+                html: `<a href='${outcomeLink}' class="govuk-link govuk-link--no-visited-state">Change</a>`,
+              },
+            ],
             [{ text: 'Test key' }, { html: 'Test value' }, { html: link }],
           ],
           template: './test.njk',
           showWillAlertPractitionerMessage: false,
           alertDiaryText: 'Would you like this to be sent to the alert diary?',
+          alertPractitionerItems: [
+            {
+              checked: false,
+              text: 'Yes',
+              value: 'yes',
+            },
+            {
+              checked: false,
+              text: 'No',
+              value: 'no',
+            },
+          ],
+        })
+      })
+    })
+
+    describe('when the outcome is not attended', () => {
+      it('should not show the change link', () => {
+        const formId = 'form1234'
+        const url = `${paths.appointments.notes.absent({ appointmentId: appointment.id.toString(), projectCode: appointment.projectCode })}?form=${formId}`
+
+        const outcome = contactOutcomeFactory.build({ attended: false })
+
+        const page = new ReviewPage('test', { form: formId }, outcome, { 'Test key': 'Test value' }, true)
+
+        const link = `<a href=${url} class="govuk-link govuk-link--no-visited-state">Change</a>`
+
+        const statusTagHtml = '<strong>Contact outcome name</strong>'
+        jest.spyOn(AppointmentUtils, 'buildStatusTag').mockReturnValue(statusTagHtml)
+
+        expect(page.viewData(appointment)).toEqual({
+          offender,
+          backPath: url,
+          updatePath: url,
+          rows: [
+            [
+              { text: 'Outcome status' },
+              { html: statusTagHtml },
+              {
+                text: '',
+              },
+            ],
+            [{ text: 'Test key' }, { html: 'Test value' }, { html: link }],
+          ],
+          template: './test.njk',
+          showWillAlertPractitionerMessage: true,
+          alertDiaryText: 'Would you also like this to be sent to the alert diary?',
+          alertPractitionerItems: [
+            {
+              checked: false,
+              text: 'Yes',
+              value: 'yes',
+            },
+            {
+              checked: false,
+              text: 'No',
+              value: 'no',
+            },
+          ],
+        })
+      })
+    })
+
+    describe('when the outcome does not exist', () => {
+      it('should not show the change link', () => {
+        const formId = 'form1234'
+        const url = `${paths.appointments.notes.absent({ appointmentId: appointment.id.toString(), projectCode: appointment.projectCode })}?form=${formId}`
+
+        const page = new ReviewPage(
+          'test',
+          { form: formId },
+          undefined as unknown as ContactOutcomeDto,
+          { 'Test key': 'Test value' },
+          true,
+        )
+
+        const link = `<a href=${url} class="govuk-link govuk-link--no-visited-state">Change</a>`
+
+        const statusTagHtml = '<strong>Contact outcome name</strong>'
+        jest.spyOn(AppointmentUtils, 'buildStatusTag').mockReturnValue(statusTagHtml)
+
+        expect(page.viewData(appointment)).toEqual({
+          offender,
+          backPath: url,
+          updatePath: url,
+          rows: [
+            [
+              { text: 'Outcome status' },
+              { html: statusTagHtml },
+              {
+                text: '',
+              },
+            ],
+            [{ text: 'Test key' }, { html: 'Test value' }, { html: link }],
+          ],
+          template: './test.njk',
+          showWillAlertPractitionerMessage: true,
+          alertDiaryText: 'Would you also like this to be sent to the alert diary?',
           alertPractitionerItems: [
             {
               checked: false,

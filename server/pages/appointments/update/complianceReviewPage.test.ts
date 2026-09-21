@@ -34,7 +34,7 @@ describe('ComplianceReviewPage', () => {
 
         const formId = 'abcxyz456'
 
-        const outcome = contactOutcomeFactory.build({ willAlertEnforcementDiary: true })
+        const outcome = contactOutcomeFactory.build({ willAlertEnforcementDiary: true, attended: true })
 
         const appointmentOutputForm = appointmentOutcomeFormFactory.build({
           endTime,
@@ -55,6 +55,7 @@ describe('ComplianceReviewPage', () => {
         const endTimeChangeLink = link`${paths.appointments.completed.endTime(params)}`
         const changeLink = link`${paths.appointments.completed.compliance(params)}`
         const notesLink = link`${paths.appointments.notes.completed(params)}`
+        const outcomeLink = `${paths.appointments.attendanceOutcome(params)}?form=${formId}`
 
         const statusTagHtml = '<strong>Contact outcome name</strong>'
         jest.spyOn(HtmlUtils, 'getStatusTag').mockReturnValue(statusTagHtml)
@@ -65,7 +66,13 @@ describe('ComplianceReviewPage', () => {
           updatePath: `${paths.appointments.notes.completed(params)}?form=${formId}`,
           alertDiaryText: 'Would you also like this to be sent to the alert diary?',
           rows: [
-            [{ text: 'Outcome status' }, { html: statusTagHtml }, { text: '' }],
+            [
+              { text: 'Outcome status' },
+              { html: statusTagHtml },
+              {
+                html: `<a href='${outcomeLink}' class="govuk-link govuk-link--no-visited-state">Change</a>`,
+              },
+            ],
             [
               { text: 'Start time' },
               { html: '09:00' },
