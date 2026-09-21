@@ -45,8 +45,8 @@ describe('ReviewPage', () => {
           backPath: url,
           updatePath: url,
           rows: [
-            [{ text: 'Test key' }, { html: 'Test value' }, { html: link }],
             [{ text: 'Outcome status' }, { html: statusTagHtml }, { text: '' }],
+            [{ text: 'Test key' }, { html: 'Test value' }, { html: link }],
           ],
           template: './test.njk',
           showWillAlertPractitionerMessage: true,
@@ -88,8 +88,8 @@ describe('ReviewPage', () => {
           backPath: url,
           updatePath: url,
           rows: [
-            [{ text: 'Test key' }, { html: 'Test value' }, { html: link }],
             [{ text: 'Outcome status' }, { html: statusTagHtml }, { text: '' }],
+            [{ text: 'Test key' }, { html: 'Test value' }, { html: link }],
           ],
           template: './test.njk',
           showWillAlertPractitionerMessage: false,
