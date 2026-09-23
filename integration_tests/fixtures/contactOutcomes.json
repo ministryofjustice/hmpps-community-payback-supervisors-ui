@@ -33,19 +33,23 @@
   },
   {
     "name": "Attended - Complied",
-    "code": "ATTC"
+    "code": "ATTC",
+    "attended": true
   },
   {
     "name": "Attended - Concurrent Hours",
-    "code": "ATCH"
+    "code": "ATCH",
+    "attended": true
   },
   {
     "name": "Attended - FTC Deemed Acceptable",
-    "code": "AFDA"
+    "code": "AFDA",
+    "attended": true
   },
   {
     "name": "Attended - Failed to Comply",
-    "code": "AFTC"
+    "code": "AFTC",
+    "attended": true
   },
   {
     "name": "Attended - Sent Home (behaviour)",
@@ -77,7 +81,8 @@
   },
   {
     "name": "Unacceptable Absence",
-    "code": "UACP"
+    "code": "UACP",
+    "attended": false
   },
   {
     "name": "Warrant Outstanding",

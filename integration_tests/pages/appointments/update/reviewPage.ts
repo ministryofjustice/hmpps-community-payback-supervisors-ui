@@ -47,4 +47,16 @@ export default class ReviewPage extends Page {
   cannotBeShared() {
     cy.contains('th', 'Sensitive').next('td').should('contain.text', 'Cannot be shared')
   }
+
+  clickChangeOutcome(text = 'Change'): void {
+    cy.contains('th', 'Outcome status').next().next().contains(text).click()
+  }
+
+  shouldShowCorrectOutcome(outcome: string) {
+    cy.contains('th', 'Outcome status').next().contains(outcome)
+  }
+
+  shouldShowAlertPractitionerError() {
+    this.shouldShowErrorSummary('alertPractitioner', 'Choose whether you want to send an alert')
+  }
 }

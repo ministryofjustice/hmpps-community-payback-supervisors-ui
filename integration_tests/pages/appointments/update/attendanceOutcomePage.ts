@@ -33,6 +33,10 @@ export default class AttendanceOutcomePage extends Page {
     this.contactOutcomeOptions.checkOptionWithValue(contactOutcomeCode)
   }
 
+  checkOptionSelected(contactOutcomeCode: string) {
+    this.contactOutcomeOptions.shouldHaveSelectedValue(contactOutcomeCode)
+  }
+
   checkOnPage(): void {
     cy.get('legend').should('contain.text', 'Log attendance')
   }
