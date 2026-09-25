@@ -6,7 +6,7 @@
 //  Scenario: Showing the offender details
 //    Given I am on the end time page for a finish session form
 //    I can see the offender's CRN on the page
-//  Scenario: Finish session
+//  Scenario: End session
 //    Scenario: Validates time entered
 //      Given I am on the end time page for a finish session form
 //      When I submit an invalid time
@@ -53,7 +53,7 @@ context('Log finish time ', () => {
     page.shouldShowOffenderDetails(appointment.offender.crn)
   })
 
-  //  Scenario: Finish session
+  //  Scenario: End session
   describe('completed', () => {
     //  Scenario: Validates time entered
     it('validates the time entered on submit', () => {

@@ -1,7 +1,5 @@
 import { AppointmentDto } from '../../../@types/shared'
 import { AppointmentEndTimeAction, AppointmentOutcomeForm, ValidationErrors } from '../../../@types/user-defined'
-import InvalidUpdateActionError from '../../../errors/invalidUpdateActionError'
-import Offender from '../../../models/offender'
 import paths from '../../../paths'
 import DateTimeFormats from '../../../utils/dateTimeUtils'
 import { pathWithQuery } from '../../../utils/utils'
@@ -74,8 +72,8 @@ export default class EndTimePage extends BaseAppointmentUpdatePage<Body> {
     return {
       ...commonViewData,
       time: hasFormBody ? this.query.time : formData.endTime,
-      question: this.getPageTitle(commonViewData.offender),
-      documentTitle: 'Log finish time',
+      question: 'Log end time',
+      documentTitle: 'Log end time',
     }
   }
 
@@ -85,29 +83,17 @@ export default class EndTimePage extends BaseAppointmentUpdatePage<Body> {
     }
 
     if (!DateTimeFormats.isValidTime(this.query.time as string)) {
-      return { time: { text: 'Enter a valid finish time, for example 17:00' } }
+      return { time: { text: 'Enter a valid end time, for example 17:00' } }
     }
 
     if (!DateTimeFormats.isAfterTime(this.query.time, appointment.startTime)) {
       return {
         time: {
-          text: `Finish time must be after ${DateTimeFormats.stripTime(appointment.startTime)}`,
+          text: `End time must be after ${DateTimeFormats.stripTime(appointment.startTime)}`,
         },
       }
     }
 
     return {}
-  }
-
-  private getPageTitle(offender: Offender): string {
-    if (this.action === 'completed') {
-      return `You're logging ${offender.name} as finishing today at:`
-    }
-
-    if (this.action === 'arrived') {
-      return `You're logging ${offender.name} as having left at:`
-    }
-
-    throw new InvalidUpdateActionError(`Invalid update appointment action: ${this.action}`)
   }
 }

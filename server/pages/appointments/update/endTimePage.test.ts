@@ -46,8 +46,8 @@ describe('EndTimePage', () => {
         backPath: `${paths.appointments.arrived.startTime({ appointmentId, projectCode })}?form=${formId}`,
         updatePath: `${paths.appointments.completed.endTime({ appointmentId, projectCode })}?form=${formId}`,
         time: form.endTime,
-        question: `You're logging Sam Smith as finishing today at:`,
-        documentTitle: 'Log finish time',
+        question: 'Log end time',
+        documentTitle: 'Log end time',
       })
     })
 
@@ -86,7 +86,7 @@ describe('EndTimePage', () => {
       const appointment = appointmentFactory.build()
       const page = new EndTimePage('arrived', formId)
       const result = page.viewData(appointment, form)
-      expect(result.question).toBe("You're logging Sam Smith as having left at:")
+      expect(result.question).toBe('Log end time')
     })
   })
 
@@ -147,7 +147,7 @@ describe('EndTimePage', () => {
         page.validate(appointment)
 
         expect(page.validationErrors.time).toEqual({
-          text: 'Enter a valid finish time, for example 17:00',
+          text: 'Enter a valid end time, for example 17:00',
         })
       })
     })
@@ -170,7 +170,7 @@ describe('EndTimePage', () => {
         page.validate(appointment)
 
         expect(page.validationErrors.time).toEqual({
-          text: 'Finish time must be after 09:00',
+          text: 'End time must be after 09:00',
         })
       })
     })
@@ -193,7 +193,7 @@ describe('EndTimePage', () => {
         page.validate(appointment)
 
         expect(page.validationErrors.time).toEqual({
-          text: 'Finish time must be after 09:00',
+          text: 'End time must be after 09:00',
         })
       })
     })

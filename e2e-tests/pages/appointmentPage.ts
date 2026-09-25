@@ -26,7 +26,7 @@ export default class AppointmentPage extends BasePage {
     this.details = new SummaryListComponent(page)
     this.arrivedButtonLocator = page.getByRole('button', { name: 'Arrived', exact: true })
     this.notArrivedButtonLocator = page.getByRole('button', { name: 'Did not attend' })
-    this.finishButtonLocator = page.getByRole('button', { name: 'Finish session' })
+    this.finishButtonLocator = page.getByRole('button', { name: 'End session' })
     this.leftSiteEarlyButtonLocator = page.getByRole('button', { name: 'Left site early' })
     this.personDetailsHeading = this.page.getByRole('heading', { name: 'Session details' })
   }
@@ -62,7 +62,7 @@ class AppointmentPageAssertions {
 
   async toShowAppointmentDetails() {
     await this.appointmentPage.details.expect.toHaveItemWith('Start time', '09:00')
-    await this.appointmentPage.details.expect.toHaveItemWith('Finish time', '17:00')
+    await this.appointmentPage.details.expect.toHaveItemWith('End time', '17:00')
   }
 
   async toShowStatus(status: AppointmentStatusType) {
