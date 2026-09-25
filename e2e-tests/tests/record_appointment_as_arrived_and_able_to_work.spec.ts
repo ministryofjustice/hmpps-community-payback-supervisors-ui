@@ -33,7 +33,7 @@ test('Record an appointment as arrived and able to work', async ({ page, supervi
   await attendanceOutcomePage.chooseAttendedCompliedOutcome()
   await attendanceOutcomePage.clickContinue()
 
-  const startTimePage = new StartTimePage(page, 'arrived')
+  const startTimePage = new StartTimePage(page)
   await startTimePage.expect.toBeOnThePage()
   await startTimePage.clickContinue()
 

@@ -46,7 +46,7 @@ describe('StartTimePage', () => {
         backPath: `${paths.appointments.attendanceOutcome({ appointmentId, projectCode })}?form=${formId}`,
         updatePath: `${paths.appointments.arrived.startTime({ appointmentId, projectCode })}?form=${formId}`,
         time: form.startTime,
-        question: `You're logging Sam Smith as having arrived at:`,
+        question: 'Log start time',
         documentTitle: 'Log start time',
       })
     })
@@ -86,7 +86,7 @@ describe('StartTimePage', () => {
       const appointment = appointmentFactory.build()
       const page = new StartTimePage('absent', formId)
       const result = page.viewData(appointment, form)
-      expect(result.question).toBe("You're logging Sam Smith as absent today at:")
+      expect(result.question).toBe('Log start time')
     })
   })
 

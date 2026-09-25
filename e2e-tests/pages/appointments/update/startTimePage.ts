@@ -2,27 +2,18 @@
 
 import { Locator, Page, expect } from '@playwright/test'
 import BasePage from '../../basePage'
-import { AppointmentArrivedAction } from '../../../../server/@types/user-defined'
 
 export default class StartTimePage extends BasePage {
-  readonly titleText = this.getExpectedTitlePattern()
+  readonly titleText = 'Log start time'
 
   readonly expect: StartTimePageAssertions
 
   question: Locator
 
-  constructor(
-    readonly page: Page,
-    private readonly action: AppointmentArrivedAction,
-  ) {
+  constructor(readonly page: Page) {
     super(page)
     this.expect = new StartTimePageAssertions(this)
-    this.question = this.headingLocator.getByText("You're logging")
-  }
-
-  getExpectedTitlePattern() {
-    const questionEnd = this.action === 'arrived' ? 'as having arrived at:' : 'as absent today at:'
-    return new RegExp(`You're logging (.*) ${questionEnd}`)
+    this.question = this.headingLocator.getByText(this.titleText)
   }
 }
 
@@ -30,6 +21,6 @@ class StartTimePageAssertions {
   constructor(private readonly page: StartTimePage) {}
 
   async toBeOnThePage() {
-    await expect(this.page.question).toContainText(this.page.getExpectedTitlePattern())
+    await expect(this.page.question).toContainText('Log start time')
   }
 }
