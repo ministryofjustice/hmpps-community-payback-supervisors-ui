@@ -1,7 +1,6 @@
 import { AppointmentDto } from '../../../@types/shared'
 import { AppointmentArrivedAction, AppointmentOutcomeForm, ValidationErrors } from '../../../@types/user-defined'
 import InvalidUpdateActionError from '../../../errors/invalidUpdateActionError'
-import Offender from '../../../models/offender'
 import paths from '../../../paths'
 import DateTimeFormats from '../../../utils/dateTimeUtils'
 import { pathWithQuery } from '../../../utils/utils'
@@ -88,7 +87,7 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
     return {
       ...commonViewData,
       time: hasQueryBody ? this.query.time : formData?.startTime,
-      question: this.getPageTitle(commonViewData.offender),
+      question: 'Log start time',
       documentTitle: 'Log start time',
     }
   }
@@ -111,17 +110,5 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
     }
 
     return {}
-  }
-
-  private getPageTitle(offender: Offender): string {
-    if (this.action === 'arrived') {
-      return `You're logging ${offender.name} as having arrived at:`
-    }
-
-    if (this.action === 'absent') {
-      return `You're logging ${offender.name} as absent today at:`
-    }
-
-    throw new InvalidUpdateActionError(`Invalid update appointment action: ${this.action}`)
   }
 }
