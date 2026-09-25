@@ -1,13 +1,11 @@
 import { AppointmentDto } from '../../../../server/@types/shared'
-import Offender from '../../../../server/models/offender'
 import paths from '../../../../server/paths'
 import { AppointmentEndTimeAction } from '../../../../server/@types/user-defined'
 import LogTimePage from './base/logTimePage'
 
 export default class EndTimePage extends LogTimePage {
-  constructor(appointment: AppointmentDto, action: AppointmentEndTimeAction) {
-    const offender = new Offender(appointment.offender)
-    const title: string = EndTimePage.getExpectedTitle(action, offender)
+  constructor() {
+    const title: string = 'Log end time'
     super(title)
   }
 
@@ -26,20 +24,7 @@ export default class EndTimePage extends LogTimePage {
     }
     cy.visit(path)
 
-    return new EndTimePage(appointment, action)
-  }
-
-  private static getExpectedTitle(action: AppointmentEndTimeAction, offender: Offender) {
-    let title: string
-
-    if (action === 'completed') {
-      title = `You're logging ${offender.name} as finishing today at:`
-    }
-
-    if (action === 'arrived') {
-      title = `You're logging ${offender.name} as having left at:`
-    }
-    return title
+    return new EndTimePage()
   }
 
   shouldShowValidationErrors() {
@@ -47,6 +32,6 @@ export default class EndTimePage extends LogTimePage {
   }
 
   shouldShowStartTimeValidationErrors() {
-    this.shouldShowErrorSummary('time', 'Finish time must be after 09:00')
+    this.shouldShowErrorSummary('time', 'End time must be after 09:00')
   }
 }

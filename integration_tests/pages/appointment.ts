@@ -37,7 +37,7 @@ export default class AppointmentPage extends Page {
   }
 
   finishedButton() {
-    return cy.get('a').contains('Finish session')
+    return cy.get('a').contains('End session')
   }
 
   clickLeftSiteEarly() {
@@ -50,7 +50,7 @@ export default class AppointmentPage extends Page {
 
   shouldShowAppointmentDetails(): void {
     this.sessionDetails.getValueWithLabel('Start time').should('contain.text', this.appointment.startTime)
-    this.sessionDetails.getValueWithLabel('Finish time').should('contain.text', this.appointment.endTime)
+    this.sessionDetails.getValueWithLabel('End time').should('contain.text', this.appointment.endTime)
   }
 
   shouldShowPickUpDetails(): void {

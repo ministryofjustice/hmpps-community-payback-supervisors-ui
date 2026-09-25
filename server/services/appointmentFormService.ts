@@ -28,7 +28,7 @@ export default class AppointmentFormService {
     const form = {
       key: this.getFormKey(randomUUID()),
       data: {
-        // we will only persist values in the `Finish session` pages of the form
+        // we will only persist values in the `End session` pages of the form
         // setting notes and contact outcome as undefined as these should be entered from scratch in the app
         // attendance data does not need to be saved as we will submit at the time of selection
         deliusVersion: appointment.version,
