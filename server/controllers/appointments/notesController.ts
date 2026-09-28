@@ -185,9 +185,7 @@ export default class NotesController {
         contactOutcome,
         {
           Notes: formData.notes || '',
-          Sensitive: formData.sensitive
-            ? 'Cannot be shared with person on probation'
-            : 'Can be shared with person on probation',
+          Sensitive: formData.sensitive ? 'Yes' : 'No',
         },
         true,
       )

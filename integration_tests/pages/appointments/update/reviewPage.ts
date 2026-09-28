@@ -41,11 +41,11 @@ export default class ReviewPage extends Page {
   }
 
   canBeShared() {
-    cy.contains('th', 'Notes').next('td').should('contain.text', 'Can be shared')
+    cy.contains('th', 'Notes').next('td').should('contain.text', 'No')
   }
 
   cannotBeShared() {
-    cy.contains('th', 'Sensitive').next('td').should('contain.text', 'Cannot be shared')
+    cy.contains('th', 'Sensitive').next('td').should('contain.text', 'Yes')
   }
 
   clickChangeOutcome(text = 'Change'): void {
