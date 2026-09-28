@@ -14,7 +14,7 @@ export default class SessionPage extends BasePage {
   constructor(readonly page: Page) {
     super(page)
     this.expect = new SessionPageAssertions(this)
-    this.viewDetailsLinkLocator = page.getByRole('link', { name: 'View and update' })
+    this.viewDetailsLinkLocator = page.getByRole('link', { name: 'View' })
     this.clearSessionDataLinkLocator = page.getByRole('link', { name: 'Clear session data' })
   }
 
@@ -23,7 +23,7 @@ export default class SessionPage extends BasePage {
       .locator('.govuk-summary-card', {
         has: this.page.getByRole('heading', { name: personName }),
       })
-      .getByRole('link', { name: 'View and update' })
+      .getByRole('link', { name: 'View' })
       .click()
   }
 
