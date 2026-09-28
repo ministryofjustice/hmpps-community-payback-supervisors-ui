@@ -90,7 +90,7 @@ context('Log compliance', () => {
     page.shouldHaveFormWithEmptyValues()
 
     // When I submit the form
-    page.clickSubmit()
+    page.clickContinue()
 
     // Then I see the log compliance page with errors
     page.shouldShowErrorSummary('workQuality', 'Select a description of the quality of their work ')
@@ -114,7 +114,7 @@ context('Log compliance', () => {
       page.selectWorkQualityValue()
 
       // When I submit the form
-      page.clickSubmit()
+      page.clickContinue()
 
       // Then I see the log compliance page with errors and my entered answers
       page.shouldShowErrorSummary('behaviour', 'Select a description of their behaviour ')
@@ -162,11 +162,11 @@ context('Log compliance', () => {
         cy.task('stubSaveAppointmentForm', { formId })
 
         page.completeForm()
-        page.clickSubmit()
+        page.clickContinue()
 
         // And I continue through the notes page
         const notesPage = Page.verifyOnPage(NotesPage, this.appointment, 'completed', 'some-form')
-        notesPage.clickSubmit()
+        notesPage.clickContinue()
 
         // And I continue through the review page
         const reviewPage = Page.verifyOnPage(ReviewPage, this.appointment, 'completed')
@@ -175,7 +175,7 @@ context('Log compliance', () => {
 
         reviewPage.alertPractitionerQuestion.checkOptionWithValue('yes')
 
-        reviewPage.clickSubmit()
+        reviewPage.clickConfirm()
 
         // Then I see the confirm details page
         Page.verifyOnPage(ConfirmCompletedPage, this.appointment)

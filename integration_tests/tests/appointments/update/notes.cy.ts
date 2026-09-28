@@ -98,7 +98,7 @@ context('Notes', () => {
     notesPage.enterNotesWithCharacterLength(4005)
 
     // When I submit the form
-    notesPage.clickSubmit()
+    notesPage.clickContinue()
 
     // Then I see the notes page with errors
     notesPage.shouldShowErrorSummary('notes', 'Notes must be 4000 characters or less')
@@ -115,7 +115,7 @@ context('Notes', () => {
     const notesPage = NotesPage.visit(appointment, 'absent')
 
     // And I submit the empty form
-    notesPage.clickSubmit()
+    notesPage.clickContinue()
 
     // Then I am taken to the review page
     Page.verifyOnPage(ReviewPage, appointment, 'absent')
@@ -133,7 +133,7 @@ context('Notes', () => {
 
     // And I enter a note
     notesPage.enterNote('note')
-    notesPage.clickSubmit()
+    notesPage.clickContinue()
 
     // Then I am taken to the review page
     const reviewPage = Page.verifyOnPage(ReviewPage, appointment, 'absent')
@@ -155,7 +155,7 @@ context('Notes', () => {
     // And I check the sensitive info checkbox
     notesPage.checkSensitiveInformation()
     // And I submit the form
-    notesPage.clickSubmit()
+    notesPage.clickContinue()
 
     // Then I am taken to the review page
     const reviewPage = Page.verifyOnPage(ReviewPage, appointment, 'absent')
@@ -181,7 +181,7 @@ context('Notes', () => {
     // And I cannot see the sensitive info checkbox
     notesPage.shouldNotShowSensitiveInformationCheckBox()
     // And I submit the form
-    notesPage.clickSubmit()
+    notesPage.clickContinue()
 
     // Then I am taken to the review page
     const reviewPage = Page.verifyOnPage(ReviewPage, appointment, 'absent')

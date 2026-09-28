@@ -13,7 +13,11 @@ export default abstract class Page {
     cy.get('h1').contains(this.title)
   }
 
-  clickSubmit(text = 'continue'): void {
+  clickContinue(text = 'Continue'): void {
+    cy.get('button').contains(text).click()
+  }
+
+  clickConfirm(text = 'Confirm'): void {
     cy.get('button').contains(text).click()
   }
 

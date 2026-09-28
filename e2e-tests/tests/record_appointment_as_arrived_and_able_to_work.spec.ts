@@ -53,7 +53,7 @@ test('Record an appointment as arrived and able to work', async ({ page, supervi
   const reviewPage = new ReviewPage(page)
   await reviewPage.expect.toBeOnThePage()
   await reviewPage.selectAlertPractitioner()
-  await reviewPage.clickContinue()
+  await reviewPage.clickConfirm()
 
   const confirmCompletedPage = new ConfirmCompletedPage(page)
   await confirmCompletedPage.expect.toBeOnThePage()
