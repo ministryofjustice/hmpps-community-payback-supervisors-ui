@@ -91,7 +91,7 @@ context('Log start time ', () => {
 
       // When I submit an invalid time
       page.clearTime()
-      page.clickSubmit()
+      page.clickContinue()
 
       // Then I see the same page with errors
       Page.verifyOnPage(StartTimePage, appointment, 'arrived')
@@ -107,7 +107,7 @@ context('Log start time ', () => {
       // When I submit a valid time
       cy.task('stubUpdateAppointmentOutcome', { appointment })
       page.enterTime('09:30')
-      page.clickSubmit()
+      page.clickContinue()
 
       // Then I see the next form page
       Page.verifyOnPage(EndTimePage, appointment, 'completed')
@@ -134,12 +134,12 @@ context('Log start time ', () => {
       const notesPage = NotesPage.visit(appointment, 'absent')
 
       // And I navigate to the review page
-      notesPage.clickSubmit()
+      notesPage.clickContinue()
 
       // And I navigate through the review page
       const reviewPage = Page.verifyOnPage(ReviewPage, appointment, 'absent')
       reviewPage.alertPractitionerQuestion.checkOptionWithValue('yes')
-      reviewPage.clickSubmit()
+      reviewPage.clickConfirm()
 
       // When I am on the confirm page
       const page = Page.verifyOnPage(ConfirmAbsentPage, appointment)
@@ -183,12 +183,12 @@ context('Log start time ', () => {
       const notesPage = NotesPage.visit(appointment, 'absent')
 
       // And I navigate to the review page
-      notesPage.clickSubmit()
+      notesPage.clickContinue()
 
       // And the API returns an error on submit
       const reviewPage = Page.verifyOnPage(ReviewPage, appointment, 'absent')
       reviewPage.alertPractitionerQuestion.checkOptionWithValue('yes')
-      reviewPage.clickSubmit()
+      reviewPage.clickConfirm()
 
       // Then I am taken to the show session page with an error showing
       const sessionPage = Page.verifyOnPage(SessionPage, session)

@@ -7,10 +7,13 @@ export default class BasePage {
 
   private readonly continueButtonLocator: Locator
 
+  private readonly confirmButtonLocator: Locator
+
   constructor(page: Page) {
     this.headingLocator = page.getByRole('heading', { level: 1 })
     this.backLinkLocator = page.getByRole('link', { name: 'Back', exact: true })
-    this.continueButtonLocator = page.getByRole('button', { name: 'continue' })
+    this.continueButtonLocator = page.getByRole('button', { name: 'Continue' })
+    this.confirmButtonLocator = page.getByRole('button', { name: 'Confirm' })
   }
 
   async clickBack() {
@@ -19,5 +22,9 @@ export default class BasePage {
 
   async clickContinue() {
     await this.continueButtonLocator.click()
+  }
+
+  async clickConfirm() {
+    await this.confirmButtonLocator.click()
   }
 }

@@ -62,7 +62,7 @@ context('Review', () => {
     const notesPage = NotesPage.visit(appointment, 'completed', formId)
 
     // And I submit the notes form
-    notesPage.clickSubmit()
+    notesPage.clickContinue()
   })
 
   //  Scenario: Showing the offender details
@@ -81,7 +81,7 @@ context('Review', () => {
 
     // And I do not select an option for the send alert question
     // And I click submit
-    reviewPage.clickSubmit()
+    reviewPage.clickConfirm()
 
     // Then I see the review page with errors
     reviewPage.shouldShowAlertPractitionerError()
@@ -113,13 +113,13 @@ context('Review', () => {
       formId,
     })
 
-    attendanceOutcomePage.clickSubmit()
+    attendanceOutcomePage.clickContinue()
 
     // And I complete the form
     const notesPage = NotesPage.visit(appointment, 'completed', formId)
 
     // And I submit the notes form
-    notesPage.clickSubmit()
+    notesPage.clickContinue()
 
     Page.verifyOnPage(ReviewPage, appointment, 'completed')
 

@@ -64,7 +64,7 @@ context('Log finish time ', () => {
 
       // When I submit an invalid time
       page.clearTime()
-      page.clickSubmit()
+      page.clickContinue()
 
       // Then I see the same page with errors
       Page.verifyOnPage(EndTimePage, appointment, 'completed')
@@ -78,7 +78,7 @@ context('Log finish time ', () => {
 
       // When I submit an invalid time
       page.enterTime('07:00')
-      page.clickSubmit()
+      page.clickContinue()
 
       // Then I see the same page with errors
       Page.verifyOnPage(EndTimePage, appointment, 'completed')
@@ -94,7 +94,7 @@ context('Log finish time ', () => {
       // When I submit a valid time
       cy.task('stubUpdateAppointmentOutcome', { appointment })
       page.enterTime('09:30')
-      page.clickSubmit()
+      page.clickContinue()
 
       // Then I see the next form page
       Page.verifyOnPage(CompliancePage, appointment)

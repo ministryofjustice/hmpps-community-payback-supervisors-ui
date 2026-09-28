@@ -77,7 +77,7 @@ context('Attendance outcome', () => {
     page.contactOutcomeOptions.shouldBeVisible()
 
     // When I submit the form
-    page.clickSubmit()
+    page.clickContinue()
 
     // Then I see the attendance outcome page with errors
     page.shouldShowErrorSummary('attendanceOutcome', 'Select an attendance outcome')
@@ -94,7 +94,7 @@ context('Attendance outcome', () => {
 
     cy.task('stubSaveAppointmentForm')
     // When I submit the form
-    page.clickSubmit()
+    page.clickContinue()
 
     // Then I see the log time page
     Page.verifyOnPage(StartTimePage, appointment, 'arrived')
