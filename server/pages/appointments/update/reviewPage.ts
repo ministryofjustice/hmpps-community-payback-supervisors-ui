@@ -117,7 +117,7 @@ export default class ReviewPage extends BaseAppointmentUpdatePage<Body> {
     })
 
     const outcomeField = [
-      { text: 'Outcome status' },
+      { text: 'Outcome' },
       {
         html: statusTagHtml,
       },

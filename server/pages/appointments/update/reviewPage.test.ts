@@ -51,7 +51,7 @@ describe('ReviewPage', () => {
           updatePath: url,
           rows: [
             [
-              { text: 'Outcome status' },
+              { text: 'Outcome' },
               { html: statusTagHtml },
               {
                 html: `<a href='${outcomeLink}' class="govuk-link govuk-link--no-visited-state">Change</a>`,
@@ -106,7 +106,7 @@ describe('ReviewPage', () => {
           updatePath: url,
           rows: [
             [
-              { text: 'Outcome status' },
+              { text: 'Outcome' },
               { html: statusTagHtml },
               {
                 html: `<a href='${outcomeLink}' class="govuk-link govuk-link--no-visited-state">Change</a>`,
@@ -153,7 +153,7 @@ describe('ReviewPage', () => {
           updatePath: url,
           rows: [
             [
-              { text: 'Outcome status' },
+              { text: 'Outcome' },
               { html: statusTagHtml },
               {
                 text: '',
@@ -204,7 +204,7 @@ describe('ReviewPage', () => {
           updatePath: url,
           rows: [
             [
-              { text: 'Outcome status' },
+              { text: 'Outcome' },
               { html: statusTagHtml },
               {
                 text: '',

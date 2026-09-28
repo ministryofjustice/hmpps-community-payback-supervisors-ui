@@ -49,11 +49,11 @@ export default class ReviewPage extends Page {
   }
 
   clickChangeOutcome(text = 'Change'): void {
-    cy.contains('th', 'Outcome status').next().next().contains(text).click()
+    cy.contains('th', 'Outcome').next().next().contains(text).click()
   }
 
   shouldShowCorrectOutcome(outcome: string) {
-    cy.contains('th', 'Outcome status').next().contains(outcome)
+    cy.contains('th', 'Outcome').next().contains(outcome)
   }
 
   shouldShowAlertPractitionerError() {
