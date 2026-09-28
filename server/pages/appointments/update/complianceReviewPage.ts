@@ -82,7 +82,7 @@ export default class ComplianceReviewPage extends ReviewPage {
       'Work quality': fmtLabel(this.formData?.attendanceData.workQuality),
       Behaviour: fmtLabel(this.formData?.attendanceData.behaviour),
       Notes: { value: this.formData.notes, changeUrl: this.notesUrl },
-      Sensitivity: {
+      Sensitive: {
         value: this.formData.sensitive
           ? 'Cannot be shared with person on probation'
           : 'Can be shared with person on probation',

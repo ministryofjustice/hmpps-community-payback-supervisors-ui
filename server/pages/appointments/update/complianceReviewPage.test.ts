@@ -109,7 +109,7 @@ describe('ComplianceReviewPage', () => {
               },
             ],
             [
-              { text: 'Sensitivity' },
+              { text: 'Sensitive' },
               { html: 'Cannot be shared with person on probation' },
               {
                 html: notesLink,
