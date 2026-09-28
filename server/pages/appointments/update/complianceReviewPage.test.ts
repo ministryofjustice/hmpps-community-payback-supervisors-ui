@@ -67,7 +67,7 @@ describe('ComplianceReviewPage', () => {
           alertDiaryText: 'Would you also like this to be sent to the alert diary?',
           rows: [
             [
-              { text: 'Outcome status' },
+              { text: 'Outcome' },
               { html: statusTagHtml },
               {
                 html: `<a href='${outcomeLink}' class="govuk-link govuk-link--no-visited-state">Change</a>`,
