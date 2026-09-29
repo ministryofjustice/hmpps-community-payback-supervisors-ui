@@ -71,7 +71,7 @@ export default class EndTimePage extends BaseAppointmentUpdatePage<Body> {
 
     return {
       ...commonViewData,
-      time: hasFormBody ? this.query.time : formData.endTime,
+      time: hasFormBody ? this.query.time : DateTimeFormats.stripTime(formData.endTime),
       question: 'Log end time',
       documentTitle: 'Log end time',
     }
