@@ -56,7 +56,7 @@ context('Attendance outcome', () => {
 
   beforeEach(function test() {
     cy.task('stubGetContactOutcomes', { contactOutcomes: this.contactOutcomes })
-    cy.task('stubGetAppointmentForm', appointmentOutcomeFormFactory.build())
+    cy.task('stubGetAppointmentForm', { form: appointmentOutcomeFormFactory.build() })
   })
 
   //  Scenario: Showing the offender details

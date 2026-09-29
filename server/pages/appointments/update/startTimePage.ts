@@ -86,7 +86,7 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
 
     return {
       ...commonViewData,
-      time: hasQueryBody ? this.query.time : formData?.startTime,
+      time: hasQueryBody ? this.query.time : DateTimeFormats.stripTime(formData?.startTime),
       question: 'Log start time',
       documentTitle: 'Log start time',
     }

@@ -88,6 +88,15 @@ describe('EndTimePage', () => {
       const result = page.viewData(appointment, form)
       expect(result.question).toBe('Log end time')
     })
+
+    it('strips seconds from the end time', () => {
+      const endTime = '09:00:00'
+      const appointment = appointmentFactory.build({ id: 1, endTime })
+
+      const page = new EndTimePage(action, formId)
+      const result = page.viewData(appointment, { ...form, endTime })
+      expect(result.time).toEqual('09:00')
+    })
   })
 
   describe('next', () => {
