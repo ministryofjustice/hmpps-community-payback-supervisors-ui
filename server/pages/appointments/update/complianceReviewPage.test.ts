@@ -88,15 +88,8 @@ describe('ComplianceReviewPage', () => {
               },
             ],
             [
-              { text: 'Work quality' },
-              { html: 'Good' },
-              {
-                html: changeLink,
-              },
-            ],
-            [
-              { text: 'Behaviour' },
-              { html: 'Not applicable' },
+              { text: 'Compliance' },
+              { html: 'Work quality - Good <br> Behaviour - Not applicable' },
               {
                 html: changeLink,
               },
