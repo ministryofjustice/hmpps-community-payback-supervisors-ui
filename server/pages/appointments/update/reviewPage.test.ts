@@ -5,12 +5,19 @@ import { contactOutcomeFactory } from '../../../testutils/factories/contactOutco
 import AppointmentUtils from '../../../utils/appointmentUtils'
 import ReviewPage from './reviewPage'
 import Offender from '../../../models/offender'
+import GovUkRadioGroup from '../../../utils/GovUKFrontend/GovUkRadioGroup'
+import ReferenceDataService from '../../../services/referenceDataService'
+import supervisorFactory from '../../../testutils/factories/supervisorFactory'
+import { AppointmentOutcomeForm } from '../../../@types/user-defined'
+import appointmentOutcomeFormFactory from '../../../testutils/factories/appointmentOutcomeFormFactory'
 
 jest.mock('../../../models/offender')
 
 describe('ReviewPage', () => {
+  let appointment: AppointmentDto
+  let form: AppointmentOutcomeForm
+
   describe('viewData', () => {
-    let appointment: AppointmentDto
     let offender: object
 
     beforeEach(() => {
@@ -29,13 +36,14 @@ describe('ReviewPage', () => {
     describe('when showWillAlertPractitionerMessage is true', () => {
       it('should return an object with correct data', () => {
         const formId = 'form1234'
-        const url = `${paths.appointments.notes.absent({ appointmentId: appointment.id.toString(), projectCode: appointment.projectCode })}?form=${formId}`
+        const backUrl = `${paths.appointments.notes.absent({ appointmentId: appointment.id.toString(), projectCode: appointment.projectCode })}?form=${formId}`
+        const updateUrl = `${paths.appointments.review.absent({ appointmentId: appointment.id.toString(), projectCode: appointment.projectCode })}?form=${formId}`
 
         const outcome = contactOutcomeFactory.build({ attended: true })
 
-        const page = new ReviewPage('test', { form: formId }, outcome, { 'Test key': 'Test value' }, true)
+        const page = new ReviewPage('absent', 'test', { form: formId }, outcome, { 'Test key': 'Test value' }, true)
 
-        const link = `<a href=${url} class="govuk-link govuk-link--no-visited-state">Change</a>`
+        const link = `<a href=${backUrl} class="govuk-link govuk-link--no-visited-state">Change</a>`
 
         const outcomeLink = `${paths.appointments.attendanceOutcome({
           projectCode: appointment.projectCode,
@@ -47,8 +55,8 @@ describe('ReviewPage', () => {
 
         expect(page.viewData(appointment)).toEqual({
           offender,
-          backPath: url,
-          updatePath: url,
+          backPath: backUrl,
+          updatePath: updateUrl,
           rows: [
             [
               { text: 'Outcome' },
@@ -81,7 +89,8 @@ describe('ReviewPage', () => {
     describe('when showWillAlertPractitionerMessage is false', () => {
       it('should return an object with correct data', () => {
         const formId = 'form1234'
-        const url = `${paths.appointments.notes.absent({ appointmentId: appointment.id.toString(), projectCode: appointment.projectCode })}?form=${formId}`
+        const backUrl = `${paths.appointments.notes.absent({ appointmentId: appointment.id.toString(), projectCode: appointment.projectCode })}?form=${formId}`
+        const updateUrl = `${paths.appointments.review.absent({ appointmentId: appointment.id.toString(), projectCode: appointment.projectCode })}?form=${formId}`
 
         const outcome = contactOutcomeFactory.build({
           willAlertEnforcementDiary: false,
@@ -93,17 +102,17 @@ describe('ReviewPage', () => {
           appointmentId: appointment.id.toString(),
         })}?form=${formId}`
 
-        const page = new ReviewPage('test', { form: formId }, outcome, { 'Test key': 'Test value' }, false)
+        const page = new ReviewPage('absent', 'test', { form: formId }, outcome, { 'Test key': 'Test value' }, false)
 
-        const link = `<a href=${url} class="govuk-link govuk-link--no-visited-state">Change</a>`
+        const link = `<a href=${backUrl} class="govuk-link govuk-link--no-visited-state">Change</a>`
 
         const statusTagHtml = '<strong>Contact outcome name</strong>'
         jest.spyOn(AppointmentUtils, 'buildStatusTag').mockReturnValue(statusTagHtml)
 
         expect(page.viewData(appointment)).toEqual({
           offender,
-          backPath: url,
-          updatePath: url,
+          backPath: backUrl,
+          updatePath: updateUrl,
           rows: [
             [
               { text: 'Outcome' },
@@ -136,21 +145,22 @@ describe('ReviewPage', () => {
     describe('when the outcome is not attended', () => {
       it('should not show the change link', () => {
         const formId = 'form1234'
-        const url = `${paths.appointments.notes.absent({ appointmentId: appointment.id.toString(), projectCode: appointment.projectCode })}?form=${formId}`
+        const backUrl = `${paths.appointments.notes.absent({ appointmentId: appointment.id.toString(), projectCode: appointment.projectCode })}?form=${formId}`
+        const updateUrl = `${paths.appointments.review.absent({ appointmentId: appointment.id.toString(), projectCode: appointment.projectCode })}?form=${formId}`
 
         const outcome = contactOutcomeFactory.build({ attended: false })
 
-        const page = new ReviewPage('test', { form: formId }, outcome, { 'Test key': 'Test value' }, true)
+        const page = new ReviewPage('absent', 'test', { form: formId }, outcome, { 'Test key': 'Test value' }, true)
 
-        const link = `<a href=${url} class="govuk-link govuk-link--no-visited-state">Change</a>`
+        const link = `<a href=${backUrl} class="govuk-link govuk-link--no-visited-state">Change</a>`
 
         const statusTagHtml = '<strong>Contact outcome name</strong>'
         jest.spyOn(AppointmentUtils, 'buildStatusTag').mockReturnValue(statusTagHtml)
 
         expect(page.viewData(appointment)).toEqual({
           offender,
-          backPath: url,
-          updatePath: url,
+          backPath: backUrl,
+          updatePath: updateUrl,
           rows: [
             [
               { text: 'Outcome' },
@@ -183,9 +193,11 @@ describe('ReviewPage', () => {
     describe('when the outcome does not exist', () => {
       it('should not show the change link', () => {
         const formId = 'form1234'
-        const url = `${paths.appointments.notes.absent({ appointmentId: appointment.id.toString(), projectCode: appointment.projectCode })}?form=${formId}`
+        const backUrl = `${paths.appointments.notes.absent({ appointmentId: appointment.id.toString(), projectCode: appointment.projectCode })}?form=${formId}`
+        const updateUrl = `${paths.appointments.review.absent({ appointmentId: appointment.id.toString(), projectCode: appointment.projectCode })}?form=${formId}`
 
         const page = new ReviewPage(
+          'absent',
           'test',
           { form: formId },
           undefined as unknown as ContactOutcomeDto,
@@ -193,15 +205,15 @@ describe('ReviewPage', () => {
           true,
         )
 
-        const link = `<a href=${url} class="govuk-link govuk-link--no-visited-state">Change</a>`
+        const link = `<a href=${backUrl} class="govuk-link govuk-link--no-visited-state">Change</a>`
 
         const statusTagHtml = '<strong>Contact outcome name</strong>'
         jest.spyOn(AppointmentUtils, 'buildStatusTag').mockReturnValue(statusTagHtml)
 
         expect(page.viewData(appointment)).toEqual({
           offender,
-          backPath: url,
-          updatePath: url,
+          backPath: backUrl,
+          updatePath: updateUrl,
           rows: [
             [
               { text: 'Outcome' },
@@ -229,6 +241,116 @@ describe('ReviewPage', () => {
           ],
         })
       })
+    })
+  })
+
+  describe('buildPayload', () => {
+    beforeEach(() => {
+      appointment = appointmentFactory.build()
+      jest.spyOn(GovUkRadioGroup, 'nullableValueFromYesOrNoItem').mockReturnValue(false)
+    })
+
+    const formId = '12'
+
+    describe('absent', () => {
+      it('returns data from the appointment except for notes, sensitive, supervisor code, and the outcome code', () => {
+        form = appointmentOutcomeFormFactory.build({
+          notes: 'testnote',
+          sensitive: true,
+          contactOutcomeCode: ReferenceDataService.UnacceptableAbsenceOutcomeCode,
+        })
+
+        const page = new ReviewPage(
+          'absent',
+          'test',
+          { form: formId },
+          undefined as unknown as ContactOutcomeDto,
+          { 'Test key': 'Test value' },
+          false,
+        )
+
+        const supervisor = supervisorFactory.build()
+
+        const result = page.buildPayload(appointment, form, supervisor)
+
+        expect(result).toEqual(
+          expect.objectContaining({
+            deliusId: appointment.id,
+            deliusVersionToUpdate: appointment.version,
+            alertActive: false,
+            startTime: appointment.startTime,
+            endTime: appointment.endTime,
+            attendanceData: appointment.attendanceData,
+            supervisorOfficerCode: supervisor.code,
+            date: appointment.date,
+            notes: 'testnote',
+            sensitive: true,
+            contactOutcomeCode: ReferenceDataService.UnacceptableAbsenceOutcomeCode,
+          }),
+        )
+      })
+    })
+
+    describe('completed', () => {
+      it('returns data from the form and query', () => {
+        form = appointmentOutcomeFormFactory.build({
+          notes: 'testnote',
+          sensitive: false,
+          contactOutcomeCode: 'ABCD',
+        })
+
+        const page = new ReviewPage(
+          'completed',
+          'test',
+          { form: formId },
+          undefined as unknown as ContactOutcomeDto,
+          { 'Test key': 'Test value' },
+          false,
+        )
+
+        const supervisor = supervisorFactory.build()
+
+        const result = page.buildPayload(appointment, form, supervisor)
+
+        expect(result).toEqual(
+          expect.objectContaining({
+            deliusId: appointment.id,
+            deliusVersionToUpdate: form.deliusVersion,
+            startTime: form.startTime,
+            endTime: form.endTime,
+            attendanceData: {
+              ...appointment.attendanceData,
+              ...form.attendanceData,
+            },
+            supervisorOfficerCode: supervisor.code,
+            date: appointment.date,
+            alertActive: false,
+            sensitive: form.sensitive,
+            contactOutcomeCode: 'ABCD',
+            notes: 'testnote',
+          }),
+        )
+      })
+    })
+
+    it('saves the correct outcome code if the action is completed', () => {
+      const page = new ReviewPage(
+        'completed',
+        'test',
+        { form: formId },
+        undefined as unknown as ContactOutcomeDto,
+        { 'Test key': 'Test value' },
+        true,
+      )
+      form = appointmentOutcomeFormFactory.build({
+        contactOutcomeCode: 'ABCD',
+      })
+
+      const supervisor = supervisorFactory.build()
+
+      const result = page.buildPayload(appointment, form, supervisor)
+
+      expect(result.contactOutcomeCode).toEqual('ABCD')
     })
   })
 })

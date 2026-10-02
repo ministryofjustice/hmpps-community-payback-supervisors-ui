@@ -1,6 +1,14 @@
-import { AppointmentDto, ContactOutcomeDto } from '../../../@types/shared'
-import { AppointmentUpdateQuery, GovUkRadioOption, ValidationErrors } from '../../../@types/user-defined'
+import { AppointmentDto, ContactOutcomeDto, SupervisorDto, UpdateAppointmentDto } from '../../../@types/shared'
+import {
+  AppointmentNotesAction,
+  AppointmentOutcomeForm,
+  AppointmentUpdateQuery,
+  GovUkRadioOption,
+  ValidationErrors,
+  YesOrNo,
+} from '../../../@types/user-defined'
 import paths from '../../../paths'
+import ReferenceDataService from '../../../services/referenceDataService'
 import AppointmentUtils from '../../../utils/appointmentUtils'
 import GovUkRadioGroup from '../../../utils/GovUKFrontend/GovUkRadioGroup'
 import { pathWithQuery } from '../../../utils/utils'
@@ -34,7 +42,10 @@ export type ReviewQuery = {
 export default class ReviewPage extends BaseAppointmentUpdatePage<Body> {
   protected changeUrl: string
 
+  formId: string | undefined
+
   constructor(
+    private action: AppointmentNotesAction,
     private readonly template: string,
     protected readonly query: ReviewQuery,
     private readonly outcome: ContactOutcomeDto,
@@ -46,17 +57,25 @@ export default class ReviewPage extends BaseAppointmentUpdatePage<Body> {
     this.template = `./${this.template}.njk`
   }
 
-  nextPath(_projectCode: string, _appointmentId: string | AppointmentDto): string {
-    return ''
+  nextPath(projectCode: string, appointmentId: string): string {
+    return this.pathWithFormId(paths.appointments.confirm[this.action]({ projectCode, appointmentId }))
   }
 
   protected backPath(appointment: AppointmentDto): string {
-    return this.updatePath(appointment)
+    return pathWithQuery(
+      paths.appointments.notes[this.action]({
+        appointmentId: appointment.id.toString(),
+        projectCode: appointment.projectCode,
+      }),
+      {
+        form: this.query.form,
+      },
+    )
   }
 
   protected updatePath(appointment: AppointmentDto): string {
     return pathWithQuery(
-      paths.appointments.notes.absent({
+      paths.appointments.review[this.action]({
         appointmentId: appointment.id.toString(),
         projectCode: appointment.projectCode,
       }),
@@ -134,5 +153,52 @@ export default class ReviewPage extends BaseAppointmentUpdatePage<Body> {
     fields.unshift(outcomeField)
 
     return fields
+  }
+
+  buildPayload(
+    appointment: AppointmentDto,
+    formData: AppointmentOutcomeForm,
+    supervisor: SupervisorDto,
+  ): UpdateAppointmentDto {
+    let payload: UpdateAppointmentDto
+
+    if (this.action === 'absent') {
+      payload = {
+        deliusId: appointment.id,
+        deliusVersionToUpdate: appointment.version,
+        alertActive: GovUkRadioGroup.nullableValueFromYesOrNoItem(this.query.alertPractitioner as YesOrNo),
+        startTime: appointment.startTime,
+        endTime: appointment.endTime,
+        contactOutcomeCode: ReferenceDataService.UnacceptableAbsenceOutcomeCode,
+        attendanceData: appointment.attendanceData,
+        supervisorOfficerCode: supervisor.code,
+        notes: formData.notes,
+        sensitive: formData.sensitive,
+        date: appointment.date,
+      }
+    } else {
+      payload = {
+        deliusId: appointment.id,
+        deliusVersionToUpdate: formData.deliusVersion,
+        startTime: formData.startTime,
+        endTime: formData.endTime,
+        contactOutcomeCode: formData.contactOutcomeCode,
+        attendanceData: {
+          ...appointment.attendanceData,
+          ...formData.attendanceData,
+        },
+        supervisorOfficerCode: supervisor.code,
+        alertActive: GovUkRadioGroup.nullableValueFromYesOrNoItem(this.query.alertPractitioner as YesOrNo),
+        notes: formData.notes,
+        sensitive: formData.sensitive,
+        date: appointment.date,
+      }
+    }
+
+    return payload
+  }
+
+  protected pathWithFormId(path: string): string {
+    return pathWithQuery(path, { form: this.formId })
   }
 }

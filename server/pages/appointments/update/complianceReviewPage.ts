@@ -11,15 +11,13 @@ export default class ComplianceReviewPage extends ReviewPage {
 
   private notesUrl: string
 
-  private formId: string
-
   constructor(
     private appointment: AppointmentDto,
     protected query: ReviewQuery,
     private contactOutcome: ContactOutcomeDto,
     private formData: AppointmentOutcomeForm,
   ) {
-    super('compliance', query, contactOutcome, {})
+    super('completed', 'compliance', query, contactOutcome, {})
 
     this.formId = this.query.form
 
@@ -62,7 +60,7 @@ export default class ComplianceReviewPage extends ReviewPage {
 
   protected updatePath(appointment: AppointmentDto): string {
     return pathWithQuery(
-      paths.appointments.notes.completed({
+      paths.appointments.review.completed({
         appointmentId: appointment.id.toString(),
         projectCode: appointment.projectCode,
       }),

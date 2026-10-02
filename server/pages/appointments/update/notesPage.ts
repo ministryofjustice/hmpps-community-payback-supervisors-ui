@@ -3,14 +3,11 @@ import {
   AppointmentOutcomeForm,
   AppointmentUpdateQuery,
   ValidationErrors,
-  YesOrNo,
 } from '../../../@types/user-defined'
-import { AppointmentDto, SupervisorDto, UpdateAppointmentDto } from '../../../@types/shared'
+import { AppointmentDto } from '../../../@types/shared'
 import paths from '../../../paths'
 import BaseAppointmentUpdatePage, { AppointmentUpdatePageViewData } from './baseAppointmentUpdatePage'
 import { pathWithQuery } from '../../../utils/utils'
-import GovUkRadioGroup from '../../../utils/GovUKFrontend/GovUkRadioGroup'
-import ReferenceDataService from '../../../services/referenceDataService'
 import { ReviewQuery } from './reviewPage'
 
 export type AttendanceOutcomeBody = {
@@ -89,49 +86,6 @@ export default class NotesPage extends BaseAppointmentUpdatePage<Body> {
     }
   }
 
-  buildPayload(
-    appointment: AppointmentDto,
-    formData: AppointmentOutcomeForm,
-    supervisor: SupervisorDto,
-  ): UpdateAppointmentDto {
-    let payload: UpdateAppointmentDto
-
-    if (this.action === 'absent') {
-      payload = {
-        deliusId: appointment.id,
-        deliusVersionToUpdate: appointment.version,
-        alertActive: GovUkRadioGroup.nullableValueFromYesOrNoItem(this.query.alertPractitioner as YesOrNo),
-        startTime: appointment.startTime,
-        endTime: appointment.endTime,
-        contactOutcomeCode: ReferenceDataService.UnacceptableAbsenceOutcomeCode,
-        attendanceData: appointment.attendanceData,
-        supervisorOfficerCode: supervisor.code,
-        notes: formData.notes,
-        sensitive: formData.sensitive,
-        date: appointment.date,
-      }
-    } else {
-      payload = {
-        deliusId: appointment.id,
-        deliusVersionToUpdate: formData.deliusVersion,
-        startTime: formData.startTime,
-        endTime: formData.endTime,
-        contactOutcomeCode: formData.contactOutcomeCode,
-        attendanceData: {
-          ...appointment.attendanceData,
-          ...formData.attendanceData,
-        },
-        supervisorOfficerCode: supervisor.code,
-        alertActive: GovUkRadioGroup.nullableValueFromYesOrNoItem(this.query.alertPractitioner as YesOrNo),
-        notes: formData.notes,
-        sensitive: formData.sensitive,
-        date: appointment.date,
-      }
-    }
-
-    return payload
-  }
-
   protected backPath(): string {
     if (this.action === 'absent') {
       return paths.appointments.show({
@@ -148,12 +102,12 @@ export default class NotesPage extends BaseAppointmentUpdatePage<Body> {
   }
 
   nextPath(projectCode: string, appointmentId: string): string {
-    return paths.appointments.confirm[this.action]({ projectCode, appointmentId })
+    return this.pathWithFormId(paths.appointments.review[this.action]({ projectCode, appointmentId }))
   }
 
   updatePath(): string {
     return this.pathWithFormId(
-      paths.appointments.review[this.action]({
+      paths.appointments.notes[this.action]({
         projectCode: this.appointment.projectCode,
         appointmentId: this.appointment.id.toString(),
       }),

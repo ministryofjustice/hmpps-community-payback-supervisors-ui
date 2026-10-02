@@ -60,5 +60,5 @@ export const pathWithQuery = (
 ) => {
   const [basePath, pathParams = ''] = path.split('?')
   const queryString = createQueryString({ ...qs.parse(pathParams), ...params }, options)
-  return `${basePath}?${queryString}`
+  return queryString ? `${basePath}?${queryString}` : basePath
 }
