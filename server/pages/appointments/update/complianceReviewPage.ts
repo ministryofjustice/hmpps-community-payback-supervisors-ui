@@ -85,9 +85,7 @@ export default class ComplianceReviewPage extends ReviewPage {
       },
       Notes: { value: this.formData.notes, changeUrl: this.notesUrl },
       Sensitive: {
-        value: this.formData.sensitive
-          ? 'Cannot be shared with person on probation'
-          : 'Can be shared with person on probation',
+        value: this.formData.sensitive ? 'Yes' : 'No',
         changeUrl: this.notesUrl,
       },
     }
