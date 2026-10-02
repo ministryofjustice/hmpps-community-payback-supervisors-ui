@@ -15,6 +15,6 @@ export type ProjectTypeDto = {
      * Project type code
      */
     code: string;
-    group?: 'ETE' | 'GROUP' | 'INDIVIDUAL' | 'INDUCTION';
+    group?: 'ETE' | 'OTHER_ETE' | 'GROUP' | 'INDIVIDUAL' | 'INDUCTION';
 };
 
