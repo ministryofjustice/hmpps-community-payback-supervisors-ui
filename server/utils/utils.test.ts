@@ -77,6 +77,14 @@ describe('path with query', () => {
     expect(result).toEqual('/path?form=1')
   })
 
+  it.each([{}, { form: undefined }])(
+    'returns the path without a query separator when there is no queryString',
+    params => {
+      const result = pathWithQuery('/path', params)
+      expect(result).toEqual('/path')
+    },
+  )
+
   it('returns a valid path even if the existing path has a ? in it', () => {
     const result = pathWithQuery('/path?foo=bar', { baz: 'quux' })
     expect(result).toEqual('/path?foo=bar&baz=quux')

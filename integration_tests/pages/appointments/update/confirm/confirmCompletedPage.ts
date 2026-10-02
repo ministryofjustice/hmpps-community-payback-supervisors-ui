@@ -12,8 +12,8 @@ export default class ConfirmCompletedPage extends BaseConfirmPage {
 
   static visit(appointment: AppointmentDto): ConfirmCompletedPage {
     const path = paths.appointments.confirm.completed({
-      appointmentId: appointment.id.toString(),
       projectCode: appointment.projectCode,
+      appointmentId: appointment.id.toString(),
     })
     cy.visit(path)
 

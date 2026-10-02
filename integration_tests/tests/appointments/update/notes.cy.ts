@@ -133,6 +133,10 @@ context('Notes', () => {
 
     // And I enter a note
     notesPage.enterNote('note')
+    cy.task('stubGetAppointmentForm', {
+      form: { ...form, notes: 'note' },
+      formId: 'some-form',
+    })
     notesPage.clickContinue()
 
     // Then I am taken to the review page
@@ -154,6 +158,11 @@ context('Notes', () => {
     notesPage.enterNote('note')
     // And I check the sensitive info checkbox
     notesPage.checkSensitiveInformation()
+    cy.task('stubGetAppointmentForm', {
+      form: { ...form, notes: 'note', sensitive: true },
+      formId: 'some-form',
+    })
+
     // And I submit the form
     notesPage.clickContinue()
 
@@ -178,6 +187,11 @@ context('Notes', () => {
     // Given I am on the notes page
     const notesPage = NotesPage.visit(appointment, 'absent')
     notesPage.enterNote('note')
+    cy.task('stubGetAppointmentForm', {
+      form: { ...form, notes: 'note', sensitive: true },
+      formId: 'some-form',
+    })
+
     // And I cannot see the sensitive info checkbox
     notesPage.shouldNotShowSensitiveInformationCheckBox()
     // And I submit the form

@@ -63,7 +63,7 @@ describe('ComplianceReviewPage', () => {
         expect(page.viewData(appointment)).toEqual({
           offender,
           backPath: `${paths.appointments.notes.completed(params)}?form=${formId}`,
-          updatePath: `${paths.appointments.notes.completed(params)}?form=${formId}`,
+          updatePath: `${paths.appointments.review.completed(params)}?form=${formId}`,
           alertDiaryText: 'Would you also like this to be sent to the alert diary?',
           rows: [
             [

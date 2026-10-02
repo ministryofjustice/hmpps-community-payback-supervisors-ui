@@ -71,23 +71,31 @@ export default function appointmentRoutes(controllers: Controllers, router: Rout
     auditEvent: Page.VIEW_APPOINTMENT_NOTES_PAGE,
   })
 
-  post(paths.appointments.review.absent.pattern, appointments.notesController.review('absent'), {
-    auditEvent: Page.VIEW_REVIEW_APPOINTMENT_ABSENT,
-  })
-
   post(paths.appointments.notes.absent.pattern, appointments.notesController.submit('absent'), {
-    auditEvent: Page.CREATE_APPOINTMENT_ABSENT_PAGE,
+    auditEvent: Page.EDIT_APPOINTMENT_NOTES_PAGE,
   })
 
   get(paths.appointments.notes.completed.pattern, appointments.notesController.show('completed'), {
     auditEvent: Page.VIEW_APPOINTMENT_NOTES_PAGE,
   })
 
-  post(paths.appointments.review.completed.pattern, appointments.notesController.review('completed'), {
-    auditEvent: Page.VIEW_REVIEW_APPOINTMENT_COMPLETED,
+  post(paths.appointments.notes.completed.pattern, appointments.notesController.submit('completed'), {
+    auditEvent: Page.EDIT_APPOINTMENT_NOTES_PAGE,
   })
 
-  post(paths.appointments.notes.completed.pattern, appointments.notesController.submit('completed'), {
+  get(paths.appointments.review.absent.pattern, appointments.reviewController.show('absent'), {
+    auditEvent: Page.VIEW_REVIEW_APPOINTMENT_ABSENT,
+  })
+
+  post(paths.appointments.review.absent.pattern, appointments.reviewController.submit('absent'), {
+    auditEvent: Page.CREATE_APPOINTMENT_ABSENT_PAGE,
+  })
+
+  get(paths.appointments.review.completed.pattern, appointments.reviewController.show('completed'), {
+    auditEvent: Page.VIEW_REVIEW_APPOINTMENT_ABSENT,
+  })
+
+  post(paths.appointments.review.completed.pattern, appointments.reviewController.submit('completed'), {
     auditEvent: Page.CREATE_APPOINTMENT_COMPLETED_PAGE,
   })
 

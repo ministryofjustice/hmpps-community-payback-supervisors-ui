@@ -5,10 +5,7 @@ import Offender from '../../../models/offender'
 import paths from '../../../paths'
 import appointmentFactory from '../../../testutils/factories/appointmentFactory'
 import appointmentOutcomeFormFactory from '../../../testutils/factories/appointmentOutcomeFormFactory'
-import GovUkRadioGroup from '../../../utils/GovUKFrontend/GovUkRadioGroup'
 import NotesPage from './notesPage'
-import ReferenceDataService from '../../../services/referenceDataService'
-import supervisorFactory from '../../../testutils/factories/supervisorFactory'
 
 jest.mock('../../../models/offender')
 
@@ -75,7 +72,7 @@ describe('NotesPage', () => {
         page = new NotesPage({ action: 'completed', query: { form: formId }, appointment })
         const result = page.viewData(form)
         expect(result.updatePath).toBe(
-          `${paths.appointments.review.completed({
+          `${paths.appointments.notes.completed({
             projectCode: appointment.projectCode,
             appointmentId: appointment.id.toString(),
           })}?form=${formId}`,
@@ -86,7 +83,7 @@ describe('NotesPage', () => {
         page = new NotesPage({ action: 'absent', query: { form: formId }, appointment })
         const result = page.viewData(form)
         expect(result.updatePath).toBe(
-          `${paths.appointments.review.absent({
+          `${paths.appointments.notes.absent({
             projectCode: appointment.projectCode,
             appointmentId: appointment.id.toString(),
           })}?form=${formId}`,
@@ -242,111 +239,24 @@ describe('NotesPage', () => {
   })
 
   describe('next', () => {
-    it('should return confirm page link for completed action', () => {
+    it('should return review page link for completed action', () => {
       const appointmentId = '1'
       const projectCode = '2'
       page = new NotesPage({ action: 'completed', query: {}, appointment })
 
       expect(page.nextPath(projectCode, appointmentId)).toBe(
-        paths.appointments.confirm.completed({ projectCode, appointmentId }),
+        paths.appointments.review.completed({ projectCode, appointmentId }),
       )
     })
 
-    it('should return confirm page link for absent action', () => {
+    it('should return review page link for absent action', () => {
       const appointmentId = '1'
       const projectCode = '2'
       page = new NotesPage({ action: 'absent', query: {}, appointment })
 
       expect(page.nextPath(projectCode, appointmentId)).toBe(
-        paths.appointments.confirm.absent({ projectCode, appointmentId }),
+        paths.appointments.review.absent({ projectCode, appointmentId }),
       )
-    })
-  })
-
-  describe('buildPayload', () => {
-    beforeEach(() => {
-      appointment = appointmentFactory.build()
-      jest.spyOn(GovUkRadioGroup, 'valueFromYesOrNoItem').mockReturnValue(false)
-    })
-
-    describe('absent', () => {
-      it('returns data from the appointment except for notes, sensitive, supervisor code, and the outcome code', () => {
-        form = appointmentOutcomeFormFactory.build({
-          notes: 'testnote',
-          sensitive: true,
-          contactOutcomeCode: ReferenceDataService.UnacceptableAbsenceOutcomeCode,
-        })
-
-        page = new NotesPage({ action: 'absent', query: { alertPractitioner: 'no' }, appointment })
-
-        const supervisor = supervisorFactory.build()
-
-        const result = page.buildPayload(appointment, form, supervisor)
-
-        expect(result).toEqual(
-          expect.objectContaining({
-            deliusId: appointment.id,
-            deliusVersionToUpdate: appointment.version,
-            alertActive: false,
-            startTime: appointment.startTime,
-            endTime: appointment.endTime,
-            attendanceData: appointment.attendanceData,
-            supervisorOfficerCode: supervisor.code,
-            date: appointment.date,
-            notes: 'testnote',
-            sensitive: true,
-            contactOutcomeCode: ReferenceDataService.UnacceptableAbsenceOutcomeCode,
-          }),
-        )
-      })
-    })
-
-    describe('completed', () => {
-      it('returns data from the form and query', () => {
-        form = appointmentOutcomeFormFactory.build({
-          notes: 'testnote',
-          sensitive: false,
-          contactOutcomeCode: 'ABCD',
-        })
-
-        page = new NotesPage({ action: 'completed', query: { alertPractitioner: 'yes' }, appointment })
-
-        const supervisor = supervisorFactory.build()
-
-        const result = page.buildPayload(appointment, form, supervisor)
-
-        expect(result).toEqual(
-          expect.objectContaining({
-            deliusId: appointment.id,
-            deliusVersionToUpdate: form.deliusVersion,
-            startTime: form.startTime,
-            endTime: form.endTime,
-            attendanceData: {
-              ...appointment.attendanceData,
-              ...form.attendanceData,
-            },
-            supervisorOfficerCode: supervisor.code,
-            date: appointment.date,
-            alertActive: true,
-            sensitive: form.sensitive,
-            contactOutcomeCode: 'ABCD',
-            notes: 'testnote',
-          }),
-        )
-      })
-    })
-
-    it('saves the correct outcome code if the action is completed', () => {
-      page = new NotesPage({ action: 'completed', query: {}, appointment })
-      form = appointmentOutcomeFormFactory.build({
-        contactOutcomeCode: 'ABCD',
-      })
-
-      const supervisor = supervisorFactory.build()
-
-      const result = page.buildPayload(appointment, form, supervisor)
-
-      expect(result.contactOutcomeCode).toEqual('ABCD')
     })
   })
 })
