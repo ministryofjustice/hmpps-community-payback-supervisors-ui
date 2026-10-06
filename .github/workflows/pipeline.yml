@@ -53,6 +53,11 @@ jobs:
           node-version-file: '.nvmrc'
           cache: 'npm'
 
+      - name: update npm
+        shell: bash
+        run: |
+          npm install -g npm@latest
+
       - name: Install dependencies
         run: npm run setup
 
