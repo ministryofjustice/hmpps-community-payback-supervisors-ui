@@ -190,9 +190,9 @@ context('Log start time ', () => {
       reviewPage.alertPractitionerQuestion.checkOptionWithValue('yes')
       reviewPage.clickConfirm()
 
-      // Then I am taken to the show session page with an error showing
-      const sessionPage = Page.verifyOnPage(SessionPage, session)
-      sessionPage.shouldShowErrorSummary('Unable to update appointment')
+      // Then I remain on the review page with an error showing
+
+      Page.verifyOnPage(ReviewPage).shouldShowAPIError('Unable to update appointment')
     })
   })
 })

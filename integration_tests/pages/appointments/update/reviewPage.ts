@@ -59,4 +59,8 @@ export default class ReviewPage extends Page {
   shouldShowAlertPractitionerError() {
     this.shouldShowErrorSummary('alertPractitioner', 'Choose whether you want to send an alert')
   }
+
+  shouldShowAPIError(errorMessage: string) {
+    cy.get('[data-testid="error-summary"]').should('contain', errorMessage)
+  }
 }
