@@ -46,7 +46,7 @@ export default class ReviewPage extends BaseAppointmentUpdatePage<Body> {
     this.template = `./${this.template}.njk`
   }
 
-  nextPath(_appointmentId: string | AppointmentDto, _projectCode: string): string {
+  nextPath(_projectCode: string, _appointmentId: string | AppointmentDto): string {
     return ''
   }
 

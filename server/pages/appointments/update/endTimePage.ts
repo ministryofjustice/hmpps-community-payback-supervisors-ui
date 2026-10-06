@@ -28,7 +28,7 @@ export default class EndTimePage extends BaseAppointmentUpdatePage<Body> {
     super()
   }
 
-  nextPath(appointmentId: string, projectCode: string): string {
+  nextPath(projectCode: string, appointmentId: string): string {
     return pathWithQuery(
       paths.appointments.completed.compliance({
         projectCode,

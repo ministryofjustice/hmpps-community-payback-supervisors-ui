@@ -30,7 +30,7 @@ export default class StartTimePage extends BaseAppointmentUpdatePage<Body> {
     super()
   }
 
-  nextPath(appointmentId: string, projectCode: string): string {
+  nextPath(projectCode: string, appointmentId: string): string {
     if (this.action === 'arrived') {
       return pathWithQuery(paths.appointments.completed.endTime({ projectCode, appointmentId }), {
         form: this.formId,

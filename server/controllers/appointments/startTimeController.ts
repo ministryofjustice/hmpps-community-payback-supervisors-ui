@@ -74,7 +74,7 @@ export default class StartTimeController {
       const updatedFormData = page.updatedFormData(formData)
       await this.appointmentFormService.saveForm(formId, res.locals.user.username, updatedFormData)
 
-      return res.redirect(page.nextPath(appointmentId, projectCode))
+      return res.redirect(page.nextPath(projectCode, appointmentId))
     }
   }
 }
