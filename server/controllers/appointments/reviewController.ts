@@ -1,6 +1,6 @@
 import type { Request, RequestHandler, Response } from 'express'
 import AppointmentService from '../../services/appointmentService'
-import { catchApiValidationErrorOrPropagate, generateErrorSummary } from '../../utils/errorUtils'
+import { catchApiValidationErrorOrPropagate, generateErrorSummary, generateErrorTextList } from '../../utils/errorUtils'
 import { AppointmentNotesAction, AppointmentOutcomeForm, AppointmentParams } from '../../@types/user-defined'
 import AppointmentFormService from '../../services/appointmentFormService'
 import { NotesQuery } from '../../pages/appointments/update/notesPage'
@@ -12,6 +12,7 @@ import { AppointmentDto, ContactOutcomeDto } from '../../@types/shared'
 import SupervisorService from '../../services/supervisorService'
 import setCrnAuditSubject from '../../utils/auditUtils'
 import paths from '../../paths'
+import { pathWithQuery } from '../../utils/utils'
 
 export default class ReviewController {
   constructor(
@@ -26,6 +27,7 @@ export default class ReviewController {
       const formId = _req.query.form?.toString()
 
       const { projectCode, appointmentId } = _req.params as unknown as AppointmentParams
+      const errorList = generateErrorTextList(res.locals.errorMessages)
 
       const appointment = await this.appointmentService.getAppointment({
         projectCode,
@@ -50,7 +52,7 @@ export default class ReviewController {
         formData,
       )
 
-      return res.render('appointments/update/review', reviewPageData)
+      return res.render('appointments/update/review', { ...reviewPageData, errorList })
     }
   }
 
@@ -109,7 +111,13 @@ export default class ReviewController {
           _req,
           res,
           error,
-          paths.sessions.show({ projectCode: appointment.projectCode, date: appointment.date }),
+          pathWithQuery(
+            paths.appointments.review[action]({
+              projectCode: appointment.projectCode,
+              appointmentId: appointmentParams.appointmentId,
+            }),
+            { form: formId },
+          ),
         )
       }
     }

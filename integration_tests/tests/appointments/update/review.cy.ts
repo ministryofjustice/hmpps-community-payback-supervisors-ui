@@ -32,6 +32,11 @@ import AttendanceOutcomePage from '../../../pages/appointments/update/attendance
 //    And I complete the form
 //    Then I see the new selection on the review page
 
+//  Scenario: 400 error from the API
+//    Given that I'm on the review page
+//    And the API returns an error on submit
+//    Then I remain on the review page with an error showing
+
 context('Review', () => {
   const formId = 'some-form'
   let appointment: AppointmentDto
@@ -125,5 +130,21 @@ context('Review', () => {
 
     // Then I see the new selection on the review page
     reviewPage.shouldShowCorrectOutcome('Attended - Failed to Comply')
+  })
+
+  // Scenario: 400 error from the API
+  describe('completed with error', () => {
+    it('Shows the error summary when an API error is thrown', () => {
+      // Given that I'm on the review page
+      const reviewPage = Page.verifyOnPage(ReviewPage, appointment, 'completed')
+      reviewPage.alertPractitionerQuestion.checkOptionWithValue('yes')
+
+      // And the API returns an error on submit
+      cy.task('stubUpdateAppointmentOutcomeWithError', { appointment, userMessage: 'Unable to update appointment' })
+      reviewPage.clickConfirm()
+
+      // Then I remain on the review page with an error showing
+      Page.verifyOnPage(ReviewPage).shouldShowAPIError('Unable to update appointment')
+    })
   })
 })
