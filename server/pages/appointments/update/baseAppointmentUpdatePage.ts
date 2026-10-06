@@ -20,7 +20,7 @@ export default abstract class BaseAppointmentUpdatePage<TBody> {
     this.checkHasErrors()
   }
 
-  abstract nextPath(appointmentId: string | AppointmentDto, projectCode: string): string
+  abstract nextPath(projectCode: string, appointmentId: string | AppointmentDto): string
 
   protected abstract backPath(appointment: AppointmentDto): string
 

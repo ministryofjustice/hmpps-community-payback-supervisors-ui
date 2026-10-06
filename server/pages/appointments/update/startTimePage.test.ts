@@ -105,7 +105,7 @@ describe('StartTimePage', () => {
         const appointmentId = '1'
         const projectCode = '2'
         const page = new StartTimePage('arrived', formId)
-        const result = page.nextPath(appointmentId, projectCode)
+        const result = page.nextPath(projectCode, appointmentId)
 
         expect(result).toEqual(`${paths.appointments.completed.endTime({ projectCode, appointmentId })}?form=${formId}`)
       })
@@ -116,7 +116,7 @@ describe('StartTimePage', () => {
         const appointmentId = '1'
         const projectCode = '2'
         const page = new StartTimePage('absent', formId)
-        const result = page.nextPath(appointmentId, projectCode)
+        const result = page.nextPath(projectCode, appointmentId)
 
         expect(result).toEqual(`${paths.appointments.confirm.absent({ projectCode, appointmentId })}?form=${formId}`)
       })
