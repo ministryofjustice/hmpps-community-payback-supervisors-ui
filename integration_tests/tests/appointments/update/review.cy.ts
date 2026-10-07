@@ -145,6 +145,9 @@ context('Review', () => {
 
       // Then I remain on the review page with an error showing
       Page.verifyOnPage(ReviewPage).shouldShowAPIError('Unable to update appointment')
+
+      // Alert practitioner choice should be preserved
+      reviewPage.alertPractitionerQuestion.shouldHaveSelectedValue('yes')
     })
   })
 })
