@@ -46,7 +46,7 @@ export default class ReviewController {
       const { reviewPageData } = this.getReviewPageAndViewData(
         action,
         contactOutcome,
-        { ..._req.body, form: formId },
+        { ..._req.body, form: formId, alertPractitioner: _req.query.alertPractitioner?.toString() },
         appointment,
         formId,
         formData,
@@ -116,7 +116,7 @@ export default class ReviewController {
               projectCode: appointment.projectCode,
               appointmentId: appointmentParams.appointmentId,
             }),
-            { form: formId },
+            { form: formId, ...{ alertPractitioner: _req.body.alertPractitioner } },
           ),
         )
       }

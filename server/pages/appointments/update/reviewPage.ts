@@ -91,7 +91,9 @@ export default class ReviewPage extends BaseAppointmentUpdatePage<Body> {
       rows: this.buildRows(appointment),
       template: this.template,
       showWillAlertPractitionerMessage: this.showWillAlertPractitionerMessage,
-      alertPractitionerItems: GovUkRadioGroup.yesNoItems({}),
+      alertPractitionerItems: GovUkRadioGroup.yesNoItems({
+        checkedValue: this.query.alertPractitioner as YesOrNo | undefined,
+      }),
       alertDiaryText: `Would you${this.showWillAlertPractitionerMessage ? ' also' : ''} like this to be sent to the alert diary?`,
     }
   }
