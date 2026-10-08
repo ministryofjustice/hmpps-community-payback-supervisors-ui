@@ -21,12 +21,11 @@ export default class ConfirmController {
       const appointment = await this.appointmentService.getAppointment(request)
       setCrnAuditSubject(res, appointment.offender.crn)
 
-      const offender = new Offender(appointment.offender)
+      const { name } = new Offender(appointment.offender)
 
       res.render('appointments/update/confirm', {
-        offender,
-        title: `You have recorded the outcome for ${offender.name}`,
-        nextStepsText: `${offender.name}'s probation practioner will be informed about this absence.`,
+        title: `You have recorded the outcome for ${name}`,
+        nextStepsText: `${name}'s probation practioner will be informed about this absence.`,
         sessionPath: paths.sessions.show({ projectCode: appointment.projectCode, date: appointment.date }),
       })
     }
