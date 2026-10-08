@@ -25,7 +25,7 @@ export default class ConfirmController {
 
       res.render('appointments/update/confirm', {
         title: `You have recorded the outcome for ${name}`,
-        nextStepsText: `${name}'s probation practioner will be informed about this absence.`,
+        nextStepsText: `${name}'s probation practitioner will be informed about this absence.`,
         sessionPath: paths.sessions.show({ projectCode: appointment.projectCode, date: appointment.date }),
       })
     }
