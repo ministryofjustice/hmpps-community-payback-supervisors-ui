@@ -77,7 +77,7 @@ export default class EndTimePage extends BaseAppointmentUpdatePage<Body> {
     }
   }
 
-  protected getValidationErrors(appointment: AppointmentDto): ValidationErrors<Body> {
+  protected getValidationErrors(startTime: string): ValidationErrors<Body> {
     if (!this.query.time) {
       return { time: { text: 'Enter the time they left' } }
     }
@@ -86,10 +86,10 @@ export default class EndTimePage extends BaseAppointmentUpdatePage<Body> {
       return { time: { text: 'Enter a valid end time, for example 17:00' } }
     }
 
-    if (!DateTimeFormats.isAfterTime(this.query.time, appointment.startTime)) {
+    if (!DateTimeFormats.isAfterTime(this.query.time, startTime)) {
       return {
         time: {
-          text: `End time must be after ${DateTimeFormats.stripTime(appointment.startTime)}`,
+          text: `End time must be after ${DateTimeFormats.stripTime(startTime)}`,
         },
       }
     }
