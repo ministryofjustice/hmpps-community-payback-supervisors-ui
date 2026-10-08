@@ -6,7 +6,7 @@ import BaseConfirmPage from './baseConfirmPage'
 export default class ConfirmAbsentPage extends BaseConfirmPage {
   constructor(appointment: AppointmentDto) {
     const offender = new Offender(appointment.offender)
-    const title = `${offender.name} has been recorded as absent`
+    const title = `You have recorded the outcome for ${offender.name}`
     super(title)
   }
 
