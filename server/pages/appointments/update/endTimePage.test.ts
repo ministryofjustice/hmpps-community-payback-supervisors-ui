@@ -1,3 +1,4 @@
+import { AppointmentDto } from '../../../@types/shared'
 import { AppointmentEndTimeAction, AppointmentOutcomeForm } from '../../../@types/user-defined'
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
@@ -224,6 +225,22 @@ describe('EndTimePage', () => {
         page.validate(form.startTime)
 
         expect(page.validationErrors.time).toEqual(undefined)
+      })
+    })
+
+    describe('The appointment start time is not evaulated when a form value is passed', () => {
+      it('uses the form start time when validating the end time', () => {
+        const page = new EndTimePage(action, formId, { time: '10:00' })
+        form = appointmentOutcomeFormFactory.build({ startTime: '11:00' })
+        const appointment: AppointmentDto = appointmentFactory.build()
+        expect(form.startTime).not.toBe(appointment.startTime)
+
+        page.validate(form.startTime)
+
+        expect(page.hasErrors).toBe(true)
+        expect(page.validationErrors.time).toEqual({
+          text: 'End time must be after 11:00',
+        })
       })
     })
   })
