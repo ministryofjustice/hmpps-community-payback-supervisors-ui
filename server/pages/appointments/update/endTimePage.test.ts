@@ -119,22 +119,23 @@ describe('EndTimePage', () => {
 
   describe('validate', () => {
     const action = 'completed'
-    let appointment: AppointmentDto
+    let form: AppointmentOutcomeForm
 
     beforeEach(() => {
-      appointment = appointmentFactory.build({ startTime: '09:00' })
+      form = appointmentOutcomeFormFactory.build()
+      jest.restoreAllMocks()
     })
     describe('when endTime is not present', () => {
       it.each([null, undefined, ''])('has errors should be true', (time?: string) => {
         const page = new EndTimePage(action, formId, { time })
-        page.validate(appointment)
+        page.validate(form.startTime)
 
         expect(page.hasErrors).toEqual(true)
       })
 
       it.each([null, undefined, ''])('validation errors should include error', (time?: string) => {
         const page = new EndTimePage(action, formId, { time })
-        page.validate(appointment)
+        page.validate(form.startTime)
 
         expect(page.validationErrors.time).toEqual({
           text: 'Enter the time they left',
@@ -146,14 +147,14 @@ describe('EndTimePage', () => {
       it('has errors should be true', () => {
         jest.spyOn(DateTimeFormats, 'isValidTime').mockReturnValue(false)
         const page = new EndTimePage(action, formId, { time: '8475438' })
-        page.validate(appointment)
+        page.validate(form.startTime)
 
         expect(page.hasErrors).toEqual(true)
       })
 
       it('validation errors should include error', () => {
         const page = new EndTimePage(action, formId, { time: '8475438' })
-        page.validate(appointment)
+        page.validate(form.startTime)
 
         expect(page.validationErrors.time).toEqual({
           text: 'Enter a valid end time, for example 17:00',
@@ -170,13 +171,13 @@ describe('EndTimePage', () => {
         page = new EndTimePage(action, formId, { time: '08:00' })
       })
       it('hasErrors should be true', () => {
-        page.validate(appointment)
+        page.validate(form.startTime)
 
         expect(page.hasErrors).toEqual(true)
       })
 
       it('validationErrors should contain error message', () => {
-        page.validate(appointment)
+        page.validate(form.startTime)
 
         expect(page.validationErrors.time).toEqual({
           text: 'End time must be after 09:00',
@@ -193,13 +194,13 @@ describe('EndTimePage', () => {
         page = new EndTimePage(action, formId, { time: '09:00' })
       })
       it('hasErrors should be true', () => {
-        page.validate(appointment)
+        page.validate(form.startTime)
 
         expect(page.hasErrors).toEqual(true)
       })
 
       it('validationErrors should contain error message', () => {
-        page.validate(appointment)
+        page.validate(form.startTime)
 
         expect(page.validationErrors.time).toEqual({
           text: 'End time must be after 09:00',
@@ -214,16 +215,32 @@ describe('EndTimePage', () => {
       })
       it('should return false', () => {
         const page = new EndTimePage(action, formId, { time: '10:00' })
-        page.validate(appointment)
+        page.validate(form.startTime)
 
         expect(page.hasErrors).toEqual(false)
       })
 
       it('endTime error should be undefined', () => {
         const page = new EndTimePage(action, formId, { time: '10:00' })
-        page.validate(appointment)
+        page.validate(form.startTime)
 
         expect(page.validationErrors.time).toEqual(undefined)
+      })
+    })
+
+    describe('The appointment start time is not evaulated when a form value is passed', () => {
+      it('uses the form start time when validating the end time', () => {
+        const page = new EndTimePage(action, formId, { time: '10:00' })
+        form = appointmentOutcomeFormFactory.build({ startTime: '11:00' })
+        const appointment: AppointmentDto = appointmentFactory.build()
+        expect(form.startTime).not.toBe(appointment.startTime)
+
+        page.validate(form.startTime)
+
+        expect(page.hasErrors).toBe(true)
+        expect(page.validationErrors.time).toEqual({
+          text: 'End time must be after 11:00',
+        })
       })
     })
   })

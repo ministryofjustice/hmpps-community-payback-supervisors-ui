@@ -60,7 +60,7 @@ export default class EndTimeController {
 
       const page = new EndTimePage(action, formId, _req.body)
       const formData = await this.appointmentFormService.getForm(formId, res.locals.user.username)
-      page.validate(appointment)
+      page.validate(formData.startTime)
 
       if (page.hasErrors) {
         return res.render('appointments/update/time', {
