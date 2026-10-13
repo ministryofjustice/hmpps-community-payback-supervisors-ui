@@ -166,4 +166,49 @@ describe('DateTimeFormats', () => {
       })
     })
   })
+
+  describe('totalMinutesToHumanReadableHoursAndMinutes', () => {
+    it.each([
+      [0, '0 minutes'],
+      [90, '1 hour 30 minutes'],
+      [240, '4 hours'],
+      [61, '1 hour 1 minute'],
+      [-90, '-1 hour 30 minutes'],
+      [-61, '-1 hour 1 minute'],
+      [-1, '-1 minute'],
+    ])('formats %d to %s', (minutes: number, expected: string) => {
+      expect(DateTimeFormats.totalMinutesToHumanReadableHoursAndMinutes(minutes)).toEqual(expected)
+    })
+  })
+
+  describe('totalMinutesToHoursAndMinutesNumberParts', () => {
+    it.each([
+      [0, { hours: 0, minutes: 0 }],
+      [60, { hours: 1, minutes: 0 }],
+      [61, { hours: 1, minutes: 1 }],
+      [90, { hours: 1, minutes: 30 }],
+      [640, { hours: 10, minutes: 40 }],
+      [-90, { hours: 1, minutes: 30 }],
+    ])('formats %d to %o', (totalMinutes: number, expected: { hours: number; minutes: number }) => {
+      expect(DateTimeFormats.totalMinutesToHoursAndMinutesNumberParts(totalMinutes)).toEqual(expected)
+    })
+
+    it.each([Number.NaN, Number.POSITIVE_INFINITY])('throws for invalid totalMinutes %s', (totalMinutes: number) => {
+      expect(() => DateTimeFormats.totalMinutesToHoursAndMinutesNumberParts(totalMinutes)).toThrow(RangeError)
+    })
+  })
+
+  describe('hoursAndMinutesToHumanReadable', () => {
+    it.each([
+      [8, 0, '8 hours'],
+      [7, 42, '7 hours 42 minutes'],
+      [1, 15, '1 hour 15 minutes'],
+      [0, 0, '0 minutes'],
+    ])(
+      'should return a natural language string for the given time',
+      (hours: number, minutes: number, expected: string) => {
+        expect(DateTimeFormats.hoursAndMinutesToHumanReadable(hours, minutes)).toBe(expected)
+      },
+    )
+  })
 })
