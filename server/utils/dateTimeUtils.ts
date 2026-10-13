@@ -98,4 +98,27 @@ export default class DateTimeFormats {
   private static timeToDate(time: string) {
     return new Date(`1970-01-01T${this.stripTime(time)}:00Z`)
   }
+
+  /**
+   * Takes a number of total minutes and converts to a human-readable string
+   * @param minutes a number representing minutes
+   * @returns A string in the format: '2 hours 10 minutes'
+   */
+  static totalMinutesToHumanReadableHoursAndMinutes(minutes: number): string {
+    if (!Number.isFinite(minutes)) {
+      throw new RangeError(`Invalid minutes: ${minutes}`)
+    }
+
+    const isNegative = minutes < 0
+    const absoluteMinutes = Math.abs(minutes)
+    const totalHours = Math.floor(absoluteMinutes / 60)
+    const totalMinutes = absoluteMinutes % 60
+    const hoursAndMinutes = []
+
+    if (totalHours > 0) hoursAndMinutes.push(`${totalHours} hour${totalHours === 1 ? '' : 's'}`)
+    if (totalMinutes > 0 || totalHours === 0)
+      hoursAndMinutes.push(`${totalMinutes} minute${totalMinutes === 1 ? '' : 's'}`)
+
+    return isNegative ? `-${hoursAndMinutes.join(' ')}` : hoursAndMinutes.join(' ')
+  }
 }
