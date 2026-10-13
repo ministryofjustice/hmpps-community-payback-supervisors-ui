@@ -6,8 +6,8 @@
 
   {% for item in items %}
 
-    <li class="{{item.classList}}">
-      <div class="govuk-summary-card card">
+    <li class="card-group__item {{item.containerClassList}}">
+      <div class="govuk-summary-card card {{item.cardClassList}}">
         <div class="govuk-summary-card__title-wrapper">
           <h3 class="govuk-summary-card__title">{{item.key}}</h3>
         </div>
