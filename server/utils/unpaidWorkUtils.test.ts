@@ -11,9 +11,7 @@ describe('UnpaidWorkUtils', () => {
       const unpaidWorkDetail = unpaidWorkDetailsFactory.build({
         requiredMinutes: 180,
         completedMinutes: 100,
-        completedEteMinutes: 60,
-        remainingEteMinutes: 30,
-        allowedEteMinutes: 90,
+        remainingMinutes: 80,
       })
 
       const result = UnpaidWorkUtils.unpaidWorkHoursDetails(unpaidWorkDetail)

@@ -35,6 +35,7 @@ import sessionSummaryFactory from '../../server/testutils/factories/sessionSumma
 import { contactOutcomeFactory, contactOutcomesFactory } from '../../server/testutils/factories/contactOutcomeFactory'
 import supervisorFactory from '../../server/testutils/factories/supervisorFactory'
 import supervisorTeamFactory from '../../server/testutils/factories/supervisorTeamFactory'
+import caseDetailsFactory from '../../server/testutils/factories/caseDetailsFactory'
 
 context('Home', () => {
   beforeEach(() => {
@@ -130,6 +131,9 @@ context('Session', () => {
     const appointment = appointmentFactory.build({ id: appointmentSummaries[0].id, projectCode: session.projectCode })
     //  When I click on an appointment
     cy.task('stubFindAppointment', { appointment })
+
+    const caseDetailsSummary = caseDetailsFactory.build({ offender: appointment.offender })
+    cy.task('stubGetOffenderSummary', { caseDetailsSummary })
 
     sessionPage.clickOnAnAppointment()
     //  Then I am taken to the appointment page

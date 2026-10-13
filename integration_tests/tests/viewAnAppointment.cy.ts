@@ -39,6 +39,8 @@ import AttendanceOutcomePage from '../pages/appointments/update/attendanceOutcom
 import { contactOutcomeFactory, contactOutcomesFactory } from '../../server/testutils/factories/contactOutcomeFactory'
 import pickupDataFactory from '../../server/testutils/factories/pickupDataFactory'
 import NotesPage from '../pages/appointments/update/notesPage'
+import caseDetailsFactory from '../../server/testutils/factories/caseDetailsFactory'
+import unpaidWorkDetailsFactory from '../../server/testutils/factories/unpaidWorkDetailsFactory'
 
 context('viewAnAppointment', () => {
   beforeEach(() => {
@@ -65,13 +67,21 @@ context('viewAnAppointment', () => {
     const appointment = appointmentFactory.build({ pickUpData: pickupDataFactory.build({ time: '09:00' }) })
     cy.task('stubFindAppointment', { appointment })
 
+    const unpaidWorkDetails = unpaidWorkDetailsFactory.build({ eventNumber: appointment.deliusEventNumber })
+    const caseDetailsSummary = caseDetailsFactory.build({
+      offender: appointment.offender,
+      unpaidWorkDetails: [unpaidWorkDetails],
+    })
+    cy.task('stubGetOffenderSummary', { caseDetailsSummary })
+
     const appointmentPage = AppointmentPage.visit(appointment)
 
-    // Then I should see the appointment, offender, and pick-up details
+    // Then I should see the appointment, offender, time cards and pick-up details
     appointmentPage.shouldShowAppointmentDetails()
     appointmentPage.shouldShowPickUpDetails()
     appointmentPage.shouldShowOffenderDetails(appointment.offender.crn)
     appointmentPage.shouldShowStatus('Scheduled')
+    appointmentPage.shouldShowTimeComponents()
   })
 
   //  Scenario: navigating back to the session page
@@ -79,6 +89,9 @@ context('viewAnAppointment', () => {
     const appointmentSummaries = appointmentSummaryFactory.buildList(3)
     const session = sessionFactory.build({ appointmentSummaries })
     const appointment = appointmentFactory.build({ projectCode: session.projectCode, date: session.date })
+
+    const caseDetailsSummary = caseDetailsFactory.build({ offender: appointment.offender })
+    cy.task('stubGetOffenderSummary', { caseDetailsSummary })
 
     // Given I am on an appointment page
     cy.signIn()
@@ -100,6 +113,9 @@ context('viewAnAppointment', () => {
       // Given I am on the appointment page
       const appointment = appointmentFactory.build({ contactOutcomeCode: undefined })
 
+      const caseDetailsSummary = caseDetailsFactory.build({ offender: appointment.offender })
+      cy.task('stubGetOffenderSummary', { caseDetailsSummary })
+
       cy.signIn()
       cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
       cy.task('stubSaveAppointmentForm')
@@ -118,6 +134,9 @@ context('viewAnAppointment', () => {
     it('I can navigate to the absent form', () => {
       // Given I am on the appointment page
       const appointment = appointmentFactory.build({ contactOutcomeCode: undefined })
+
+      const caseDetailsSummary = caseDetailsFactory.build({ offender: appointment.offender })
+      cy.task('stubGetOffenderSummary', { caseDetailsSummary })
 
       cy.signIn()
       cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
@@ -140,6 +159,9 @@ context('viewAnAppointment', () => {
       // Given I am on the appointment page
       const appointment = appointmentFactory.build()
 
+      const caseDetailsSummary = caseDetailsFactory.build({ offender: appointment.offender })
+      cy.task('stubGetOffenderSummary', { caseDetailsSummary })
+
       cy.signIn()
       cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
 
@@ -148,5 +170,30 @@ context('viewAnAppointment', () => {
       // Then I should not see any appointment update actions
       appointmentPage.shouldNotHaveAnyActions()
     })
+  })
+
+  //  Scenario: viewing an appointment with no unpaidWorkDetails
+  it('Viewing an appointment with no unpaid work details', () => {
+    // Given I am logged in
+    cy.signIn()
+
+    //  When I visit an appointment page
+    const appointment = appointmentFactory.build({ pickUpData: pickupDataFactory.build({ time: '09:00' }) })
+    cy.task('stubFindAppointment', { appointment })
+
+    const caseDetailsSummary = caseDetailsFactory.build({
+      offender: appointment.offender,
+      unpaidWorkDetails: undefined,
+    })
+    cy.task('stubGetOffenderSummary', { caseDetailsSummary })
+
+    const appointmentPage = AppointmentPage.visit(appointment)
+
+    // Then I should see the appointment, offender, and pick-up details
+    appointmentPage.shouldShowAppointmentDetails()
+    appointmentPage.shouldShowPickUpDetails()
+    appointmentPage.shouldShowOffenderDetails(appointment.offender.crn)
+    appointmentPage.shouldShowStatus('Scheduled')
+    appointmentPage.shouldNotShowTimeComponents()
   })
 })

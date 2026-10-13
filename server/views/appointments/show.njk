@@ -35,7 +35,9 @@
       {% endfor %}
     {% endif %}
 
-  {{ hoursCards(unpaidWorkHoursItems) }}
+  {% if unpaidWorkHoursItems %}
+    {{ hoursCards(unpaidWorkHoursItems) }}
+  {% endif %}
 
   <h2>Appointment details</h2>
 
