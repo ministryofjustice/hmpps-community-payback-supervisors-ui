@@ -1,6 +1,7 @@
 import { AppointmentDto } from '../../server/@types/shared'
 import Offender from '../../server/models/offender'
 import SummaryListComponent from './components/summaryListComponent'
+import TimeCardComponent from './components/timeCardComponent'
 import Page from './page'
 import paths from '../../server/paths'
 
@@ -11,6 +12,12 @@ export default class AppointmentPage extends Page {
 
   private readonly appointment: AppointmentDto
 
+  private readonly hoursRemaining: TimeCardComponent
+
+  private readonly hoursOrdered: TimeCardComponent
+
+  private readonly hoursCredited: TimeCardComponent
+
   constructor(appointment: AppointmentDto) {
     const offender = new Offender(appointment.offender)
     super(offender.name)
@@ -18,6 +25,9 @@ export default class AppointmentPage extends Page {
     this.appointment = appointment
     this.sessionDetails = new SummaryListComponent('Session details')
     this.pickUpDetails = new SummaryListComponent('Pick-up details')
+    this.hoursRemaining = new TimeCardComponent('Hours remaining')
+    this.hoursOrdered = new TimeCardComponent('Hours ordered')
+    this.hoursCredited = new TimeCardComponent('Hours credited')
   }
 
   static visit(appointment: AppointmentDto): AppointmentPage {
@@ -64,5 +74,11 @@ export default class AppointmentPage extends Page {
     this.arrivedButton().should('not.exist')
     this.notArrivedButton().should('not.exist')
     this.finishedButton().should('not.exist')
+  }
+
+  shouldShowTimeComponents() {
+    this.hoursRemaining.exists()
+    this.hoursOrdered.exists()
+    this.hoursCredited.exists()
   }
 }

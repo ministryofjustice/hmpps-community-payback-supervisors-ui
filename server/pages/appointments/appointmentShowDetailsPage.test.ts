@@ -26,6 +26,23 @@ describe('AppointmentShowDetailsPage', () => {
           crn: 'CRN123',
           isLimited: false,
         }
+        const unpaidWorkHoursItems = [
+          {
+            key: 'Hours remaining',
+            value: '1 hour 30 minutes',
+            classList: 'card-group__item govuk-grid-column-full',
+          },
+          {
+            key: 'Hours ordered',
+            value: '30 hours',
+            classList: 'card-group__item govuk-grid-column-one-half',
+          },
+          {
+            key: 'Hours completed',
+            value: '28 hours 30 minutes',
+            classList: 'card-group__item govuk-grid-column-one-half',
+          },
+        ]
 
         offenderMock.mockImplementation(() => {
           return offender
@@ -35,7 +52,7 @@ describe('AppointmentShowDetailsPage', () => {
         jest.spyOn(AppointmentUtils, 'buildStatusTag').mockReturnValue(statusTagHtml)
 
         const page = new AppointmentShowDetailsPage()
-        const result = page.viewData(appointment, null)
+        const result = page.viewData(appointment, null, unpaidWorkHoursItems)
         const { projectCode, date, id } = appointment
         expect(result).toEqual({
           pickupDetails: [],
@@ -55,6 +72,7 @@ describe('AppointmentShowDetailsPage', () => {
           ],
           statusTagHtml,
           canBeUpdated: true,
+          unpaidWorkHoursItems,
         })
       })
     })
@@ -79,6 +97,23 @@ describe('AppointmentShowDetailsPage', () => {
         }
         const location = '1001, 14B Office Street, City, Shireshire, ZY98XW'
         const pickUpTime = '09:00'
+        const unpaidWorkHoursItems = [
+          {
+            key: 'Hours remaining',
+            value: '1 hour 30 minutes',
+            classList: 'card-group__item govuk-grid-column-full',
+          },
+          {
+            key: 'Hours ordered',
+            value: '30 hours',
+            classList: 'card-group__item govuk-grid-column-one-half',
+          },
+          {
+            key: 'Hours completed',
+            value: '28 hours 30 minutes',
+            classList: 'card-group__item govuk-grid-column-one-half',
+          },
+        ]
 
         offenderMock.mockImplementation(() => {
           return offender
@@ -90,7 +125,7 @@ describe('AppointmentShowDetailsPage', () => {
         jest.spyOn(LocationUtils, 'locationToString').mockReturnValue(location)
 
         const page = new AppointmentShowDetailsPage()
-        const result = page.viewData(appointment, null)
+        const result = page.viewData(appointment, null, unpaidWorkHoursItems)
         const { projectCode, date, id } = appointment
         expect(result).toEqual({
           pickupDetails: [
@@ -113,6 +148,7 @@ describe('AppointmentShowDetailsPage', () => {
           ],
           statusTagHtml,
           canBeUpdated: true,
+          unpaidWorkHoursItems,
         })
       })
     })
@@ -120,8 +156,25 @@ describe('AppointmentShowDetailsPage', () => {
     describe('actions', () => {
       it('should include arrived links if status is scheduled', () => {
         const appointment = appointmentFactory.build({ contactOutcomeCode: null })
+        const unpaidWorkHoursItems = [
+          {
+            key: 'Hours remaining',
+            value: '1 hour 30 minutes',
+            classList: 'card-group__item govuk-grid-column-full',
+          },
+          {
+            key: 'Hours ordered',
+            value: '30 hours',
+            classList: 'card-group__item govuk-grid-column-one-half',
+          },
+          {
+            key: 'Hours completed',
+            value: '28 hours 30 minutes',
+            classList: 'card-group__item govuk-grid-column-one-half',
+          },
+        ]
         const page = new AppointmentShowDetailsPage()
-        const result = page.viewData(appointment, null)
+        const result = page.viewData(appointment, null, unpaidWorkHoursItems)
         const { projectCode, id } = appointment
 
         expect(result.actions).toEqual([
@@ -144,8 +197,25 @@ describe('AppointmentShowDetailsPage', () => {
         yesterday.setDate(yesterday.getDate() - 1)
 
         const appointment = appointmentFactory.build({ date: yesterday.toISOString() })
+        const unpaidWorkHoursItems = [
+          {
+            key: 'Hours remaining',
+            value: '1 hour 30 minutes',
+            classList: 'card-group__item govuk-grid-column-full',
+          },
+          {
+            key: 'Hours ordered',
+            value: '30 hours',
+            classList: 'card-group__item govuk-grid-column-one-half',
+          },
+          {
+            key: 'Hours completed',
+            value: '28 hours 30 minutes',
+            classList: 'card-group__item govuk-grid-column-one-half',
+          },
+        ]
         const page = new AppointmentShowDetailsPage()
-        const result = page.viewData(appointment, null)
+        const result = page.viewData(appointment, null, unpaidWorkHoursItems)
 
         expect(result.canBeUpdated).toBe(true)
       })
@@ -158,8 +228,25 @@ describe('AppointmentShowDetailsPage', () => {
         const startTime = `${tenMinutesAgo.getHours().toString().padStart(2, '0')}:${tenMinutesAgo.getMinutes().toString().padStart(2, '0')}`
 
         const appointment = appointmentFactory.build({ date: new Date().toISOString(), startTime })
+        const unpaidWorkHoursItems = [
+          {
+            key: 'Hours remaining',
+            value: '1 hour 30 minutes',
+            classList: 'card-group__item govuk-grid-column-full',
+          },
+          {
+            key: 'Hours ordered',
+            value: '30 hours',
+            classList: 'card-group__item govuk-grid-column-one-half',
+          },
+          {
+            key: 'Hours completed',
+            value: '28 hours 30 minutes',
+            classList: 'card-group__item govuk-grid-column-one-half',
+          },
+        ]
         const page = new AppointmentShowDetailsPage()
-        const result = page.viewData(appointment, null)
+        const result = page.viewData(appointment, null, unpaidWorkHoursItems)
 
         expect(result.canBeUpdated).toBe(true)
       })
@@ -170,8 +257,25 @@ describe('AppointmentShowDetailsPage', () => {
         tomorrow.setDate(tomorrow.getDate() + 1)
 
         const appointment = appointmentFactory.build({ date: tomorrow.toISOString() })
+        const unpaidWorkHoursItems = [
+          {
+            key: 'Hours remaining',
+            value: '1 hour 30 minutes',
+            classList: 'card-group__item govuk-grid-column-full',
+          },
+          {
+            key: 'Hours ordered',
+            value: '30 hours',
+            classList: 'card-group__item govuk-grid-column-one-half',
+          },
+          {
+            key: 'Hours completed',
+            value: '28 hours 30 minutes',
+            classList: 'card-group__item govuk-grid-column-one-half',
+          },
+        ]
         const page = new AppointmentShowDetailsPage()
-        const result = page.viewData(appointment, null)
+        const result = page.viewData(appointment, null, unpaidWorkHoursItems)
 
         expect(result.canBeUpdated).toBe(false)
       })
@@ -184,8 +288,25 @@ describe('AppointmentShowDetailsPage', () => {
         const startTime = `${tenMinutesFromNow.getHours().toString().padStart(2, '0')}:${tenMinutesFromNow.getMinutes().toString().padStart(2, '0')}`
 
         const appointment = appointmentFactory.build({ date: new Date().toISOString(), startTime })
+        const unpaidWorkHoursItems = [
+          {
+            key: 'Hours remaining',
+            value: '1 hour 30 minutes',
+            classList: 'card-group__item govuk-grid-column-full',
+          },
+          {
+            key: 'Hours ordered',
+            value: '30 hours',
+            classList: 'card-group__item govuk-grid-column-one-half',
+          },
+          {
+            key: 'Hours completed',
+            value: '28 hours 30 minutes',
+            classList: 'card-group__item govuk-grid-column-one-half',
+          },
+        ]
         const page = new AppointmentShowDetailsPage()
-        const result = page.viewData(appointment, null)
+        const result = page.viewData(appointment, null, unpaidWorkHoursItems)
 
         expect(result.canBeUpdated).toBe(false)
       })

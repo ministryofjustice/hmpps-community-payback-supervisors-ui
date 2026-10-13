@@ -4,6 +4,7 @@ import { AppointmentParams, GetAppointmentRequest } from '../../@types/user-defi
 import AppointmentShowDetailsPage from '../../pages/appointments/appointmentShowDetailsPage'
 import ReferenceDataService from '../../services/referenceDataService'
 import setCrnAuditSubject from '../../utils/auditUtils'
+import UnpaidWorkUtils from '../../utils/unpaidWorkUtils'
 import OffenderService from '../../services/offenderService'
 
 export default class ShowDetailsController {
@@ -25,6 +26,13 @@ export default class ShowDetailsController {
 
       const appointment = await this.appointmentService.getAppointment(request)
 
+      const offenderParams = {
+        username: request.username,
+        crn: appointment.offender.crn,
+      }
+      const offenderSummary = await this.offenderService.getOffenderSummary(offenderParams)
+      const unpaidWorkHoursItems = UnpaidWorkUtils.unpaidWorkHoursCardList(offenderSummary.unpaidWorkDetails[0])
+
       setCrnAuditSubject(res, appointment.offender.crn)
 
       const contactOutcome = appointment.contactOutcomeCode
@@ -33,7 +41,7 @@ export default class ShowDetailsController {
 
       const page = new AppointmentShowDetailsPage()
 
-      res.render('appointments/show', page.viewData(appointment, contactOutcome))
+      res.render('appointments/show', page.viewData(appointment, contactOutcome, unpaidWorkHoursItems))
     }
   }
 }
