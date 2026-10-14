@@ -20,6 +20,7 @@ import ReferenceDataClient from './referenceDataClient'
 import FormClient from './formClient'
 import SupervisorClient from './supervisorClient'
 import AuditClient from './auditClient'
+import OffenderClient from './offenderClient'
 
 export const dataAccess = () => {
   const hmppsAuthClient = new AuthenticationClient(
@@ -37,9 +38,10 @@ export const dataAccess = () => {
     referenceDataClient: new ReferenceDataClient(hmppsAuthClient),
     formClient: new FormClient(hmppsAuthClient),
     supervisorClient: new SupervisorClient(hmppsAuthClient),
+    offenderClient: new OffenderClient(hmppsAuthClient),
   }
 }
 
 export type DataAccess = ReturnType<typeof dataAccess>
 
-export { AuditClient, AuthenticationClient, SessionClient, AppointmentClient, ReferenceDataClient }
+export { AuditClient, AuthenticationClient, SessionClient, AppointmentClient, ReferenceDataClient, OffenderClient }
