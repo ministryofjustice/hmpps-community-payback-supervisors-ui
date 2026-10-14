@@ -4,7 +4,7 @@
 /* eslint-disable */
 export type AdjustmentDto = {
     deliusId: number;
-    id: string;
+    id?: string | null;
     date: string;
     amount: string;
     reason: string;

@@ -5,7 +5,9 @@
 export type AdjustmentReasonDto = {
     id: string;
     name: string;
+    hintText?: string | null;
     deliusCode: string;
     maxMinutesAllowed: number;
+    rank: number;
 };
 
