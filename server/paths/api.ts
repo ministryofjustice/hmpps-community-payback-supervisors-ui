@@ -6,6 +6,7 @@ const projectPath = supervisorUiPath.path('/projects/:projectCode')
 const singleAppointmentPath = projectPath.path('/appointments/:appointmentId')
 const referenceDataPath = path('/common/references')
 const formsPath = path('/common/forms')
+const offenderSummaryPath = path('/common/offenders/:crn/summary')
 
 export default {
   projects: {
@@ -25,4 +26,5 @@ export default {
   supervisors: {
     supervisor: supervisorUiPath.path('supervisors'),
   },
+  offenderSummary: offenderSummaryPath,
 }
