@@ -4,11 +4,13 @@ import { AppointmentParams, GetAppointmentRequest } from '../../@types/user-defi
 import AppointmentShowDetailsPage from '../../pages/appointments/appointmentShowDetailsPage'
 import ReferenceDataService from '../../services/referenceDataService'
 import setCrnAuditSubject from '../../utils/auditUtils'
+import OffenderService from '../../services/offenderService'
 
 export default class ShowDetailsController {
   constructor(
     private readonly appointmentService: AppointmentService,
     private readonly referenceDataService: ReferenceDataService,
+    private readonly offenderService: OffenderService,
   ) {}
 
   show(): RequestHandler {
