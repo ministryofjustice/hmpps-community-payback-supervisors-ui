@@ -31,6 +31,7 @@ export default class UnpaidWorkUtils {
         key: 'Hours remaining',
         value: formattedHours.totalHoursRemaining,
         containerClassList: `${containerClassList}-main`,
+        cardClassList: `card--highlight-blue`,
       },
       {
         key: 'Hours ordered',
