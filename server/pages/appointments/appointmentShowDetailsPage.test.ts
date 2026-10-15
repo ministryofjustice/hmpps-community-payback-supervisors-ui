@@ -31,7 +31,7 @@ describe('AppointmentShowDetailsPage', () => {
             key: 'Hours remaining',
             value: '1 hour 30 minutes',
             containerClassList: 'card-group__item card-group__item-main',
-            cardClassList: 'govuk-summary-card card',
+            cardClassList: 'govuk-summary-card card card--highlight-blue',
           },
           {
             key: 'Hours ordered',
@@ -105,7 +105,7 @@ describe('AppointmentShowDetailsPage', () => {
             key: 'Hours remaining',
             value: '1 hour 30 minutes',
             containerClassList: 'card-group__item card-group__item-main',
-            cardClassList: 'govuk-summary-card card',
+            cardClassList: 'govuk-summary-card card card--highlight-blue',
           },
           {
             key: 'Hours ordered',
@@ -167,7 +167,7 @@ describe('AppointmentShowDetailsPage', () => {
             key: 'Hours remaining',
             value: '1 hour 30 minutes',
             containerClassList: 'card-group__item card-group__item-main',
-            cardClassList: 'govuk-summary-card card',
+            cardClassList: 'govuk-summary-card card card--highlight-blue',
           },
           {
             key: 'Hours ordered',
@@ -211,7 +211,7 @@ describe('AppointmentShowDetailsPage', () => {
             key: 'Hours remaining',
             value: '1 hour 30 minutes',
             containerClassList: 'card-group__item card-group__item-main',
-            cardClassList: 'govuk-summary-card card',
+            cardClassList: 'govuk-summary-card card card--highlight-blue',
           },
           {
             key: 'Hours ordered',
@@ -245,7 +245,7 @@ describe('AppointmentShowDetailsPage', () => {
             key: 'Hours remaining',
             value: '1 hour 30 minutes',
             containerClassList: 'card-group__item card-group__item-main',
-            cardClassList: 'govuk-summary-card card',
+            cardClassList: 'govuk-summary-card card card--highlight-blue',
           },
           {
             key: 'Hours ordered',
@@ -277,7 +277,7 @@ describe('AppointmentShowDetailsPage', () => {
             key: 'Hours remaining',
             value: '1 hour 30 minutes',
             containerClassList: 'card-group__item card-group__item-main',
-            cardClassList: 'govuk-summary-card card',
+            cardClassList: 'govuk-summary-card card card--highlight-blue',
           },
           {
             key: 'Hours ordered',
@@ -311,7 +311,7 @@ describe('AppointmentShowDetailsPage', () => {
             key: 'Hours remaining',
             value: '1 hour 30 minutes',
             containerClassList: 'card-group__item card-group__item-main',
-            cardClassList: 'govuk-summary-card card',
+            cardClassList: 'govuk-summary-card card card--highlight-blue',
           },
           {
             key: 'Hours ordered',
