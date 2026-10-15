@@ -41,7 +41,8 @@ export interface LinkItem {
 export interface unpaidWorkItem {
   key: string
   value: string
-  classList: string
+  containerClassList: string
+  cardClassList: string
 }
 
 export interface AuditParams {

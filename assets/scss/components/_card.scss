@@ -114,3 +114,7 @@
   //   margin-bottom: 0;
   // }
 }
+
+.card--highlight-blue {
+  border-top: 5px solid govuk-colour('blue', $variant: 'tint-25');
+}

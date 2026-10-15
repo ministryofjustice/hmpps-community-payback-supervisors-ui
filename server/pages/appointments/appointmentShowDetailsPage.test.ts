@@ -30,17 +30,20 @@ describe('AppointmentShowDetailsPage', () => {
           {
             key: 'Hours remaining',
             value: '1 hour 30 minutes',
-            classList: 'card-group__item govuk-grid-column-full',
+            containerClassList: 'card-group__item govuk-grid-column-full',
+            cardClassList: 'govuk-summary-card card card--highlight-blue',
           },
           {
             key: 'Hours ordered',
             value: '30 hours',
-            classList: 'card-group__item govuk-grid-column-one-half',
+            containerClassList: 'card-group__item card-group__item-one-half',
+            cardClassList: 'govuk-summary-card card',
           },
           {
             key: 'Hours completed',
             value: '28 hours 30 minutes',
-            classList: 'card-group__item govuk-grid-column-one-half',
+            containerClassList: 'card-group__item card-group__item-one-half',
+            cardClassList: 'govuk-summary-card card',
           },
         ]
 
@@ -101,17 +104,20 @@ describe('AppointmentShowDetailsPage', () => {
           {
             key: 'Hours remaining',
             value: '1 hour 30 minutes',
-            classList: 'card-group__item govuk-grid-column-full',
+            containerClassList: 'card-group__item govuk-grid-column-full',
+            cardClassList: 'govuk-summary-card card card--highlight-blue',
           },
           {
             key: 'Hours ordered',
             value: '30 hours',
-            classList: 'card-group__item govuk-grid-column-one-half',
+            containerClassList: 'card-group__item card-group__item-one-half',
+            cardClassList: 'govuk-summary-card card',
           },
           {
             key: 'Hours completed',
             value: '28 hours 30 minutes',
-            classList: 'card-group__item govuk-grid-column-one-half',
+            containerClassList: 'card-group__item card-group__item-one-half',
+            cardClassList: 'govuk-summary-card card',
           },
         ]
 
@@ -160,17 +166,20 @@ describe('AppointmentShowDetailsPage', () => {
           {
             key: 'Hours remaining',
             value: '1 hour 30 minutes',
-            classList: 'card-group__item govuk-grid-column-full',
+            containerClassList: 'card-group__item govuk-grid-column-full',
+            cardClassList: 'govuk-summary-card card card--highlight-blue',
           },
           {
             key: 'Hours ordered',
             value: '30 hours',
-            classList: 'card-group__item govuk-grid-column-one-half',
+            containerClassList: 'card-group__item card-group__item-one-half',
+            cardClassList: 'govuk-summary-card card',
           },
           {
             key: 'Hours completed',
             value: '28 hours 30 minutes',
-            classList: 'card-group__item govuk-grid-column-one-half',
+            containerClassList: 'card-group__item card-group__item-one-half',
+            cardClassList: 'govuk-summary-card card',
           },
         ]
         const page = new AppointmentShowDetailsPage()
@@ -201,17 +210,20 @@ describe('AppointmentShowDetailsPage', () => {
           {
             key: 'Hours remaining',
             value: '1 hour 30 minutes',
-            classList: 'card-group__item govuk-grid-column-full',
+            containerClassList: 'card-group__item govuk-grid-column-full',
+            cardClassList: 'govuk-summary-card card card--highlight-blue',
           },
           {
             key: 'Hours ordered',
             value: '30 hours',
-            classList: 'card-group__item govuk-grid-column-one-half',
+            containerClassList: 'card-group__item card-group__item-one-half',
+            cardClassList: 'govuk-summary-card card',
           },
           {
             key: 'Hours completed',
             value: '28 hours 30 minutes',
-            classList: 'card-group__item govuk-grid-column-one-half',
+            containerClassList: 'card-group__item card-group__item-one-half',
+            cardClassList: 'govuk-summary-card card',
           },
         ]
         const page = new AppointmentShowDetailsPage()
@@ -232,17 +244,20 @@ describe('AppointmentShowDetailsPage', () => {
           {
             key: 'Hours remaining',
             value: '1 hour 30 minutes',
-            classList: 'card-group__item govuk-grid-column-full',
+            containerClassList: 'card-group__item govuk-grid-column-full',
+            cardClassList: 'govuk-summary-card card card--highlight-blue',
           },
           {
             key: 'Hours ordered',
             value: '30 hours',
-            classList: 'card-group__item govuk-grid-column-one-half',
+            containerClassList: 'card-group__item card-group__item-one-half',
+            cardClassList: 'govuk-summary-card card',
           },
           {
             key: 'Hours completed',
             value: '28 hours 30 minutes',
-            classList: 'card-group__item govuk-grid-column-one-half',
+            containerClassList: 'card-group__item card-group__item-one-half',
+            cardClassList: 'govuk-summary-card card',
           },
         ]
         const page = new AppointmentShowDetailsPage()
@@ -261,17 +276,20 @@ describe('AppointmentShowDetailsPage', () => {
           {
             key: 'Hours remaining',
             value: '1 hour 30 minutes',
-            classList: 'card-group__item govuk-grid-column-full',
+            containerClassList: 'card-group__item govuk-grid-column-full',
+            cardClassList: 'govuk-summary-card card card--highlight-blue',
           },
           {
             key: 'Hours ordered',
             value: '30 hours',
-            classList: 'card-group__item govuk-grid-column-one-half',
+            containerClassList: 'card-group__item card-group__item-one-half',
+            cardClassList: 'govuk-summary-card card',
           },
           {
             key: 'Hours completed',
             value: '28 hours 30 minutes',
-            classList: 'card-group__item govuk-grid-column-one-half',
+            containerClassList: 'card-group__item card-group__item-one-half',
+            cardClassList: 'govuk-summary-card card',
           },
         ]
         const page = new AppointmentShowDetailsPage()
@@ -292,17 +310,20 @@ describe('AppointmentShowDetailsPage', () => {
           {
             key: 'Hours remaining',
             value: '1 hour 30 minutes',
-            classList: 'card-group__item govuk-grid-column-full',
+            containerClassList: 'card-group__item govuk-grid-column-full',
+            cardClassList: 'govuk-summary-card card card--highlight-blue',
           },
           {
             key: 'Hours ordered',
             value: '30 hours',
-            classList: 'card-group__item govuk-grid-column-one-half',
+            containerClassList: 'card-group__item card-group__item-one-half',
+            cardClassList: 'govuk-summary-card card',
           },
           {
             key: 'Hours completed',
             value: '28 hours 30 minutes',
-            classList: 'card-group__item govuk-grid-column-one-half',
+            containerClassList: 'card-group__item card-group__item-one-half',
+            cardClassList: 'govuk-summary-card card',
           },
         ]
         const page = new AppointmentShowDetailsPage()

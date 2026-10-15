@@ -21,23 +21,26 @@ export default class UnpaidWorkUtils {
 
   static unpaidWorkHoursCardList(
     unpaidWorkDetails: CommonUnpaidWorkDetailsDto,
-  ): Array<{ key: string; value: string; classList: string }> {
+  ): Array<{ key: string; value: string; containerClassList: string; cardClassList: string }> {
     const formattedHours = this.unpaidWorkHoursDetails(unpaidWorkDetails)
     return [
       {
         key: 'Hours remaining',
         value: formattedHours.totalHoursRemaining,
-        classList: 'card-group__item govuk-grid-column-full',
+        containerClassList: 'card-group__item govuk-grid-column-full',
+        cardClassList: 'govuk-summary-card card card--highlight-blue',
       },
       {
         key: 'Hours ordered',
         value: formattedHours.totalHoursOrdered,
-        classList: 'card-group__item card-group__item-one-half',
+        containerClassList: 'card-group__item card-group__item-one-half',
+        cardClassList: 'govuk-summary-card card',
       },
       {
         key: 'Hours credited',
         value: formattedHours.totalHoursCredited,
-        classList: 'card-group__item card-group__item-one-half',
+        containerClassList: 'card-group__item card-group__item-one-half',
+        cardClassList: 'govuk-summary-card card',
       },
     ]
   }
