@@ -31,9 +31,10 @@ export default class ShowDetailsController {
         crn: appointment.offender.crn,
       }
       const offenderSummary = await this.offenderService.getOffenderSummary(offenderParams)
-      const unpaidWorkHoursItems = offenderSummary.unpaidWorkDetails
-        ? UnpaidWorkUtils.unpaidWorkHoursCardList(offenderSummary.unpaidWorkDetails[0])
-        : null
+      const unpaidWorkDetails = offenderSummary.unpaidWorkDetails?.find(
+        detail => detail.eventNumber === appointment.deliusEventNumber,
+      )
+      const unpaidWorkHoursItems = unpaidWorkDetails ? UnpaidWorkUtils.unpaidWorkHoursCardList(unpaidWorkDetails) : null
 
       setCrnAuditSubject(res, appointment.offender.crn)
 
