@@ -93,12 +93,20 @@
   margin-bottom: 0;
 }
 
-// Custom class which gives control over the half-sizing of our time cards
+// Custom classes which give control over the sizing and layout of our time cards
+// These are a close match to the govuk-grid-column-[size] classes
 .card-group__item-one-half {
   box-sizing: border-box;
   width: 50%;
   padding: 0 15px;
   float: left;
+}
+
+.card-group__item-main,
+.card-group__item-sub {
+  box-sizing: border-box;
+  padding: 0 15px;
+  width: 33.3333333333%;
 }
 
 .card-group__item .card {
@@ -109,10 +117,14 @@
   .card-group__item .card {
     margin-bottom: 15px;
   }
+  .card-group__item-main {
+    width: 100%;
+  }
 
-  // .card-group__item:last-child .card {
-  //   margin-bottom: 0;
-  // }
+  .card-group__item-sub {
+    width: 50%;
+    float: left;
+  }
 }
 
 .card--highlight-blue {
