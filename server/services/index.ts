@@ -5,6 +5,7 @@ import SessionService from './sessionService'
 import ReferenceDataService from './referenceDataService'
 import SupervisorService from './supervisorService'
 import AppointmentFormService from './appointmentFormService'
+import OffenderService from './offenderService'
 
 export const services = () => {
   const {
@@ -15,6 +16,7 @@ export const services = () => {
     referenceDataClient,
     formClient,
     supervisorClient,
+    offenderClient,
   } = dataAccess()
 
   return {
@@ -25,6 +27,7 @@ export const services = () => {
     referenceDataService: new ReferenceDataService(referenceDataClient),
     supervisorService: new SupervisorService(supervisorClient),
     appointmentFormService: new AppointmentFormService(formClient),
+    offenderService: new OffenderService(offenderClient),
   }
 }
 

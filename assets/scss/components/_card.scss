@@ -1,0 +1,132 @@
+.card {
+  margin-bottom: 40px;
+  background: #fff;
+  border: 1px solid #d9dadb;
+  position: relative;
+  width: 100%;
+  // border-bottom-width: 5px;
+}
+
+.card__heading {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.card {
+  .govuk-summary-card__title-wrapper {
+    padding: 15px;
+  }
+  .govuk-summary-card__title {
+    font-size: 1.15rem;
+  }
+}
+
+.card__description {
+  margin-bottom: 0;
+}
+
+.card__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card__action {
+  padding: 1rem;
+}
+
+.card--clickable:hover,
+.card--clickable:active {
+  cursor: pointer;
+}
+
+.card--clickable:hover .card__heading a,
+.card--clickable:hover .card__link,
+.card--clickable:active .card__heading a,
+.card--clickable:active .card__link {
+  color: #003078;
+  text-decoration: none;
+}
+
+.card--clickable:hover .card__heading a:focus,
+.card--clickable:hover .card__link:focus,
+.card--clickable:active .card__heading a:focus,
+.card--clickable:active .card__link:focus {
+  outline: 3px solid transparent;
+  color: #0b0c0c;
+  background-color: #fd0;
+  box-shadow:
+    0 -2px #fd0,
+    0 4px #0b0c0c;
+  text-decoration: none;
+}
+
+.card--clickable:hover {
+  border-color: #b1b4b6;
+}
+
+.card--clickable:active {
+  border-color: #b1b4b6;
+  bottom: -1px;
+}
+
+.card--grey {
+  background-color: #f3f2f1;
+}
+
+.card-group {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+  padding: 0;
+}
+
+@media (max-width: 48.0525em) {
+  .card-group {
+    margin-bottom: 30px;
+  }
+}
+
+.card-group__item {
+  display: flex;
+  list-style-type: none;
+  margin-bottom: 0;
+}
+
+// Custom classes which give control over the sizing and layout of our time cards
+// These are a close match to the govuk-grid-column-[size] classes
+.card-group__item-one-half {
+  box-sizing: border-box;
+  width: 50%;
+  padding: 0 15px;
+  float: left;
+}
+
+.card-group__item-main,
+.card-group__item-sub {
+  box-sizing: border-box;
+  padding: 0 15px;
+  width: 33.3333333333%;
+}
+
+.card-group__item .card {
+  margin-bottom: 25px;
+}
+
+@media (max-width: 48.0525em) {
+  .card-group__item .card {
+    margin-bottom: 15px;
+  }
+  .card-group__item-main {
+    width: 100%;
+  }
+
+  .card-group__item-sub {
+    width: 50%;
+    float: left;
+  }
+}
+
+.card--highlight-blue {
+  border-top: 5px solid govuk-colour('blue', $variant: 'tint-25');
+}

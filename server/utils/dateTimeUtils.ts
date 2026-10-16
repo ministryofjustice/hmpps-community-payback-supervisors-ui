@@ -98,4 +98,61 @@ export default class DateTimeFormats {
   private static timeToDate(time: string) {
     return new Date(`1970-01-01T${this.stripTime(time)}:00Z`)
   }
+
+  /**
+   * Takes a number of total minutes and converts to a human-readable string
+   * @param minutes a number representing minutes
+   * @returns A string in the format: '2 hours 10 minutes'
+   */
+  static totalMinutesToHumanReadableHoursAndMinutes(minutes: number): string {
+    const isNegative = minutes < 0
+    const hoursAndMinutesObj = DateTimeFormats.totalMinutesToHoursAndMinutesNumberParts(Math.abs(minutes))
+
+    const formatted = DateTimeFormats.hoursAndMinutesToHumanReadable(
+      hoursAndMinutesObj.hours,
+      hoursAndMinutesObj.minutes,
+    )
+    return isNegative ? `-${formatted}` : formatted
+  }
+
+  /**
+   * Converts a number representing total minutes into separate hour/minute numbers.
+   * @param totalMinutes number of minutes (must be >= 0)
+   */
+  static totalMinutesToHoursAndMinutesNumberParts(totalMinutes: number): { hours: number; minutes: number } {
+    if (!Number.isFinite(totalMinutes)) {
+      throw new RangeError(`Invalid totalMinutes: ${totalMinutes}`)
+    }
+
+    const absoluteTotalMinutes = Math.abs(totalMinutes)
+    const hours = Math.floor(absoluteTotalMinutes / 60)
+    const minutesRemaining = absoluteTotalMinutes % 60
+
+    return {
+      hours,
+      minutes: minutesRemaining,
+    }
+  }
+
+  /**
+   * Returns a sentence containing a date and time period
+   * @param hours - number
+   * @param minutes - number
+   * @returns A string in the format: '2 hours 10 minutes'
+   */
+  static hoursAndMinutesToHumanReadable(hours: number, minutes: number) {
+    if (hours === 0 && minutes === 0) {
+      return '0 minutes'
+    }
+
+    if (hours === 0) {
+      return `${minutes} minute${minutes !== 1 ? 's' : ''}`
+    }
+
+    if (minutes === 0) {
+      return `${hours} hour${hours !== 1 ? 's' : ''}`
+    }
+
+    return `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`
+  }
 }

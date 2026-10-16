@@ -1,5 +1,5 @@
 import { AppointmentDto, ContactOutcomeDto } from '../../@types/shared'
-import { GovUkSummaryListItem, LinkItem } from '../../@types/user-defined'
+import { GovUkSummaryListItem, LinkItem, unpaidWorkItem } from '../../@types/user-defined'
 import Offender from '../../models/offender'
 import paths from '../../paths'
 import AppointmentUtils from '../../utils/appointmentUtils'
@@ -16,10 +16,15 @@ interface ViewData {
   statusTagHtml: string
   pickupDetails: Array<GovUkSummaryListItem>
   canBeUpdated: boolean
+  unpaidWorkHoursItems: unpaidWorkItem[]
 }
 
 export default class AppointmentShowDetailsPage {
-  viewData(appointment: AppointmentDto, contactOutcome: ContactOutcomeDto): ViewData {
+  viewData(
+    appointment: AppointmentDto,
+    contactOutcome: ContactOutcomeDto,
+    unpaidWorkHoursItems: unpaidWorkItem[],
+  ): ViewData {
     return {
       offender: new Offender(appointment.offender),
       startTime: DateTimeFormats.stripTime(appointment.startTime),
@@ -29,6 +34,7 @@ export default class AppointmentShowDetailsPage {
       statusTagHtml: AppointmentUtils.buildStatusTag(contactOutcome),
       pickupDetails: this.pickupDetails(appointment),
       canBeUpdated: this.appointmentIsInThePast(appointment),
+      unpaidWorkHoursItems,
     }
   }
 

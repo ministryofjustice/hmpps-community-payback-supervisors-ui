@@ -38,6 +38,13 @@ export interface LinkItem {
   href: string
 }
 
+export interface unpaidWorkItem {
+  key: string
+  value: string
+  containerClassList: string
+  cardClassList: string
+}
+
 export interface AuditParams {
   action: string
   username: string

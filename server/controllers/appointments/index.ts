@@ -11,7 +11,11 @@ import NotesController from './notesController'
 import ReviewController from './reviewController'
 
 const appointmentControllers = (services: Services) => {
-  const showDetailsController = new ShowDetailsController(services.appointmentService, services.referenceDataService)
+  const showDetailsController = new ShowDetailsController(
+    services.appointmentService,
+    services.referenceDataService,
+    services.offenderService,
+  )
   const startTimeController = new StartTimeController(services.appointmentService, services.appointmentFormService)
   const endTimeController = new EndTimeController(services.appointmentService, services.appointmentFormService)
   const complianceController = new ComplianceController(services.appointmentService, services.appointmentFormService)

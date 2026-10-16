@@ -1,0 +1,24 @@
+{% macro hoursCards(items) %}
+
+  <h2>Community payback hours</h2>
+
+  <ul class="govuk-grid-row card-group">
+
+  {% for item in items %}
+
+    <li class="{{item.containerClassList}}">
+      <div class="{{item.cardClassList}}">
+        <div class="govuk-summary-card__title-wrapper">
+          <h3 class="govuk-summary-card__title">{{item.key}}</h3>
+        </div>
+        <div class="govuk-summary-card__content">
+          <p class="govuk-summary-card__title">{{item.value}}</p>
+        </div>
+      </div>
+    </li>
+
+  {% endfor %}
+
+  </ul>
+
+{% endmacro %}
