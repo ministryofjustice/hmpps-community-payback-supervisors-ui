@@ -81,4 +81,10 @@ export default class AppointmentPage extends Page {
     this.hoursOrdered.exists()
     this.hoursCredited.exists()
   }
+
+  shouldNotShowTimeComponents() {
+    this.hoursRemaining.notExist()
+    this.hoursOrdered.notExist()
+    this.hoursCredited.notExist()
+  }
 }

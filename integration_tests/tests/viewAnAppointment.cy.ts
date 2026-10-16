@@ -166,4 +166,29 @@ context('viewAnAppointment', () => {
       appointmentPage.shouldNotHaveAnyActions()
     })
   })
+
+  //  Scenario: viewing an appointment with no unpaidWorkDetails
+  it('Viewing an appointment', () => {
+    // Given I am logged in
+    cy.signIn()
+
+    //  When I visit an appointment page
+    const appointment = appointmentFactory.build({ pickUpData: pickupDataFactory.build({ time: '09:00' }) })
+    cy.task('stubFindAppointment', { appointment })
+
+    const caseDetailsSummary = caseDetailsFactory.build({
+      offender: appointment.offender,
+      unpaidWorkDetails: undefined,
+    })
+    cy.task('stubGetOffenderSummary', { caseDetailsSummary })
+
+    const appointmentPage = AppointmentPage.visit(appointment)
+
+    // Then I should see the appointment, offender, and pick-up details
+    appointmentPage.shouldShowAppointmentDetails()
+    appointmentPage.shouldShowPickUpDetails()
+    appointmentPage.shouldShowOffenderDetails(appointment.offender.crn)
+    appointmentPage.shouldShowStatus('Scheduled')
+    appointmentPage.shouldNotShowTimeComponents()
+  })
 })
