@@ -97,4 +97,7 @@ export default {
   ingressUrl: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   environmentName: get('ENVIRONMENT_NAME', ''),
   requiredSupervisorRole: 'ROLE_CP_SUPERVISE_SESSION',
+  featureFlags: {
+    displayHoursDetailsEnabled: get('DISPLAY_HOURS_DETAILS_ENABLED', 'false') === 'true',
+  },
 }

@@ -5,12 +5,14 @@ import pickupDataFactory from '../../testutils/factories/pickupDataFactory'
 import AppointmentUtils from '../../utils/appointmentUtils'
 import LocationUtils from '../../utils/locationUtils'
 import AppointmentShowDetailsPage from './appointmentShowDetailsPage'
+import config from '../../config'
 
 jest.mock('../../models/offender')
 
 describe('AppointmentShowDetailsPage', () => {
   beforeEach(() => {
     jest.resetAllMocks()
+    jest.replaceProperty(config, 'featureFlags', { ...config.featureFlags, displayHoursDetailsEnabled: true })
   })
 
   describe('viewData', () => {
@@ -330,6 +332,52 @@ describe('AppointmentShowDetailsPage', () => {
         const result = page.viewData(appointment, null, unpaidWorkHoursItems)
 
         expect(result.canBeUpdated).toBe(false)
+      })
+    })
+
+    describe('When feature flag is false', () => {
+      const offenderMock: jest.Mock = Offender as unknown as jest.Mock<Offender>
+      it('does not include the unpaidWorkHoursItems', () => {
+        const startTime = '09:00:00'
+        const endTime = '17:00:00'
+        const appointment = appointmentFactory.build({ startTime, endTime, contactOutcomeCode: null })
+        const offender = {
+          name: 'Sam Smith',
+          crn: 'CRN123',
+          isLimited: false,
+        }
+
+        offenderMock.mockImplementation(() => {
+          return offender
+        })
+
+        const statusTagHtml = '<strong>Scheduled</strong>'
+        jest.spyOn(AppointmentUtils, 'buildStatusTag').mockReturnValue(statusTagHtml)
+        jest.replaceProperty(config, 'featureFlags', { ...config.featureFlags, displayHoursDetailsEnabled: false })
+
+        const page = new AppointmentShowDetailsPage()
+        const result = page.viewData(appointment, null, null)
+        const { projectCode, date, id } = appointment
+        expect(result).toEqual({
+          pickupDetails: [],
+          offender,
+          startTime: '09:00',
+          endTime: '17:00',
+          backPath: paths.sessions.show({ projectCode, date }),
+          actions: [
+            {
+              text: 'Arrived',
+              href: paths.appointments.attendanceOutcome({ projectCode, appointmentId: id.toString() }),
+            },
+            {
+              text: 'Did not attend',
+              href: paths.appointments.notes.absent({ projectCode, appointmentId: id.toString() }),
+            },
+          ],
+          statusTagHtml,
+          canBeUpdated: true,
+          unpaidWorkHoursItems: null,
+        })
       })
     })
   })
