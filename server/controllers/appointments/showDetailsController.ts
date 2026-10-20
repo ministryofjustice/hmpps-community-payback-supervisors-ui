@@ -6,6 +6,7 @@ import ReferenceDataService from '../../services/referenceDataService'
 import setCrnAuditSubject from '../../utils/auditUtils'
 import UnpaidWorkUtils from '../../utils/unpaidWorkUtils'
 import OffenderService from '../../services/offenderService'
+import config from '../../config'
 
 export default class ShowDetailsController {
   constructor(
@@ -34,7 +35,10 @@ export default class ShowDetailsController {
       const unpaidWorkDetails = offenderSummary.unpaidWorkDetails?.find(
         detail => detail.eventNumber === appointment.deliusEventNumber,
       )
-      const unpaidWorkHoursItems = unpaidWorkDetails ? UnpaidWorkUtils.unpaidWorkHoursCardList(unpaidWorkDetails) : null
+      const unpaidWorkHoursItems =
+        config.featureFlags.displayHoursDetailsEnabled && unpaidWorkDetails
+          ? UnpaidWorkUtils.unpaidWorkHoursCardList(unpaidWorkDetails)
+          : null
 
       setCrnAuditSubject(res, appointment.offender.crn)
 

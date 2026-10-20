@@ -3,7 +3,7 @@ generic-service:
   productId: 'HMPPS552' # productId for the product that this belongs too, i.e. DPS001, see README.md for details
 
   # the IRSA service account name for accessing AWS resources
-  serviceAccountName: "hmpps-community-payback-supervisors-ui-account"
+  serviceAccountName: 'hmpps-community-payback-supervisors-ui-account'
 
   replicaCount: 4
 
@@ -33,6 +33,7 @@ generic-service:
     TOKEN_VERIFICATION_ENABLED: 'true'
     AUDIT_SQS_REGION: 'eu-west-2'
     AUDIT_SERVICE_NAME: 'hmpps-community-payback-supervisors-ui' # Your audit service name
+    DISPLAY_HOURS_DETAILS_ENABLED: 'true'
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
   # namespace_secrets:
@@ -55,7 +56,7 @@ generic-service:
     hmpps-community-payback-supervisors-ui-application-insights:
       APPLICATIONINSIGHTS_CONNECTION_STRING: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
     hmpps-community-payback-supervisors-ui-sentry:
-      SENTRY_DSN: "SENTRY_DSN"
+      SENTRY_DSN: 'SENTRY_DSN'
     sqs-hmpps-audit-secret:
       AUDIT_SQS_QUEUE_URL: 'sqs_queue_url'
       AUDIT_SQS_QUEUE_NAME: 'sqs_queue_name'
