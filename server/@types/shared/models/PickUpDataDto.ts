@@ -5,6 +5,10 @@
 import type { LocationDto } from './LocationDto';
 import type { PickUpLocationDto } from './PickUpLocationDto';
 export type PickUpDataDto = {
+    /**
+     * Use pickupLocation instead
+     * @deprecated
+     */
     location?: (LocationDto | null);
     /**
      * Use pickupLocation.deliusCode instead
