@@ -12,6 +12,9 @@ export type AppointmentSummaryDto = {
      * The NDelius Appointment ID
      */
     id: number;
+    /**
+     * How many community payback minutes the offender is required to complete
+     */
     contactOutcome?: (ContactOutcomeDto | null);
     /**
      * Total minutes ordered. >= 0

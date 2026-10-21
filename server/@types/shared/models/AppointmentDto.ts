@@ -34,6 +34,10 @@ export type AppointmentDto = {
      * @deprecated
      */
     projectTypeCode?: string | null;
+    /**
+     * Retrieve project information from GET project instead. Whilst marked as optional to support deprecation, this will always be populated.
+     * @deprecated
+     */
     projectType?: (ProjectTypeDto | null);
     offender: (OffenderFullDto | OffenderLimitedDto | OffenderNotFoundDto);
     supervisingTeam: string;
