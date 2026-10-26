@@ -51,7 +51,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h2>
-      {{ session.appointmentSummaries.length }} people scheduled on this session
+      {{ session.appointmentSummaries.length }} {{ 'person' | pluralise(session.appointmentSummaries.length) }} scheduled on this session
     </h2>
 
     <ul class="govuk-list">
