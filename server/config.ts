@@ -114,5 +114,6 @@ export default {
   featureFlags: {
     displayHoursDetailsEnabled: get('DISPLAY_HOURS_DETAILS_ENABLED', 'false') === 'true',
     updateAppointmentsEnabled: get('UPDATE_APPOINTMENTS_ENABLED', 'false') === 'true',
+    sessionsFiltersEnabled: get('SESSIONS_FILTERS_ENABLED', 'false') === 'true',
   },
 }
