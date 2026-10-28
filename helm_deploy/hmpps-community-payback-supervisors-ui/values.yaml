@@ -34,6 +34,7 @@ generic-service:
     AUDIT_SQS_REGION: 'eu-west-2'
     AUDIT_SERVICE_NAME: 'hmpps-community-payback-supervisors-ui' # Your audit service name
     DISPLAY_HOURS_DETAILS_ENABLED: 'true'
+    SESSIONS_FILTERS_ENABLED: 'true'
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
   # namespace_secrets:
