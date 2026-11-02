@@ -1,9 +1,9 @@
 name: Pipeline [test -> build -> deploy]
 
 on:
-  push:
+  pull_request:
     branches:
-      - '**'
+      - 'main'
   workflow_dispatch:
     inputs:
       additional_docker_tag:
@@ -37,9 +37,10 @@ jobs:
     secrets: inherit
     with:
       install_command: 'npm run setup'
+      npm_version: '12'
 
   type_checking:
-    name: "Type check"
+    name: 'Type check'
     runs-on: ubuntu-latest
     needs: [node_build]
     steps:
@@ -51,6 +52,11 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           cache: 'npm'
+
+      - name: update npm
+        shell: bash
+        run: |
+          npm install -g npm@latest
 
       - name: Install dependencies
         run: npm run setup

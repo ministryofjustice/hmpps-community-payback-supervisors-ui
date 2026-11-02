@@ -40,6 +40,11 @@ jobs:
         run: |
           npm run setup
 
+      - name: update npm
+        shell: bash
+        run: |
+          npm install -g npm@latest
+
       - name: install playwright
         shell: bash
         run: |
