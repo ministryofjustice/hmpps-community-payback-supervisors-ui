@@ -98,7 +98,7 @@
     "audit-ci": "^7.1.0",
     "aws-sdk-client-mock": "^4.1.0",
     "babel-jest": "^30.5.2",
-    "chokidar": "^5.0.0",
+    "chokidar": "^6.0.0",
     "concurrently": "^10.0.6",
     "cypress": "16.2.0",
     "esbuild": "^0.28.2",
