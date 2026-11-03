@@ -11,12 +11,16 @@ import SessionPage from '../pages/sessionPage'
 import StartTimePage from '../pages/appointments/update/startTimePage'
 import AttendanceOutcomePage from '../pages/appointments/update/attendanceOutcomePage'
 import NotesPage from '../pages/appointments/update/notesPage'
+import searchForASession from '../steps/searchForASession'
 
 test('Record an appointment as arrived and able to work', async ({ page, supervisorUser, testData, team }) => {
   const { person } = testData
   await signIn(page, supervisorUser)
 
   const homePage = new HomePage(page)
+
+  await searchForASession(page, team)
+
   await homePage.clickViewDetailsForProject(testData.project.name)
 
   const sessionPage = new SessionPage(page)
