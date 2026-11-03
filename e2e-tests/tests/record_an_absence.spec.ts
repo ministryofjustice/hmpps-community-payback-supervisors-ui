@@ -6,10 +6,13 @@ import AppointmentPage from '../pages/appointmentPage'
 import ConfirmAbsentPage from '../pages/appointments/update/confirm/confirmAbsentPage'
 import ReviewPage from '../pages/appointments/update/reviewPage'
 import NotesPage from '../pages/appointments/update/notesPage'
+import searchForASession from '../steps/searchForASession'
 
 test('Record an absence', async ({ page, supervisorUser, testData, team }) => {
   const { person, project } = testData
   const homePage = await signIn(page, supervisorUser)
+
+  await searchForASession(page, team)
 
   await homePage.clickViewDetailsForProject(project.name)
 
