@@ -96,6 +96,7 @@ export default class indexController {
         },
         searchPath: paths.sessions.search({}),
         sessions,
+        showNoResultsMessage: sessions.length === 0,
         sessionsFiltersEnabled: config.featureFlags.sessionsFiltersEnabled,
       })
     }

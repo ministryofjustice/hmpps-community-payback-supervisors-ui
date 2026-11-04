@@ -66,4 +66,10 @@
 
   {% endfor %}
 
+  {% if showNoResultsMessage %}
+    <h2>No results found</h2>
+
+    <p>There are no results that match your search. Try searching again using different search criteria.</p>
+  {% endif %}
+
 {% endblock %}
