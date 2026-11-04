@@ -29,10 +29,12 @@
   {{ form() }}
 </div>
 
-{{ govukTable({
-  firstCellIsHeader: true,
-  rows: rows
-}) }}
+<div class="cpb-scrollable-table" role="region" aria-label="Check your answers" tabindex="0">
+  {{ govukTable({
+    firstCellIsHeader: true,
+    rows: rows
+  }) }}
+</div>
 
 {% if showWillAlertPractitionerMessage %}
   {{ mojAlert({
