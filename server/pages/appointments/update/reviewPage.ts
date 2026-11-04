@@ -4,6 +4,7 @@ import {
   AppointmentOutcomeForm,
   AppointmentUpdateQuery,
   GovUkRadioOption,
+  GovUkSummaryListItem,
   ValidationErrors,
   YesOrNo,
 } from '../../../@types/user-defined'
@@ -11,20 +12,14 @@ import paths from '../../../paths'
 import ReferenceDataService from '../../../services/referenceDataService'
 import AppointmentUtils from '../../../utils/appointmentUtils'
 import GovUkRadioGroup from '../../../utils/GovUKFrontend/GovUkRadioGroup'
+import GovUKComponentUtils from '../../../utils/govUkComponentUtils'
 import { pathWithQuery } from '../../../utils/utils'
 import BaseAppointmentUpdatePage from './baseAppointmentUpdatePage'
 
 export type ReviewItem = Record<string, string | { value: string; changeUrl: string }>
 
-type OutputRow = OutputItem[]
-
-type OutputItem = {
-  text?: string
-  html?: string
-}
-
 interface ViewData {
-  rows: OutputRow[]
+  rows: GovUkSummaryListItem[]
   template: string
   showWillAlertPractitionerMessage: boolean
   alertPractitionerItems: GovUkRadioOption[]
@@ -112,7 +107,7 @@ export default class ReviewPage extends BaseAppointmentUpdatePage<Body> {
     return this.reviewFields
   }
 
-  private buildRows(appointment: AppointmentDto): OutputRow[] {
+  private buildRows(appointment: AppointmentDto): GovUkSummaryListItem[] {
     this.changeUrl = this.changeUrl ?? this.backPath(appointment)
 
     const outcomeLink = pathWithQuery(
@@ -123,38 +118,27 @@ export default class ReviewPage extends BaseAppointmentUpdatePage<Body> {
       { form: this.query.form },
     )
 
-    const statusTagHtml = AppointmentUtils.buildStatusTag(this.outcome)
+    const outcomeField = {
+      label: 'Outcome',
+      content: AppointmentUtils.buildStatusTag(this.outcome),
+      contentIsHtml: true,
+      actions: {
+        items: this.outcome?.attended ? [GovUKComponentUtils.changeAction(outcomeLink, 'Outcome')] : [],
+      },
+    }
 
-    const fields = Object.entries(this.mappedReviewFields()).map(([key, v]) => {
+    const fields = Object.entries(this.mappedReviewFields()).map(([label, v]) => {
       const { value, changeUrl } = typeof v === 'string' ? { value: v, changeUrl: undefined } : v
 
-      return [
-        { text: key },
-        { html: value },
-        {
-          html: `<a href=${changeUrl || this.changeUrl} class="govuk-link govuk-link--no-visited-state">Change</a>`,
-        },
-      ]
+      return {
+        label,
+        content: value,
+        contentIsHtml: true,
+        actions: { items: [GovUKComponentUtils.changeAction(changeUrl || this.changeUrl, label)] },
+      }
     })
 
-    const outcomeField = [
-      { text: 'Outcome' },
-      {
-        html: statusTagHtml,
-      },
-    ].concat(
-      this.outcome?.attended
-        ? [
-            {
-              html: `<a href='${outcomeLink}' class="govuk-link govuk-link--no-visited-state">Change</a>`,
-            },
-          ]
-        : [{ text: '' }],
-    )
-
-    fields.unshift(outcomeField)
-
-    return fields
+    return GovUKComponentUtils.buildSummaryListItems([outcomeField, ...fields])
   }
 
   buildPayload(

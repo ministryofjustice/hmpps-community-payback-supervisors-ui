@@ -5,6 +5,10 @@ export default class SummaryListComponent {
     return this.component.get('dt').contains(label).find('+dd')
   }
 
+  getActionsWithLabel(label: string) {
+    return this.component.get('dt').contains(label).parent().find('.govuk-summary-list__actions')
+  }
+
   private get component() {
     return this.title ? cy.get('.govuk-summary-card').filter(`:contains(${this.title})`) : cy.get('dl')
   }
