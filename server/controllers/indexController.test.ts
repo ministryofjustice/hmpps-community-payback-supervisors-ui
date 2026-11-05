@@ -7,6 +7,7 @@ import IndexController from './indexController'
 import sessionSummaryFactory from '../testutils/factories/sessionSummaryFactory'
 import SupervisorService from '../services/supervisorService'
 import supervisorFactory from '../testutils/factories/supervisorFactory'
+import HtmlUtils from '../utils/htmlUtils'
 
 describe('IndexController', () => {
   const request: DeepMocked<Request> = createMock<Request>({})
@@ -18,6 +19,7 @@ describe('IndexController', () => {
 
   beforeEach(() => {
     indexController = new IndexController(sessionService, supervisorService)
+    jest.clearAllMocks()
   })
 
   describe('index', () => {
@@ -31,6 +33,9 @@ describe('IndexController', () => {
       const requestHandler = indexController.index()
       const response = createMock<Response>()
 
+      const hiddenText = 'hidden text'
+      jest.spyOn(HtmlUtils, 'getHiddenText').mockReturnValue(hiddenText)
+
       await requestHandler(request, response, next)
 
       const sessions = sessionResult.map(session => {
@@ -39,6 +44,7 @@ describe('IndexController', () => {
           date: DateTimeFormats.isoDateToUIDate(session.date, { format: 'dashed' }),
           formattedDate: DateTimeFormats.isoDateToUIDate(session.date, { format: 'medium' }),
           path: paths.sessions.show({ ...session }),
+          linkHtmlContent: `View${hiddenText}`,
         }
       })
 
