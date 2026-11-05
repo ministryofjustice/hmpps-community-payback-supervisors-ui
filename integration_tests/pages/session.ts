@@ -50,6 +50,18 @@ export default class SessionPage extends Page {
     })
   }
 
+  shouldShowAppointmentsWithNoName() {
+    this.offenders.forEach(_offender => {
+      cy.contains('li').find('h3').should('not.exist')
+    })
+  }
+
+  shouldShowAppointmentsWithNoLink() {
+    this.offenders.forEach(_offender => {
+      cy.contains('li').find('a').should('not.exist')
+    })
+  }
+
   override shouldShowErrorSummary(message: string) {
     cy.get('[data-testid="error-summary"]').within(() => {
       cy.get('li').contains(message)

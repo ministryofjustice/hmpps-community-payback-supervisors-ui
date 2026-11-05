@@ -44,14 +44,16 @@ export default class SessionsController {
       )
 
       const appointmentSummaries = session.appointmentSummaries.map(appointment => {
+        const offender = new Offender(appointment.offender)
         return {
           ...appointment,
-          formattedOffender: new Offender(appointment.offender),
+          formattedOffender: offender,
           path: paths.appointments.show({
             projectCode: session.projectCode,
             appointmentId: appointment.id.toString(),
           }),
           statusTagHtml: AppointmentUtils.buildStatusTag(appointment.contactOutcome),
+          withViewLink: !offender.isLimited,
         }
       })
 
