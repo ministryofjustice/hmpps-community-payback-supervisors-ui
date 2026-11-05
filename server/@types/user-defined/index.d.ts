@@ -105,9 +105,22 @@ export type AppointmentOutcomeForm = {
   attendanceData?: AttendanceDataDto
 }
 
+export type GovUkValue = {
+  text?: string
+  html?: string
+}
+
+export type GovUkActionItem = {
+  href: string
+  text: string
+  visuallyHiddenText?: string
+  attributes?: Record<string, string>
+  classes?: string
+}
+
 export type GovUkSummaryListItem = {
-  key: GovUKValue
-  value: GovUKValue
-  actions?: { items: Array<GovUKActionItem> }
+  key: GovUkValue
+  value: GovUkValue
+  actions?: { items: Array<GovUkActionItem> }
   classes?: string
 }

@@ -1,4 +1,5 @@
 import paths from '../../../paths'
+import GovUKComponentUtils from '../../../utils/govUkComponentUtils'
 import { AppointmentDto, ContactOutcomeDto } from '../../../@types/shared'
 import appointmentFactory from '../../../testutils/factories/appointmentFactory'
 import { contactOutcomeFactory } from '../../../testutils/factories/contactOutcomeFactory'
@@ -43,8 +44,6 @@ describe('ReviewPage', () => {
 
         const page = new ReviewPage('absent', 'test', { form: formId }, outcome, { 'Test key': 'Test value' }, true)
 
-        const link = `<a href=${backUrl} class="govuk-link govuk-link--no-visited-state">Change</a>`
-
         const outcomeLink = `${paths.appointments.attendanceOutcome({
           projectCode: appointment.projectCode,
           appointmentId: appointment.id.toString(),
@@ -58,14 +57,16 @@ describe('ReviewPage', () => {
           backPath: backUrl,
           updatePath: updateUrl,
           rows: [
-            [
-              { text: 'Outcome' },
-              { html: statusTagHtml },
-              {
-                html: `<a href='${outcomeLink}' class="govuk-link govuk-link--no-visited-state">Change</a>`,
-              },
-            ],
-            [{ text: 'Test key' }, { html: 'Test value' }, { html: link }],
+            {
+              key: { text: 'Outcome' },
+              value: { html: statusTagHtml },
+              actions: { items: [GovUKComponentUtils.changeAction(outcomeLink, 'Outcome')] },
+            },
+            {
+              key: { text: 'Test key' },
+              value: { html: 'Test value' },
+              actions: { items: [GovUKComponentUtils.changeAction(backUrl, 'Test key')] },
+            },
           ],
           template: './test.njk',
           showWillAlertPractitionerMessage: true,
@@ -104,8 +105,6 @@ describe('ReviewPage', () => {
 
         const page = new ReviewPage('absent', 'test', { form: formId }, outcome, { 'Test key': 'Test value' }, false)
 
-        const link = `<a href=${backUrl} class="govuk-link govuk-link--no-visited-state">Change</a>`
-
         const statusTagHtml = '<strong>Contact outcome name</strong>'
         jest.spyOn(AppointmentUtils, 'buildStatusTag').mockReturnValue(statusTagHtml)
 
@@ -114,14 +113,16 @@ describe('ReviewPage', () => {
           backPath: backUrl,
           updatePath: updateUrl,
           rows: [
-            [
-              { text: 'Outcome' },
-              { html: statusTagHtml },
-              {
-                html: `<a href='${outcomeLink}' class="govuk-link govuk-link--no-visited-state">Change</a>`,
-              },
-            ],
-            [{ text: 'Test key' }, { html: 'Test value' }, { html: link }],
+            {
+              key: { text: 'Outcome' },
+              value: { html: statusTagHtml },
+              actions: { items: [GovUKComponentUtils.changeAction(outcomeLink, 'Outcome')] },
+            },
+            {
+              key: { text: 'Test key' },
+              value: { html: 'Test value' },
+              actions: { items: [GovUKComponentUtils.changeAction(backUrl, 'Test key')] },
+            },
           ],
           template: './test.njk',
           showWillAlertPractitionerMessage: false,
@@ -152,8 +153,6 @@ describe('ReviewPage', () => {
 
         const page = new ReviewPage('absent', 'test', { form: formId }, outcome, { 'Test key': 'Test value' }, true)
 
-        const link = `<a href=${backUrl} class="govuk-link govuk-link--no-visited-state">Change</a>`
-
         const statusTagHtml = '<strong>Contact outcome name</strong>'
         jest.spyOn(AppointmentUtils, 'buildStatusTag').mockReturnValue(statusTagHtml)
 
@@ -162,14 +161,12 @@ describe('ReviewPage', () => {
           backPath: backUrl,
           updatePath: updateUrl,
           rows: [
-            [
-              { text: 'Outcome' },
-              { html: statusTagHtml },
-              {
-                text: '',
-              },
-            ],
-            [{ text: 'Test key' }, { html: 'Test value' }, { html: link }],
+            { key: { text: 'Outcome' }, value: { html: statusTagHtml } },
+            {
+              key: { text: 'Test key' },
+              value: { html: 'Test value' },
+              actions: { items: [GovUKComponentUtils.changeAction(backUrl, 'Test key')] },
+            },
           ],
           template: './test.njk',
           showWillAlertPractitionerMessage: true,
@@ -205,8 +202,6 @@ describe('ReviewPage', () => {
           true,
         )
 
-        const link = `<a href=${backUrl} class="govuk-link govuk-link--no-visited-state">Change</a>`
-
         const statusTagHtml = '<strong>Contact outcome name</strong>'
         jest.spyOn(AppointmentUtils, 'buildStatusTag').mockReturnValue(statusTagHtml)
 
@@ -215,14 +210,12 @@ describe('ReviewPage', () => {
           backPath: backUrl,
           updatePath: updateUrl,
           rows: [
-            [
-              { text: 'Outcome' },
-              { html: statusTagHtml },
-              {
-                text: '',
-              },
-            ],
-            [{ text: 'Test key' }, { html: 'Test value' }, { html: link }],
+            { key: { text: 'Outcome' }, value: { html: statusTagHtml } },
+            {
+              key: { text: 'Test key' },
+              value: { html: 'Test value' },
+              actions: { items: [GovUKComponentUtils.changeAction(backUrl, 'Test key')] },
+            },
           ],
           template: './test.njk',
           showWillAlertPractitionerMessage: true,

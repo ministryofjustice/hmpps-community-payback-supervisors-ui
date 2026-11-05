@@ -173,6 +173,47 @@ describe('GovUKComponentUtils', () => {
         value: { html: undefined },
       })
     })
+
+    it('should include actions when action items are provided', () => {
+      const actions = {
+        items: [
+          { href: '/change', text: 'Change', visuallyHiddenText: 'start time' },
+          { href: '/remove', text: 'Remove', visuallyHiddenText: 'start time' },
+        ],
+      }
+
+      const result = GovUKComponentUtils.buildSummaryListItem({ label: 'Start time', content: '09:00', actions })
+
+      expect(result).toEqual({
+        key: { text: 'Start time' },
+        value: { text: '09:00' },
+        actions,
+      })
+    })
+
+    it('should omit actions when there are no action items', () => {
+      const result = GovUKComponentUtils.buildSummaryListItem({
+        label: 'Start time',
+        content: '09:00',
+        actions: { items: [] },
+      })
+
+      expect(result).toEqual({
+        key: { text: 'Start time' },
+        value: { text: '09:00' },
+      })
+    })
+  })
+
+  describe('changeAction', () => {
+    it('should build a change action with visually hidden text from the label', () => {
+      expect(GovUKComponentUtils.changeAction('/change', 'Start time')).toEqual({
+        href: '/change',
+        text: 'Change',
+        visuallyHiddenText: 'start time',
+        classes: 'govuk-link--no-visited-state',
+      })
+    })
   })
 
   describe('buildSummaryListItems', () => {

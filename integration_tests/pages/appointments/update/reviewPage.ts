@@ -2,15 +2,19 @@ import { AppointmentDto } from '../../../../server/@types/shared'
 import { AppointmentNotesAction } from '../../../../server/@types/user-defined'
 import paths from '../../../../server/paths'
 import RadioGroupComponent from '../../components/radioGroupComponent'
+import SummaryListComponent from '../../components/summaryListComponent'
 import Page from '../../page'
 
 export default class ReviewPage extends Page {
   readonly alertPractitionerQuestion: RadioGroupComponent
 
+  private readonly answers: SummaryListComponent
+
   constructor() {
     super('Check your answers')
 
     this.alertPractitionerQuestion = new RadioGroupComponent('alertPractitioner')
+    this.answers = new SummaryListComponent()
   }
 
   static visit(appointment: AppointmentDto, action: AppointmentNotesAction): ReviewPage {
@@ -37,23 +41,23 @@ export default class ReviewPage extends Page {
   }
 
   shouldContainNote(note: string) {
-    cy.contains('th', 'Notes').next('td').should('contain.text', note)
+    this.answers.getValueWithLabel('Notes').should('contain.text', note)
   }
 
   canBeShared() {
-    cy.contains('th', 'Notes').next('td').should('contain.text', 'No')
+    this.answers.getValueWithLabel('Notes').should('contain.text', 'No')
   }
 
   cannotBeShared() {
-    cy.contains('th', 'Sensitive').next('td').should('contain.text', 'Yes')
+    this.answers.getValueWithLabel('Sensitive').should('contain.text', 'Yes')
   }
 
   clickChangeOutcome(text = 'Change'): void {
-    cy.contains('th', 'Outcome').next().next().contains(text).click()
+    this.answers.getActionsWithLabel('Outcome').contains(text).click()
   }
 
   shouldShowCorrectOutcome(outcome: string) {
-    cy.contains('th', 'Outcome').next().contains(outcome)
+    this.answers.getValueWithLabel('Outcome').contains(outcome)
   }
 
   shouldShowAlertPractitionerError() {

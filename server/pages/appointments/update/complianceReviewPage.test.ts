@@ -1,5 +1,6 @@
 import Offender from '../../../models/offender'
 import paths from '../../../paths'
+import GovUKComponentUtils from '../../../utils/govUkComponentUtils'
 import appointmentFactory from '../../../testutils/factories/appointmentFactory'
 import appointmentOutcomeFormFactory from '../../../testutils/factories/appointmentOutcomeFormFactory'
 import attendanceDataFactory from '../../../testutils/factories/attendanceDataFactory'
@@ -45,9 +46,7 @@ describe('ComplianceReviewPage', () => {
 
         const page = new ComplianceReviewPage(appointment, { form: formId }, outcome, appointmentOutputForm)
 
-        const link = (_str: TemplateStringsArray, url: string): string => {
-          return `<a href=${url}?form=${formId} class="govuk-link govuk-link--no-visited-state">Change</a>`
-        }
+        const link = (_str: TemplateStringsArray, url: string): string => `${url}?form=${formId}`
 
         const params = { projectCode, appointmentId: appointmentId.toString() }
 
@@ -66,48 +65,36 @@ describe('ComplianceReviewPage', () => {
           updatePath: `${paths.appointments.review.completed(params)}?form=${formId}`,
           alertDiaryText: 'Would you also like this to be sent to the alert diary?',
           rows: [
-            [
-              { text: 'Outcome' },
-              { html: statusTagHtml },
-              {
-                html: `<a href='${outcomeLink}' class="govuk-link govuk-link--no-visited-state">Change</a>`,
-              },
-            ],
-            [
-              { text: 'Start time' },
-              { html: '09:00' },
-              {
-                html: startTimeChangeLink,
-              },
-            ],
-            [
-              { text: 'End time' },
-              { html: endTime },
-              {
-                html: endTimeChangeLink,
-              },
-            ],
-            [
-              { text: 'Compliance' },
-              { html: 'Work quality - Good <br> Behaviour - Not applicable' },
-              {
-                html: changeLink,
-              },
-            ],
-            [
-              { text: 'Notes' },
-              { html: 'test note' },
-              {
-                html: notesLink,
-              },
-            ],
-            [
-              { text: 'Sensitive' },
-              { html: 'Yes' },
-              {
-                html: notesLink,
-              },
-            ],
+            {
+              key: { text: 'Outcome' },
+              value: { html: statusTagHtml },
+              actions: { items: [GovUKComponentUtils.changeAction(outcomeLink, 'Outcome')] },
+            },
+            {
+              key: { text: 'Start time' },
+              value: { html: '09:00' },
+              actions: { items: [GovUKComponentUtils.changeAction(startTimeChangeLink, 'Start time')] },
+            },
+            {
+              key: { text: 'End time' },
+              value: { html: endTime },
+              actions: { items: [GovUKComponentUtils.changeAction(endTimeChangeLink, 'End time')] },
+            },
+            {
+              key: { text: 'Compliance' },
+              value: { html: 'Work quality - Good <br> Behaviour - Not applicable' },
+              actions: { items: [GovUKComponentUtils.changeAction(changeLink, 'Compliance')] },
+            },
+            {
+              key: { text: 'Notes' },
+              value: { html: 'test note' },
+              actions: { items: [GovUKComponentUtils.changeAction(notesLink, 'Notes')] },
+            },
+            {
+              key: { text: 'Sensitive' },
+              value: { html: 'Yes' },
+              actions: { items: [GovUKComponentUtils.changeAction(notesLink, 'Sensitive')] },
+            },
           ],
           template: './compliance.njk',
           showWillAlertPractitionerMessage: true,
