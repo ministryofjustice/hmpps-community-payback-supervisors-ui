@@ -30,6 +30,8 @@ export default class sessionIndexPage {
 
   items() {
     return {
+      providerCode: this.query.provider,
+      teamCode: this.query.team,
       date: this.query.date,
     }
   }

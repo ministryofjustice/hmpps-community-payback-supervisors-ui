@@ -8,6 +8,7 @@ import ProviderService from '../services/providerService'
 import getProvidersAndTeams from './shared/getProvidersAndTeams'
 import SessionIndexPage from '../pages/sessions/sessionIndexPage'
 import { SessionIndexPageInput } from '../@types/user-defined'
+import { generateErrorSummary } from '../utils/errorUtils'
 
 export default class indexController {
   constructor(
@@ -74,7 +75,24 @@ export default class indexController {
         teamCode,
       })
 
-      // Add validation heres
+      const validationErrors = indexPage.validationErrors()
+
+      if (Object.keys(validationErrors).length !== 0) {
+        const errorSummary = generateErrorSummary(validationErrors)
+
+        return res.render('pages/index', {
+          form: {
+            ...indexPage.items(),
+            providerItems,
+            provider,
+            teamItems,
+          },
+          errorSummary,
+          errors: validationErrors,
+          searchPath: paths.sessions.search({}),
+          sessionsFiltersEnabled: config.featureFlags.sessionsFiltersEnabled,
+        })
+      }
 
       const sessionResponse = await this.sessionService.getFilteredSessions(username, teamCode, date.toString())
 
