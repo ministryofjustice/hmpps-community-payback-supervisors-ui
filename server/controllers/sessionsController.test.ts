@@ -71,6 +71,7 @@ describe('SessionsController', () => {
                 appointmentId: appointmentSummary.id.toString(),
               }),
               statusTagHtml,
+              withViewLink: true,
             },
           ],
         },
@@ -171,6 +172,56 @@ describe('SessionsController', () => {
                 appointmentId: appointmentSummary.id.toString(),
               }),
               statusTagHtml,
+              withViewLink: true,
+            },
+          ],
+        },
+      })
+    })
+
+    it('should render the session page with `withViewLink` as false if the offender is an LAO', async () => {
+      const offenderMock: jest.Mock = Offender as unknown as jest.Mock<Offender>
+      const offender = {
+        name: 'Sam Smith',
+        crn: 'CRN123',
+        isLimited: true,
+      }
+      offenderMock.mockImplementation(() => offender)
+
+      const appointmentSummary = appointmentSummaryFactory.build({ contactOutcome: null })
+      const session = sessionFactory.build({ appointmentSummaries: [appointmentSummary] })
+
+      sessionService.getSession.mockResolvedValue(session)
+
+      const requestHandler = sessionsController.show()
+      const response = createMock<Response>()
+
+      const date = '12 February 2025'
+      jest.spyOn(DateTimeFormats, 'isoDateToUIDate').mockReturnValue(date)
+
+      const location = '12 Hampton Road'
+      jest.spyOn(LocationUtils, 'locationToParagraph').mockReturnValue(location)
+
+      const statusTagHtml = '<strong>Scheduled</strong>'
+      jest.spyOn(AppointmentUtils, 'buildStatusTag').mockReturnValue(statusTagHtml)
+
+      await requestHandler(request, response, next)
+
+      expect(response.render).toHaveBeenCalledWith('sessions/show', {
+        session: {
+          ...session,
+          formattedDate: date,
+          formattedLocation: location,
+          appointmentSummaries: [
+            {
+              ...appointmentSummary,
+              formattedOffender: offender,
+              path: paths.appointments.show({
+                projectCode: session.projectCode,
+                appointmentId: appointmentSummary.id.toString(),
+              }),
+              statusTagHtml,
+              withViewLink: false,
             },
           ],
         },

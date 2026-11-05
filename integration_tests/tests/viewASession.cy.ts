@@ -16,6 +16,10 @@
 //    When I click on an appointment
 //    Then I am taken to the appointment page
 //
+//  Scenario: viewing a session for an LAO
+//    Given I am on a session page where the offenders are LAOs
+//    Then I should not see links or names for each LAO
+//
 //  Scenario: Viewing statuses
 //    Scenario: viewing a new session with no appointment statuses saved
 //      Given I am on a session page for a new session
@@ -36,6 +40,7 @@ import { contactOutcomeFactory, contactOutcomesFactory } from '../../server/test
 import supervisorFactory from '../../server/testutils/factories/supervisorFactory'
 import supervisorTeamFactory from '../../server/testutils/factories/supervisorTeamFactory'
 import caseDetailsFactory from '../../server/testutils/factories/caseDetailsFactory'
+import offenderLimitedFactory from '../../server/testutils/factories/offenderLimitedFactory'
 
 context('Home', () => {
   beforeEach(() => {
@@ -138,6 +143,24 @@ context('Session', () => {
     sessionPage.clickOnAnAppointment()
     //  Then I am taken to the appointment page
     Page.verifyOnPage(AppointmentPage, appointment)
+  })
+
+  // Scenario: viewing a session for an LAO
+  describe('LAO', () => {
+    it('should not show a view link or name for a LAO', () => {
+      // Given I am on a session page where the offenders are LAOs
+      const appointmentSummaries = [
+        appointmentSummaryFactory.build({ offender: offenderLimitedFactory.build() }),
+        appointmentSummaryFactory.build({ offender: offenderLimitedFactory.build() }),
+      ]
+      const session = sessionFactory.build({ appointmentSummaries })
+      cy.task('stubFindSession', { session })
+      const sessionPage = SessionPage.visit(session)
+
+      // Then I should not see links or names for each LAO
+      sessionPage.shouldShowAppointmentsWithNoLink()
+      sessionPage.shouldShowAppointmentsWithNoName()
+    })
   })
 
   // Scenario: Viewing statuses
