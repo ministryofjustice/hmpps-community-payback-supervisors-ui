@@ -1,7 +1,6 @@
 import IndexPage from '../pages/index'
 import AuthSignInPage from '../pages/authSignIn'
 import Page from '../pages/page'
-import AuthManageDetailsPage from '../pages/authManageDetails'
 import sessionSummaryFactory from '../../server/testutils/factories/sessionSummaryFactory'
 import config from '../../server/config'
 import AuthErrorPage from '../pages/authErrorPage'
@@ -52,15 +51,6 @@ context('Sign In', () => {
     Page.verifyOnPage(AuthSignInPage)
   })
 
-  it('User can manage their details', () => {
-    cy.signIn()
-    cy.task('stubAuthManageDetails')
-    const indexPage = Page.verifyOnPage(IndexPage)
-
-    indexPage.manageDetails().click()
-    Page.verifyOnPage(AuthManageDetailsPage)
-  })
-
   it('Token verification failure takes user to sign in page', () => {
     cy.signIn()
     Page.verifyOnPage(IndexPage)
@@ -105,5 +95,16 @@ context('Sign In', () => {
 
     cy.signIn({ failOnStatusCode: false })
     Page.verifyOnPage(AuthErrorPage)
+  })
+
+  it('shows the user name and sign out link on the authorisation error page', () => {
+    cy.task('stubSignIn', { roles: [] })
+
+    cy.signIn({ failOnStatusCode: false })
+    const authErrorPage = Page.verifyOnPage(AuthErrorPage)
+    authErrorPage.headerUserName().should('contain.text', 'J. Smith')
+
+    authErrorPage.signOut().click()
+    Page.verifyOnPage(AuthSignInPage)
   })
 })

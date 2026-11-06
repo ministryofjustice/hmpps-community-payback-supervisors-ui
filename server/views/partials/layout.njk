@@ -1,21 +1,31 @@
 {% extends "govuk/template.njk" %}
 
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+{% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
 {%- from "moj/components/domain-specific/probation/footer/macro.njk" import pdsFooter -%}
 
 {% block head %}
   <link href="{{ '/assets/css/index.css' | assetMap }}" rel="stylesheet"/>
 {% endblock %}
 
-{% block pageTitle %}{{pageTitle | default(applicationName)}}{% endblock %}
+{% block pageTitle %}{{ pageTitle | default(applicationName) }}{% endblock %}
 
 {% set emailHtml %}
-  This is a new service. To get help or report a bug, email <a href=mailto:"{{ supportEmailAddress }}">{{ supportEmailAddress }}</a>.
+  This is a new service. To get help or report a bug, email <a href="mailto:{{ supportEmailAddress }}">{{ supportEmailAddress }}</a>.
 {% endset %}
 
 {% block header %}
-  {% include "./header.njk" %}
-    {{ govukPhaseBanner({
+  {{ feComponents.header | safe }}
+  {{ govukServiceNavigation({
+    navigation: [
+      {
+        href: "/",
+        text: applicationName
+      }
+    ]
+  }) }}
+  {{ govukPhaseBanner({
+    classes: "govuk-width-container",
     tag: {
       text: "Private beta"
     },
