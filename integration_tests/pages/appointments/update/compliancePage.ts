@@ -54,6 +54,14 @@ export default class CompliancePage extends Page {
     this.workQualityOption('UNSATISFACTORY').should('not.be.checked')
   }
 
+  shouldHaveFormWithSelectedValues(
+    selectedBehaviourOption: AttendanceDataDto['behaviour'],
+    selectedWorkQualityOption: AttendanceDataDto['workQuality'],
+  ) {
+    this.behaviourOption(selectedBehaviourOption).should('be.checked')
+    this.workQualityOption(selectedWorkQualityOption).should('be.checked')
+  }
+
   selectWorkQualityValue() {
     this.workQualityOption().check()
   }
