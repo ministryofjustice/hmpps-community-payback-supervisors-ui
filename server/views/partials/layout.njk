@@ -7,7 +7,17 @@
   <link href="{{ '/assets/css/index.css' | assetMap }}" rel="stylesheet"/>
 {% endblock %}
 
-{% block pageTitle %}{{ pageTitle | default(applicationName) }}{% endblock %}
+{% if pageTitle %}
+  {% set documentTitle = pageTitle + " - " + applicationName %}
+{% else %}
+  {% set documentTitle = applicationName %}
+{% endif %}
+
+{% if errorSummary | length or errorList | length %}
+  {% set documentTitle = "Error: " + documentTitle %}
+{% endif %}
+
+{% block pageTitle %}{{ documentTitle }}{% endblock %}
 
 {% set emailHtml %}
   This is a new service. To get help or report a bug, email <a href="mailto:{{ supportEmailAddress }}">{{ supportEmailAddress }}</a>.
