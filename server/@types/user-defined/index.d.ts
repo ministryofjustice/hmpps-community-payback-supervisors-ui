@@ -1,3 +1,4 @@
+import type { Response } from 'express'
 import { AttendanceDataDto, SessionSummaryDto, UpdateAppointmentOutcomeDto } from '../shared'
 
 export interface BaseRequest {
@@ -11,6 +12,12 @@ export interface GetSessionRequest extends BaseRequest {
 
 export interface GetNextSessionsRequest extends BaseRequest {
   teamCodes: Array<string>
+  page: number
+}
+
+export interface GetFilteredSessionsRequest extends BaseRequest {
+  teamCode: string
+  date: string
   page: number
 }
 
@@ -123,4 +130,34 @@ export type GovUkSummaryListItem = {
   value: GovUkValue
   actions?: { items: Array<GovUkActionItem> }
   classes?: string
+}
+
+export type GetProvidersAndTeamsParams = {
+  providerCode?: string
+  teamCode?: string
+  response: Response
+  providerService: ProviderService
+}
+
+export interface GovUkSelectOption {
+  text: string
+  value: string
+  selected?: boolean
+}
+
+export interface GetForTeamRequest extends BaseRequest {
+  providerCode: string
+  teamCode: string
+}
+
+interface SearchValues {
+  teamCode: string
+  startDate: string
+  endDate: string
+}
+
+export type SessionIndexPageInput = {
+  team?: string
+  provider?: string
+  date?: string
 }

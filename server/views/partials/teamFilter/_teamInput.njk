@@ -1,0 +1,13 @@
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+
+{{ govukSelect({
+  label: {
+    text: "Project team",
+    classes: "govuk-label--s"
+  },
+  id: "team",
+  name: "team",
+  items: form.teamItems,
+  errorMessage: errors.team,
+  disabled: form.provider.value == undefined
+}) }}

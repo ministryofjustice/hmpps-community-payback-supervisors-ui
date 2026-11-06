@@ -10,5 +10,6 @@ $govuk-page-width: $moj-page-width;
 @import '@ministryofjustice/hmpps-probation-frontend-components/dist/assets/footer';
 
 @import './components/card';
+@import './components/search-and-filter';
 @import './overrides/local';
 @import './utilities';

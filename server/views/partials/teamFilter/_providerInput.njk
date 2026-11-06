@@ -1,0 +1,12 @@
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+
+{{ govukSelect({
+  label: {
+      text: "Region",
+      classes: "govuk-label--s"
+  },
+  id: "provider",
+  name: "provider",
+  errorMessage: errors.provider,
+  items: form.providerItems
+}) }}

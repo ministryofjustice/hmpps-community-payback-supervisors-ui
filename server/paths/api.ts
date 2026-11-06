@@ -3,10 +3,14 @@ import { path } from 'static-path'
 const supervisorUiPath = path('/supervisor')
 
 const projectPath = supervisorUiPath.path('/projects/:projectCode')
+const commonPath = path('/common')
 const singleAppointmentPath = projectPath.path('/appointments/:appointmentId')
-const referenceDataPath = path('/common/references')
-const formsPath = path('/common/forms')
-const offenderSummaryPath = path('/common/offenders/:crn/summary')
+const referenceDataPath = commonPath.path('/references')
+const formsPath = commonPath.path('/forms')
+const offenderSummaryPath = commonPath.path('/offenders/:crn/summary')
+const sessionsSearchPath = commonPath.path('/teams/:teamCode/sessions')
+const providersPath = commonPath.path('/providers')
+const teamsPath = providersPath.path(':providerCode/teams')
 
 export default {
   projects: {
@@ -17,6 +21,7 @@ export default {
     outcome: singleAppointmentPath,
   },
   sessions: {
+    search: sessionsSearchPath,
     next: supervisorUiPath.path('sessions/recent'),
   },
   referenceData: {
@@ -27,4 +32,9 @@ export default {
     supervisor: supervisorUiPath.path('supervisors'),
   },
   offenderSummary: offenderSummaryPath,
+  providers: {
+    providers: providersPath,
+    teams: teamsPath,
+    supervisors: teamsPath.path(':teamCode/supervisors'),
+  },
 }

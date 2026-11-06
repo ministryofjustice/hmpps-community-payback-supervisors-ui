@@ -1,0 +1,50 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% macro teamFilter(form, errors, searchPath, regionPath, title="Filter results") %}
+  <div class="search-and-filter"  data-module="cpb-team-filter">
+    <h2 class="govuk-heading-m">{{ title }}</h2>
+    {% if form.providerItems %}
+      <form action="{{ regionPath }}" method="get" class="govuk-!-margin-bottom-5" id="filter-provider-no-js">
+        <div class="search-and-filter__row">
+          {% include "./_providerInput.njk" %}
+          {{ govukButton({
+            "text": "Apply",
+            preventDoubleClick: true
+          }) }}
+        </div>
+      </form>
+    {% else %}
+      <label class="govuk-label govuk-label--s">Region</label>
+      <p class="govuk-body">{{ form.provider.text }}</p>
+    {% endif %}
+    <form action="{{ searchPath }}" method="get">
+      <div class="search-and-filter__row" id="filter-team-row">
+        <input type="hidden" name="provider" value="{{ form.provider.value }}" />
+        {% include "./_teamInput.njk" %}
+      </div>
+
+      {{ caller() }}
+
+      <div class="search-and-filter__row">
+        <div class="govuk-button-group govuk-!-margin-bottom-0 govuk-!-margin-top-3">
+            {{ govukButton({
+              "text": "Apply filters",
+              preventDoubleClick: true
+            }) }}
+
+            <a
+              href="{{ "/" }}"
+              class="govuk-link govuk-!-margin-bottom-0"
+            >
+              Clear
+            </a>
+          </div>
+      </div>
+    </form>
+  </div>
+
+  <template id="filter-provider-team-js">
+    {% include "./_providerInput.njk" %}
+    {% include "./_teamInput.njk" %}
+  </template>
+{% endmacro %}
