@@ -11,7 +11,6 @@ import appointmentForms from './integration_tests/mockApis/appointmentForms'
 import offenders from './integration_tests/mockApis/offenders'
 import frontendComponents from './integration_tests/mockApis/frontendComponents'
 import providers from './integration_tests/mockApis/providers'
-import teams from './integration_tests/mockApis/teams'
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -38,7 +37,6 @@ export default defineConfig({
         ...offenders,
         ...frontendComponents,
         ...providers,
-        ...teams,
       })
     },
     baseUrl: 'http://localhost:3007',
