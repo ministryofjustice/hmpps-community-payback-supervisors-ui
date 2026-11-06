@@ -66,5 +66,6 @@ export default class SessionPage extends Page {
     cy.get('[data-testid="error-summary"]').within(() => {
       cy.get('li').contains(message)
     })
+    this.shouldHaveErrorPageTitle()
   }
 }

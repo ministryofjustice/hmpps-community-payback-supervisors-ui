@@ -1,8 +1,9 @@
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% extends "../partials/layout.njk" %}
+
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
-{% set pageTitle = project.projectName %}
+{% set pageTitle = session.projectName %}
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block beforeContent %}
