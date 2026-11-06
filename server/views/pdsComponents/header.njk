@@ -1,0 +1,36 @@
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+<header class="probation-common-fallback-header govuk-!-display-none-print {% if classes %}{{ classes }}{% endif %}" role="banner">
+  <div class="probation-common-fallback-header__container">
+    <div class="probation-common-fallback-header__title">
+      <a class="probation-common-fallback-header__link probation-common-fallback-header__title__organisation-name" href="{{ pdsUrl }}" aria-label="Probation Digital Services homepage">
+        <img class="probation-common-fallback-header__logo" src="/assets/images/crest.svg" alt="" height="40" width="40">
+      </a>
+
+      <a class="probation-common-fallback-header__link probation-common-fallback-header__title__service-name" href="{{ pdsUrl }}">Probation Digital Services</a>
+
+      {% if environmentName and environmentName !== 'PRODUCTION' %}
+          {{ govukTag({
+            text: environmentName,
+            classes: environmentNameColour,
+            attributes: { "data-qa": "header-environment-banner" }
+          }) }}
+      {% endif %}
+    </div>
+
+    {% if user %}
+      <nav aria-label="Account navigation">
+        <ul class="probation-common-fallback-header__navigation">
+          {% if name %}
+            <li class="probation-common-fallback-header__navigation__item">
+              <span data-qa=header-user-name>{{ name }}</span>
+            </li>
+          {% endif %}
+
+          <li class="probation-common-fallback-header__navigation__item">
+            <a data-qa="signOut" class="probation-common-fallback-header__link" href="/sign-out">Sign out</a>
+          </li>
+        </ul>
+      </nav>
+    {% endif %}
+  </div>
+</header>

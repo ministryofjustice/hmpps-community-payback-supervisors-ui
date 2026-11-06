@@ -7,7 +7,6 @@ import { initialiseName, pluralise } from './utils'
 import config from '../config'
 import logger from '../../logger'
 import paths from '../paths'
-import staticPaths from '../paths/static'
 
 export default function nunjucksSetup(app: express.Express): void {
   app.set('view engine', 'njk')
@@ -33,6 +32,7 @@ export default function nunjucksSetup(app: express.Express): void {
       path.join(__dirname, '../../server/views'),
       'node_modules/govuk-frontend/dist/',
       'node_modules/@ministryofjustice/frontend/',
+      'node_modules/@ministryofjustice/hmpps-probation-frontend-components/dist/assets/',
     ],
     {
       autoescape: true,
@@ -43,5 +43,5 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('initialiseName', initialiseName)
   njkEnv.addFilter('pluralise', pluralise)
   njkEnv.addFilter('assetMap', (url: string) => assetManifest[url] || url)
-  njkEnv.addGlobal('paths', { ...paths, ...staticPaths })
+  njkEnv.addGlobal('paths', paths)
 }

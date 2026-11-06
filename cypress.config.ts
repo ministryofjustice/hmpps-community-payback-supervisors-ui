@@ -9,6 +9,7 @@ import referenceData from './integration_tests/mockApis/referenceData'
 import supervisors from './integration_tests/mockApis/supervisors'
 import appointmentForms from './integration_tests/mockApis/appointmentForms'
 import offenders from './integration_tests/mockApis/offenders'
+import frontendComponents from './integration_tests/mockApis/frontendComponents'
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -33,6 +34,7 @@ export default defineConfig({
         ...supervisors,
         ...appointmentForms,
         ...offenders,
+        ...frontendComponents,
       })
     },
     baseUrl: 'http://localhost:3007',

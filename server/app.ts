@@ -12,6 +12,7 @@ import authorisationMiddleware from './middleware/authorisationMiddleware'
 import setUpAuthentication from './middleware/setUpAuthentication'
 import setUpCsrf from './middleware/setUpCsrf'
 import setUpCurrentUser from './middleware/setUpCurrentUser'
+import setUpFrontendComponents from './middleware/setUpFrontendComponents'
 import setUpHealthChecks from './middleware/setUpHealthChecks'
 import setUpStaticResources from './middleware/setUpStaticResources'
 import setUpWebRequestParsing from './middleware/setupRequestParsing'
@@ -43,6 +44,7 @@ export default function createApp(controllers: Controllers, services: Services):
   app.use(authorisationMiddleware([config.requiredSupervisorRole]))
   app.use(setUpCsrf())
   app.use(setUpCurrentUser())
+  app.use(setUpFrontendComponents())
 
   app.use((req, res, next) => {
     res.locals.successMessages = req.flash('success')

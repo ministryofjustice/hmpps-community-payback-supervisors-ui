@@ -7,6 +7,8 @@ import config from '../config'
 import { HmppsUser } from '../interfaces/hmppsUser'
 import generateOauthClientToken from '../utils/clientCredentials'
 import logger from '../../logger'
+import setUpFrontendComponents from './setUpFrontendComponents'
+import setUpCurrentUser from './setUpCurrentUser'
 
 passport.serializeUser((user, done) => {
   // Not used but required for Passport
@@ -38,15 +40,25 @@ passport.use(
 export default function setupAuthentication() {
   const router = Router()
   const tokenVerificationClient = new VerificationClient(config.apis.tokenVerification, logger)
+  const currentUser = setUpCurrentUser()
 
   router.use(passport.initialize())
   router.use(passport.session())
   router.use(flash())
 
-  router.get('/autherror', (req, res) => {
-    res.status(401)
-    return res.render('autherror')
-  })
+  router.get(
+    '/autherror',
+    (req, res, next) => {
+      if (!req.isAuthenticated()) return next()
+      res.locals.user = req.user as HmppsUser
+      return currentUser(req, res, next)
+    },
+    setUpFrontendComponents(),
+    (req, res) => {
+      res.status(401)
+      return res.render('autherror')
+    },
+  )
 
   router.get('/sign-in', passport.authenticate('oauth2'))
 
@@ -68,10 +80,6 @@ export default function setupAuthentication() {
         return req.session.destroy(() => res.redirect(authSignOutUrl))
       })
     } else res.redirect(authSignOutUrl)
-  })
-
-  router.use('/account-details', (req, res) => {
-    res.redirect(`${authUrl}/account-details?${authParameters}`)
   })
 
   router.use(async (req, res, next) => {

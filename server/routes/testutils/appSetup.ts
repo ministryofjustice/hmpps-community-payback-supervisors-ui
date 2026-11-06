@@ -8,7 +8,6 @@ import errorHandler from '../../errorHandler'
 import { HmppsUser } from '../../interfaces/hmppsUser'
 import setUpWebSession from '../../middleware/setUpWebSession'
 import { Controllers } from '../../controllers'
-import StaticController from '../../controllers/staticController'
 
 jest.mock('../../services/auditService')
 
@@ -55,9 +54,7 @@ function appSetup(controllers: Controllers, production: boolean, userSupplier: (
 
 export function appWithAllRoutes({
   production = false,
-  controllers = {
-    staticController: new StaticController() as jest.Mocked<StaticController>,
-  },
+  controllers = {},
   userSupplier = () => user,
 }: {
   production?: boolean
