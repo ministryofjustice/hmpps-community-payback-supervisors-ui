@@ -41,7 +41,13 @@ import attendanceDataFactory from '../../../../server/testutils/factories/attend
 //      When I submit the form
 //      And I continue from the review page
 //      Then I see the confirm details page
-//    Scenario: Returning to the log hours page
+//   Scenario: preserving compliance form answers
+//      Given I am on the log compliance page for an appointment
+//      And I complete the form
+//      When I submit the form
+//      And I click back from the notes page
+//      Then I should see the compliance form values I selected
+//   Scenario: Returning to the log hours page
 //      Given I am on the log compliance page for an appointment
 //      When I click back
 //      Then I see the log hours page
@@ -179,6 +185,37 @@ context('Log compliance', () => {
 
         // Then I see the confirm details page
         Page.verifyOnPage(ConfirmCompletedPage, this.appointment)
+      })
+
+      // Scenario: preserving compliance form answers
+      it('preserves compliance answers on navigating back', function test() {
+        // Given I am on the log compliance page for an appointment
+        cy.task('stubFindAppointment', { appointment: { ...this.appointment, contactOutcomeCode: 'XYZ' } })
+        cy.task('stubGetAppointmentForm', {
+          form: appointmentOutcomeFormFactory.build({
+            attendanceData: attendanceDataFactory.build(),
+            contactOutcomeCode: 'ABC',
+          }),
+          formId,
+        })
+
+        const page = CompliancePage.visit(this.appointment, 'completed', formId)
+
+        cy.task('stubUpdateAppointmentOutcome', { appointment: this.appointment })
+        cy.task('stubSaveAppointmentForm', { formId })
+
+        // And I complete the form
+        page.completeForm()
+
+        // When I submit the form
+        page.clickContinue()
+
+        const notesPage = Page.verifyOnPage(NotesPage, this.appointment, 'completed', 'some-form')
+        // And I click back from the notes page
+        notesPage.clickBack()
+
+        // Then I should see the compliance form values I selected
+        page.shouldHaveFormWithSelectedValues('NOT_APPLICABLE', 'GOOD')
       })
     })
 

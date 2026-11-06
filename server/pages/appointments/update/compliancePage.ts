@@ -127,13 +127,6 @@ export default class CompliancePage extends BaseAppointmentUpdatePage<Body> {
       return this.query
     }
 
-    if (formData.contactOutcomeCode !== appointment.contactOutcomeCode) {
-      return {
-        workQuality: null,
-        behaviour: null,
-      }
-    }
-
     if (formData.attendanceData) {
       return {
         workQuality: formData.attendanceData?.workQuality,
