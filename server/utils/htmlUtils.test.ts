@@ -16,4 +16,12 @@ describe('HTMLUtils', () => {
       expect(result).toEqual(`govuk-tag--${colour} cpb-unset-max-width`)
     })
   })
+
+  describe('getHiddenText', () => {
+    it('returns an element with the govuk hidden class containing given content', () => {
+      const result = HtmlUtils.getHiddenText('Some content')
+
+      expect(result).toEqual('<span class="govuk-visually-hidden">Some content</span>')
+    })
+  })
 })
