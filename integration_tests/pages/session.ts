@@ -51,14 +51,14 @@ export default class SessionPage extends Page {
   }
 
   shouldShowAppointmentsWithNoName() {
-    this.offenders.forEach(_offender => {
-      cy.contains('li').find('h3').should('not.exist')
+    this.offenders.forEach((offender, i) => {
+      cy.get('.govuk-list li').eq(i).find('h3').should('not.contain', offender.forename)
     })
   }
 
   shouldShowAppointmentsWithNoLink() {
-    this.offenders.forEach(_offender => {
-      cy.contains('li').find('a').should('not.exist')
+    this.offenders.forEach((_offender, i) => {
+      cy.get('.govuk-list li').eq(i).find('a').should('not.exist')
     })
   }
 
