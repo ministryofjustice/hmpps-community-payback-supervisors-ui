@@ -13,6 +13,7 @@ generic-service:
     HMPPS_AUTH_URL: 'https://sign-in.hmpps.service.justice.gov.uk/auth'
     TOKEN_VERIFICATION_API_URL: 'https://token-verification-api.prison.service.justice.gov.uk'
     COMMUNITY_PAYBACK_API_URL: 'https://community-payback-api.hmpps.service.justice.gov.uk'
+    COMPONENT_API_URL: 'https://probation-frontend-components.hmpps.service.justice.gov.uk'
     ENVIRONMENT_NAME: PROD
     AUDIT_ENABLED: 'true'
     DISPLAY_HOURS_DETAILS_ENABLED: 'true'
