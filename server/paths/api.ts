@@ -8,6 +8,7 @@ const singleAppointmentPath = projectPath.path('/appointments/:appointmentId')
 const referenceDataPath = commonPath.path('/references')
 const formsPath = commonPath.path('/forms')
 const offenderSummaryPath = commonPath.path('/offenders/:crn/summary')
+const sessionsSearchPath = commonPath.path('/teams/:teamCode/sessions')
 const providersPath = commonPath.path('/providers')
 const teamsPath = providersPath.path(':providerCode/teams')
 
@@ -20,6 +21,7 @@ export default {
     outcome: singleAppointmentPath,
   },
   sessions: {
+    search: sessionsSearchPath,
     next: supervisorUiPath.path('sessions/recent'),
   },
   referenceData: {

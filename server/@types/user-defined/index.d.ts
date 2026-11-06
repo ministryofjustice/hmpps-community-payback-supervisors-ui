@@ -15,6 +15,12 @@ export interface GetNextSessionsRequest extends BaseRequest {
   page: number
 }
 
+export interface GetFilteredSessionsRequest extends BaseRequest {
+  teamCode: string
+  date: string
+  page: number
+}
+
 export type SessionSummariesDto = {
   allocations: SessionSummaryDto[]
 }

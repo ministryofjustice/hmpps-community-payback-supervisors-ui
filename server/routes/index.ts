@@ -4,6 +4,7 @@ import sessionRoutes from './session'
 import appointmentRoutes from './appointment'
 import type { Controllers } from '../controllers'
 import { actions } from './utils'
+import paths from '../paths'
 
 export default function routes(controllers: Controllers): Router {
   const router = Router()
@@ -14,6 +15,10 @@ export default function routes(controllers: Controllers): Router {
 
   get('/', indexController.index(), {
     auditEvent: Page.VIEW_INDEX_PAGE,
+  })
+
+  get(paths.sessions.search.pattern, indexController.search(), {
+    auditEvent: Page.VIEW_NEXT_SESSIONS,
   })
 
   sessionRoutes(sessionsController, router)

@@ -7,6 +7,8 @@ import IndexController from './indexController'
 import sessionSummaryFactory from '../testutils/factories/sessionSummaryFactory'
 import SupervisorService from '../services/supervisorService'
 import supervisorFactory from '../testutils/factories/supervisorFactory'
+import config from '../config'
+import ProviderService from '../services/providerService'
 
 describe('IndexController', () => {
   const request: DeepMocked<Request> = createMock<Request>({})
@@ -15,9 +17,10 @@ describe('IndexController', () => {
   let indexController: IndexController
   const sessionService = createMock<SessionService>()
   const supervisorService = createMock<SupervisorService>()
+  const providerService = createMock<ProviderService>()
 
   beforeEach(() => {
-    indexController = new IndexController(sessionService, supervisorService)
+    indexController = new IndexController(sessionService, supervisorService, providerService)
   })
 
   describe('index', () => {
@@ -44,6 +47,7 @@ describe('IndexController', () => {
 
       expect(response.render).toHaveBeenCalledWith('pages/index', {
         sessions,
+        sessionsFiltersEnabled: config.featureFlags.sessionsFiltersEnabled,
       })
     })
   })
