@@ -124,3 +124,9 @@ export type GovUkSummaryListItem = {
   actions?: { items: Array<GovUkActionItem> }
   classes?: string
 }
+
+export interface GovUkSelectOption {
+  text: string
+  value: string
+  selected?: boolean
+}
