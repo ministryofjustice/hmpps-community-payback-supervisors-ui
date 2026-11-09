@@ -42,6 +42,9 @@ const paths = {
       completed: appointmentPath.path('confirm-completed'),
     },
   },
+  data: {
+    teams: path('/data/regions/:provider/teams'),
+  },
 }
 
 export default paths

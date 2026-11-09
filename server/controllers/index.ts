@@ -4,6 +4,7 @@ import { Services } from '../services'
 import SessionsController from './sessionsController'
 import appointmentControllers from './appointments'
 import IndexController from './indexController'
+import DataController from './shared/dataController'
 
 export const controllers = (services: Services) => {
   const sessionsController = new SessionsController(services.auditService, services.sessionService)
@@ -12,10 +13,12 @@ export const controllers = (services: Services) => {
     services.supervisorService,
     services.providerService,
   )
+  const dataController = new DataController(services.providerService)
 
   return {
     indexController,
     sessionsController,
+    dataController,
     appointments: {
       ...appointmentControllers(services),
     },
