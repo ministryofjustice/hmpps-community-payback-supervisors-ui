@@ -14,6 +14,7 @@ import FormClient from './formClient'
 import SupervisorClient from './supervisorClient'
 import AuditClient from './auditClient'
 import OffenderClient from './offenderClient'
+import ProviderClient from './providerClient'
 
 import applicationInfoSupplier from '../applicationInfo'
 
@@ -36,6 +37,7 @@ export const dataAccess = () => {
     formClient: new FormClient(hmppsAuthClient),
     supervisorClient: new SupervisorClient(hmppsAuthClient),
     offenderClient: new OffenderClient(hmppsAuthClient),
+    providerClient: new ProviderClient(hmppsAuthClient),
   }
 }
 
