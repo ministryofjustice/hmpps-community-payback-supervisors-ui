@@ -30,7 +30,7 @@
             <p class="govuk-body">{{ session.numberOfOffendersAllocated }} {{ 'person' | pluralise(session.numberOfOffendersAllocated) }} scheduled to work this session</p>
 
             {{ govukButton({
-              text: "View details",
+              html: session.linkHtmlContent,
               href: session.path
             }) }}
 

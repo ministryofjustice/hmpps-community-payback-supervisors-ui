@@ -13,7 +13,7 @@ export default class IndexPage extends Page {
 
   headerPhaseBanner = (): PageElement => cy.get('.govuk-phase-banner')
 
-  clickViewSession = () => cy.get('a').contains('View details').click()
+  clickViewSession = () => cy.get('a').contains('View').click()
 
   shouldShowSessionSummaryDetails() {
     this.sessionSummaries.forEach((sessionSummary, i) => {

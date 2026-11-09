@@ -3,6 +3,7 @@ import SessionService from '../services/sessionService'
 import DateTimeFormats from '../utils/dateTimeUtils'
 import paths from '../paths'
 import SupervisorService from '../services/supervisorService'
+import HtmlUtils from '../utils/htmlUtils'
 
 export default class indexController {
   constructor(
@@ -21,11 +22,14 @@ export default class indexController {
       }
 
       const sessions = sessionResponse.map(session => {
+        const formattedDate = DateTimeFormats.isoDateToUIDate(session.date, { format: 'medium' })
+        const hiddenLinkText = HtmlUtils.getHiddenText(HtmlUtils.escape(` ${session.projectName} on ${formattedDate}`))
         return {
           ...session,
           date: DateTimeFormats.isoDateToUIDate(session.date, { format: 'dashed' }),
-          formattedDate: DateTimeFormats.isoDateToUIDate(session.date, { format: 'medium' }),
+          formattedDate,
           path: paths.sessions.show({ ...session }),
+          linkHtmlContent: `View${hiddenLinkText}`,
         }
       })
 

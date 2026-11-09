@@ -16,7 +16,7 @@ export default class HomePage extends BasePage {
       .locator('.govuk-notification-banner__content', {
         has: this.page.getByRole('heading', { name: projectName }),
       })
-      .getByRole('button', { name: 'View details' })
+      .getByRole('button', { name: 'View' })
       .click()
   }
 
