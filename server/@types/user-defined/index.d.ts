@@ -144,3 +144,15 @@ export interface GovUkSelectOption {
   value: string
   selected?: boolean
 }
+
+interface SearchValues {
+  teamCode: string
+  startDate: string
+  endDate: string
+}
+
+export type SessionIndexPageInput = {
+  team?: string
+  provider?: string
+  date?: string
+}
