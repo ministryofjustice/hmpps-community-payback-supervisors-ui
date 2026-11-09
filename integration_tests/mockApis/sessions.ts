@@ -45,4 +45,28 @@ export default {
       },
     })
   },
+  stubFindFilteredSessions: ({
+    sessionSummaries,
+    teamCode,
+    date,
+  }: {
+    sessionSummaries: SessionSummariesDto
+    teamCode: string
+    date: string
+  }): SuperAgentRequest =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPath: paths.sessions.search({ teamCode }),
+        queryParameters: {
+          startDate: { equalTo: date },
+          endDate: { equalTo: date },
+        },
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: { content: sessionSummaries.allocations, page: { totalPages: 1 } },
+      },
+    }),
 }

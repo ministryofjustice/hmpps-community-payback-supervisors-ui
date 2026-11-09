@@ -3,9 +3,14 @@
 //    As a supervisor
 //    I want to view a project session
 //
-//  Scenario: viewing a session page
+//  Scenario: viewing the home page
 //      Given I am logged in
-//      When I visit a session page
+//      And I am on the home page
+//      I should see the search form
+//  Scenario: searching for sessions
+//      Given I am logged in
+//      And I am on the home page
+//      And I fill in the search form
 //      Then I see the session details
 //  Scenario: viewing the home page with multiple teams
 //    Given I am logged in
@@ -45,18 +50,34 @@ import providerSummaryFactory from '../../server/testutils/factories/providerSum
 import providerTeamSummaryFactory from '../../server/testutils/factories/providerTeamSummaryFactory'
 
 context('Home', () => {
+  const providers = providerSummaryFactory.buildList(2)
+  const provider = providers[0]
+  const teams = providerTeamSummaryFactory.buildList(2)
+
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
-    const providers = providerSummaryFactory.buildList(2)
-    const provider = providers[0]
-    const teams = providerTeamSummaryFactory.buildList(2)
     cy.task('stubGetProviders', { providers: { providers } })
     cy.task('stubGetTeams', { teams: { providers: teams }, providerCode: provider.code })
   })
 
   //  Scenario: viewing the home page
-  it('shows a list of next sessions', () => {
+  it('shows the home page with filters', () => {
+    const supervisor = supervisorFactory.build()
+    cy.task('stubFindSupervisor', { supervisor })
+
+    // Given I am logged in
+    cy.signIn()
+
+    // and I am on the home page
+    const page = Page.verifyOnPage(IndexPage)
+
+    //  Then I see the search form
+    page.shouldShowSearchForm()
+  })
+
+  //  Scenario: searching for sessions
+  it('shows a list of next sessions when search filters are applied', () => {
     const sessionSummary = sessionSummaryFactory.build({
       date: '2025-09-15',
       projectCode: 'N56123456',
@@ -71,12 +92,22 @@ context('Home', () => {
     const sessionSummaries = { allocations: [sessionSummary, sessionSummary2] }
 
     cy.task('stubFindSupervisor', { supervisor })
-    cy.task('stubNextSessions', { sessionSummaries, teamCodes: [supervisor.unpaidWorkTeams[0].code] })
+    cy.task('stubFindFilteredSessions', {
+      sessionSummaries,
+      teamCode: teams[0].code,
+      date: '2025-09-18',
+    })
 
     // Given I am logged in
     cy.signIn()
 
+    // And I have filled in the sessions form
     const page = Page.verifyOnPage(IndexPage, [sessionSummary, sessionSummary2])
+    page.selectRegion(provider)
+    page.selectTeam(teams[0])
+    page.enterDate()
+    page.submitForm()
+
     page.shouldShowSessionSummaryDetails()
     page.shouldContainPersonTextForSession(0)
     page.shouldContainPeopleTextForSession(1)
@@ -97,39 +128,86 @@ context('Home', () => {
   it('shows a list of next sessions for a supervisor on two teams', () => {
     const unpaidWorkTeams = supervisorTeamFactory.buildList(2)
     const supervisor = supervisorFactory.build({ unpaidWorkTeams })
-    const allocations = sessionSummaryFactory.buildList(4)
+    const sessionSummary = sessionSummaryFactory.build({
+      date: '2025-09-15',
+      projectCode: 'N56123456',
+      numberOfOffendersAllocated: 1,
+    })
+    const sessionSummary2 = sessionSummaryFactory.build({
+      ...sessionSummary,
+      numberOfOffendersAllocated: 2,
+    })
+    const sessionSummaries = { allocations: [sessionSummary, sessionSummary2] }
 
     cy.task('stubFindSupervisor', { supervisor })
-    cy.task('stubNextSessions', {
-      sessionSummaries: { allocations },
-      teamCodes: unpaidWorkTeams.map(team => team.code),
+    cy.task('stubFindFilteredSessions', {
+      sessionSummaries,
+      teamCode: teams[1].code,
+      date: '2025-09-18',
     })
 
     // Given I am logged in
     cy.signIn()
 
-    //  Then I see session details for all of the sessions for my teams
-    const page = Page.verifyOnPage(IndexPage, allocations)
+    // And I have filled in the sessions form
+    const page = Page.verifyOnPage(IndexPage, [sessionSummary, sessionSummary2])
+    page.selectRegion(provider)
+    page.selectTeam(teams[1])
+    page.enterDate()
+    page.submitForm()
+
     page.shouldShowSessionSummaryDetails()
+    page.shouldContainPersonTextForSession(0)
+    page.shouldContainPeopleTextForSession(1)
+
+    //  When I visit a session page
+    const appointmentSummaries = appointmentSummaryFactory.buildList(3)
+    const session = sessionFactory.build({ appointmentSummaries, projectCode: 'N56123456', date: '2025-09-15' })
+    cy.task('stubFindSession', { session })
+    page.clickViewSession()
+
+    //  Then I see the session details
+    const sessionPage = Page.verifyOnPage(SessionPage, session)
+    sessionPage.shouldShowSessionDetails()
+    sessionPage.shouldShowAppointmentsForEachOffender()
   })
 })
 
 context('Session', () => {
+  const providers = providerSummaryFactory.buildList(2)
+  const provider = providers[0]
+  const teams = providerTeamSummaryFactory.buildList(2)
+
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
+    cy.task('stubGetProviders', { providers: { providers } })
+    cy.task('stubGetTeams', { teams: { providers: teams }, providerCode: provider.code })
 
     const supervisor = supervisorFactory.build()
     const allocations = [sessionSummaryFactory.build({ date: '2025-09-15' })]
+    const sessionSummaries = { allocations }
     cy.task('stubFindSupervisor', { supervisor })
-    cy.task('stubNextSessions', { sessionSummaries: { allocations }, teamCodes: [supervisor.unpaidWorkTeams[0].code] })
+    cy.task('stubFindFilteredSessions', {
+      sessionSummaries,
+      teamCode: teams[1].code,
+      date: '2025-09-18',
+    })
+
+    // Given I am logged in
+    cy.signIn()
+
+    // And I have filled in the sessions form
+    const page = Page.verifyOnPage(IndexPage, allocations)
+    page.selectRegion(provider)
+    page.selectTeam(teams[1])
+    page.enterDate()
+    page.submitForm()
 
     const contactOutcomes = contactOutcomesFactory.build({
       contactOutcomes: [contactOutcomeFactory.build({ enforceable: true }), contactOutcomeFactory.build()],
     })
     cy.task('stubGetContactOutcomes', { contactOutcomes })
-
-    cy.signIn()
   })
 
   //  Scenario: viewing an individual appointment
