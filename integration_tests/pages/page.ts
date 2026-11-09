@@ -57,6 +57,11 @@ export default abstract class Page {
 
   shouldShowErrorSummary(field: string, errorMessage: string) {
     cy.get(`[data-cy-error-${field}]`).should('contain', errorMessage)
+    this.shouldHaveErrorPageTitle()
+  }
+
+  shouldHaveErrorPageTitle() {
+    cy.title().should('match', /^Error: /)
   }
 
   shouldShowOffenderDetails(crn: string): void {
