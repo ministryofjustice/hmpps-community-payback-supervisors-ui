@@ -41,11 +41,18 @@ import supervisorFactory from '../../server/testutils/factories/supervisorFactor
 import supervisorTeamFactory from '../../server/testutils/factories/supervisorTeamFactory'
 import caseDetailsFactory from '../../server/testutils/factories/caseDetailsFactory'
 import offenderLimitedFactory from '../../server/testutils/factories/offenderLimitedFactory'
+import providerSummaryFactory from '../../server/testutils/factories/providerSummaryFactory'
+import providerTeamSummaryFactory from '../../server/testutils/factories/providerTeamSummaryFactory'
 
 context('Home', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
+    const providers = providerSummaryFactory.buildList(2)
+    const provider = providers[0]
+    const teams = providerTeamSummaryFactory.buildList(2)
+    cy.task('stubGetProviders', { providers: { providers } })
+    cy.task('stubGetTeams', { teams: { providers: teams }, providerCode: provider.code })
   })
 
   //  Scenario: viewing the home page

@@ -32,6 +32,8 @@ import appointmentOutcomeFormFactory from '../../../../server/testutils/factorie
 import StartTimePage from '../../../pages/appointments/update/startTimePage'
 import supervisorFactory from '../../../../server/testutils/factories/supervisorFactory'
 import sessionSummaryFactory from '../../../../server/testutils/factories/sessionSummaryFactory'
+import providerSummaryFactory from '../../../../server/testutils/factories/providerSummaryFactory'
+import providerTeamSummaryFactory from '../../../../server/testutils/factories/providerTeamSummaryFactory'
 
 context('Attendance outcome', () => {
   let appointment: AppointmentDto
@@ -42,6 +44,11 @@ context('Attendance outcome', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubFindAppointment', { appointment })
+    const providers = providerSummaryFactory.buildList(2)
+    const provider = providers[0]
+    const teams = providerTeamSummaryFactory.buildList(2)
+    cy.task('stubGetProviders', { providers: { providers } })
+    cy.task('stubGetTeams', { teams: { providers: teams }, providerCode: provider.code })
     const supervisor = supervisorFactory.build()
     const allocations = [sessionSummaryFactory.build({ date: '2025-09-15' })]
     cy.task('stubFindSupervisor', { supervisor })

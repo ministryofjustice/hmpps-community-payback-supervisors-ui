@@ -13,6 +13,8 @@ import ReviewPage from '../../../pages/appointments/update/reviewPage'
 import NotesPage from '../../../pages/appointments/update/notesPage'
 import { AppointmentDto } from '../../../../server/@types/shared'
 import AttendanceOutcomePage from '../../../pages/appointments/update/attendanceOutcomePage'
+import providerSummaryFactory from '../../../../server/testutils/factories/providerSummaryFactory'
+import providerTeamSummaryFactory from '../../../../server/testutils/factories/providerTeamSummaryFactory'
 
 //  Scenario: Showing the offender details
 //    Given I am on the check answers page for an appointment
@@ -45,6 +47,11 @@ context('Review', () => {
     appointment = appointmentFactory.build({})
     cy.task('reset')
     cy.task('stubSignIn')
+    const providers = providerSummaryFactory.buildList(2)
+    const provider = providers[0]
+    const teams = providerTeamSummaryFactory.buildList(2)
+    cy.task('stubGetProviders', { providers: { providers } })
+    cy.task('stubGetTeams', { teams: { providers: teams }, providerCode: provider.code })
     const supervisor = supervisorFactory.build()
     const allocations = [sessionSummaryFactory.build({ date: '2025-09-15' })]
     cy.task('stubFindSupervisor', { supervisor })

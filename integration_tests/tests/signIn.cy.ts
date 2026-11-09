@@ -5,11 +5,18 @@ import sessionSummaryFactory from '../../server/testutils/factories/sessionSumma
 import config from '../../server/config'
 import AuthErrorPage from '../pages/authErrorPage'
 import supervisorFactory from '../../server/testutils/factories/supervisorFactory'
+import providerSummaryFactory from '../../server/testutils/factories/providerSummaryFactory'
+import providerTeamSummaryFactory from '../../server/testutils/factories/providerTeamSummaryFactory'
 
 context('Sign In', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
+    const providers = providerSummaryFactory.buildList(2)
+    const provider = providers[0]
+    const teams = providerTeamSummaryFactory.buildList(2)
+    cy.task('stubGetProviders', { providers: { providers } })
+    cy.task('stubGetTeams', { teams: { providers: teams }, providerCode: provider.code })
     const supervisor = supervisorFactory.build()
     const allocations = [sessionSummaryFactory.build({ date: '2025-09-15' })]
     cy.task('stubFindSupervisor', { supervisor })
