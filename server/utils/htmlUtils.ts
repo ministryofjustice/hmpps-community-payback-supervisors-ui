@@ -12,4 +12,13 @@ export default class HtmlUtils {
   static getHiddenText = (text: string): string => {
     return `<span class="govuk-visually-hidden">${text}</span>`
   }
+
+  static escape(text: string): string {
+    return text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;')
+  }
 }

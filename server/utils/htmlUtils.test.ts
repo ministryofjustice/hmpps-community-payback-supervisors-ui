@@ -24,4 +24,12 @@ describe('HTMLUtils', () => {
       expect(result).toEqual('<span class="govuk-visually-hidden">Some content</span>')
     })
   })
+
+  describe('escape', () => {
+    it('escapes HTML special characters', () => {
+      const result = HtmlUtils.escape(`<script>alert("x" & 'y')</script>`)
+
+      expect(result).toEqual('&lt;script&gt;alert(&quot;x&quot; &amp; &#39;y&#39;)&lt;/script&gt;')
+    })
+  })
 })
