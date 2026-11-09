@@ -1,3 +1,4 @@
+import type { Response } from 'express'
 import { AttendanceDataDto, SessionSummaryDto, UpdateAppointmentOutcomeDto } from '../shared'
 
 export interface BaseRequest {
@@ -123,6 +124,13 @@ export type GovUkSummaryListItem = {
   value: GovUkValue
   actions?: { items: Array<GovUkActionItem> }
   classes?: string
+}
+
+export type GetProvidersAndTeamsParams = {
+  providerCode?: string
+  teamCode?: string
+  response: Response
+  providerService: ProviderService
 }
 
 export interface GovUkSelectOption {
