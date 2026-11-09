@@ -1,4 +1,7 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "moj/components/date-picker/macro.njk" import mojDatePicker %}
 {% extends "../partials/layout.njk" %}
+{% from "../partials/teamFilter/index.njk" import teamFilter %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
@@ -9,9 +12,37 @@
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-xl">{{ 'Next session' | pluralise(sessions.?length) }}</h1>
+      {% if sessionsFiltersEnabled %}
+        <h1 class="govuk-heading-xl">Find a group session</h1>
+      {% else %}
+        <h1 class="govuk-heading-xl">{{ 'Next session' | pluralise(sessions.?length)}}</h1>
+      {% endif %}
     </div>
   </div>
+
+  {% if sessionsFiltersEnabled %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        {% call teamFilter(form, errors, searchPath, "/sessions/", "Filter sessions") %}
+          <div class="search-and-filter__row">
+            {{ mojDatePicker({
+              id: "date",
+              name: "date",
+              label: {
+                text: "Date",
+                classes: "govuk-!-font-weight-bold"
+              },
+              hint: {
+                text: "For example, 17/5/2024"
+              },
+              value: form.date,
+              errorMessage: errors.date
+            }) }}
+          </div>
+        {% endcall %}
+      </div>
+    </div>
+  {% endif %}
 
   {% for session in sessions %}
 

@@ -7,10 +7,12 @@ const appointmentArrivedPath = appointmentPath.path('arrived')
 const appointmentAbsentPath = appointmentPath.path('absent')
 const appointmentCompletedPath = appointmentPath.path('completed')
 const appointmentReviewPath = appointmentPath.path('review')
+const sessionsSearchPath = path('/sessions/search')
 
 const paths = {
   sessions: {
     show: sessionsPath,
+    search: sessionsSearchPath,
     clearSessionStatuses: sessionsPath.path('clear-data'),
   },
   appointments: {
