@@ -59,4 +59,25 @@ describe('SessionClient', () => {
       expect(response).toEqual(sessionSummary)
     })
   })
+
+  describe('filterSessions', () => {
+    it('should make a GET request to the filterSessions path using user token and return the response body', async () => {
+      const teamCode = '5678'
+      const username = 'some-username'
+      const date = '1/1/2026'
+      const isoDate = '2026-01-01'
+      const page = 1
+
+      const sessionSummary = sessionSummaryFactory.build()
+
+      nock(config.apis.communityPaybackApi.url)
+        .get(`${paths.sessions.search({ teamCode })}?startDate=${isoDate}&endDate=${isoDate}&page=${page}`)
+        .matchHeader('authorization', 'Bearer test-system-token')
+        .reply(200, sessionSummary)
+
+      const response = await sessionClient.filterSessions({ username, teamCode, date, page })
+
+      expect(response).toEqual(sessionSummary)
+    })
+  })
 })

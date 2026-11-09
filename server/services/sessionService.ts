@@ -32,4 +32,27 @@ export default class SessionService {
 
     return nextSessions
   }
+
+  async getFilteredSessions(username: string, teamCode: string, date: string): Promise<SessionSummaryDto[]> {
+    const sessionResults = []
+
+    let page = 0
+    let total = Number.MAX_VALUE
+
+    /* eslint-disable no-await-in-loop */
+    while (page < total) {
+      const result = await this.sessionClient.filterSessions({
+        username,
+        teamCode,
+        date,
+        page,
+      })
+      total = result.page.totalPages
+      sessionResults.push(...result.content)
+      page += 1
+    }
+    /* eslint-enable no-await-in-loop */
+
+    return sessionResults
+  }
 }

@@ -56,4 +56,30 @@ describe('ProviderService', () => {
     expect(sessionClient.nextSessions).toHaveBeenCalledTimes(2)
     expect(result).toEqual([...firstAllocations, ...secondAllocations])
   })
+
+  it('should call filterSessions on the client and return its result', async () => {
+    const teamCode = 'ABC'
+    const allocations = sessionSummaryFactory.buildList(2)
+    const date = '1/1/2026'
+
+    sessionClient.filterSessions.mockResolvedValue({ content: allocations, page: { totalPages: 1 } })
+    const result = await sessionService.getFilteredSessions('some-username', teamCode, date)
+
+    expect(sessionClient.filterSessions).toHaveBeenCalledTimes(1)
+    expect(result).toEqual(allocations)
+  })
+
+  it('should call filterSession multiple times on the client for multiple pages and return its result', async () => {
+    const teamCode = 'ABC'
+    const firstAllocations = sessionSummaryFactory.buildList(2)
+    const secondAllocations = sessionSummaryFactory.buildList(1)
+    const date = '1/1/2026'
+
+    sessionClient.filterSessions.mockResolvedValueOnce({ content: firstAllocations, page: { totalPages: 2 } })
+    sessionClient.filterSessions.mockResolvedValueOnce({ content: secondAllocations, page: { totalPages: 2 } })
+    const result = await sessionService.getFilteredSessions('some-username', teamCode, date)
+
+    expect(sessionClient.filterSessions).toHaveBeenCalledTimes(2)
+    expect(result).toEqual([...firstAllocations, ...secondAllocations])
+  })
 })

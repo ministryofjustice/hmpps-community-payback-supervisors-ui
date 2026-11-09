@@ -20,6 +20,7 @@ export default {
     outcome: singleAppointmentPath,
   },
   sessions: {
+    search: commonPath.path('/teams/:teamCode/sessions'),
     next: supervisorUiPath.path('sessions/recent'),
   },
   referenceData: {
