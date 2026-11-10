@@ -21,6 +21,8 @@
   </div>
 
   {% if sessionsFiltersEnabled %}
+    {% from "../showErrorSummary.njk" import showErrorSummary %}
+     {{ showErrorSummary(errorSummary) }}
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
         {% call teamFilter(form, errors, searchPath, "/sessions/", "Filter sessions") %}
