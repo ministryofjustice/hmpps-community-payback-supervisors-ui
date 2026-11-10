@@ -10,6 +10,7 @@ const appointmentReviewPath = appointmentPath.path('review')
 const sessionsSearchPath = path('/sessions/search')
 
 const paths = {
+  error: path('/error'),
   sessions: {
     show: sessionsPath,
     search: sessionsSearchPath,
