@@ -3,13 +3,13 @@
 /* tslint:disable */
 /* eslint-disable */
 export type PickUpLocationDto = {
-    deliusCode: string;
-    description: string;
     buildingName?: string | null;
     buildingNumber?: string | null;
+    county?: string | null;
+    deliusCode: string;
+    description: string;
+    postCode?: string | null;
     streetName?: string | null;
     townCity?: string | null;
-    county?: string | null;
-    postCode?: string | null;
 };
 

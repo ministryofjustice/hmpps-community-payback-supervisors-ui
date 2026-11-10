@@ -4,14 +4,6 @@
 /* eslint-disable */
 export type SessionSummaryDto = {
     /**
-     * Project name
-     */
-    projectName: string;
-    /**
-     * Project code
-     */
-    projectCode: string;
-    /**
      * Allocation date
      */
     date: string;
@@ -20,12 +12,20 @@ export type SessionSummaryDto = {
      */
     numberOfOffendersAllocated: number;
     /**
+     * Number of offenders with outcomes requiring enforcement
+     */
+    numberOfOffendersWithEA: number;
+    /**
      * Number of offenders with outcomes
      */
     numberOfOffendersWithOutcomes: number;
     /**
-     * Number of offenders with outcomes requiring enforcement
+     * Project code
      */
-    numberOfOffendersWithEA: number;
+    projectCode: string;
+    /**
+     * Project name
+     */
+    projectName: string;
 };
 

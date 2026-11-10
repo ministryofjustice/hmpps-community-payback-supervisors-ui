@@ -4,9 +4,9 @@
 /* eslint-disable */
 import type { OffenderDto } from './OffenderDto';
 export type OffenderFullDto = (OffenderDto & {
-    forename?: string | null;
-    surname?: string | null;
-    middleNames?: any[] | null;
     dateOfBirth?: string | null;
+    forename?: string | null;
+    middleNames?: any[] | null;
+    surname?: string | null;
 });
 

@@ -3,9 +3,9 @@
 /* tslint:disable */
 /* eslint-disable */
 export type MainOffenceDto = {
-    date: string;
-    count: number;
     code: string;
+    count: number;
+    date: string;
     description: string;
 };
 

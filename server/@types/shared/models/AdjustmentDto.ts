@@ -3,10 +3,10 @@
 /* tslint:disable */
 /* eslint-disable */
 export type AdjustmentDto = {
+    amount: string;
+    date: string;
     deliusId: number;
     id?: string | null;
-    date: string;
-    amount: string;
     reason: string;
     reasonCode: string;
 };
