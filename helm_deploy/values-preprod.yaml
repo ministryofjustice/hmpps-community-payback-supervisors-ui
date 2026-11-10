@@ -17,6 +17,7 @@ generic-service:
     ENVIRONMENT_NAME: PREPROD
     AUDIT_ENABLED: 'true'
     DISPLAY_HOURS_DETAILS_ENABLED: 'true'
+    UPDATE_APPOINTMENTS_ENABLED: 'false'
 
 generic-prometheus-alerts:
   alertSeverity: hmpps-community-payback-nonprod

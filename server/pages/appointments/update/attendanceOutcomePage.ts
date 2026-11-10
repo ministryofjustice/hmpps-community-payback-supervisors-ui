@@ -107,7 +107,9 @@ export default class AttendanceOutcomePage extends BaseAppointmentUpdatePage<Bod
   }
 
   private items(form: AppointmentOutcomeForm, hasErrors: boolean): { text: string; value: string }[] {
-    const code = hasErrors ? this.query.attendanceOutcome : form.contactOutcomeCode
+    const code = hasErrors
+      ? this.query.attendanceOutcome
+      : form.contactOutcomeCode || this.appointment.contactOutcomeCode
     return this.contactOutcomes.map(outcome => ({
       text: outcome.name,
       value: outcome.code,

@@ -226,6 +226,78 @@ describe('AttendanceOutcomePage', () => {
 
         expect(result.items).toEqual(expectedItems)
       })
+
+      it('should return items matching the contact outcome, if present, from the appointment, if no errors and no form', () => {
+        const page = new AttendanceOutcomePage({
+          query: {},
+          appointment: {
+            ...appointment,
+            contactOutcomeCode: contactOutcomes[0].code,
+          },
+          contactOutcomes,
+        })
+        page.validate()
+
+        const result = page.viewData(appointmentOutcomeFormFactory.build())
+
+        const expectedItems = [
+          {
+            text: contactOutcomes[0].name,
+            value: contactOutcomes[0].code,
+            checked: true,
+          },
+          {
+            text: contactOutcomes[1].name,
+            value: contactOutcomes[1].code,
+            checked: false,
+          },
+          {
+            text: contactOutcomes[2].name,
+            value: contactOutcomes[2].code,
+            checked: false,
+          },
+        ]
+
+        expect(result.items).toEqual(expectedItems)
+      })
+
+      it('should return items matching the contact outcome from the form even if the appointment has an outcome', () => {
+        const page = new AttendanceOutcomePage({
+          query: {},
+          appointment: {
+            ...appointment,
+            contactOutcomeCode: contactOutcomes[0].code,
+          },
+          contactOutcomes,
+        })
+        page.validate()
+
+        const result = page.viewData(
+          appointmentOutcomeFormFactory.build({
+            contactOutcomeCode: contactOutcomes[1].code,
+          }),
+        )
+
+        const expectedItems = [
+          {
+            text: contactOutcomes[0].name,
+            value: contactOutcomes[0].code,
+            checked: false,
+          },
+          {
+            text: contactOutcomes[1].name,
+            value: contactOutcomes[1].code,
+            checked: true,
+          },
+          {
+            text: contactOutcomes[2].name,
+            value: contactOutcomes[2].code,
+            checked: false,
+          },
+        ]
+
+        expect(result.items).toEqual(expectedItems)
+      })
     })
   })
 

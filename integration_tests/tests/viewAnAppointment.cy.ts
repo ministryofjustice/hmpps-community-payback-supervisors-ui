@@ -22,9 +22,12 @@
 //      When I click on 'Did not attend'
 //      Then I should be taken to the first page of the absent form
 //
-//  Scenario: Appointment already with an outcode code
+//  Scenario: Appointment already with an outcome
 //    Given I am on the appointment page
-//    Then I should not see any appointment update actions
+//    And the appointment has an outcome code
+//    And I see appointment update actions
+//    When I click 'Arrived'
+//    Then I should see the outcome already selected
 
 import Page from '../pages/page'
 import SessionPage from '../pages/session'
@@ -153,11 +156,20 @@ context('viewAnAppointment', () => {
     })
   })
 
+  // Scenario: Appointment already with an outcome
   describe('A complete appointment', () => {
-    // Scenario: Appointment already with an outcode code
-    it('has no available actions', () => {
+    it('has available actions', () => {
       // Given I am on the appointment page
-      const appointment = appointmentFactory.build()
+
+      const attendedOutcome = contactOutcomeFactory.build({ code: 'ATTC' })
+      const contactOutcomes = contactOutcomesFactory.build({ contactOutcomes: [attendedOutcome] })
+
+      cy.task('stubGetContactOutcomes', { contactOutcomes })
+
+      // And the appointment has an outcome code
+      const appointment = appointmentFactory.build({
+        contactOutcomeCode: attendedOutcome.code,
+      })
 
       const caseDetailsSummary = caseDetailsFactory.build({ offender: appointment.offender })
       cy.task('stubGetOffenderSummary', { caseDetailsSummary })
@@ -165,10 +177,20 @@ context('viewAnAppointment', () => {
       cy.signIn()
       cy.task('stubFindAppointment', { appointment, projectCode: appointment.projectCode })
 
+      cy.task('stubSaveAppointmentForm')
+      cy.task('stubGetAppointmentForm', { form: appointmentOutcomeFormFactory.build() })
+
       const appointmentPage = AppointmentPage.visit(appointment)
 
-      // Then I should not see any appointment update actions
-      appointmentPage.shouldNotHaveAnyActions()
+      // And I see appointment update actions
+      appointmentPage.shouldHaveActions()
+
+      // When I click 'Arrived'
+      appointmentPage.arrivedButton().click()
+
+      // Then I should see the outcome already selected
+      const outcomePage = Page.verifyOnPage(AttendanceOutcomePage, appointment)
+      outcomePage.checkOptionSelected(attendedOutcome.code)
     })
   })
 
