@@ -41,10 +41,6 @@ export default class AppointmentShowDetailsPage {
   private appointmentActions(appointment: AppointmentDto): LinkItem[] {
     const appointmentPathParams = { projectCode: appointment.projectCode, appointmentId: appointment.id.toString() }
 
-    if (appointment.contactOutcomeCode) {
-      return []
-    }
-
     return [
       { text: 'Arrived', href: paths.appointments.attendanceOutcome(appointmentPathParams) },
       { text: 'Did not attend', href: paths.appointments.notes.absent(appointmentPathParams) },

@@ -46,10 +46,6 @@ export default class AppointmentPage extends Page {
     return cy.get('a').contains('Did not attend')
   }
 
-  finishedButton() {
-    return cy.get('a').contains('End session')
-  }
-
   clickLeftSiteEarly() {
     cy.get('a').contains('Left site early').click()
   }
@@ -70,10 +66,14 @@ export default class AppointmentPage extends Page {
     this.pickUpDetails.getValueWithLabel('Time').should('contain.text', this.appointment.pickUpData?.time)
   }
 
+  shouldHaveActions() {
+    this.arrivedButton().should('exist')
+    this.notArrivedButton().should('exist')
+  }
+
   shouldNotHaveAnyActions() {
     this.arrivedButton().should('not.exist')
     this.notArrivedButton().should('not.exist')
-    this.finishedButton().should('not.exist')
   }
 
   shouldShowTimeComponents() {

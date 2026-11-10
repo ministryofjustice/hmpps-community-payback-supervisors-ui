@@ -6,6 +6,7 @@ import AppointmentUtils from '../../utils/appointmentUtils'
 import LocationUtils from '../../utils/locationUtils'
 import AppointmentShowDetailsPage from './appointmentShowDetailsPage'
 import config from '../../config'
+import { contactOutcomeFactory } from '../../testutils/factories/contactOutcomeFactory'
 
 jest.mock('../../models/offender')
 
@@ -186,6 +187,45 @@ describe('AppointmentShowDetailsPage', () => {
         ]
         const page = new AppointmentShowDetailsPage()
         const result = page.viewData(appointment, null, unpaidWorkHoursItems)
+        const { projectCode, id } = appointment
+
+        expect(result.actions).toEqual([
+          {
+            text: 'Arrived',
+            href: paths.appointments.attendanceOutcome({ projectCode, appointmentId: id.toString() }),
+          },
+          {
+            text: 'Did not attend',
+            href: paths.appointments.notes.absent({ projectCode, appointmentId: id.toString() }),
+          },
+        ])
+      })
+
+      it('should include arrived links if appointment has an outcome', () => {
+        const contactOutcome = contactOutcomeFactory.build()
+        const appointment = appointmentFactory.build({ contactOutcomeCode: contactOutcome.code })
+        const unpaidWorkHoursItems = [
+          {
+            key: 'Hours remaining',
+            value: '1 hour 30 minutes',
+            containerClassList: 'card-group__item card-group__item-main',
+            cardClassList: 'govuk-summary-card card card--highlight-blue',
+          },
+          {
+            key: 'Hours ordered',
+            value: '30 hours',
+            containerClassList: 'card-group__item card-group__item-sub',
+            cardClassList: 'govuk-summary-card card',
+          },
+          {
+            key: 'Hours completed',
+            value: '28 hours 30 minutes',
+            containerClassList: 'card-group__item card-group__item-sub',
+            cardClassList: 'govuk-summary-card card',
+          },
+        ]
+        const page = new AppointmentShowDetailsPage()
+        const result = page.viewData(appointment, contactOutcome, unpaidWorkHoursItems)
         const { projectCode, id } = appointment
 
         expect(result.actions).toEqual([
