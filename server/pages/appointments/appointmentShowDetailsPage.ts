@@ -1,5 +1,6 @@
 import { AppointmentDto, ContactOutcomeDto } from '../../@types/shared'
 import { GovUkSummaryListItem, LinkItem, unpaidWorkItem } from '../../@types/user-defined'
+import config from '../../config'
 import Offender from '../../models/offender'
 import paths from '../../paths'
 import AppointmentUtils from '../../utils/appointmentUtils'
@@ -40,6 +41,10 @@ export default class AppointmentShowDetailsPage {
 
   private appointmentActions(appointment: AppointmentDto): LinkItem[] {
     const appointmentPathParams = { projectCode: appointment.projectCode, appointmentId: appointment.id.toString() }
+
+    if (!config.featureFlags.updateAppointmentsEnabled && appointment.contactOutcomeCode) {
+      return []
+    }
 
     return [
       { text: 'Arrived', href: paths.appointments.attendanceOutcome(appointmentPathParams) },

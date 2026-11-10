@@ -113,5 +113,6 @@ export default {
   requiredSupervisorRole: 'ROLE_CP_SUPERVISE_SESSION',
   featureFlags: {
     displayHoursDetailsEnabled: get('DISPLAY_HOURS_DETAILS_ENABLED', 'false') === 'true',
+    updateAppointmentsEnabled: get('UPDATE_APPOINTMENTS_ENABLED', 'false') === 'true',
   },
 }

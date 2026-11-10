@@ -201,43 +201,80 @@ describe('AppointmentShowDetailsPage', () => {
         ])
       })
 
-      it('should include arrived links if appointment has an outcome', () => {
-        const contactOutcome = contactOutcomeFactory.build()
-        const appointment = appointmentFactory.build({ contactOutcomeCode: contactOutcome.code })
-        const unpaidWorkHoursItems = [
-          {
-            key: 'Hours remaining',
-            value: '1 hour 30 minutes',
-            containerClassList: 'card-group__item card-group__item-main',
-            cardClassList: 'govuk-summary-card card card--highlight-blue',
-          },
-          {
-            key: 'Hours ordered',
-            value: '30 hours',
-            containerClassList: 'card-group__item card-group__item-sub',
-            cardClassList: 'govuk-summary-card card',
-          },
-          {
-            key: 'Hours completed',
-            value: '28 hours 30 minutes',
-            containerClassList: 'card-group__item card-group__item-sub',
-            cardClassList: 'govuk-summary-card card',
-          },
-        ]
-        const page = new AppointmentShowDetailsPage()
-        const result = page.viewData(appointment, contactOutcome, unpaidWorkHoursItems)
-        const { projectCode, id } = appointment
+      describe('when the feature flag is true', () => {
+        it('should include arrived links if appointment has an outcome', () => {
+          jest.replaceProperty(config, 'featureFlags', { ...config.featureFlags, updateAppointmentsEnabled: true })
 
-        expect(result.actions).toEqual([
-          {
-            text: 'Arrived',
-            href: paths.appointments.attendanceOutcome({ projectCode, appointmentId: id.toString() }),
-          },
-          {
-            text: 'Did not attend',
-            href: paths.appointments.notes.absent({ projectCode, appointmentId: id.toString() }),
-          },
-        ])
+          const contactOutcome = contactOutcomeFactory.build()
+          const appointment = appointmentFactory.build({ contactOutcomeCode: contactOutcome.code })
+          const unpaidWorkHoursItems = [
+            {
+              key: 'Hours remaining',
+              value: '1 hour 30 minutes',
+              containerClassList: 'card-group__item card-group__item-main',
+              cardClassList: 'govuk-summary-card card card--highlight-blue',
+            },
+            {
+              key: 'Hours ordered',
+              value: '30 hours',
+              containerClassList: 'card-group__item card-group__item-sub',
+              cardClassList: 'govuk-summary-card card',
+            },
+            {
+              key: 'Hours completed',
+              value: '28 hours 30 minutes',
+              containerClassList: 'card-group__item card-group__item-sub',
+              cardClassList: 'govuk-summary-card card',
+            },
+          ]
+          const page = new AppointmentShowDetailsPage()
+          const result = page.viewData(appointment, contactOutcome, unpaidWorkHoursItems)
+          const { projectCode, id } = appointment
+
+          expect(result.actions).toEqual([
+            {
+              text: 'Arrived',
+              href: paths.appointments.attendanceOutcome({ projectCode, appointmentId: id.toString() }),
+            },
+            {
+              text: 'Did not attend',
+              href: paths.appointments.notes.absent({ projectCode, appointmentId: id.toString() }),
+            },
+          ])
+        })
+      })
+
+      describe('when the feature flag is false', () => {
+        it('should not include arrived links if appointment has an outcome', () => {
+          jest.replaceProperty(config, 'featureFlags', { ...config.featureFlags, updateAppointmentsEnabled: false })
+
+          const contactOutcome = contactOutcomeFactory.build()
+          const appointment = appointmentFactory.build({ contactOutcomeCode: contactOutcome.code })
+          const unpaidWorkHoursItems = [
+            {
+              key: 'Hours remaining',
+              value: '1 hour 30 minutes',
+              containerClassList: 'card-group__item card-group__item-main',
+              cardClassList: 'govuk-summary-card card card--highlight-blue',
+            },
+            {
+              key: 'Hours ordered',
+              value: '30 hours',
+              containerClassList: 'card-group__item card-group__item-sub',
+              cardClassList: 'govuk-summary-card card',
+            },
+            {
+              key: 'Hours completed',
+              value: '28 hours 30 minutes',
+              containerClassList: 'card-group__item card-group__item-sub',
+              cardClassList: 'govuk-summary-card card',
+            },
+          ]
+          const page = new AppointmentShowDetailsPage()
+          const result = page.viewData(appointment, contactOutcome, unpaidWorkHoursItems)
+
+          expect(result.actions).toEqual([])
+        })
       })
     })
 
