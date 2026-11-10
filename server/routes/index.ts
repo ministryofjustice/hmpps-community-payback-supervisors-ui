@@ -23,6 +23,11 @@ export default function routes(controllers: Controllers): Router {
 
   get(paths.data.teams.pattern, dataController.teams())
 
+  router.get(paths.error.pattern, async (_, res) => {
+    res.status(500)
+    return res.render('pages/500')
+  })
+
   sessionRoutes(sessionsController, router)
   appointmentRoutes(controllers, router)
 
