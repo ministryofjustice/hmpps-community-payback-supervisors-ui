@@ -1,10 +1,10 @@
+{% extends "../../partials/layout.njk" %}
+
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 
 {% from "../../showErrorSummary.njk" import showErrorSummary %}
-
-{% extends "../../partials/layout.njk" %}
 
 {% set mainClasses = "app-container govuk-body" %}
 {% if formButtonText is not defined %}
@@ -26,9 +26,9 @@
         <span class="govuk-caption-l">
           {{ offender.crn }}
         </span>
-        <h2 class="govuk-heading-l">
+        <h1 class="govuk-heading-xl">
           {{ offender.name }}
-        </h2>
+        </h1>
       </div>
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 

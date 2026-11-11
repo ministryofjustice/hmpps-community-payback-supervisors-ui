@@ -1,5 +1,6 @@
-{% from "govuk/components/input/macro.njk" import govukInput %}
 {% extends "./layout.njk" %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
 
 {% set pageTitle = documentTitle %}
 
@@ -11,8 +12,7 @@
     {{ govukInput({
       label: {
         text: question,
-        classes: "govuk-label--l",
-        isPageHeading: true
+        classes: "govuk-label--l"
       },
       id: "time",
       name: "time",
@@ -20,7 +20,7 @@
       value: time,
       errorMessage: errors.time
     }) }}
-  {%endmacro %}
+  {% endmacro %}
 
   {{ form() }}
 

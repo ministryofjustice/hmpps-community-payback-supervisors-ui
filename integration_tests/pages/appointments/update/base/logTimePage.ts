@@ -5,6 +5,10 @@ export default class LogTimePage extends Page {
     super(title)
   }
 
+  checkOnPage(): void {
+    cy.get('label').should('contain.text', this.title)
+  }
+
   clearTime(): void {
     this.getInputByLabel(this.title).clear()
   }

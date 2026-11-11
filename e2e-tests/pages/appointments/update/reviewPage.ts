@@ -10,9 +10,12 @@ export default class ReviewPage extends BasePage {
 
   readonly expect: ReviewPageAssertions
 
+  readonly formHeadingLocator: Locator
+
   constructor(readonly page: Page) {
     super(page)
     this.expect = new ReviewPageAssertions(this)
+    this.formHeadingLocator = page.getByRole('heading', { level: 2, name: this.titleText })
 
     this.alertPractitionerQuestionLocator = page.getByRole('group', {
       name: /Would you (?:also )?like this to be sent to the alert diary?/,
@@ -32,6 +35,6 @@ class ReviewPageAssertions {
   constructor(private readonly page: ReviewPage) {}
 
   async toBeOnThePage() {
-    await expect(this.page.headingLocator).toContainText(this.page.titleText)
+    await expect(this.page.formHeadingLocator).toBeVisible()
   }
 }

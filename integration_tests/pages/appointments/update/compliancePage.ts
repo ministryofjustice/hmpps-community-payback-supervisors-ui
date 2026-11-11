@@ -9,6 +9,10 @@ export default class CompliancePage extends Page {
     super('Log compliance')
   }
 
+  checkOnPage(): void {
+    cy.get('h2').should('contain.text', this.title)
+  }
+
   static visit(
     appointment: AppointmentDto,
     action: AppointmentCompletedAction,

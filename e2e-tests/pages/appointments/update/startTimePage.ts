@@ -13,7 +13,7 @@ export default class StartTimePage extends BasePage {
   constructor(readonly page: Page) {
     super(page)
     this.expect = new StartTimePageAssertions(this)
-    this.question = this.headingLocator.getByText(this.titleText)
+    this.question = page.getByLabel(this.titleText)
   }
 }
 
@@ -21,6 +21,6 @@ class StartTimePageAssertions {
   constructor(private readonly page: StartTimePage) {}
 
   async toBeOnThePage() {
-    await expect(this.page.question).toContainText('Log start time')
+    await expect(this.page.question).toBeVisible()
   }
 }

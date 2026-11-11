@@ -17,6 +17,10 @@ export default class ReviewPage extends Page {
     this.answers = new SummaryListComponent()
   }
 
+  checkOnPage(): void {
+    cy.get('h2').should('contain.text', this.title)
+  }
+
   static visit(appointment: AppointmentDto, action: AppointmentNotesAction): ReviewPage {
     const path = paths.appointments.review[action]({
       projectCode: appointment.projectCode,

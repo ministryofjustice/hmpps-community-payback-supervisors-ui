@@ -10,9 +10,12 @@ export default class CompliancePage extends BasePage {
 
   expect: CompliancePageAssertions
 
+  readonly formHeadingLocator: Locator
+
   constructor(page: Page) {
     super(page)
     this.expect = new CompliancePageAssertions(this)
+    this.formHeadingLocator = page.getByRole('heading', { level: 2, name: 'Log compliance' })
     this.workedQualityFieldLocator = page.getByRole('group', { name: 'How was their work quality?' })
     this.behaviourFieldLocator = page.getByRole('group', { name: 'How was their behaviour?' })
   }
@@ -27,6 +30,6 @@ class CompliancePageAssertions {
   constructor(private readonly page: CompliancePage) {}
 
   async toBeOnThePage() {
-    await expect(this.page.headingLocator).toContainText('Log compliance')
+    await expect(this.page.formHeadingLocator).toBeVisible()
   }
 }
