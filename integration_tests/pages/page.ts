@@ -1,3 +1,6 @@
+import { OffenderDto } from '../../server/@types/shared'
+import Offender from '../../server/models/offender'
+
 export type PageElement = Cypress.Chainable<JQuery>
 
 export default abstract class Page {
@@ -64,7 +67,8 @@ export default abstract class Page {
     cy.title().should('match', /^Error: /)
   }
 
-  shouldShowOffenderDetails(crn: string): void {
-    cy.get('.govuk-caption-l').should('contain.text', crn)
+  shouldShowOffenderDetails(offender: OffenderDto): void {
+    cy.get('.govuk-caption-l').should('contain.text', offender.crn)
+    cy.get('h1').should('contain.text', new Offender(offender).name)
   }
 }

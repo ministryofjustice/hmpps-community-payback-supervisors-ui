@@ -7,6 +7,10 @@ export default class PageWithNotes extends Page {
     super(notesLabel)
   }
 
+  checkOnPage(): void {
+    cy.get('label').should('contain.text', this.title)
+  }
+
   enterNotesWithCharacterLength(characterLength: number): void {
     this.userInput = 'x'.repeat(characterLength)
 

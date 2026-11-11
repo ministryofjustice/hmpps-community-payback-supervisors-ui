@@ -1,6 +1,6 @@
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
-
 {% extends "./layout.njk" %}
+
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% set pageTitle = 'Log attendance outcome' %}
 
@@ -16,8 +16,7 @@
         fieldset: {
           legend: {
             text: "Log attendance",
-            classes: "govuk-fieldset__legend--m",
-            isPageHeading: true
+            classes: "govuk-fieldset__legend--l"
           }
         },
         items: items,

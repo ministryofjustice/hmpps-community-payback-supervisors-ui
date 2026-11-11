@@ -79,7 +79,7 @@ context('Log start time ', () => {
     cy.task('stubFindAppointment', { appointment })
     const page = StartTimePage.visit(appointment, 'arrived')
     // I should see the offender CRN on the page
-    page.shouldShowOffenderDetails(appointment.offender.crn)
+    page.shouldShowOffenderDetails(appointment.offender)
   })
 
   //  Scenario: Arrived

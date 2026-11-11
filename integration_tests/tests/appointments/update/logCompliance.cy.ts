@@ -77,7 +77,7 @@ context('Log compliance', () => {
     cy.task('stubFindAppointment', { appointment })
     const page = CompliancePage.visit(appointment, 'completed', formId)
     // I should see the offender CRN on the page
-    page.shouldShowOffenderDetails(appointment.offender.crn)
+    page.shouldShowOffenderDetails(appointment.offender)
   })
 
   // Scenario: Validating the log compliance page

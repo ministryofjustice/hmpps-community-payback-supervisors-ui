@@ -65,7 +65,7 @@ context('Attendance outcome', () => {
     cy.task('stubFindAppointment', { appointment })
     const page = AttendanceOutcomePage.visit(appointment)
     // I should see the offender CRN on the page
-    page.shouldShowOffenderDetails(appointment.offender.crn)
+    page.shouldShowOffenderDetails(appointment.offender)
   })
 
   // Scenario: Validating the attendance outcome page

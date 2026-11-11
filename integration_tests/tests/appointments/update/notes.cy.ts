@@ -81,7 +81,7 @@ context('Notes', () => {
     cy.task('stubFindAppointment', { appointment })
     const page = NotesPage.visit(appointment, 'absent')
     // I should see the offender CRN on the page
-    page.shouldShowOffenderDetails(appointment.offender.crn)
+    page.shouldShowOffenderDetails(appointment.offender)
   })
 
   // Scenario: Validating the notes page

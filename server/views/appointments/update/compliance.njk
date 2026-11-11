@@ -1,13 +1,13 @@
+{% extends "./layout.njk" %}
+
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
-{% extends "./layout.njk" %}
-
 {% set pageTitle = 'Log compliance' %}
 
 {% block beforeForm %}
-  <h1>Log compliance</h1>
+  <h2 class="govuk-heading-l">{{ pageTitle }}</h2>
 {% endblock %}
 
 {% block formContent %}
@@ -42,7 +42,7 @@
         }) }}
       </div>
     </div>
-  {%endmacro %}
+  {% endmacro %}
 
   {{ form() }}
 
