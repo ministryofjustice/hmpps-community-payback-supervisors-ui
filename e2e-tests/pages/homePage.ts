@@ -47,6 +47,6 @@ class HomePageAssertions {
   constructor(private readonly page: HomePage) {}
 
   async toBeOnThePage() {
-    await expect(this.page.headingLocator).toContainText('Next session')
+    await expect(this.page.headingLocator).toContainText('Find a group session')
   }
 }
