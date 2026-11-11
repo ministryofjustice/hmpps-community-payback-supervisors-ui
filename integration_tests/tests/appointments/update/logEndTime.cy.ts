@@ -50,7 +50,7 @@ context('Log finish time ', () => {
     cy.task('stubFindAppointment', { appointment })
     const page = EndTimePage.visit(appointment, 'completed')
     // I should see the offender CRN on the page
-    page.shouldShowOffenderDetails(appointment.offender.crn)
+    page.shouldShowOffenderDetails(appointment.offender)
   })
 
   //  Scenario: End session

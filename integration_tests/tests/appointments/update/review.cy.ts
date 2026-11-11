@@ -76,7 +76,7 @@ context('Review', () => {
     const page = Page.verifyOnPage(ReviewPage, appointment, 'completed')
 
     // I should see the offender CRN on the page
-    page.shouldShowOffenderDetails(appointment.offender.crn)
+    page.shouldShowOffenderDetails(appointment.offender)
   })
 
   //  Scenario: Validating the review page

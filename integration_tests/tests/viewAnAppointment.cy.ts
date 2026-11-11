@@ -82,7 +82,7 @@ context('viewAnAppointment', () => {
     // Then I should see the appointment, offender, time cards and pick-up details
     appointmentPage.shouldShowAppointmentDetails()
     appointmentPage.shouldShowPickUpDetails()
-    appointmentPage.shouldShowOffenderDetails(appointment.offender.crn)
+    appointmentPage.shouldShowOffenderDetails(appointment.offender)
     appointmentPage.shouldShowStatus('Scheduled')
     appointmentPage.shouldShowTimeComponents()
   })
@@ -214,7 +214,7 @@ context('viewAnAppointment', () => {
     // Then I should see the appointment, offender, and pick-up details
     appointmentPage.shouldShowAppointmentDetails()
     appointmentPage.shouldShowPickUpDetails()
-    appointmentPage.shouldShowOffenderDetails(appointment.offender.crn)
+    appointmentPage.shouldShowOffenderDetails(appointment.offender)
     appointmentPage.shouldShowStatus('Scheduled')
     appointmentPage.shouldNotShowTimeComponents()
   })
