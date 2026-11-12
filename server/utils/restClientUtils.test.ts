@@ -1,5 +1,3 @@
-import { expect } from '@playwright/test'
-import { describe } from 'node:test'
 import idempotencyKey from './restClientUtils'
 
 describe('idempotencyKey', () => {
