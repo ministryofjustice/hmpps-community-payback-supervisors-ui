@@ -4,6 +4,11 @@
 /* eslint-disable */
 export type ProjectTypeDto = {
     /**
+     * Project type code
+     */
+    code: string;
+    group?: 'ETE' | 'OTHER_ETE' | 'GROUP' | 'INDIVIDUAL' | 'INDUCTION';
+    /**
      * Project type identifier
      */
     id: string;
@@ -11,10 +16,5 @@ export type ProjectTypeDto = {
      * Project type name
      */
     name: string;
-    /**
-     * Project type code
-     */
-    code: string;
-    group?: 'ETE' | 'OTHER_ETE' | 'GROUP' | 'INDIVIDUAL' | 'INDUCTION';
 };
 

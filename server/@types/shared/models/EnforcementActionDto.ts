@@ -4,6 +4,10 @@
 /* eslint-disable */
 export type EnforcementActionDto = {
     /**
+     * Enforcement outcome code
+     */
+    code: string;
+    /**
      * Enforcement outcome identifier
      */
     id: string;
@@ -11,10 +15,6 @@ export type EnforcementActionDto = {
      * Enforcement outcome name
      */
     name: string;
-    /**
-     * Enforcement outcome code
-     */
-    code: string;
     /**
      * Indicates if 'respondByDateRequired' is required on this enforcement outcome
      */

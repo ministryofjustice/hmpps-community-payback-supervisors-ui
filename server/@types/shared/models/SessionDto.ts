@@ -5,15 +5,15 @@
 import type { AppointmentSummaryDto } from './AppointmentSummaryDto';
 import type { LocationDto } from './LocationDto';
 export type SessionDto = {
-    projectName: string;
+    appointmentSummaries: Array<AppointmentSummaryDto>;
+    date: string;
+    location: LocationDto;
     projectCode: string;
     /**
      * Deprecated, use the structured location instead
      * @deprecated
      */
     projectLocation?: string | null;
-    location: LocationDto;
-    date: string;
-    appointmentSummaries: Array<AppointmentSummaryDto>;
+    projectName: string;
 };
 

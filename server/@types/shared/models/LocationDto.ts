@@ -5,9 +5,9 @@
 export type LocationDto = {
     buildingName?: string | null;
     buildingNumber?: string | null;
-    streetName?: string | null;
-    townCity?: string | null;
     county?: string | null;
     postCode?: string | null;
+    streetName?: string | null;
+    townCity?: string | null;
 };
 

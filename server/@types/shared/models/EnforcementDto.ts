@@ -3,8 +3,8 @@
 /* tslint:disable */
 /* eslint-disable */
 export type EnforcementDto = {
-    enforcementActionName: string;
     enforcementActionId: string;
+    enforcementActionName: string;
     respondBy?: string | null;
 };
 
