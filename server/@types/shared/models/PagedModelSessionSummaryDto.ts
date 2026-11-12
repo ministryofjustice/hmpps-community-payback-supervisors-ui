@@ -5,7 +5,7 @@
 import type { PageMetadata } from './PageMetadata';
 import type { SessionSummaryDto } from './SessionSummaryDto';
 export type PagedModelSessionSummaryDto = {
-    content?: Array<SessionSummaryDto>;
-    page?: PageMetadata;
+    content: Array<SessionSummaryDto>;
+    page: PageMetadata;
 };
 
