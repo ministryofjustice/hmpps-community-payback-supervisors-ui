@@ -23,5 +23,22 @@
     & + & {
       margin-top: govuk-spacing(4);
     }
+
+    @media (max-width: 48.0525em) {
+      .govuk-form-group,
+      .moj-datepicker {
+        flex: 1 1 0;
+        min-width: 0;
+      }
+
+      .govuk-form-group > select,
+      .govuk-input__wrapper input {
+        width: 100%;
+      }
+    }
+  }
+
+  &__buttons {
+    margin-top: govuk-spacing(4);
   }
 }
