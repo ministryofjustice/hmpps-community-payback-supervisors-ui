@@ -46,7 +46,7 @@
     "@ministryofjustice/hmpps-probation-frontend-components": "1.2.2",
     "@ministryofjustice/hmpps-rest-client": "^2.2.0",
     "@sentry/node": "^10.78.0",
-    "applicationinsights": "^2.9.8",
+    "applicationinsights": "^3.17.0",
     "body-parser": "^2.4.0",
     "bunyan": "^1.8.15",
     "bunyan-format": "^0.2.1",
