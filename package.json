@@ -45,7 +45,7 @@
     "@ministryofjustice/hmpps-monitoring": "^2.1.0",
     "@ministryofjustice/hmpps-probation-frontend-components": "1.2.2",
     "@ministryofjustice/hmpps-rest-client": "^2.2.0",
-    "@sentry/node": "^10.78.0",
+    "@sentry/node": "^11.11.0",
     "applicationinsights": "^2.9.8",
     "body-parser": "^2.4.0",
     "bunyan": "^1.8.15",
