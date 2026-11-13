@@ -9,6 +9,7 @@ generic-service:
     tlsSecretName: hmpps-community-payback-supervisors-preprod-cert
 
   env:
+    LOG_LEVEL: 'info'
     INGRESS_URL: 'https://community-payback-supervisors-preprod.hmpps.service.justice.gov.uk'
     HMPPS_AUTH_URL: 'https://sign-in-preprod.hmpps.service.justice.gov.uk/auth'
     TOKEN_VERIFICATION_API_URL: 'https://token-verification-api-preprod.prison.service.justice.gov.uk'
