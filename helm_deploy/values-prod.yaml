@@ -20,6 +20,3 @@ generic-service:
     DISPLAY_HOURS_DETAILS_ENABLED: 'true'
     UPDATE_APPOINTMENTS_ENABLED: 'false'
     SESSIONS_FILTERS_ENABLED: 'false'
-
-generic-prometheus-alerts:
-  alertSeverity: hmpps-community-payback-prod
