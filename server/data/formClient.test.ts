@@ -60,7 +60,7 @@ describe('formClient', () => {
         .matchHeader('authorization', 'Bearer test-system-token')
         .replyWithError('Something went wrong')
 
-      expect(() => formClient.find({ type, id }, 'some-user')).rejects.toThrow('Something went wrong')
+      await expect(() => formClient.find({ type, id }, 'some-user')).rejects.toThrow('Something went wrong')
     })
   })
 
