@@ -6,7 +6,7 @@ import locationFactory from './locationFactory'
 
 export default Factory.define<SessionDto>(() => ({
   projectCode: faker.string.alpha(10),
-  projectName: faker.company.name(),
+  projectName: faker.company.catchPhrase(),
   projectLocation: fakerEngb.location.county(),
   location: locationFactory.build(),
   date: faker.date.recent().toISOString().split('T')[0],

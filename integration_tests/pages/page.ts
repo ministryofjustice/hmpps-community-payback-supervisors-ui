@@ -14,6 +14,22 @@ export default abstract class Page {
 
   checkOnPage(): void {
     cy.get('h1').contains(this.title)
+    this.shouldNotHavePopNameInDocumentTitle()
+  }
+
+  shouldNotHavePopNameInDocumentTitle(): void {
+    const containsWord = (text: string, word: string) =>
+      new RegExp(`\\b${word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i').test(text)
+
+    cy.task<Array<string>>('getStubbedPopNameParts').then(nameParts => {
+      cy.title().then(title => {
+        nameParts.forEach(namePart => {
+          expect(containsWord(title, namePart), `document title "${title}" contains the name "${namePart}"`).to.equal(
+            false,
+          )
+        })
+      })
+    })
   }
 
   clickContinue(text = 'Continue'): void {

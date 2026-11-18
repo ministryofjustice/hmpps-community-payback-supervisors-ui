@@ -11,6 +11,7 @@ import appointmentForms from './integration_tests/mockApis/appointmentForms'
 import offenders from './integration_tests/mockApis/offenders'
 import frontendComponents from './integration_tests/mockApis/frontendComponents'
 import providers from './integration_tests/mockApis/providers'
+import popNames from './integration_tests/mockApis/popNames'
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -37,6 +38,7 @@ export default defineConfig({
         ...offenders,
         ...frontendComponents,
         ...providers,
+        ...popNames,
       })
     },
     baseUrl: 'http://localhost:3007',
