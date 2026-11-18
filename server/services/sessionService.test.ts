@@ -4,6 +4,7 @@ import sessionFactory from '../testutils/factories/sessionFactory'
 import sessionSummaryFactory from '../testutils/factories/sessionSummaryFactory'
 import supervisorTeamFactory from '../testutils/factories/supervisorTeamFactory'
 import supervisorFactory from '../testutils/factories/supervisorFactory'
+import pagedMetadataFactory from '../testutils/factories/pagedMetadataFactory'
 
 jest.mock('../data/sessionClient')
 
@@ -36,7 +37,10 @@ describe('ProviderService', () => {
     const supervisor = supervisorFactory.build({ unpaidWorkTeams })
     const allocations = sessionSummaryFactory.buildList(2)
 
-    sessionClient.nextSessions.mockResolvedValue({ content: allocations, page: { totalPages: 1 } })
+    sessionClient.nextSessions.mockResolvedValue({
+      content: allocations,
+      page: pagedMetadataFactory.build({ totalPages: 1 }),
+    })
     const result = await sessionService.getNextSessions('some-username', supervisor)
 
     expect(sessionClient.nextSessions).toHaveBeenCalledTimes(1)
@@ -49,8 +53,14 @@ describe('ProviderService', () => {
     const firstAllocations = sessionSummaryFactory.buildList(2)
     const secondAllocations = sessionSummaryFactory.buildList(1)
 
-    sessionClient.nextSessions.mockResolvedValueOnce({ content: firstAllocations, page: { totalPages: 2 } })
-    sessionClient.nextSessions.mockResolvedValueOnce({ content: secondAllocations, page: { totalPages: 2 } })
+    sessionClient.nextSessions.mockResolvedValueOnce({
+      content: firstAllocations,
+      page: pagedMetadataFactory.build({ totalPages: 2 }),
+    })
+    sessionClient.nextSessions.mockResolvedValueOnce({
+      content: secondAllocations,
+      page: pagedMetadataFactory.build({ totalPages: 2 }),
+    })
     const result = await sessionService.getNextSessions('some-username', supervisor)
 
     expect(sessionClient.nextSessions).toHaveBeenCalledTimes(2)
@@ -62,7 +72,10 @@ describe('ProviderService', () => {
     const allocations = sessionSummaryFactory.buildList(2)
     const date = '1/1/2026'
 
-    sessionClient.filterSessions.mockResolvedValue({ content: allocations, page: { totalPages: 1 } })
+    sessionClient.filterSessions.mockResolvedValue({
+      content: allocations,
+      page: pagedMetadataFactory.build({ totalPages: 1 }),
+    })
     const result = await sessionService.getFilteredSessions('some-username', teamCode, date)
 
     expect(sessionClient.filterSessions).toHaveBeenCalledTimes(1)
@@ -75,8 +88,14 @@ describe('ProviderService', () => {
     const secondAllocations = sessionSummaryFactory.buildList(1)
     const date = '1/1/2026'
 
-    sessionClient.filterSessions.mockResolvedValueOnce({ content: firstAllocations, page: { totalPages: 2 } })
-    sessionClient.filterSessions.mockResolvedValueOnce({ content: secondAllocations, page: { totalPages: 2 } })
+    sessionClient.filterSessions.mockResolvedValueOnce({
+      content: firstAllocations,
+      page: pagedMetadataFactory.build({ totalPages: 2 }),
+    })
+    sessionClient.filterSessions.mockResolvedValueOnce({
+      content: secondAllocations,
+      page: pagedMetadataFactory.build({ totalPages: 2 }),
+    })
     const result = await sessionService.getFilteredSessions('some-username', teamCode, date)
 
     expect(sessionClient.filterSessions).toHaveBeenCalledTimes(2)
