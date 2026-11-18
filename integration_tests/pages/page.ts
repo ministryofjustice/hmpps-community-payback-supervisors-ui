@@ -4,17 +4,18 @@ import Offender from '../../server/models/offender'
 export type PageElement = Cypress.Chainable<JQuery>
 
 export default abstract class Page {
-  static verifyOnPage<T>(constructor: new (...args: Array<unknown>) => T, ...args: Array<unknown>): T {
-    return new constructor(...args)
+  static verifyOnPage<T extends Page>(constructor: new (...args: Array<unknown>) => T, ...args: Array<unknown>): T {
+    const page = new constructor(...args)
+    page.checkOnPage()
+    return page
   }
 
-  protected constructor(protected readonly title: string) {
-    this.checkOnPage()
-  }
+  protected constructor(protected readonly title: string) {}
 
   checkOnPage(): void {
     cy.get('h1').contains(this.title)
     this.shouldNotHavePopNameInDocumentTitle()
+    this.customCheckOnPage()
   }
 
   shouldNotHavePopNameInDocumentTitle(): void {
@@ -31,6 +32,10 @@ export default abstract class Page {
       })
     })
   }
+
+  // Ignoring rule `no-empty-function`
+  // This is designed to be empty to provide an optional page verification override at the class implementation level
+  protected customCheckOnPage(): void {} // eslint-disable-line no-empty-function
 
   clickContinue(text = 'Continue'): void {
     cy.get('button').contains(text).click()
