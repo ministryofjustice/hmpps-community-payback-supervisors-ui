@@ -27,6 +27,7 @@ import supervisorFactory from '../../../../server/testutils/factories/supervisor
 import appointmentOutcomeFormFactory from '../../../../server/testutils/factories/appointmentOutcomeFormFactory'
 import providerSummaryFactory from '../../../../server/testutils/factories/providerSummaryFactory'
 import providerTeamSummaryFactory from '../../../../server/testutils/factories/providerTeamSummaryFactory'
+import Utils from '../../../utils'
 
 context('Log finish time ', () => {
   let appointment: AppointmentDto
@@ -47,6 +48,7 @@ context('Log finish time ', () => {
     cy.task('stubNextSessions', { sessionSummaries: { allocations }, teamCodes: [supervisor.unpaidWorkTeams[0].code] })
     cy.task('stubSaveAppointmentForm')
     cy.task('stubGetAppointmentForm', { form: appointmentOutcomeFormFactory.build() })
+    Utils.stubOffenderFromAppointment(appointment)
 
     cy.signIn()
   })

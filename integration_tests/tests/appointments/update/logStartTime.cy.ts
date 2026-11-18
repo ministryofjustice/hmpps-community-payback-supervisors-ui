@@ -51,6 +51,7 @@ import {
 import { SessionSummariesDto } from '../../../../server/@types/user-defined'
 import providerSummaryFactory from '../../../../server/testutils/factories/providerSummaryFactory'
 import providerTeamSummaryFactory from '../../../../server/testutils/factories/providerTeamSummaryFactory'
+import Utils from '../../../utils'
 
 context('Log start time ', () => {
   let appointment: AppointmentDto
@@ -76,6 +77,7 @@ context('Log start time ', () => {
       contactOutcomes: [contactOutcomeFactory.build({ enforceable: true }), contactOutcomeFactory.build()],
     })
     cy.task('stubGetContactOutcomes', { contactOutcomes })
+    Utils.stubOffenderFromAppointment(appointment)
 
     cy.signIn()
   })
@@ -129,6 +131,8 @@ context('Log start time ', () => {
       const session = sessionFactory.build({ appointmentSummaries })
       appointment = appointmentFactory.build({ projectCode: session.projectCode, date: session.date })
 
+      Utils.stubOffenderFromAppointment(appointment)
+
       cy.task('stubFindAppointment', { appointment })
       cy.task('stubUpdateAppointmentOutcome', { appointment })
 
@@ -178,6 +182,8 @@ context('Log start time ', () => {
       const session = sessionFactory.build({ appointmentSummaries })
       cy.task('stubFindSession', { session })
       appointment = appointmentFactory.build({ projectCode: session.projectCode, date: session.date })
+
+      Utils.stubOffenderFromAppointment(appointment)
 
       cy.task('stubFindAppointment', { appointment })
       cy.task('stubUpdateAppointmentOutcomeWithError', { appointment, userMessage: 'Unable to update appointment' })

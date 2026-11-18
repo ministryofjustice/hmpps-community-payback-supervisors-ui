@@ -34,6 +34,7 @@ import supervisorFactory from '../../../../server/testutils/factories/supervisor
 import sessionSummaryFactory from '../../../../server/testutils/factories/sessionSummaryFactory'
 import providerSummaryFactory from '../../../../server/testutils/factories/providerSummaryFactory'
 import providerTeamSummaryFactory from '../../../../server/testutils/factories/providerTeamSummaryFactory'
+import Utils from '../../../utils'
 
 context('Attendance outcome', () => {
   let appointment: AppointmentDto
@@ -64,6 +65,8 @@ context('Attendance outcome', () => {
   beforeEach(function test() {
     cy.task('stubGetContactOutcomes', { contactOutcomes: this.contactOutcomes })
     cy.task('stubGetAppointmentForm', { form: appointmentOutcomeFormFactory.build() })
+
+    Utils.stubOffenderFromAppointment(appointment)
   })
 
   //  Scenario: Showing the offender details

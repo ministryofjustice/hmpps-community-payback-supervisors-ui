@@ -4,6 +4,7 @@ import { DeepMocked, createMock } from '@golevelup/ts-jest'
 import request from 'supertest'
 import createErrorHandler from './errorHandler'
 import { Controllers, controllers } from './controllers'
+import { Services, services } from './services'
 import { appWithAllRoutes } from './routes/testutils/appSetup'
 
 let app: Express
@@ -12,14 +13,22 @@ jest.mock('./controllers', () => ({
   controllers: jest.fn(),
 }))
 
+jest.mock('./services', () => ({
+  services: jest.fn(),
+}))
+
 const mockControllers = createMock<Controllers>() as DeepMocked<Controllers>
 ;(controllers as jest.Mock).mockReturnValue(mockControllers)
+
+const mockServices = createMock<Services>() as DeepMocked<Services>
+;(services as jest.Mock).mockReturnValue(mockServices)
 
 beforeEach(() => {
   jest.resetModules()
 
   app = appWithAllRoutes({
     controllers: mockControllers,
+    services: mockServices,
   })
 })
 
@@ -40,7 +49,7 @@ describe('GET 404', () => {
   })
 
   it('should render content without stack in production mode', () => {
-    return request(appWithAllRoutes({ production: true, controllers: mockControllers }))
+    return request(appWithAllRoutes({ production: true, controllers: mockControllers, services: mockServices }))
       .get('/unknown')
       .expect(404)
       .expect('Content-Type', /html/)

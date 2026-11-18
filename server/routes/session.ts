@@ -2,7 +2,7 @@ import { Router } from 'express'
 import paths from '../paths'
 import SessionsController from '../controllers/sessionsController'
 import { Page } from '../services/auditService'
-import { actions } from './utils'
+import actions from './actions'
 
 export default function sessionRoutes(sessionsController: SessionsController, router: Router): Router {
   const { get } = actions(router)

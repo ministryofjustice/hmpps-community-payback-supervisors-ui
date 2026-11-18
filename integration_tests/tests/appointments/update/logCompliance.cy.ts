@@ -16,6 +16,7 @@ import NotesPage from '../../../pages/appointments/update/notesPage'
 import attendanceDataFactory from '../../../../server/testutils/factories/attendanceDataFactory'
 import providerSummaryFactory from '../../../../server/testutils/factories/providerSummaryFactory'
 import providerTeamSummaryFactory from '../../../../server/testutils/factories/providerTeamSummaryFactory'
+import Utils from '../../../utils'
 
 //  Scenario: Showing the offender details
 //    Given I am on the log compliance page for an appointment
@@ -74,12 +75,17 @@ context('Log compliance', () => {
     cy.signIn()
 
     const appointment = appointmentFactory.build({})
+
+    Utils.stubOffenderFromAppointment(appointment)
+
     cy.wrap(appointment).as('appointment')
   })
 
   //  Scenario: Showing the offender details
   it('shows the offender details on the page', () => {
     const appointment = appointmentFactory.build({})
+    Utils.stubOffenderFromAppointment(appointment)
+
     // Given I am on the log compliance page for an appointment
     cy.task('stubFindAppointment', { appointment })
     const page = CompliancePage.visit(appointment, 'completed', formId)
@@ -95,6 +101,8 @@ context('Log compliance', () => {
         behaviour: null,
       },
     })
+    Utils.stubOffenderFromAppointment(appointment)
+
     // Given I am on the log compliance page for an appointment
     cy.task('stubFindAppointment', { appointment })
     const page = CompliancePage.visit(appointment, 'completed', formId)
@@ -119,6 +127,9 @@ context('Log compliance', () => {
           behaviour: null,
         },
       })
+
+      Utils.stubOffenderFromAppointment(appointment)
+
       // Given I am on the log compliance page for an appointment
       cy.task('stubFindAppointment', { appointment })
       const page = CompliancePage.visit(appointment, 'completed', formId)
@@ -143,6 +154,8 @@ context('Log compliance', () => {
           behaviour: 'UNSATISFACTORY',
         },
       })
+      Utils.stubOffenderFromAppointment(appointment)
+
       const form = appointmentOutcomeFormFactory.build({ contactOutcomeCode: 'ATTC' })
       cy.task('stubGetAppointmentForm', { form, formId })
 

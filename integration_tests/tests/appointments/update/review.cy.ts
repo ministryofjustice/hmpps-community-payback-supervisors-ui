@@ -15,6 +15,7 @@ import { AppointmentDto } from '../../../../server/@types/shared'
 import AttendanceOutcomePage from '../../../pages/appointments/update/attendanceOutcomePage'
 import providerSummaryFactory from '../../../../server/testutils/factories/providerSummaryFactory'
 import providerTeamSummaryFactory from '../../../../server/testutils/factories/providerTeamSummaryFactory'
+import Utils from '../../../utils'
 
 //  Scenario: Showing the offender details
 //    Given I am on the check answers page for an appointment
@@ -66,6 +67,8 @@ context('Review', () => {
       formId,
     })
     cy.task('stubSaveAppointmentForm', { formId })
+
+    Utils.stubOffenderFromAppointment(appointment)
 
     cy.signIn()
 
