@@ -16,7 +16,7 @@ export default Factory.define<AppointmentSummaryDto>(() => ({
   offender: offenderFullFactory.build(),
   daysOverdue: faker.number.int({ max: 10 }),
   date: faker.date.recent().toISOString(),
-  projectName: faker.company.name(),
+  projectName: faker.company.catchPhrase(),
   projectCode: faker.string.alphanumeric(8),
   projectTypeName: faker.commerce.department(),
   projectTypeCode: faker.string.alphanumeric(8),
