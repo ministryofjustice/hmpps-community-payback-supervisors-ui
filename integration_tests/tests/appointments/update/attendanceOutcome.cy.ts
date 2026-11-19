@@ -20,6 +20,11 @@
 //    When I submit the form
 //    Then I see the log time page
 
+//  Scenario: limited access offender
+//    Given the offender is limited
+//    And I view the attendance outcome page
+//    Then I should see the restricted person page
+
 import AttendanceOutcomePage from '../../../pages/appointments/update/attendanceOutcomePage'
 import Page from '../../../pages/page'
 import {
@@ -34,6 +39,10 @@ import supervisorFactory from '../../../../server/testutils/factories/supervisor
 import sessionSummaryFactory from '../../../../server/testutils/factories/sessionSummaryFactory'
 import providerSummaryFactory from '../../../../server/testutils/factories/providerSummaryFactory'
 import providerTeamSummaryFactory from '../../../../server/testutils/factories/providerTeamSummaryFactory'
+import Utils from '../../../utils'
+import offenderLimitedFactory from '../../../../server/testutils/factories/offenderLimitedFactory'
+import RestrictedPersonPage from '../../../pages/restrictedPersonPage'
+import caseDetailsFactory from '../../../../server/testutils/factories/caseDetailsFactory'
 
 context('Attendance outcome', () => {
   let appointment: AppointmentDto
@@ -64,6 +73,8 @@ context('Attendance outcome', () => {
   beforeEach(function test() {
     cy.task('stubGetContactOutcomes', { contactOutcomes: this.contactOutcomes })
     cy.task('stubGetAppointmentForm', { form: appointmentOutcomeFormFactory.build() })
+
+    Utils.stubOffenderFromAppointment(appointment)
   })
 
   //  Scenario: Showing the offender details
@@ -105,5 +116,28 @@ context('Attendance outcome', () => {
 
     // Then I see the log time page
     Page.verifyOnPage(StartTimePage, appointment, 'arrived')
+  })
+
+  // Scenario: limited access offender
+  it('shows the restricted person page for an LAO', function test() {
+    // Given the offender is limited
+    const limitedOffender = offenderLimitedFactory.build()
+
+    const limitedAppointment = appointmentFactory.build({
+      offender: limitedOffender,
+    })
+    cy.task('stubFindAppointment', { appointment: limitedAppointment })
+
+    const caseDetailsSummary = caseDetailsFactory.build({
+      offender: limitedAppointment.offender,
+      unpaidWorkDetails: undefined,
+    })
+    cy.task('stubGetOffenderSummary', { caseDetailsSummary })
+
+    // And I view the attendance outcome page
+    AttendanceOutcomePage.visit(limitedAppointment)
+
+    // Then I should see the restricted person page
+    Page.verifyOnPage(RestrictedPersonPage, limitedOffender.crn)
   })
 })

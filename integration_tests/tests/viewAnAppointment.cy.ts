@@ -28,6 +28,11 @@
 //    And I see appointment update actions
 //    When I click 'Arrived'
 //    Then I should see the outcome already selected
+//
+//  Scenario: limited access offender
+//    Given the offender is limited
+//    And I visit an appointment page
+//    Then I should see the restricted person page
 
 import Page from '../pages/page'
 import SessionPage from '../pages/session'
@@ -46,6 +51,8 @@ import caseDetailsFactory from '../../server/testutils/factories/caseDetailsFact
 import unpaidWorkDetailsFactory from '../../server/testutils/factories/unpaidWorkDetailsFactory'
 import providerSummaryFactory from '../../server/testutils/factories/providerSummaryFactory'
 import providerTeamSummaryFactory from '../../server/testutils/factories/providerTeamSummaryFactory'
+import offenderLimitedFactory from '../../server/testutils/factories/offenderLimitedFactory'
+import RestrictedPersonPage from '../pages/restrictedPersonPage'
 
 context('viewAnAppointment', () => {
   beforeEach(() => {
@@ -223,5 +230,30 @@ context('viewAnAppointment', () => {
     appointmentPage.shouldShowOffenderDetails(appointment.offender)
     appointmentPage.shouldShowStatus('Scheduled')
     appointmentPage.shouldNotShowTimeComponents()
+  })
+
+  // Scenario: limited access offender
+  it('shows the restricted person page for an LAO', () => {
+    cy.signIn()
+
+    // Given the offender is limited
+    const limitedOffender = offenderLimitedFactory.build()
+
+    const appointment = appointmentFactory.build({
+      offender: limitedOffender,
+    })
+    cy.task('stubFindAppointment', { appointment })
+
+    const caseDetailsSummary = caseDetailsFactory.build({
+      offender: appointment.offender,
+      unpaidWorkDetails: undefined,
+    })
+    cy.task('stubGetOffenderSummary', { caseDetailsSummary })
+
+    // And I visit an appointment page
+    AppointmentPage.visit(appointment)
+
+    // Then I should see the restricted person page
+    Page.verifyOnPage(RestrictedPersonPage, limitedOffender.crn)
   })
 })

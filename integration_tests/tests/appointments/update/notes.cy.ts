@@ -52,6 +52,7 @@ import {
 } from '../../../../server/testutils/factories/contactOutcomeFactory'
 import providerSummaryFactory from '../../../../server/testutils/factories/providerSummaryFactory'
 import providerTeamSummaryFactory from '../../../../server/testutils/factories/providerTeamSummaryFactory'
+import Utils from '../../../utils'
 
 context('Notes', () => {
   let appointment: AppointmentDto
@@ -78,6 +79,8 @@ context('Notes', () => {
       contactOutcomes: [contactOutcomeFactory.build({ enforceable: true }), contactOutcomeFactory.build()],
     })
     cy.task('stubGetContactOutcomes', { contactOutcomes })
+
+    Utils.stubOffenderFromAppointment(appointment)
 
     cy.signIn()
   })
@@ -184,6 +187,9 @@ context('Notes', () => {
   // Scenario: already sensitive appointments are flagged as sensitive
   it('submits the form and navigates to the next page with sensitive set to true', function test() {
     appointment = appointmentFactory.build({ sensitive: true })
+
+    Utils.stubOffenderFromAppointment(appointment)
+
     cy.task('stubFindAppointment', { appointment })
 
     const form = appointmentOutcomeFormFactory.build()

@@ -1,12 +1,40 @@
-import { Router } from 'express'
+import { RequestHandler, Router } from 'express'
 import paths from '../paths'
 import { Page } from '../services/auditService'
 import type { Controllers } from '../controllers'
-import { actions } from './utils'
+import actions from './actions'
+import { AuditEventSpec } from '../middleware/auditMiddleware'
+import limitedOffenderMiddleware from './limitedOffenderMiddleware'
+import { Services } from '../services'
 
-export default function appointmentRoutes(controllers: Controllers, router: Router): Router {
+export default function appointmentRoutes(controllers: Controllers, router: Router, services: Services): Router {
   const { appointments } = controllers
-  const { get, post } = actions(router)
+
+  const limitedOffenderMiddlewareHandler = limitedOffenderMiddleware({
+    offenderService: services.offenderService,
+    backPath: '/',
+    appointmentService: services.appointmentService,
+    appointmentFormService: services.appointmentFormService,
+  })
+
+  const wrapHandlers = (handler: RequestHandler | RequestHandler[]) => {
+    let handlers = []
+    if (Array.isArray(handler)) {
+      handlers = [limitedOffenderMiddlewareHandler, ...handler]
+    } else {
+      handlers = [limitedOffenderMiddlewareHandler, handler]
+    }
+    return handlers
+  }
+
+  const { get, post } = {
+    get: (path: string | string[], handler: RequestHandler | RequestHandler[], auditEventSpec?: AuditEventSpec) => {
+      actions(router).get(path, wrapHandlers(handler), auditEventSpec)
+    },
+    post: (path: string | string[], handler: RequestHandler | RequestHandler[], auditEventSpec?: AuditEventSpec) => {
+      actions(router).post(path, wrapHandlers(handler), auditEventSpec)
+    },
+  }
 
   get(paths.appointments.show.pattern, appointments.showDetailsController.show(), {
     auditEvent: Page.VIEW_APPOINTMENT,

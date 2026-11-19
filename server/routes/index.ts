@@ -3,10 +3,11 @@ import { Page } from '../services/auditService'
 import sessionRoutes from './session'
 import appointmentRoutes from './appointment'
 import type { Controllers } from '../controllers'
-import { actions } from './utils'
+import actions from './actions'
 import paths from '../paths'
+import { Services } from '../services'
 
-export default function routes(controllers: Controllers): Router {
+export default function routes(controllers: Controllers, services: Services): Router {
   const router = Router()
 
   const { get } = actions(router)
@@ -29,7 +30,7 @@ export default function routes(controllers: Controllers): Router {
   })
 
   sessionRoutes(sessionsController, router)
-  appointmentRoutes(controllers, router)
+  appointmentRoutes(controllers, router, services)
 
   return router
 }
