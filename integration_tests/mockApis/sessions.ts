@@ -1,8 +1,19 @@
 import type { SuperAgentRequest } from 'superagent'
 import { stubFor, arrayToQueryStubMappings } from './wiremock'
 import paths from '../../server/paths/api'
-import type { SessionDto } from '../../server/@types/shared'
+import type { PagedModelSessionSummaryDto, SessionDto } from '../../server/@types/shared'
 import { SessionSummariesDto } from '../../server/@types/user-defined'
+
+const singlePageOf = (sessionSummaries: SessionSummariesDto) =>
+  ({
+    content: sessionSummaries.allocations,
+    page: {
+      number: 0,
+      size: sessionSummaries.allocations.length,
+      totalElements: sessionSummaries.allocations.length,
+      totalPages: 1,
+    },
+  }) satisfies PagedModelSessionSummaryDto
 
 export default {
   stubFindSession: ({ session }: { session: SessionDto }): SuperAgentRequest => {
@@ -41,7 +52,7 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: { content: sessionSummaries.allocations, page: { totalPages: 1 } },
+        jsonBody: singlePageOf(sessionSummaries),
       },
     })
   },
@@ -66,7 +77,7 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: { content: sessionSummaries.allocations, page: { totalPages: 1 } },
+        jsonBody: singlePageOf(sessionSummaries),
       },
     }),
 }

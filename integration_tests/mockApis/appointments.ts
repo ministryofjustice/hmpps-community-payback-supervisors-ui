@@ -1,7 +1,7 @@
 import { SuperAgentRequest } from 'superagent'
 import { stubFor } from './wiremock'
 import paths from '../../server/paths/api'
-import { AppointmentDto } from '../../server/@types/shared'
+import { AppointmentDto, ErrorResponse } from '../../server/@types/shared'
 
 export default {
   stubFindAppointment: ({ appointment }: { appointment: AppointmentDto }): SuperAgentRequest => {
@@ -62,9 +62,15 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {
           status: 400,
+          success: false,
+          hasContent: false,
+          hasErrors: true,
+          hasWarnings: false,
+          errors: [],
+          warnings: [],
           userMessage,
           developerMessage: 'Bad request',
-        },
+        } satisfies ErrorResponse,
       },
     })
   },
