@@ -51,6 +51,7 @@ export default function createApp(controllers: Controllers, services: Services):
   app.use((req, res, next) => {
     res.locals.successMessages = req.flash('success')
     res.locals.errorMessages = req.flash('error')
+    res.locals.warningMessages = req.flash('warning')
     return next()
   })
   app.use(flash())

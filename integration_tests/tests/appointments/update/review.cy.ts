@@ -45,6 +45,11 @@ import Utils from '../../../utils'
 //    And the API returns several errors on submit
 //    Then I remain on the review page with every error showing
 
+//  Scenario: Warnings from the API
+//    Given that I'm on the review page
+//    And the API returns warnings on submit
+//    Then I remain on the review page with the warnings showing
+
 context('Review', () => {
   const formId = 'some-form'
   let appointment: AppointmentDto
@@ -187,6 +192,29 @@ context('Review', () => {
       const page = Page.verifyOnPage(ReviewPage)
       page.shouldShowAPIError('First error')
       page.shouldShowAPIError('Second error')
+    })
+  })
+
+  describe('completed with warnings', () => {
+    it('Shows every warning returned by the API', () => {
+      // Given that I'm on the review page
+      const reviewPage = Page.verifyOnPage(ReviewPage, appointment, 'completed')
+      reviewPage.alertPractitionerQuestion.checkOptionWithValue('yes')
+
+      // And the API returns warnings on submit
+      cy.task('stubUpdateAppointmentOutcomeWithError', {
+        appointment,
+        warnings: [
+          { field: '', code: 'FIRST', data: { message: 'First warning' } },
+          { field: '', code: 'SECOND', data: { message: 'Second warning' } },
+        ],
+      })
+      reviewPage.clickConfirm()
+
+      // Then I remain on the review page with the warnings showing
+      const page = Page.verifyOnPage(ReviewPage)
+      page.shouldShowWarning('First warning')
+      page.shouldShowWarning('Second warning')
     })
   })
 })
