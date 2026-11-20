@@ -5,13 +5,14 @@ import { HTTPError } from 'superagent'
 import { createMock } from '@golevelup/ts-jest'
 import {
   catchApiValidationErrorOrPropagate,
+  getApiIssueMessages,
   errorHasStatus,
   generateErrorSummary,
   generateErrorTextList,
   getErrorStatus,
 } from './errorUtils'
 import type { Request, Response } from 'express'
-import { ErrorResponse } from '../@types/shared'
+import { ApiResponseIssue, ErrorResponse } from '../@types/shared'
 import errorResponseFactory from '../testutils/factories/errorResponseFactory'
 
 describe('errorUtils', () => {
@@ -97,45 +98,101 @@ describe('errorUtils', () => {
     })
   })
 
+  describe('getApiIssueMessages', () => {
+    it('returns the data.message of each issue', () => {
+      const issues: Array<ApiResponseIssue> = [
+        { field: '', code: 'FIRST', data: { message: 'First message' } },
+        { field: '', code: 'SECOND', data: { message: 'Second message' } },
+      ]
+
+      expect(getApiIssueMessages(issues)).toEqual(['First message', 'Second message'])
+    })
+
+    it('ignores issues without a message', () => {
+      const issues: Array<ApiResponseIssue> = [
+        { field: '', code: 'NO_DATA', data: undefined },
+        { field: '', code: 'NO_MESSAGE', data: { startTime: '09:00' } },
+        { field: '', code: 'EMPTY_MESSAGE', data: { message: '' } },
+        { field: '', code: 'MESSAGE', data: { message: 'A message' } },
+      ]
+
+      expect(getApiIssueMessages(issues)).toEqual(['A message'])
+    })
+
+    it.each([undefined, []])('returns an empty array when issues are %s', (issues?: Array<ApiResponseIssue>) => {
+      expect(getApiIssueMessages(issues)).toEqual([])
+    })
+  })
+
   describe('catchApiValidationErrorOrPropagate', () => {
     const referer = 'foo/bar'
     let request = createMock<Request>()
     let response = createMock<Response>()
 
-    beforeEach(() => {
-      jest.resetAllMocks()
+    const issue = (message?: string): ApiResponseIssue => ({
+      field: '',
+      code: 'SOME_CODE',
+      data: message === undefined ? {} : { message },
     })
 
-    it('populates the error and redirects to the previous page if the API finds an error', () => {
-      const userMessage = 'Some error'
-      const error: SanitisedError<ErrorResponse> = {
-        responseStatus: 400,
-        data: errorResponseFactory.build({ userMessage }),
-        name: 'Bad request',
-        message: userMessage,
-      }
+    const badRequest = (data: Partial<ErrorResponse>): SanitisedError<ErrorResponse> => ({
+      responseStatus: 400,
+      data: errorResponseFactory.build(data),
+      name: 'Bad request',
+      message: 'error message',
+    })
+
+    beforeEach(() => {
+      jest.resetAllMocks()
+      request = createMock<Request>()
+      response = createMock<Response>()
+    })
+
+    it('flashes the message of every error and redirects to the given path', () => {
+      const error = badRequest({ errors: [issue('First error'), issue('Second error')] })
 
       catchApiValidationErrorOrPropagate(request, response, error, referer)
 
-      expect(request.flash).toHaveBeenCalledWith('error', userMessage)
+      expect(request.flash).toHaveBeenCalledTimes(1)
+      expect(request.flash).toHaveBeenCalledWith('error', ['First error', 'Second error'])
       expect(response.redirect).toHaveBeenCalledWith(referer)
     })
 
-    it.each([undefined, null, ''])(
-      'throws error when responseStatus is 400 but userMessage is %s',
-      (userMessage?: string | null) => {
-        const error: SanitisedError<ErrorResponse> = {
-          responseStatus: 400,
-          data: errorResponseFactory.build({ userMessage }),
-          name: 'Bad request',
-          message: 'error message',
-        }
+    it('flashes only the errors when there are both errors and warnings', () => {
+      const error = badRequest({ errors: [issue('An error')], warnings: [issue('A warning')] })
 
-        expect(() => catchApiValidationErrorOrPropagate(request, response, error, referer)).toThrow(error)
-        expect(request.flash).not.toHaveBeenCalled()
-        expect(response.redirect).not.toHaveBeenCalled()
-      },
-    )
+      catchApiValidationErrorOrPropagate(request, response, error, referer)
+
+      expect(request.flash).toHaveBeenCalledTimes(1)
+      expect(request.flash).toHaveBeenCalledWith('error', ['An error'])
+      expect(response.redirect).toHaveBeenCalledWith(referer)
+    })
+
+    it('flashes the message of every warning when there are no errors', () => {
+      const error = badRequest({ errors: [], warnings: [issue('First warning'), issue('Second warning')] })
+
+      catchApiValidationErrorOrPropagate(request, response, error, referer)
+
+      expect(request.flash).toHaveBeenCalledTimes(1)
+      expect(request.flash).toHaveBeenCalledWith('warning', ['First warning', 'Second warning'])
+      expect(response.redirect).toHaveBeenCalledWith(referer)
+    })
+
+    it('throws error when responseStatus is 400 but no error or warning has a message, even if there is a userMessage', () => {
+      const error = badRequest({ errors: [issue()], warnings: [issue()], userMessage: 'Some error' })
+
+      expect(() => catchApiValidationErrorOrPropagate(request, response, error, referer)).toThrow(error)
+      expect(request.flash).not.toHaveBeenCalled()
+      expect(response.redirect).not.toHaveBeenCalled()
+    })
+
+    it('throws error when responseStatus is 400 but there are no errors or warnings', () => {
+      const error = badRequest({ errors: [], warnings: [] })
+
+      expect(() => catchApiValidationErrorOrPropagate(request, response, error, referer)).toThrow(error)
+      expect(request.flash).not.toHaveBeenCalled()
+      expect(response.redirect).not.toHaveBeenCalled()
+    })
 
     it.each([undefined, null])(
       'throws error when responseStatus is 400 but data is %s',
@@ -155,8 +212,8 @@ describe('errorUtils', () => {
 
     it.each([500, undefined])('throws error when responseStatus is %s', (responseStatus: number) => {
       const error: SanitisedError<ErrorResponse> = {
-        responseStatus: responseStatus,
-        data: errorResponseFactory.build({ userMessage: undefined, status: responseStatus }),
+        responseStatus,
+        data: errorResponseFactory.build({ errors: [issue('An error')], status: responseStatus }),
         name: 'error',
         message: 'error message',
       }

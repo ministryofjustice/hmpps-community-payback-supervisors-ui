@@ -40,6 +40,11 @@ import Utils from '../../../utils'
 //    And the API returns an error on submit
 //    Then I remain on the review page with an error showing
 
+//  Scenario: Multiple errors from the API
+//    Given that I'm on the review page
+//    And the API returns several errors on submit
+//    Then I remain on the review page with every error showing
+
 context('Review', () => {
   const formId = 'some-form'
   let appointment: AppointmentDto
@@ -150,7 +155,10 @@ context('Review', () => {
       reviewPage.alertPractitionerQuestion.checkOptionWithValue('yes')
 
       // And the API returns an error on submit
-      cy.task('stubUpdateAppointmentOutcomeWithError', { appointment, userMessage: 'Unable to update appointment' })
+      cy.task('stubUpdateAppointmentOutcomeWithError', {
+        appointment,
+        errors: [{ field: '', code: 'BAD_REQUEST', data: { message: 'Unable to update appointment' } }],
+      })
       reviewPage.clickConfirm()
 
       // Then I remain on the review page with an error showing
@@ -158,6 +166,27 @@ context('Review', () => {
 
       // Alert practitioner choice should be preserved
       reviewPage.alertPractitionerQuestion.shouldHaveSelectedValue('yes')
+    })
+
+    it('Shows every error returned by the API', () => {
+      // Given that I'm on the review page
+      const reviewPage = Page.verifyOnPage(ReviewPage, appointment, 'completed')
+      reviewPage.alertPractitionerQuestion.checkOptionWithValue('yes')
+
+      // And the API returns several errors on submit
+      cy.task('stubUpdateAppointmentOutcomeWithError', {
+        appointment,
+        errors: [
+          { field: '', code: 'FIRST', data: { message: 'First error' } },
+          { field: '', code: 'SECOND', data: { message: 'Second error' } },
+        ],
+      })
+      reviewPage.clickConfirm()
+
+      // Then I remain on the review page with every error showing
+      const page = Page.verifyOnPage(ReviewPage)
+      page.shouldShowAPIError('First error')
+      page.shouldShowAPIError('Second error')
     })
   })
 })

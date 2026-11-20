@@ -1,7 +1,7 @@
 import { SanitisedError } from '@ministryofjustice/hmpps-rest-client'
 import { HTTPError } from 'superagent'
 import type { Request, Response } from 'express'
-import { ErrorResponse } from '../@types/shared'
+import { ApiResponseIssue, ErrorResponse } from '../@types/shared'
 
 type ValidationError = {
   [key: string]: { text: string }
@@ -41,16 +41,28 @@ export const errorHasStatus = (error: HTTPError | SanitisedError, status: number
 export const generateErrorTextList = (errorMessages?: Array<string> | undefined) =>
   errorMessages?.length > 0 ? errorMessages.map((error: string) => ({ text: error })) : undefined
 
+export const getApiIssueMessages = (issues: Array<ApiResponseIssue> = []): Array<string> =>
+  issues.map(issue => issue.data?.message).filter(Boolean)
+
 export const catchApiValidationErrorOrPropagate = (
   request: Request,
   response: Response,
   error: SanitisedError<ErrorResponse>,
   redirectPath: string,
 ): void => {
-  if (error.responseStatus === 400 && error.data?.userMessage) {
-    request.flash('error', error.data?.userMessage)
+  if (error.responseStatus === 400 && error.data) {
+    const errorMessages = getApiIssueMessages(error.data.errors)
+    const warningMessages = getApiIssueMessages(error.data.warnings)
 
-    return response.redirect(redirectPath)
+    if (errorMessages.length) {
+      request.flash('error', errorMessages)
+      return response.redirect(redirectPath)
+    }
+
+    if (warningMessages.length) {
+      request.flash('warning', warningMessages)
+      return response.redirect(redirectPath)
+    }
   }
   throw error
 }
