@@ -186,7 +186,10 @@ context('Log start time ', () => {
       Utils.stubOffenderFromAppointment(appointment)
 
       cy.task('stubFindAppointment', { appointment })
-      cy.task('stubUpdateAppointmentOutcomeWithError', { appointment, userMessage: 'Unable to update appointment' })
+      cy.task('stubUpdateAppointmentOutcomeWithError', {
+        appointment,
+        errors: [{ field: '', code: 'BAD_REQUEST', data: { message: 'Unable to update appointment' } }],
+      })
 
       const form = appointmentOutcomeFormFactory.build()
       cy.task('stubGetAppointmentForm', { form, formId: 'some-form' })

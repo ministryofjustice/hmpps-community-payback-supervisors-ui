@@ -21,6 +21,28 @@
   }) }}
 {% endif %}
 
+{% if warningMessages | length %}
+  {% set warningHtml %}
+    <ul class="govuk-list govuk-list--bullet">
+      {% for message in warningMessages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    <p class="govuk-body">Check your answers below and change them if needed.</p>
+  {% endset %}
+
+  {{ mojAlert({
+    variant: 'warning',
+    title: 'Check before you confirm',
+    showTitleAsHeading: true,
+    dismissible: false,
+    html: warningHtml,
+    attributes: {
+      "data-testid": "warning-alert"
+    }
+  }) }}
+{% endif %}
+
 <h2 class="govuk-heading-l">
   {{ pageTitle }}
 </h2>

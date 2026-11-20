@@ -71,4 +71,8 @@ export default class ReviewPage extends Page {
   shouldShowAPIError(errorMessage: string) {
     cy.get('[data-testid="error-summary"]').should('contain', errorMessage)
   }
+
+  shouldShowWarning(warningMessage: string) {
+    cy.get('[data-testid="warning-alert"]').should('contain', warningMessage)
+  }
 }

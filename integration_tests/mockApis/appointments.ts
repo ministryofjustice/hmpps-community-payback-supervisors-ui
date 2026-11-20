@@ -1,7 +1,7 @@
 import { SuperAgentRequest } from 'superagent'
 import { stubFor } from './wiremock'
 import paths from '../../server/paths/api'
-import { AppointmentDto, ErrorResponse } from '../../server/@types/shared'
+import { ApiResponseIssue, AppointmentDto, ErrorResponse } from '../../server/@types/shared'
 
 export default {
   stubFindAppointment: ({ appointment }: { appointment: AppointmentDto }): SuperAgentRequest => {
@@ -43,10 +43,12 @@ export default {
 
   stubUpdateAppointmentOutcomeWithError: ({
     appointment,
-    userMessage,
+    errors = [],
+    warnings = [],
   }: {
     appointment: AppointmentDto
-    userMessage: string
+    errors?: Array<ApiResponseIssue>
+    warnings?: Array<ApiResponseIssue>
   }): SuperAgentRequest => {
     const pattern = paths.appointments.outcome({
       projectCode: appointment.projectCode,
@@ -64,11 +66,11 @@ export default {
           status: 400,
           success: false,
           hasContent: false,
-          hasErrors: true,
-          hasWarnings: false,
-          errors: [],
-          warnings: [],
-          userMessage,
+          hasErrors: errors.length > 0,
+          hasWarnings: warnings.length > 0,
+          errors,
+          warnings,
+          userMessage: errors[0]?.data.message ?? null,
           developerMessage: 'Bad request',
         } satisfies ErrorResponse,
       },
