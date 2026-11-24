@@ -1,3 +1,4 @@
+/// <reference lib="dom" />
 import { Page } from '@playwright/test'
 import HomePage from '../pages/homePage'
 
