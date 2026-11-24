@@ -4,6 +4,7 @@
   "compilerOptions": {
     "isolatedModules": true,
     "outDir": "./dist",
+    "rootDir": ".",
     "sourceMap": true,
     "noEmit": false,
     "allowJs": false,
