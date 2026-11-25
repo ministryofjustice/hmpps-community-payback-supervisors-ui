@@ -22,7 +22,7 @@ describe('ProviderClient', () => {
   })
 
   describe('getProviders', () => {
-    it('should make a GET request to the providers path using user token and return the response body', async () => {
+    it('should make a GET request to the providers path using system token and return the response body', async () => {
       const providers = providerSummaryFactory.buildList(2)
 
       nock(config.apis.communityPaybackApi.url)
@@ -37,7 +37,7 @@ describe('ProviderClient', () => {
   })
 
   describe('getTeams', () => {
-    it('should make a GET request to the teams path using user token and return the response body', async () => {
+    it('should make a GET request to the teams path using system token and return the response body', async () => {
       const teams = {
         providers: [
           {

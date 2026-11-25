@@ -17,7 +17,7 @@ describe('formClient', () => {
   })
 
   describe('find', () => {
-    it('should make a GET request to the forms path using user token and return the response body', async () => {
+    it('should make a GET request to the forms path using system token and return the response body', async () => {
       const type = 'some-type'
       const id = '1'
 
@@ -65,7 +65,7 @@ describe('formClient', () => {
   })
 
   describe('save', () => {
-    it('should make a PUT request to the forms path using user token', async () => {
+    it('should make a PUT request to the forms path using system token', async () => {
       const type = 'some-type'
       const id = '1'
 
@@ -87,7 +87,7 @@ describe('formClient', () => {
   })
 
   describe('clear', () => {
-    it('should make a DELETE request to the forms path using user token', async () => {
+    it('should make a DELETE request to the forms path using system token', async () => {
       const type = 'some-type'
       const id = '1'
 

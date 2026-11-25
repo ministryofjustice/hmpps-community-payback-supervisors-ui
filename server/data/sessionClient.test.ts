@@ -24,7 +24,7 @@ describe('SessionClient', () => {
   })
 
   describe('find', () => {
-    it('should make a GET request to the find sessions path using user token and return the response body', async () => {
+    it('should make a GET request to the find sessions path using system token and return the response body', async () => {
       const projectCode = '1'
       const date = '2026-01-01'
 
@@ -42,7 +42,7 @@ describe('SessionClient', () => {
   })
 
   describe('nextSession', () => {
-    it('should make a GET request to the nextSession path using user token and return the response body', async () => {
+    it('should make a GET request to the nextSession path using system token and return the response body', async () => {
       const teamCodes = ['5678']
       const username = 'some-username'
       const page = 1
@@ -61,7 +61,7 @@ describe('SessionClient', () => {
   })
 
   describe('filterSessions', () => {
-    it('should make a GET request to the filterSessions path using user token and return the response body', async () => {
+    it('should make a GET request to the filterSessions path using system token and return the response body', async () => {
       const teamCode = '5678'
       const username = 'some-username'
       const date = '1/1/2026'

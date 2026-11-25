@@ -43,7 +43,7 @@ describe('AppointmentClient', () => {
   })
 
   describe('save', () => {
-    it('should make a POST request to the appointment outcomes path using user token', async () => {
+    it('should make a POST request to the appointment outcomes path using system token', async () => {
       const projectCode = 'some-code'
       const data = updateAppointmentOutcomeFactory.build({ deliusId: 1001 })
 
