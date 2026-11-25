@@ -38,6 +38,7 @@ jobs:
         uses: peter-evans/create-pull-request@3ffccacd46053766916f087ce41d627c0b8cf2d1 # v8
         with:
           token: ${{ steps.generate-token.outputs.token }}
+          sign-commits: true
           title: 'API model updates'
           commit-message: 'Updating community-payback-api models from OpenAPI specification'
           body: 'Updating community-payback-api models from OpenAPI specification.  This PR was created automatically from the generate-types.yml Workflow'
