@@ -10,7 +10,9 @@ describe('ReferenceDataClient', () => {
 
   beforeEach(() => {
     mockAuthenticationClient = {
-      getToken: jest.fn().mockResolvedValue('test-system-token'),
+      getToken: jest.fn(username => {
+        return `test-system-token-for-${username}`
+      }),
     } as unknown as jest.Mocked<AuthenticationClient>
 
     referenceDataClient = new ReferenceDataClient(mockAuthenticationClient)
@@ -33,7 +35,7 @@ describe('ReferenceDataClient', () => {
       }
       nock(config.apis.communityPaybackApi.url)
         .get(path.referenceData.contactOutcomes.pattern)
-        .matchHeader('authorization', 'Bearer test-system-token')
+        .matchHeader('authorization', 'Bearer test-system-token-for-some-username')
         .reply(200, contactOutcomes)
 
       const response = await referenceDataClient.getContactOutcomes('some-username')

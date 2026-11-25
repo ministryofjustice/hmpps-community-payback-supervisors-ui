@@ -12,7 +12,9 @@ describe('SessionClient', () => {
 
   beforeEach(() => {
     mockAuthenticationClient = {
-      getToken: jest.fn().mockResolvedValue('test-system-token'),
+      getToken: jest.fn(username => {
+        return `test-system-token-for-${username}`
+      }),
     } as unknown as jest.Mocked<AuthenticationClient>
 
     sessionClient = new SessionClient(mockAuthenticationClient)
@@ -32,7 +34,7 @@ describe('SessionClient', () => {
 
       nock(config.apis.communityPaybackApi.url)
         .get(paths.projects.session({ projectCode, date }))
-        .matchHeader('authorization', 'Bearer test-system-token')
+        .matchHeader('authorization', 'Bearer test-system-token-for-some-username')
         .reply(200, session)
 
       const response = await sessionClient.find({ username: 'some-username', projectCode, date })
@@ -51,7 +53,7 @@ describe('SessionClient', () => {
 
       nock(config.apis.communityPaybackApi.url)
         .get(`${paths.sessions.next.pattern}?teamCodes=${teamCodes[0]}&page=${page}`)
-        .matchHeader('authorization', 'Bearer test-system-token')
+        .matchHeader('authorization', 'Bearer test-system-token-for-some-username')
         .reply(200, sessionSummary)
 
       const response = await sessionClient.nextSessions({ username, teamCodes, page })
@@ -72,7 +74,7 @@ describe('SessionClient', () => {
 
       nock(config.apis.communityPaybackApi.url)
         .get(`${paths.sessions.search({ teamCode })}?startDate=${isoDate}&endDate=${isoDate}&page=${page}`)
-        .matchHeader('authorization', 'Bearer test-system-token')
+        .matchHeader('authorization', 'Bearer test-system-token-for-some-username')
         .reply(200, sessionSummary)
 
       const response = await sessionClient.filterSessions({ username, teamCode, date, page })

@@ -11,7 +11,9 @@ describe('offenderClient', () => {
 
   beforeEach(() => {
     mockAuthenticationClient = {
-      getToken: jest.fn().mockResolvedValue('test-system-token'),
+      getToken: jest.fn(username => {
+        return `test-system-token-for-${username}`
+      }),
     } as unknown as jest.Mocked<AuthenticationClient>
 
     offenderClient = new OffenderClient(mockAuthenticationClient)
@@ -30,7 +32,7 @@ describe('offenderClient', () => {
 
       nock(config.apis.communityPaybackApi.url)
         .get(path.offenderSummary({ crn }))
-        .matchHeader('authorization', 'Bearer test-system-token')
+        .matchHeader('authorization', 'Bearer test-system-token-for-some-username')
         .reply(200, caseDetails)
 
       const response = await offenderClient.getOffenderSummary({ username: 'some-username', crn })

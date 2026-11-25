@@ -10,7 +10,9 @@ describe('formClient', () => {
 
   beforeEach(() => {
     mockAuthenticationClient = {
-      getToken: jest.fn().mockResolvedValue('test-system-token'),
+      getToken: jest.fn(username => {
+        return `test-system-token-for-${username}`
+      }),
     } as unknown as jest.Mocked<AuthenticationClient>
 
     formClient = new FormClient(mockAuthenticationClient)
@@ -29,7 +31,7 @@ describe('formClient', () => {
 
       nock(config.apis.communityPaybackApi.url)
         .get(paths.forms({ type, id }))
-        .matchHeader('authorization', 'Bearer test-system-token')
+        .matchHeader('authorization', 'Bearer test-system-token-for-some-user')
         .reply(200, form)
 
       const response = await formClient.find({ type, id }, 'some-user')
@@ -43,7 +45,7 @@ describe('formClient', () => {
 
       nock(config.apis.communityPaybackApi.url)
         .get(paths.forms({ type, id }))
-        .matchHeader('authorization', 'Bearer test-system-token')
+        .matchHeader('authorization', 'Bearer test-system-token-for-some-user')
         .reply(404)
 
       const response = await formClient.find({ type, id }, 'some-user')
@@ -57,7 +59,7 @@ describe('formClient', () => {
 
       nock(config.apis.communityPaybackApi.url)
         .get(paths.forms({ type, id }))
-        .matchHeader('authorization', 'Bearer test-system-token')
+        .matchHeader('authorization', 'Bearer test-system-token-for-some-user')
         .replyWithError('Something went wrong')
 
       await expect(() => formClient.find({ type, id }, 'some-user')).rejects.toThrow('Something went wrong')
@@ -77,7 +79,7 @@ describe('formClient', () => {
 
       nock(config.apis.communityPaybackApi.url)
         .put(paths.forms({ type, id }), form)
-        .matchHeader('authorization', 'Bearer test-system-token')
+        .matchHeader('authorization', 'Bearer test-system-token-for-some-user')
         .reply(200)
 
       const response = await formClient.save({ type, id }, 'some-user', form)
@@ -93,7 +95,7 @@ describe('formClient', () => {
 
       nock(config.apis.communityPaybackApi.url)
         .delete(paths.forms({ type, id }))
-        .matchHeader('authorization', 'Bearer test-system-token')
+        .matchHeader('authorization', 'Bearer test-system-token-for-some-user')
         .reply(200)
 
       const response = await formClient.clear({ type, id }, 'some-user')

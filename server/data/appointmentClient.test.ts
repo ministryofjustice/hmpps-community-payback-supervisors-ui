@@ -12,7 +12,9 @@ describe('AppointmentClient', () => {
 
   beforeEach(() => {
     mockAuthenticationClient = {
-      getToken: jest.fn().mockResolvedValue('test-system-token'),
+      getToken: jest.fn(username => {
+        return `test-system-token-for-${username}`
+      }),
     } as unknown as jest.Mocked<AuthenticationClient>
 
     appointmentClient = new AppointmentClient(mockAuthenticationClient)
@@ -32,7 +34,7 @@ describe('AppointmentClient', () => {
 
       nock(config.apis.communityPaybackApi.url)
         .get(paths.appointments.singleAppointment({ projectCode, appointmentId }))
-        .matchHeader('authorization', 'Bearer test-system-token')
+        .matchHeader('authorization', 'Bearer test-system-token-for-some-username')
         .reply(200, appointment)
 
       const response = await appointmentClient.find({ username: 'some-username', projectCode, appointmentId })
@@ -49,7 +51,7 @@ describe('AppointmentClient', () => {
 
       nock(config.apis.communityPaybackApi.url)
         .put(paths.appointments.outcome({ appointmentId: '1001', projectCode }))
-        .matchHeader('authorization', 'Bearer test-system-token')
+        .matchHeader('authorization', 'Bearer test-system-token-for-some-user-name')
         .reply(200)
 
       const response = await appointmentClient.save({ username: 'some-user-name', projectCode, data })
