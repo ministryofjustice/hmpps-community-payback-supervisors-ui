@@ -11,7 +11,9 @@ describe('SupervisorClient', () => {
 
   beforeEach(() => {
     mockAuthenticationClient = {
-      getToken: jest.fn().mockResolvedValue('test-system-token'),
+      getToken: jest.fn(username => {
+        return `test-system-token-for-${username}`
+      }),
     } as unknown as jest.Mocked<AuthenticationClient>
 
     supervisorClient = new SupervisorClient(mockAuthenticationClient)
@@ -28,7 +30,7 @@ describe('SupervisorClient', () => {
       const username = 'some-username'
       nock(config.apis.communityPaybackApi.url)
         .get(`${paths.supervisors.supervisor({})}?username=${username}`)
-        .matchHeader('authorization', 'Bearer test-system-token')
+        .matchHeader('authorization', 'Bearer test-system-token-for-some-username')
         .reply(200, supervisor)
 
       const response = await supervisorClient.find(username)
