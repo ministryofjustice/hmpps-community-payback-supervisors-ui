@@ -24,7 +24,7 @@ describe('ReferenceDataClient', () => {
   })
 
   describe('getContactOutcomes', () => {
-    it('should make a GET request to the contact-outcomes path using user token and return the response body', async () => {
+    it('should make a GET request to the contact-outcomes path using system token and return the response body', async () => {
       const contactOutcomes = {
         contactOutcomes: [
           {

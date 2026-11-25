@@ -25,7 +25,7 @@ describe('SupervisorClient', () => {
   })
 
   describe('find', () => {
-    it('should make a GET request to the find supervisor path using user token and return the response body', async () => {
+    it('should make a GET request to the find supervisor path using system token and return the response body', async () => {
       const supervisor = supervisorFactory.build()
       const username = 'some-username'
       nock(config.apis.communityPaybackApi.url)
