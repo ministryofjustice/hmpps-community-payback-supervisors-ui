@@ -32,7 +32,7 @@
     "setup": "npm ci && hmpps-npm-script-run-allowlist"
   },
   "engines": {
-    "node": "^24",
+    "node": "^26",
     "npm": "^11"
   },
   "dependencies": {
@@ -79,7 +79,7 @@
     "@ministryofjustice/hmpps-precommit-hooks": "^3.1.0",
     "@ministryofjustice/hmpps-probation-integration-e2e-tests": "1.330.0",
     "@playwright/test": "1.65.1",
-    "@tsconfig/node24": "^24.0.6",
+    "@tsconfig/node26": "^26.0.2",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",
     "@types/compression": "^1.8.1",
