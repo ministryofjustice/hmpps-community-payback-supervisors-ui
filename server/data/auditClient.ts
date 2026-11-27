@@ -1,24 +1,31 @@
-import { auditService as hmppsAuditClient } from '@ministryofjustice/hmpps-audit-client'
+import { AuditService, AuditServiceFactory } from '@ministryofjustice/hmpps-audit-client'
 import logger from '../../logger'
 import { AuditParams } from '../@types/user-defined'
 
 export interface AuditClientConfig {
+  queueUrl: string
+  region: string
   serviceName: string
   logErrors: boolean
   enabled: boolean
 }
 
 export default class AuditClient {
-  private serviceName: string
+  private hmppsAuditService: AuditService<string, string>
 
   private logErrors: boolean
 
   private enabled: boolean
 
   constructor(config: AuditClientConfig) {
-    this.serviceName = config.serviceName
+    const { queueUrl, region, serviceName, enabled } = config
+
     this.logErrors = config.logErrors
-    this.enabled = config.enabled
+    this.enabled = enabled
+    this.hmppsAuditService = AuditServiceFactory.createInstance<string, string>(
+      { queueUrl, region, serviceName, enabled },
+      logger,
+    )
   }
 
   async sendAuditMessage(auditParams: AuditParams) {
@@ -26,24 +33,18 @@ export default class AuditClient {
 
     const { action, username, subjectId, subjectType, correlationId, details } = auditParams
 
-    const jsonDetails = JSON.stringify(details)
+    logger.info(`Sending audit message ${action} (${JSON.stringify(details)})`)
 
-    try {
-      logger.info(`Sending audit message ${action} (${jsonDetails})`)
-
-      await hmppsAuditClient.sendAuditMessage({
-        action,
+    await this.hmppsAuditService.logAuditEvent(
+      {
+        what: action,
         who: username,
         subjectId,
         subjectType,
-        service: this.serviceName,
         correlationId,
-        details: jsonDetails,
-      })
-    } catch (error) {
-      if (this.logErrors) {
-        logger.error('Problem sending audit message to HMPPS audit service', error)
-      }
-    }
+        details,
+      },
+      { logOnError: this.logErrors, throwOnError: false },
+    )
   }
 }
