@@ -125,8 +125,8 @@
       "chokidar": "$chokidar"
     },
     "@opentelemetry/api": "1.10.0",
-    "@opentelemetry/core": "2.12.1",
-    "@opentelemetry/resources": "2.12.1",
+    "@opentelemetry/core": "3.1.1",
+    "@opentelemetry/resources": "3.1.1",
     "@opentelemetry/sdk-trace-base": "2.12.0",
     "@opentelemetry/sdk-trace-web": "2.12.0",
     "brace-expansion": "5.0.13",
